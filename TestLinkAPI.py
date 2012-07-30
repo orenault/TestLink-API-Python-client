@@ -122,7 +122,7 @@ class TestlinkAPIClient:
         Gets attachments for specified test case  
         """
         argsAPI = {'devKey' : self.devKey,
-                'testcaseID':str(testcaseid)}  
+                'testcaseid':str(testcaseid)}  
         return self.server.tl.getTestCaseAttachments(argsAPI)    
 
     def getTestCaseCustomFieldDesignValue(self, testcaseexternalid, version, 
