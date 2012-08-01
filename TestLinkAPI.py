@@ -3,9 +3,10 @@
 TestLinkAPI - v0.20
 Created on 5 nov. 2011
 @author: Olivier Renault (admin@sqaopen.net)
-
+@author: kereval.com
 Initialy based on the James Stock testlink-api-python-client R7.
- 
+
+Updated by Kereval to support testCase Reporting and File attachment to test execution
 
 """
 import xmlrpclib
@@ -329,6 +330,16 @@ class TestlinkAPIClient:
         return ret 
 
     def reportTCResult(self, testcaseid, testplanid, buildid, status, notes ):
+    	"""
+        Report execution result
+        testcaseid: internal testlink id of the test case
+        testplanid: testplan associated with the test case
+        buildid: build version of the test case
+        status: test verdict ('p': pass,'f': fail,'b': blocked)
+
+        Return : [{'status': True, 'operation': 'reportTCResult', 'message': 'Success!', 'overwrite': False, 'id': '37'}]
+        id correspond to the executionID needed to attach files to a test execution
+        """
         argsAPI = {'devKey' : self.devKey,
                 'testcaseid' : testcaseid,
                 'testplanid' : testplanid,
@@ -337,6 +348,28 @@ class TestlinkAPIClient:
                 'notes' : notes
                 }
         return self.server.tl.reportTCResult(argsAPI)
+        
+    def uploadExecutionAttachment(self,attachmentfile,executionid,title,description):
+        """
+        Attach a file to a test execution
+        attachmentfile: python file descriptor pointing to the file
+        name : name of the file
+        title : title of the attachment
+        description : description of the attachment
+        content type : mimetype of the file
+        """
+        import mimetypes
+        import base64
+        import os.path
+        argsAPI={'devKey' : self.devKey,
+                 'executionid':executionid,
+                 'title':title,
+                 'filename':os.path.basename(attachmentfile.name),
+                 'description':description,
+                 'filetype':mimetypes.guess_type(attachmentfile.name)[0],
+                 'content':base64.encodestring(attachmentfile.read())
+                 }
+        return self.server.tl.uploadExecutionAttachment(argsAPI)
                         
     #
     #  ADDITIONNAL FUNCTIONS
