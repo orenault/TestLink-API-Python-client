@@ -328,6 +328,15 @@ class TestlinkAPIClient:
         self.stepsList = []                    
         return ret 
 
+    def reportTCResult(self, testcaseid, testplanid, buildid, status, notes ):
+        argsAPI = {'devKey' : self.devKey,
+                'testcaseid' : testcaseid,
+                'testplanid' : testplanid,
+                'buildid':buildid,
+                'status': status,
+                'notes' : notes
+                }
+        return self.server.tl.reportTCResult(argsAPI)
                         
     #
     #  ADDITIONNAL FUNCTIONS
