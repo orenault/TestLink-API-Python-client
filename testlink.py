@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 
 TestLinkAPI - v0.20
@@ -10,6 +11,16 @@ Update by pade to provide a user friendly library, with more robustness and erro
 """
 import xmlrpclib
 import sys
+
+class Errors(Exception):
+    """ Basic error handler
+    Return message pass as argument
+    """
+    def __init__(self, msg):
+        self.__msg = msg
+
+    def __str__(self):
+        return self.__msg
 
 class TestLinkAPIClient:        
  
