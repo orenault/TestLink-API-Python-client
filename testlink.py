@@ -6,13 +6,15 @@ Created on 5 nov. 2011
 @author: kereval.com
 Initialy based on the James Stock testlink-api-python-client R7.
 
-Updated by Kereval to support testCase Reporting and File attachment to test execution
-
+Update by pade to provide a user friendly library, with more robustness and error management
 """
 import xmlrpclib
+import sys
 
-class TestlinkAPIClient:        
-  
+class TestLinkAPIClient:        
+ 
+    __VERSION__ = "0.3"
+
     def __init__(self, server_url, devKey):
         self.server = xmlrpclib.Server(server_url)
         self.devKey = devKey
@@ -139,14 +141,52 @@ class TestlinkAPIClient:
                 'details' : str(details)}
         return self.server.tl.getTestCaseCustomFieldDesignValue(argsAPI)                                                
 
-    def getTestCaseIDByName(self, testCaseName):
-        """ getTestCaseIDByName :
-        Find a test case by its name   
-        """    
+    def __getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
+        """ __getTestCaseIDByName :
+        Internal function
+        Find a test case by its name
+        testSuiteName and testProjectName are optionals arguments
+        This function return a list of tests cases
+        """
         argsAPI = {'devKey' : self.devKey,
                 'testcasename':str(testCaseName)}
-        return self.server.tl.getTestCaseIDByName(argsAPI)
+
+        if testSuiteName is not None:
+            argsAPI.update({'testsuitename':str(testSuiteName)})
+    
+        if testProjectName is not None:
+            argsAPI.update({'testprojectname':str(testProjectName)})
+
+        # Server return can be a list or a dictionnary !
+        # This function always return a list
+        ret_srv = self.server.tl.getTestCaseIDByName(argsAPI)
+        if type(ret_srv) == dict:
+            retval = []
+            for value in ret_srv.values():
+                retval.append(value)
+            return retval
+        else:
+            return ret_srv
+
+
+    def getTestCaseIDByName(self, testCaseName, testSuiteName, testProjectName):
+        """ getTestCaseIDByName :
+        Find a test case by its name, by its suite and its project
+        Suite name must not be duplicate, so only one test case must be found 
+        Return (id, None) if success 
+        or (-1, "error message") in case of error
+        """    
+        results = self.__getTestCaseIDByName(testCaseName, testSuiteName, testProjectName)
+        if results[0].has_key("message"):
+            return (-1, results[0]["message"])
+        elif len(results) > 1:
+            return (-1, "(getTestCaseIDByName) - Several case test found. Suite name must not be duplicate for the same project")
+        else:
+            if results[0]["name"] == testCaseName:
+                    return (results[0]["id"], None)
+            return (-1, "(getTestCaseIDByName) - Internal server error. Return value is not expected one!")
                                                    
+
     def getTestCasesForTestPlan(self, *args):
         """ getTestCasesForTestPlan :
         List test cases linked to a test plan    
@@ -329,12 +369,12 @@ class TestlinkAPIClient:
         self.stepsList = []                    
         return ret 
 
-    def reportTCResult(self, testcaseid, testplanid, buildid, status, notes ):
+    def __reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
     	"""
         Report execution result
         testcaseid: internal testlink id of the test case
         testplanid: testplan associated with the test case
-        buildid: build version of the test case
+        buildname: build name of the test case
         status: test verdict ('p': pass,'f': fail,'b': blocked)
 
         Return : [{'status': True, 'operation': 'reportTCResult', 'message': 'Success!', 'overwrite': False, 'id': '37'}]
@@ -343,11 +383,31 @@ class TestlinkAPIClient:
         argsAPI = {'devKey' : self.devKey,
                 'testcaseid' : testcaseid,
                 'testplanid' : testplanid,
-                'buildid':buildid,
+                'buildname':buildname,
                 'status': status,
                 'notes' : notes
                 }
         return self.server.tl.reportTCResult(argsAPI)
+
+    def reportResult(self, testCaseName, testSuiteName, testProjectName):
+        pass
+
+    def setReportCtx(self, testProjectName, testPlanName, buildName):
+        """
+        Set project name test plan name and build name for reportResult function
+        """
+        project = getTestProjectByName(testProjectName)
+        if project[0].has_key("message"):
+            sys.exit(project[0]["message"])
+
+        # Check if project is active
+        if project[0]['active'] != '1':
+            sys.exit("(getTestProjectByName) - Test project (name:%s) is not active" % testProjectName)
+
+        # Store project id
+        self.projectId = project[0]['id']
+        #TODO: à finir
+
         
     def uploadExecutionAttachment(self,attachmentfile,executionid,title,description):
         """
@@ -486,35 +546,45 @@ class TestlinkAPIClient:
         Initializes the list which stores the Steps of a Test Case to create  
         """
         self.stepsList = []
-        list = {}
-        list['step_number'] = '1'
-        list['actions'] = actions
-        list['expected_results'] = expected_results
-        list['execution_type'] = str(execution_type)
-        self.stepsList.append(list)
+        lst = {}
+        lst['step_number'] = '1'
+        lst['actions'] = actions
+        lst['expected_results'] = expected_results
+        lst['execution_type'] = str(execution_type)
+        self.stepsList.append(lst)
         return True
         
     def appendStep(self, actions, expected_results, execution_type):
         """ appendStep :
         Appends a step to the steps list  
         """
-        list = {}
-        list['step_number'] = str(len(self.stepsList)+1)
-        list['actions'] = actions
-        list['expected_results'] = expected_results
-        list['execution_type'] = str(execution_type)
-        self.stepsList.append(list)
+        lst = {}
+        lst['step_number'] = str(len(self.stepsList)+1)
+        lst['actions'] = actions
+        lst['expected_results'] = expected_results
+        lst['execution_type'] = str(execution_type)
+        self.stepsList.append(lst)
         return True                
                                         
     def getProjectIDByName(self, projectName):   
-	  	  projects=self.server.tl.getProjects({'devKey' : self.devKey})
-	  	  for project in projects:
-		  	    if (project['name'] == projectName): 
-		    	  	  result = project['id']
-		  	    else:
-		    	  	  result = -1
-	  	  return result
-	  	  
+        projects=self.server.tl.getProjects({'devKey' : self.devKey})
+	for project in projects:
+	    if (project['name'] == projectName): 
+                result = project['id']
+            else:
+                result = -1
+        return result
+
+    def __str__(self):
+        message = """
+TestLinkAPIClient - version %s
+@author: Olivier Renault (admin@sqaopen.net)
+@author: kereval.com
+@author: Patrick Dassier
+
+"""
+        return message % self.__VERSION__
+
 if __name__ == "__main__":    
     myTestLinkServer = "http://YOURSERVER/testlink/lib/api/xmlrpc.php"  #change
     myDevKey = "" # Put here your devKey
@@ -530,3 +600,4 @@ if __name__ == "__main__":
         print ""
     else:
         print "Incorrect DevKey."       
+
