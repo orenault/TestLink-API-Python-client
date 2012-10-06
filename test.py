@@ -13,7 +13,7 @@ Fichier de test pour le module "TestLinkAPI.py"
 '''
 
 import re
-import TestLinkAPI
+from testlink import TestLink, TestLinkErrors
 from nose.tools import *
 
 class TestClass():
@@ -23,22 +23,20 @@ class TestClass():
 
         SERVEUR_URL = "http://localhost/testlink/lib/api/xmlrpc.php"
         KEY = "7ec252ab966ce88fd92c25d08635672b"
-        self.client = TestLinkAPI.TestLinkAPIClient(server_url=SERVEUR_URL, devKey=KEY)
+        self.client = TestLink(server_url=SERVEUR_URL, key=KEY)
 
     def test_getTestCaseIDByName(self):
         """ getTestCaseIDByName test
         """
-        (val, message) = self.client.getTestCaseIDByName("Fin de programme", "Séquence 2", "Test 2")
-        assert_equal(message, None )
-        (val, message) = self.client.getTestCaseIDByName("Initialisation", "Séquence 1", "Test 2")
-        assert_equal(message, "(getTestCaseIDByName) - Several case test found. Suite name must not be duplicate for the same project") 
+        val = self.client.getTestCaseIDByName("Fin de programme", "Séquence 2", "Test 2")
+        # 31 is test case id
+        assert_equal(val, '31' )
 
-    def test___str__(self):
-        """ __str__ test
-        Check that return is a string that contains the version number
-        """
-
-        message = self.client.__str__()
-        assert_not_equal(re.search(self.client.__VERSION__, message), None) 
-
+        try:
+            val = self.client.getTestCaseIDByName("Initialisation", "Séquence 1", "Test 2")
+        except TestLinkErrors, e:
+            assert_equal(str(e), "(getTestCaseIDByName) - Several case test found. Suite name must not be duplicate for the same project") 
+        else:
+            print "An error message is expected !"
+            assert_equal(False, True)
 

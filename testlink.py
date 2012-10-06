@@ -12,7 +12,7 @@ Update by pade to provide a user friendly library, with more robustness and erro
 import xmlrpclib
 import sys
 
-class Errors(Exception):
+class TestLinkErrors(Exception):
     """ Basic error handler
     Return message pass as argument
     """
@@ -22,9 +22,8 @@ class Errors(Exception):
     def __str__(self):
         return self.__msg
 
-class TestLinkAPIClient:        
+class TestLinkAPIClient(object):        
  
-    __VERSION__ = "0.3"
 
     def __init__(self, server_url, devKey):
         self.server = xmlrpclib.Server(server_url)
@@ -152,9 +151,8 @@ class TestLinkAPIClient:
                 'details' : str(details)}
         return self.server.tl.getTestCaseCustomFieldDesignValue(argsAPI)                                                
 
-    def __getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
-        """ __getTestCaseIDByName :
-        Internal function
+    def getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
+        """ 
         Find a test case by its name
         testSuiteName and testProjectName are optionals arguments
         This function return a list of tests cases
@@ -180,22 +178,6 @@ class TestLinkAPIClient:
             return ret_srv
 
 
-    def getTestCaseIDByName(self, testCaseName, testSuiteName, testProjectName):
-        """ getTestCaseIDByName :
-        Find a test case by its name, by its suite and its project
-        Suite name must not be duplicate, so only one test case must be found 
-        Return (id, None) if success 
-        or (-1, "error message") in case of error
-        """    
-        results = self.__getTestCaseIDByName(testCaseName, testSuiteName, testProjectName)
-        if results[0].has_key("message"):
-            return (-1, results[0]["message"])
-        elif len(results) > 1:
-            return (-1, "(getTestCaseIDByName) - Several case test found. Suite name must not be duplicate for the same project")
-        else:
-            if results[0]["name"] == testCaseName:
-                    return (results[0]["id"], None)
-            return (-1, "(getTestCaseIDByName) - Internal server error. Return value is not expected one!")
                                                    
 
     def getTestCasesForTestPlan(self, *args):
@@ -596,19 +578,35 @@ TestLinkAPIClient - version %s
 """
         return message % self.__VERSION__
 
-if __name__ == "__main__":    
-    myTestLinkServer = "http://YOURSERVER/testlink/lib/api/xmlrpc.php"  #change
-    myDevKey = "" # Put here your devKey
-    myTestLink = TestlinkAPIClient(myTestLinkServer, myDevKey)
-    print "TestLinkAPIClient - v0.2"      
-    print "@author: Olivier Renault (admin@sqaopen.net)"
-    print ""
-    if myTestLink.checkDevKey() == True:      
-        methodList = [method for method in TestlinkAPIClient.__dict__]
-        for method in methodList:
-            if method[0:2] != "__": 
-                print method
-        print ""
-    else:
-        print "Incorrect DevKey."       
+class TestLink(TestLinkAPIClient):
+    """
+    TestLink API library
+    """
+
+    __VERSION__ = "0.1"
+
+    def __init__(self, server_url, key):
+        """
+        Class initialisation
+        """
+
+        super(testlink, self).__init__(server_url, key)
+
+    def getTestCaseIDByName(self, testCaseName, testSuiteName, testProjectName):
+        """
+        Find a test case by its name, by its suite and its project
+        Suite name must not be duplicate, so only one test case must be found 
+        Return test case id if success 
+        or raise TestLinkErrors exception with error message in case of error
+        """    
+        results = super(testlink, self).getTestCaseIDByName(testCaseName, testSuiteName, testProjectName)
+        if results[0].has_key("message"):
+            raise TestLinkErrors(results[0]["message"])
+        elif len(results) > 1:
+            raise TestLinkErrors("(getTestCaseIDByName) - Several case test found. Suite name must not be duplicate for the same project")
+        else:
+            if results[0]["name"] == testCaseName:
+                    return results[0]["id"]
+            raise TestLinkErrors("(getTestCaseIDByName) - Internal server error. Return value is not expected one!")
+
 
