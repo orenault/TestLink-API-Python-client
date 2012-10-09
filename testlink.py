@@ -177,9 +177,6 @@ class TestLinkAPIClient(object):
         else:
             return ret_srv
 
-
-                                                   
-
     def getTestCasesForTestPlan(self, *args):
         """ getTestCasesForTestPlan :
         List test cases linked to a test plan    
@@ -362,7 +359,7 @@ class TestLinkAPIClient(object):
         self.stepsList = []                    
         return ret 
 
-    def __reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
+    def reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
     	"""
         Report execution result
         testcaseid: internal testlink id of the test case
@@ -382,24 +379,6 @@ class TestLinkAPIClient(object):
                 }
         return self.server.tl.reportTCResult(argsAPI)
 
-    def reportResult(self, testCaseName, testSuiteName, testProjectName):
-        pass
-
-    def setReportCtx(self, testProjectName, testPlanName, buildName):
-        """
-        Set project name test plan name and build name for reportResult function
-        """
-        project = getTestProjectByName(testProjectName)
-        if project[0].has_key("message"):
-            sys.exit(project[0]["message"])
-
-        # Check if project is active
-        if project[0]['active'] != '1':
-            sys.exit("(getTestProjectByName) - Test project (name:%s) is not active" % testProjectName)
-
-        # Store project id
-        self.projectId = project[0]['id']
-        #TODO: à finir
 
         
     def uploadExecutionAttachment(self,attachmentfile,executionid,title,description):
@@ -589,8 +568,7 @@ class TestLink(TestLinkAPIClient):
         """
         Class initialisation
         """
-
-        super(testlink, self).__init__(server_url, key)
+        super(TestLink, self).__init__(server_url, key)
 
     def getTestCaseIDByName(self, testCaseName, testSuiteName, testProjectName):
         """
@@ -599,7 +577,7 @@ class TestLink(TestLinkAPIClient):
         Return test case id if success 
         or raise TestLinkErrors exception with error message in case of error
         """    
-        results = super(testlink, self).getTestCaseIDByName(testCaseName, testSuiteName, testProjectName)
+        results = super(TestLink, self).getTestCaseIDByName(testCaseName, testSuiteName, testProjectName)
         if results[0].has_key("message"):
             raise TestLinkErrors(results[0]["message"])
         elif len(results) > 1:
@@ -610,3 +588,68 @@ class TestLink(TestLinkAPIClient):
             raise TestLinkErrors("(getTestCaseIDByName) - Internal server error. Return value is not expected one!")
 
 
+    def reportResult(self, testResult, testCaseName, testSuiteName, testNotes, **kwargs):
+        """
+        Report results for test case
+        Arguments are:
+        - testResult: "p" for passed, "b" for blocked, "f" for failed
+        - testCaseName: the test case name to report
+        - testSuiteName: the test suite name that support the test case
+        - an anonymous dictionnary with followings keys:
+            - testProjectName: the project to fill
+            - testPlanName: the active test plan
+            - buildName: the active build.
+        Raise a TestLinkErrors error with the error message in case of trouble
+        """
+        
+        # Check parameters
+        for data in ["testProjectName", "testPlanName", "buildName"]:
+            if not kwargs.has_key(data):
+                raise TestLinkErrors("(reportResult) - Missing key %s in anonymous dictionnary" % data)
+
+        # Get project id
+        project = self.getTestProjectByName(kwargs["testProjectName"])
+
+        # Check if project is active
+        if project['active'] != '1':
+            raise TestLinkErrors("(reportResult) - Test project %s is not active" % kwargs["testProjectName"])
+        # Memorize project id
+        projectId = project['id']
+
+        # Check test plan name
+        plan = self.getTestPlanByName(kwargs["testProjectName"], kwargs["testPlanName"])
+
+        # Check is test plan is open and active
+        if results[0]['is_open'] != '1' or results[0]['active'] != '1':
+            raise TestLinkErrors("(reportResult) - Test plan %s is not active or not open" % kwargs["testPlanName"])
+
+
+        # Check results parameters
+        if testResults not in "pbf":
+            raise TestLinkErrors("(reportResult) - Test result must be 'p', 'f' or 'b'")
+
+        
+        results = self.reportTCResult(testCaseName, testSuiteName, testProjectName)
+        #TODO: à terminer
+
+    def getTestProjectByName(self, testProjectName):
+        """
+        Return project
+        A TestLinkError is raised in case of error
+        """
+        results = super(TestLink, self).getTestProjectByName(testProjectName)
+        if results[0].has_key("message"):
+             raise TestLinkErrors(results[0]["message"])
+
+        return results[0]
+
+    def getTestPlanByName(self, testProjectName, testPlanName):
+        """
+        Return test plan
+        A TestLinkErrors is raised in case of error
+        """
+        results = super(TestLink, self).getTestPlanByName(testProjectName, testPlanName)
+        if results[0].has_key("message"):
+            raise TestLinkErrors(results[0].["message"])
+
+        return results[0]

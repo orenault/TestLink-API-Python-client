@@ -32,11 +32,16 @@ class TestClass():
         # 31 is test case id
         assert_equal(val, '31' )
 
-        try:
-            val = self.client.getTestCaseIDByName("Initialisation", "Séquence 1", "Test 2")
-        except TestLinkErrors, e:
-            assert_equal(str(e), "(getTestCaseIDByName) - Several case test found. Suite name must not be duplicate for the same project") 
-        else:
-            print "An error message is expected !"
-            assert_equal(False, True)
+        # Check if an error is raised in case of bad parameters
+        assert_raises(TestLinkErrors, self.client.getTestCaseIDByName, "Initialisation", "Séquence 1", "Test 2")
 
+    def test_getTestProjectByName(self):
+        project = self.client.getTestProjectByName("Test 2")
+        assert_equals(type(project), dict)
+        # Check if an error is raised in case of bad parameters
+        assert_raises(TestLinkErrors, self.client.getTestProjectByName, "Unknown project")
+
+    def test_getTestPlanByName(self):
+        #print self.client.getTestPlanByName("Test 2", "Full")
+        #print self.client.getTestPlanByName("Test 2", "Name Error")
+        #assert_equal(True, False)
