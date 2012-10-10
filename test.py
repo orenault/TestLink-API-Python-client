@@ -42,6 +42,23 @@ class TestClass():
         assert_raises(TestLinkErrors, self.client.getTestProjectByName, "Unknown project")
 
     def test_getTestPlanByName(self):
-        #print self.client.getTestPlanByName("Test 2", "Full")
-        #print self.client.getTestPlanByName("Test 2", "Name Error")
-        #assert_equal(True, False)
+        plan_ok = self.client.getTestPlanByName("Test 2", "Full")
+
+        # Assume that plan id is 33
+        assert_equal(plan_ok['id'], '33')
+
+        assert_raises(TestLinkErrors, self.client.getTestPlanByName, "Test 2", "Name Error")
+
+    def test_getBuildByName(self):
+        pass
+
+    def test_reportResult(self):
+        dico = {'testProjectName': 'Automatique',
+                'testPlanName': 'FullAuto',
+                'buildName': 'V0.1'}
+        execid = self.client.reportResult("p", "test1", "S1", "An example of note", **dico)
+        assert_equal(type(execid), str)
+
+        execid = self.client.reportResult("f", "test2", "S1", **dico)
+        assert_equal(type(execid), str)
+

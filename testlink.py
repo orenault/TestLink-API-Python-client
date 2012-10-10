@@ -11,6 +11,7 @@ Update by pade to provide a user friendly library, with more robustness and erro
 """
 import xmlrpclib
 import sys
+from datetime import date
 
 class TestLinkErrors(Exception):
     """ Basic error handler
@@ -373,9 +374,9 @@ class TestLinkAPIClient(object):
         argsAPI = {'devKey' : self.devKey,
                 'testcaseid' : testcaseid,
                 'testplanid' : testplanid,
-                'buildname':buildname,
                 'status': status,
-                'notes' : notes
+                'buildname': buildname,
+                'notes': str(notes)
                 }
         return self.server.tl.reportTCResult(argsAPI)
 
@@ -588,18 +589,20 @@ class TestLink(TestLinkAPIClient):
             raise TestLinkErrors("(getTestCaseIDByName) - Internal server error. Return value is not expected one!")
 
 
-    def reportResult(self, testResult, testCaseName, testSuiteName, testNotes, **kwargs):
+    def reportResult(self, testResult, testCaseName, testSuiteName, testNotes="", **kwargs):
         """
         Report results for test case
         Arguments are:
         - testResult: "p" for passed, "b" for blocked, "f" for failed
         - testCaseName: the test case name to report
         - testSuiteName: the test suite name that support the test case
+        - testNotes: optional, if empty will be replace by a default string. To let it blank, just set testNotes to " " characters
         - an anonymous dictionnary with followings keys:
             - testProjectName: the project to fill
             - testPlanName: the active test plan
             - buildName: the active build.
         Raise a TestLinkErrors error with the error message in case of trouble
+        Return the execution id needs to attach files to test execution
         """
         
         # Check parameters
@@ -613,29 +616,51 @@ class TestLink(TestLinkAPIClient):
         # Check if project is active
         if project['active'] != '1':
             raise TestLinkErrors("(reportResult) - Test project %s is not active" % kwargs["testProjectName"])
-        # Memorize project id
-        projectId = project['id']
 
         # Check test plan name
         plan = self.getTestPlanByName(kwargs["testProjectName"], kwargs["testPlanName"])
 
         # Check is test plan is open and active
-        if results[0]['is_open'] != '1' or results[0]['active'] != '1':
+        if plan['is_open'] != '1' or plan['active'] != '1':
             raise TestLinkErrors("(reportResult) - Test plan %s is not active or not open" % kwargs["testPlanName"])
+        # Memorise test plan id
+        planId = plan['id']
 
+        # Check build name
+        build = self.getBuildByName(kwargs["testProjectName"], kwargs["testPlanName"], kwargs["buildName"])
+
+        # Check if build is open and active
+        if build['is_open'] != '1' or build['active'] != '1':
+            raise TestLinkErrors("(reportResult) - Build %s in not active or not open" % kwargs["buildName"])
+
+        # Get test case id
+        caseId = self.getTestCaseIDByName(testCaseName, testSuiteName, kwargs["testProjectName"])
 
         # Check results parameters
-        if testResults not in "pbf":
+        if testResult not in "pbf":
             raise TestLinkErrors("(reportResult) - Test result must be 'p', 'f' or 'b'")
 
-        
-        results = self.reportTCResult(testCaseName, testSuiteName, testProjectName)
-        #TODO: à terminer
+        if testNotes == "":
+            # Builds testNotes if empty
+            today = date.today()
+            testNotes = "%s - Test performed automatically" % today.strftime("%c")
+        elif testNotes == " ":
+            #No notes
+            testNotes = ""
+
+        print "testNotes: %s" % testNotes
+        # Now report results
+        results = self.reportTCResult(caseId, planId, kwargs["buildName"], testResult, testNotes)
+        # Check errors
+        if results[0]["message"] != "Success!":
+            raise TestLinkErrors(results[0]["message"])
+    
+        return results[0]['id']
 
     def getTestProjectByName(self, testProjectName):
         """
         Return project
-        A TestLinkError is raised in case of error
+        A TestLinkErrors is raised in case of error
         """
         results = super(TestLink, self).getTestProjectByName(testProjectName)
         if results[0].has_key("message"):
@@ -650,6 +675,28 @@ class TestLink(TestLinkAPIClient):
         """
         results = super(TestLink, self).getTestPlanByName(testProjectName, testPlanName)
         if results[0].has_key("message"):
-            raise TestLinkErrors(results[0].["message"])
+            raise TestLinkErrors(results[0]["message"])
 
         return results[0]
+
+    def getBuildByName(self, testProjectName, testPlanName, buildName):
+        """
+        Return build corresponding to buildName
+        A TestLinkErrors is raised in case of error
+        """
+        plan = self.getTestPlanByName(testProjectName, testPlanName)
+        builds = self.getBuildsForTestPlan(plan['id'])
+
+        # Check if a builds exists
+        if builds == '':
+            raise TestLinkErrors("(getBuildsByName) - Builds %s does not exists for test plan %s" % (buildsName, testPlanName))
+
+        # Search the correct build name in the return builds list
+        for build in builds:
+            if build['name'] == buildName:
+                return build
+        
+        # No build found with builName name
+        raise TestLinkErrors("(getBuildsByName) - Builds %s does not exists for test plan %s" % (buildsName, testPlanName))
+
+
