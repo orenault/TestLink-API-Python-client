@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 
 TestLinkAPI - v0.20
@@ -6,13 +7,25 @@ Created on 5 nov. 2011
 @author: kereval.com
 Initialy based on the James Stock testlink-api-python-client R7.
 
-Updated by Kereval to support testCase Reporting and File attachment to test execution
-
+Update by pade to provide a user friendly library, with more robustness and error management
 """
 import xmlrpclib
+import sys
+from datetime import date
 
-class TestlinkAPIClient:        
-  
+class TestLinkErrors(Exception):
+    """ Basic error handler
+    Return message pass as argument
+    """
+    def __init__(self, msg):
+        self.__msg = msg
+
+    def __str__(self):
+        return self.__msg
+
+class TestLinkAPIClient(object):        
+ 
+
     def __init__(self, server_url, devKey):
         self.server = xmlrpclib.Server(server_url)
         self.devKey = devKey
@@ -139,14 +152,32 @@ class TestlinkAPIClient:
                 'details' : str(details)}
         return self.server.tl.getTestCaseCustomFieldDesignValue(argsAPI)                                                
 
-    def getTestCaseIDByName(self, testCaseName):
-        """ getTestCaseIDByName :
-        Find a test case by its name   
-        """    
+    def getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
+        """ 
+        Find a test case by its name
+        testSuiteName and testProjectName are optionals arguments
+        This function return a list of tests cases
+        """
         argsAPI = {'devKey' : self.devKey,
                 'testcasename':str(testCaseName)}
-        return self.server.tl.getTestCaseIDByName(argsAPI)
-                                                   
+
+        if testSuiteName is not None:
+            argsAPI.update({'testsuitename':str(testSuiteName)})
+    
+        if testProjectName is not None:
+            argsAPI.update({'testprojectname':str(testProjectName)})
+
+        # Server return can be a list or a dictionnary !
+        # This function always return a list
+        ret_srv = self.server.tl.getTestCaseIDByName(argsAPI)
+        if type(ret_srv) == dict:
+            retval = []
+            for value in ret_srv.values():
+                retval.append(value)
+            return retval
+        else:
+            return ret_srv
+
     def getTestCasesForTestPlan(self, *args):
         """ getTestCasesForTestPlan :
         List test cases linked to a test plan    
@@ -329,12 +360,12 @@ class TestlinkAPIClient:
         self.stepsList = []                    
         return ret 
 
-    def reportTCResult(self, testcaseid, testplanid, buildid, status, notes ):
+    def reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
     	"""
         Report execution result
         testcaseid: internal testlink id of the test case
         testplanid: testplan associated with the test case
-        buildid: build version of the test case
+        buildname: build name of the test case
         status: test verdict ('p': pass,'f': fail,'b': blocked)
 
         Return : [{'status': True, 'operation': 'reportTCResult', 'message': 'Success!', 'overwrite': False, 'id': '37'}]
@@ -343,11 +374,13 @@ class TestlinkAPIClient:
         argsAPI = {'devKey' : self.devKey,
                 'testcaseid' : testcaseid,
                 'testplanid' : testplanid,
-                'buildid':buildid,
                 'status': status,
-                'notes' : notes
+                'buildname': buildname,
+                'notes': str(notes)
                 }
         return self.server.tl.reportTCResult(argsAPI)
+
+
         
     def uploadExecutionAttachment(self,attachmentfile,executionid,title,description):
         """
@@ -486,47 +519,184 @@ class TestlinkAPIClient:
         Initializes the list which stores the Steps of a Test Case to create  
         """
         self.stepsList = []
-        list = {}
-        list['step_number'] = '1'
-        list['actions'] = actions
-        list['expected_results'] = expected_results
-        list['execution_type'] = str(execution_type)
-        self.stepsList.append(list)
+        lst = {}
+        lst['step_number'] = '1'
+        lst['actions'] = actions
+        lst['expected_results'] = expected_results
+        lst['execution_type'] = str(execution_type)
+        self.stepsList.append(lst)
         return True
         
     def appendStep(self, actions, expected_results, execution_type):
         """ appendStep :
         Appends a step to the steps list  
         """
-        list = {}
-        list['step_number'] = str(len(self.stepsList)+1)
-        list['actions'] = actions
-        list['expected_results'] = expected_results
-        list['execution_type'] = str(execution_type)
-        self.stepsList.append(list)
+        lst = {}
+        lst['step_number'] = str(len(self.stepsList)+1)
+        lst['actions'] = actions
+        lst['expected_results'] = expected_results
+        lst['execution_type'] = str(execution_type)
+        self.stepsList.append(lst)
         return True                
                                         
     def getProjectIDByName(self, projectName):   
-	  	  projects=self.server.tl.getProjects({'devKey' : self.devKey})
-	  	  for project in projects:
-		  	    if (project['name'] == projectName): 
-		    	  	  result = project['id']
-		  	    else:
-		    	  	  result = -1
-	  	  return result
-	  	  
-if __name__ == "__main__":    
-    myTestLinkServer = "http://YOURSERVER/testlink/lib/api/xmlrpc.php"  #change
-    myDevKey = "" # Put here your devKey
-    myTestLink = TestlinkAPIClient(myTestLinkServer, myDevKey)
-    print "TestLinkAPIClient - v0.2"      
-    print "@author: Olivier Renault (admin@sqaopen.net)"
-    print ""
-    if myTestLink.checkDevKey() == True:      
-        methodList = [method for method in TestlinkAPIClient.__dict__]
-        for method in methodList:
-            if method[0:2] != "__": 
-                print method
-        print ""
-    else:
-        print "Incorrect DevKey."       
+        projects=self.server.tl.getProjects({'devKey' : self.devKey})
+	for project in projects:
+	    if (project['name'] == projectName): 
+                result = project['id']
+            else:
+                result = -1
+        return result
+
+    def __str__(self):
+        message = """
+TestLinkAPIClient - version %s
+@author: Olivier Renault (admin@sqaopen.net)
+@author: kereval.com
+@author: Patrick Dassier
+
+"""
+        return message % self.__VERSION__
+
+class TestLink(TestLinkAPIClient):
+    """
+    TestLink API library
+    """
+
+    __VERSION__ = "0.1"
+
+    def __init__(self, server_url, key):
+        """
+        Class initialisation
+        """
+        super(TestLink, self).__init__(server_url, key)
+
+    def getTestCaseIDByName(self, testCaseName, testSuiteName, testProjectName):
+        """
+        Find a test case by its name, by its suite and its project
+        Suite name must not be duplicate, so only one test case must be found 
+        Return test case id if success 
+        or raise TestLinkErrors exception with error message in case of error
+        """    
+        results = super(TestLink, self).getTestCaseIDByName(testCaseName, testSuiteName, testProjectName)
+        if results[0].has_key("message"):
+            raise TestLinkErrors(results[0]["message"])
+        elif len(results) > 1:
+            raise TestLinkErrors("(getTestCaseIDByName) - Several case test found. Suite name must not be duplicate for the same project")
+        else:
+            if results[0]["name"] == testCaseName:
+                    return results[0]["id"]
+            raise TestLinkErrors("(getTestCaseIDByName) - Internal server error. Return value is not expected one!")
+
+
+    def reportResult(self, testResult, testCaseName, testSuiteName, testNotes="", **kwargs):
+        """
+        Report results for test case
+        Arguments are:
+        - testResult: "p" for passed, "b" for blocked, "f" for failed
+        - testCaseName: the test case name to report
+        - testSuiteName: the test suite name that support the test case
+        - testNotes: optional, if empty will be replace by a default string. To let it blank, just set testNotes to " " characters
+        - an anonymous dictionnary with followings keys:
+            - testProjectName: the project to fill
+            - testPlanName: the active test plan
+            - buildName: the active build.
+        Raise a TestLinkErrors error with the error message in case of trouble
+        Return the execution id needs to attach files to test execution
+        """
+        
+        # Check parameters
+        for data in ["testProjectName", "testPlanName", "buildName"]:
+            if not kwargs.has_key(data):
+                raise TestLinkErrors("(reportResult) - Missing key %s in anonymous dictionnary" % data)
+
+        # Get project id
+        project = self.getTestProjectByName(kwargs["testProjectName"])
+
+        # Check if project is active
+        if project['active'] != '1':
+            raise TestLinkErrors("(reportResult) - Test project %s is not active" % kwargs["testProjectName"])
+
+        # Check test plan name
+        plan = self.getTestPlanByName(kwargs["testProjectName"], kwargs["testPlanName"])
+
+        # Check is test plan is open and active
+        if plan['is_open'] != '1' or plan['active'] != '1':
+            raise TestLinkErrors("(reportResult) - Test plan %s is not active or not open" % kwargs["testPlanName"])
+        # Memorise test plan id
+        planId = plan['id']
+
+        # Check build name
+        build = self.getBuildByName(kwargs["testProjectName"], kwargs["testPlanName"], kwargs["buildName"])
+
+        # Check if build is open and active
+        if build['is_open'] != '1' or build['active'] != '1':
+            raise TestLinkErrors("(reportResult) - Build %s in not active or not open" % kwargs["buildName"])
+
+        # Get test case id
+        caseId = self.getTestCaseIDByName(testCaseName, testSuiteName, kwargs["testProjectName"])
+
+        # Check results parameters
+        if testResult not in "pbf":
+            raise TestLinkErrors("(reportResult) - Test result must be 'p', 'f' or 'b'")
+
+        if testNotes == "":
+            # Builds testNotes if empty
+            today = date.today()
+            testNotes = "%s - Test performed automatically" % today.strftime("%c")
+        elif testNotes == " ":
+            #No notes
+            testNotes = ""
+
+        print "testNotes: %s" % testNotes
+        # Now report results
+        results = self.reportTCResult(caseId, planId, kwargs["buildName"], testResult, testNotes)
+        # Check errors
+        if results[0]["message"] != "Success!":
+            raise TestLinkErrors(results[0]["message"])
+    
+        return results[0]['id']
+
+    def getTestProjectByName(self, testProjectName):
+        """
+        Return project
+        A TestLinkErrors is raised in case of error
+        """
+        results = super(TestLink, self).getTestProjectByName(testProjectName)
+        if results[0].has_key("message"):
+             raise TestLinkErrors(results[0]["message"])
+
+        return results[0]
+
+    def getTestPlanByName(self, testProjectName, testPlanName):
+        """
+        Return test plan
+        A TestLinkErrors is raised in case of error
+        """
+        results = super(TestLink, self).getTestPlanByName(testProjectName, testPlanName)
+        if results[0].has_key("message"):
+            raise TestLinkErrors(results[0]["message"])
+
+        return results[0]
+
+    def getBuildByName(self, testProjectName, testPlanName, buildName):
+        """
+        Return build corresponding to buildName
+        A TestLinkErrors is raised in case of error
+        """
+        plan = self.getTestPlanByName(testProjectName, testPlanName)
+        builds = self.getBuildsForTestPlan(plan['id'])
+
+        # Check if a builds exists
+        if builds == '':
+            raise TestLinkErrors("(getBuildsByName) - Builds %s does not exists for test plan %s" % (buildsName, testPlanName))
+
+        # Search the correct build name in the return builds list
+        for build in builds:
+            if build['name'] == buildName:
+                return build
+        
+        # No build found with builName name
+        raise TestLinkErrors("(getBuildsByName) - Builds %s does not exists for test plan %s" % (buildsName, testPlanName))
+
+
