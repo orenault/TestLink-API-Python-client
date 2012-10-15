@@ -26,13 +26,13 @@ NewProject
                                            |   
                                            --- 5 automated test steps
 """                                       
-import TestLinkAPI
+from testlink import TestLinkAPIClient
 import sys
 
 myTestLinkServer = "http://YOURSERVER/testlink/lib/api/xmlrpc.php"  # YOURSERVER
 myDevKey = "" # Put here your devKey
 
-myTestLink = TestLinkAPI.TestlinkAPIClient(myTestLinkServer, myDevKey)
+myTestLink = TestLinkAPIClient(myTestLinkServer, myDevKey)
 
 
 NEWPROJECT="NEW_PROJECT_API"
