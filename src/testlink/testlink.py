@@ -71,7 +71,7 @@ class TestLinkAPIClient(object):
         argsAPI = {'devKey' : self.devKey,
                 'testplanid':str(testplanid)}   
         return self.server.tl.getBuildsForTestPlan(argsAPI)
-	  	  
+
     def getFirstLevelTestSuitesForTestProject(self,testprojectid):
         """ getFirstLevelTestSuitesForTestProject :
         Get set of test suites AT TOP LEVEL of tree on a Test Project 
@@ -191,8 +191,8 @@ class TestLinkAPIClient(object):
         if len(args)>1:
             params = args[1:] 
             for param in params:
-              paramlist = param.split("=")                     
-              argsAPI[paramlist[0]] = paramlist[1]  
+                paramlist = param.split("=")
+                argsAPI[paramlist[0]] = paramlist[1]  
         return self.server.tl.getTestCasesForTestPlan(argsAPI)   
             
     def getTestCasesForTestSuite(self, testsuiteid, deep, details):
@@ -279,15 +279,15 @@ class TestLinkAPIClient(object):
         if len(args)>2:
             params = args[2:] 
             for param in params:
-              paramlist = param.split("=")
-              if paramlist[0] == "options":
-                  optionlist = paramlist[1].split(",")
-                  for option in optionlist:
-                      optiontuple = option.split(":")
-                      options[optiontuple[0]] = optiontuple[1]  
-                  argsAPI[paramlist[0]] = options   
-              else:
-                  argsAPI[paramlist[0]] = paramlist[1]  
+                paramlist = param.split("=")
+                if paramlist[0] == "options":
+                    optionlist = paramlist[1].split(",")
+                    for option in optionlist:
+                        optiontuple = option.split(":")
+                        options[optiontuple[0]] = optiontuple[1]
+                    argsAPI[paramlist[0]] = options
+                else:
+                    argsAPI[paramlist[0]] = paramlist[1]  
         return self.server.tl.createTestProject(argsAPI)
         
     def createBuild(self, testplanid, buildname, buildnotes):
@@ -314,8 +314,8 @@ class TestLinkAPIClient(object):
         if len(args)>2:
             params = args[2:] 
             for param in params:
-              paramlist = param.split("=")       
-              argsAPI[paramlist[0]] = paramlist[1]  
+                paramlist = param.split("=")
+                argsAPI[paramlist[0]] = paramlist[1]  
         return self.server.tl.createTestPlan(argsAPI)    
  
     def createTestSuite(self, *args):
@@ -332,8 +332,8 @@ class TestLinkAPIClient(object):
         if len(args)>3:
             params = args[3:] 
             for param in params:
-              paramlist = param.split("=")       
-              argsAPI[paramlist[0]] = paramlist[1]  
+                paramlist = param.split("=")
+                argsAPI[paramlist[0]] = paramlist[1]  
         return self.server.tl.createTestSuite(argsAPI)       
 
     def createTestCase(self, *args):
@@ -354,14 +354,14 @@ class TestLinkAPIClient(object):
         if len(args)>5:
             params = args[5:] 
             for param in params:
-              paramlist = param.split("=")       
-              argsAPI[paramlist[0]] = paramlist[1]
+                paramlist = param.split("=")
+                argsAPI[paramlist[0]] = paramlist[1]
         ret = self.server.tl.createTestCase(argsAPI) 
         self.stepsList = []                    
         return ret 
 
     def reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
-    	"""
+        """
         Report execution result
         testcaseid: internal testlink id of the test case
         testplanid: testplan associated with the test case
@@ -412,17 +412,17 @@ class TestLinkAPIClient(object):
         """ countProjects :
         Count all the test project   
         """
-        projects=TestlinkAPIClient.getProjects(self)
+        projects=TestLinkAPIClient.getProjects(self)
         return len(projects)
     
     def countTestPlans(self):
         """ countProjects :
         Count all the test plans   
         """
-        projects=TestlinkAPIClient.getProjects(self)
+        projects=TestLinkAPIClient.getProjects(self)
         nbTP = 0
         for project in projects:
-            ret = TestlinkAPIClient.getProjectTestPlans(self,project['id'])
+            ret = TestLinkAPIClient.getProjectTestPlans(self,project['id'])
             nbTP += len(ret)
         return nbTP
 
@@ -430,13 +430,13 @@ class TestLinkAPIClient(object):
         """ countProjects :
         Count all the test suites   
         """
-        projects=TestlinkAPIClient.getProjects(self)
+        projects=TestLinkAPIClient.getProjects(self)
         nbTS = 0
         for project in projects:
-            TestPlans = TestlinkAPIClient.getProjectTestPlans(self,
+            TestPlans = TestLinkAPIClient.getProjectTestPlans(self,
                                                                  project['id'])
             for TestPlan in TestPlans:
-                TestSuites = TestlinkAPIClient.getTestSuitesForTestPlan(self, 
+                TestSuites = TestLinkAPIClient.getTestSuitesForTestPlan(self, 
                                                                 TestPlan['id'])
                 nbTS += len(TestSuites)
         return nbTS
@@ -445,13 +445,13 @@ class TestLinkAPIClient(object):
         """ countProjects :
         Count all the test cases linked to a Test Plan   
         """
-        projects=TestlinkAPIClient.getProjects(self)
+        projects=TestLinkAPIClient.getProjects(self)
         nbTC = 0
         for project in projects:
-            TestPlans = TestlinkAPIClient.getProjectTestPlans(self, 
+            TestPlans = TestLinkAPIClient.getProjectTestPlans(self, 
                                                                  project['id'])
             for TestPlan in TestPlans:
-                TestCases = TestlinkAPIClient.getTestCasesForTestPlan(self,
+                TestCases = TestLinkAPIClient.getTestCasesForTestPlan(self,
                                                                 TestPlan['id'])
                 nbTC += len(TestCases)
         return nbTC
@@ -460,16 +460,16 @@ class TestLinkAPIClient(object):
         """ countProjects :
         Count all the test cases linked to a Test Suite   
         """
-        projects=TestlinkAPIClient.getProjects(self)
+        projects=TestLinkAPIClient.getProjects(self)
         nbTC = 0
         for project in projects:
-            TestPlans = TestlinkAPIClient.getProjectTestPlans(self,
+            TestPlans = TestLinkAPIClient.getProjectTestPlans(self,
                                                                  project['id'])
             for TestPlan in TestPlans:
-                TestSuites = TestlinkAPIClient.getTestSuitesForTestPlan(self,
+                TestSuites = TestLinkAPIClient.getTestSuitesForTestPlan(self,
                                                                 TestPlan['id'])
                 for TestSuite in TestSuites:
-                    TestCases = TestlinkAPIClient.getTestCasesForTestSuite(self,
+                    TestCases = TestLinkAPIClient.getTestCasesForTestSuite(self,
                                                  TestSuite['id'],'true','full')
                     for TestCase in TestCases:
                         nbTC += len(TestCases)
@@ -479,13 +479,13 @@ class TestLinkAPIClient(object):
         """ countPlatforms :
         Count all the Platforms  
         """
-        projects=TestlinkAPIClient.getProjects(self)
+        projects=TestLinkAPIClient.getProjects(self)
         nbPlatforms = 0
         for project in projects:
-            TestPlans = TestlinkAPIClient.getProjectTestPlans(self,
+            TestPlans = TestLinkAPIClient.getProjectTestPlans(self,
                                                                  project['id'])
             for TestPlan in TestPlans:
-                Platforms = TestlinkAPIClient.getTestPlanPlatforms(self,
+                Platforms = TestLinkAPIClient.getTestPlanPlatforms(self,
                                                                 TestPlan['id'])
                 nbPlatforms += len(Platforms)
         return nbPlatforms
@@ -494,13 +494,13 @@ class TestLinkAPIClient(object):
         """ countBuilds :
         Count all the Builds  
         """
-        projects=TestlinkAPIClient.getProjects(self)
+        projects=TestLinkAPIClient.getProjects(self)
         nbBuilds = 0
         for project in projects:
-            TestPlans = TestlinkAPIClient.getProjectTestPlans(self,
+            TestPlans = TestLinkAPIClient.getProjectTestPlans(self,
                                                                  project['id'])
             for TestPlan in TestPlans:
-                Builds = TestlinkAPIClient.getBuildsForTestPlan(self,
+                Builds = TestLinkAPIClient.getBuildsForTestPlan(self,
                                                                 TestPlan['id'])
                 nbBuilds += len(Builds)
         return nbBuilds
@@ -509,9 +509,9 @@ class TestLinkAPIClient(object):
         """ listProjects :
         Lists the Projects (display Name & ID)  
         """
-        projects=TestlinkAPIClient.getProjects(self)
+        projects=TestLinkAPIClient.getProjects(self)
         for project in projects:
-          print "Name: %s ID: %s " % (project['name'], project['id'])
+            print "Name: %s ID: %s " % (project['name'], project['id'])
   
 
     def initStep(self, actions, expected_results, execution_type):
@@ -541,8 +541,8 @@ class TestLinkAPIClient(object):
                                         
     def getProjectIDByName(self, projectName):   
         projects=self.server.tl.getProjects({'devKey' : self.devKey})
-	for project in projects:
-	    if (project['name'] == projectName): 
+        for project in projects:
+            if (project['name'] == projectName): 
                 result = project['id']
             else:
                 result = -1
@@ -664,7 +664,7 @@ class TestLink(TestLinkAPIClient):
         """
         results = super(TestLink, self).getTestProjectByName(testProjectName)
         if results[0].has_key("message"):
-             raise TestLinkErrors(results[0]["message"])
+            raise TestLinkErrors(results[0]["message"])
 
         return results[0]
 
@@ -689,7 +689,7 @@ class TestLink(TestLinkAPIClient):
 
         # Check if a builds exists
         if builds == '':
-            raise TestLinkErrors("(getBuildsByName) - Builds %s does not exists for test plan %s" % (buildsName, testPlanName))
+            raise TestLinkErrors("(getBuildByName) - Builds %s does not exists for test plan %s" % (buildName, testPlanName))
 
         # Search the correct build name in the return builds list
         for build in builds:
@@ -697,6 +697,6 @@ class TestLink(TestLinkAPIClient):
                 return build
         
         # No build found with builName name
-        raise TestLinkErrors("(getBuildsByName) - Builds %s does not exists for test plan %s" % (buildsName, testPlanName))
+        raise TestLinkErrors("(getBuildByName) - Builds %s does not exists for test plan %s" % (buildName, testPlanName))
 
 
