@@ -1,13 +1,14 @@
 TestLink API Python Client
 ==========================
 
-Copyright 2011 James Stock, Olivier Renault, kereval.com, Patrick Dassier
+Copyright 2011-2012 James Stock, [Olivier Renault], kereval.com, [g4l4drim], [Patrick Dassier]
+
 License [unclear License Type]
 
 Introduction
 ------------
 
-Brick of [Olivier Renault] [JinFeng] idea - a Python XMLRPC client for the [TestLink] API.
+Brick of Olivier Renault [JinFeng] idea - a Python XMLRPC client for the [TestLink] API.
 
 Initialy based on the [James Stock testlink-api-python-client R7].
 
@@ -62,6 +63,8 @@ see [downloads]
 
 [unclear License Type]: https://github.com/orenault/TestLink-API-Python-client/issues/4
 [Olivier Renault]: https://github.com/orenault/TestLink-API-Python-client
+[Patrick Dassier]: https://github.com/pade/TestLink-API-Python-client
+[g4l4drim]: https://github.com/g4l4drim/TestLink-API-Python-client
 [JinFeng]: http://www.sqaopen.net/blog/en/?p=63
 [James Stock testlink-api-python-client R7]: https://code.google.com/p/testlink-api-python-client/
 [TestLink]: http://www.teamst.org/
