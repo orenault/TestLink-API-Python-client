@@ -7,3 +7,4 @@
 #  
 
 from .testlink import TestLinkErrors, TestLinkAPIClient, TestLink
+from .testlinkhelper import TestLinkHelper

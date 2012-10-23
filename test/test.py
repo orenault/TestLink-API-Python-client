@@ -13,7 +13,7 @@ Fichier de test pour le module "TestLinkAPI.py"
 '''
 
 import re
-from testlink import TestLink, TestLinkErrors
+from testlink import TestLink, TestLinkErrors, TestLinkHelper
 from nose.tools import *
 
 class TestClass():
@@ -21,9 +21,10 @@ class TestClass():
         """Initialisation
         """
 
-        SERVEUR_URL = "http://localhost/testlink/lib/api/xmlrpc.php"
-        KEY = "7ec252ab966ce88fd92c25d08635672b"
-        self.client = TestLink(server_url=SERVEUR_URL, key=KEY)
+        # precondition - SERVEUR_URL and KEY are defined in environment
+        # TESTLINK_API_PYTHON_SERVER_URL=http://localhost/testlink/lib/api/xmlrpc.php
+        # TESTLINK_API_PYTHON_DEVKEY=7ec252ab966ce88fd92c25d08635672b
+        self.client = TestLinkHelper().connect(TestLink)
 
     def test_getTestCaseIDByName(self):
         """ getTestCaseIDByName test

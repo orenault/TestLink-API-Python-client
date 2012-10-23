@@ -12,6 +12,7 @@ Update by pade to provide a user friendly library, with more robustness and erro
 import xmlrpclib
 import sys
 from datetime import date
+from testlinkhelper import TestLinkHelper
 
 class TestLinkErrors(Exception):
     """ Basic error handler
@@ -698,5 +699,12 @@ class TestLink(TestLinkAPIClient):
         
         # No build found with builName name
         raise TestLinkErrors("(getBuildByName) - Builds %s does not exists for test plan %s" % (buildName, testPlanName))
+    
+if __name__ == "__main__":
+    tl_helper = TestLinkHelper()
+    tl_helper.setParamsFromArgs()
+    myTestLink = tl_helper.connect(TestLink)
+    print myTestLink.about()
+
 
 
