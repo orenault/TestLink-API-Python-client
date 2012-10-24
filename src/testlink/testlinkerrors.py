@@ -6,7 +6,7 @@
 #  Licensed under ???
 #  see https://github.com/orenault/TestLink-API-Python-client/issues/4
 
-class TestLinkErrors(Exception):
+class TestLinkError(Exception):
     """ Basic error handler
     Return message pass as argument
     """

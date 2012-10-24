@@ -7,6 +7,6 @@
 #  see https://github.com/orenault/TestLink-API-Python-client/issues/4
 
 
-from .testlinkerrors import TestLinkErrors
+from .testlinkerrors import TestLinkError
 from .testlink import TestLinkAPIClient, TestLink
 from .testlinkhelper import TestLinkHelper
