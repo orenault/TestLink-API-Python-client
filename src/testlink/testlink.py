@@ -13,16 +13,7 @@ import xmlrpclib
 import sys
 from datetime import date
 from testlinkhelper import TestLinkHelper
-
-class TestLinkErrors(Exception):
-    """ Basic error handler
-    Return message pass as argument
-    """
-    def __init__(self, msg):
-        self.__msg = msg
-
-    def __str__(self):
-        return self.__msg
+from testlinkerrors import TestLinkErrors
 
 class TestLinkAPIClient(object):        
  
