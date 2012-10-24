@@ -8,5 +8,6 @@
 
 
 from .testlinkerrors import TestLinkError
-from .testlink import TestLinkAPIClient, TestLink
+from .testlinkapi import TestLinkAPIClient
+from .testlink import TestLink
 from .testlinkhelper import TestLinkHelper
