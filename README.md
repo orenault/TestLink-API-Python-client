@@ -1,15 +1,20 @@
 TestLink API Python Client
 ==========================
 
-Copyright 2011 James Stock, Olivier Renault, kereval.com, Patrick Dassier
+Copyright 2011-2012 
+James Stock, Olivier Renault, TestLink-API-Python-client developers
+
 License [unclear License Type]
 
 Introduction
 ------------
 
-Brick of [Olivier Renault] [JinFeng] idea - a Python XMLRPC client for the [TestLink] API.
+TestLink-API-Python-client is a Python XMLRPC client for the [TestLink API].
 
-Initialy based on the [James Stock testlink-api-python-client R7].
+It's a brick of Olivier Renault [JinFeng] idea - an interaction of [TestLink], 
+ [Robot Framework] and [Jenkins].
+
+Initially based on the James Stock testlink-api-python-client R7.
 
 
 Directory Layout
@@ -24,8 +29,8 @@ tests/
 examples/
 *   Examples, how to use the TestLink API Python Client
 
-Installlation
--------------
+Installation
+------------
 
 ### Install TestLinkAPI into a virtualenv environment
 
@@ -57,12 +62,25 @@ nosetests test\test.py
 Download
 --------
 
-see [downloads] 
+see [downloads]
+
+
+TestLink-API-Python-client developers
+-------------------------------------
+*   [James Stock], [Olivier Renault], kereval.com
+*   [g4l4drim], [pade], [lczub] 
+*   anyone forgotten?
 
 
 [unclear License Type]: https://github.com/orenault/TestLink-API-Python-client/issues/4
-[Olivier Renault]: https://github.com/orenault/TestLink-API-Python-client
 [JinFeng]: http://www.sqaopen.net/blog/en/?p=63
-[James Stock testlink-api-python-client R7]: https://code.google.com/p/testlink-api-python-client/
+[TestLink API]: http://www.teamst.org/_tldoc/1.8/phpdoc_api/TestlinkAPI/TestlinkXMLRPCServer.html
 [TestLink]: http://www.teamst.org/
+[Robot Framework]: http://code.google.com/p/robotframework
+[Jenkins]: http://jenkins-ci.org/
 [downloads]: https://github.com/lczub/TestLink-API-Python-client/downloads
+[Olivier Renault]: https://github.com/orenault/TestLink-API-Python-client
+[pade]: https://github.com/pade/TestLink-API-Python-client
+[g4l4drim]: https://github.com/g4l4drim/TestLink-API-Python-client
+[James Stock]: https://code.google.com/p/testlink-api-python-client/
+[lczub]: https://github.com/lczub/TestLink-API-Python-client
