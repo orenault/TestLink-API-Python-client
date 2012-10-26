@@ -8,6 +8,7 @@
 
 import os
 from argparse import ArgumentParser
+from version import VERSION
 
 
 class TestLinkHelper(object):
@@ -43,7 +44,8 @@ class TestLinkHelper(object):
     ENVNAME_DEVKEY      = 'TESTLINK_API_PYTHON_DEVKEY'
     DEFAULT_SERVER_URL  = 'http://localhost/testlink/lib/api/xmlrpc.php'
     DEFAULT_DEVKEY      = '42'
-    DEFAULT_DESCRIPTION = 'Python XMLRPC client for the TestLink API'
+    DEFAULT_DESCRIPTION = 'Python XMLRPC client for the TestLink API v%s' \
+                            % VERSION
 
     def __init__(self, server_url=None, devkey=None):
         """ fill slots _server_url and _devkey

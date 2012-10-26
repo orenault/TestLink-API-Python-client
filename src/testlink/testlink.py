@@ -17,8 +17,6 @@ class TestLink(TestLinkAPIClient):
     provide a user friendly library, with more robustness and error management
     """
 
-    __VERSION__ = "0.1"
-
     def __init__(self, server_url, key):
         """
         Class initialisation
@@ -157,4 +155,5 @@ if __name__ == "__main__":
     tl_helper = TestLinkHelper()
     tl_helper.setParamsFromArgs()
     myTestLink = tl_helper.connect(TestLink)
+    print myTestLink
     print myTestLink.about()

@@ -8,10 +8,14 @@
 
 import xmlrpclib
 
-from testlinkhelper import TestLinkHelper
+from testlinkhelper import TestLinkHelper, VERSION
 
-class TestLinkAPIClient(object):        
+
+class TestLinkAPIClient(object):    
+    
+    __slots__ = ['server', 'devKey', 'stepsList']
  
+    __VERSION__ = VERSION
 
     def __init__(self, server_url, devKey):
         self.server = xmlrpclib.Server(server_url)
@@ -537,19 +541,19 @@ class TestLinkAPIClient(object):
 
     def __str__(self):
         message = """
-TestLinkAPIClient - version %s
+TestLinkAPIClient - class %s - version %s
 @author: Olivier Renault (admin@sqaopen.net)
 @author: kereval.com
 @author: Patrick Dassier
-
 """
-        return message % self.__VERSION__
+        return message % (self.__class__.__name__, self.__VERSION__)
 
     
 if __name__ == "__main__":
     tl_helper = TestLinkHelper()
     tl_helper.setParamsFromArgs()
     myTestLink = tl_helper.connect(TestLinkAPIClient)
+    print myTestLink
     print myTestLink.about()
 
 
