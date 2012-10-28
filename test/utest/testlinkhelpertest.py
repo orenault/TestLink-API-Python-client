@@ -6,6 +6,9 @@
 #  Licensed under ???
 #  see https://github.com/orenault/TestLink-API-Python-client/issues/4
 
+# this test works WITHOUT an online TestLink Server
+# no calls are send to a TestLink Server
+
 import unittest, os
 from testlink import TestLinkHelper
 

@@ -9,11 +9,12 @@
 import xmlrpclib
 
 from testlinkhelper import TestLinkHelper, VERSION
+import testlinkerrors
 
 
 class TestLinkAPIClient(object):    
     
-    __slots__ = ['server', 'devKey', 'stepsList']
+    __slots__ = ['server', 'devKey', 'stepsList', '_server_url']
  
     __VERSION__ = VERSION
 
@@ -21,7 +22,29 @@ class TestLinkAPIClient(object):
         self.server = xmlrpclib.Server(server_url)
         self.devKey = devKey
         self.stepsList = []
+        self._server_url = server_url
+        
+    def _callServer(self, methodAPI, argsAPI=None):
+        """ call server method METHODAPI with error handling and returns the 
+        responds """
+        
+        response = None
+        try:
+            if argsAPI is None:
+                response = getattr(self.server.tl, methodAPI)()
+            else:
+                response = getattr(self.server.tl, methodAPI)(argsAPI)
+        except (IOError, xmlrpclib.ProtocolError), msg:
+            new_msg = 'problems connecting the TestLink Server %s\n%s' %\
+            (self._server_url, msg) 
+            raise testlinkerrors.TLConnectionError(new_msg)
+        except xmlrpclib.Fault, msg:
+            new_msg = 'problems calling the API method %s\n%s' %\
+            (methodAPI, msg) 
+            raise testlinkerrors.TLAPIError(new_msg)
 
+        return response
+        
     #
     #  BUILT-IN API CALLS
     #
