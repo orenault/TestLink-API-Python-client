@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2012 Olivier Renault, James Stock, kereval.com, TestLink-API-Python-client developers
+#  Copyright 2011-2012 Olivier Renault, James Stock, TestLink-API-Python-client developers
 #
 #  Licensed under ???
 #  see https://github.com/orenault/TestLink-API-Python-client/issues/4
@@ -542,9 +542,7 @@ class TestLinkAPIClient(object):
     def __str__(self):
         message = """
 TestLinkAPIClient - class %s - version %s
-@author: Olivier Renault (admin@sqaopen.net)
-@author: kereval.com
-@author: Patrick Dassier
+@author: Olivier Renault, James Stock, TestLink-API-Python-client developers
 """
         return message % (self.__class__.__name__, self.__VERSION__)
 
