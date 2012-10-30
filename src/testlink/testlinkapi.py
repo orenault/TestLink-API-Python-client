@@ -9,11 +9,12 @@
 import xmlrpclib
 
 from testlinkhelper import TestLinkHelper, VERSION
+import testlinkerrors
 
 
 class TestLinkAPIClient(object):    
     
-    __slots__ = ['server', 'devKey', 'stepsList']
+    __slots__ = ['server', 'devKey', 'stepsList', '_server_url']
  
     __VERSION__ = VERSION
 
@@ -21,7 +22,29 @@ class TestLinkAPIClient(object):
         self.server = xmlrpclib.Server(server_url)
         self.devKey = devKey
         self.stepsList = []
+        self._server_url = server_url
+        
+    def _callServer(self, methodAPI, argsAPI=None):
+        """ call server method METHODAPI with error handling and returns the 
+        responds """
+        
+        response = None
+        try:
+            if argsAPI is None:
+                response = getattr(self.server.tl, methodAPI)()
+            else:
+                response = getattr(self.server.tl, methodAPI)(argsAPI)
+        except (IOError, xmlrpclib.ProtocolError), msg:
+            new_msg = 'problems connecting the TestLink Server %s\n%s' %\
+            (self._server_url, msg) 
+            raise testlinkerrors.TLConnectionError(new_msg)
+        except xmlrpclib.Fault, msg:
+            new_msg = 'problems calling the API method %s\n%s' %\
+            (methodAPI, msg) 
+            raise testlinkerrors.TLAPIError(new_msg)
 
+        return response
+        
     #
     #  BUILT-IN API CALLS
     #
@@ -31,21 +54,21 @@ class TestLinkAPIClient(object):
         check if Developer Key exists   
         """
         argsAPI = {'devKey' : self.devKey}     
-        return self.server.tl.checkDevKey(argsAPI)  
+        return self._callServer('checkDevKey', argsAPI)  
     
     def about(self):
         """ about :
         Gives basic information about the API    
         """
-        return self.server.tl.about()
+        return self._callServer('about')
   
     def ping(self):
         """ ping :   
         """
-        return self.server.tl.ping()
+        return self._callServer('ping')
 
     def echo(self, message):
-        return self.server.tl.repeat({'str': message})
+        return self._callServer('repeat', {'str': message})
 
     def doesUserExist(self, user):
         """ doesUserExist :
@@ -53,7 +76,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'user':str(user)}   
-        return self.server.tl.doesUserExist(argsAPI)
+        return self._callServer('doesUserExist', argsAPI)
         
     def getBuildsForTestPlan(self, testplanid):
         """ getBuildsForTestPlan :
@@ -61,7 +84,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testplanid':str(testplanid)}   
-        return self.server.tl.getBuildsForTestPlan(argsAPI)
+        return self._callServer('getBuildsForTestPlan', argsAPI)
 
     def getFirstLevelTestSuitesForTestProject(self,testprojectid):
         """ getFirstLevelTestSuitesForTestProject :
@@ -69,7 +92,7 @@ class TestLinkAPIClient(object):
         """  
         argsAPI = {'devKey' : self.devKey,
                 'testprojectid':str(testprojectid)}   
-        return self.server.tl.getFirstLevelTestSuitesForTestProject(argsAPI)
+        return self._callServer('getFirstLevelTestSuitesForTestProject', argsAPI)
         
     def getFullPath(self,nodeid):
         """ getFullPath :
@@ -78,7 +101,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'nodeid':str(nodeid)}    
-        return self.server.tl.getFullPath(argsAPI)
+        return self._callServer('getFullPath', argsAPI)
 
     def getLastExecutionResult(self, testplanid, testcaseid):
         """ getLastExecutionResult :
@@ -88,7 +111,7 @@ class TestLinkAPIClient(object):
         argsAPI = {'devKey' : self.devKey,
                 'testplanid' : str(testplanid),
                 'testcaseid' : str(testcaseid)}     
-        return self.server.tl.getLastExecutionResult(argsAPI)
+        return self._callServer('getLastExecutionResult', argsAPI)
 
     def getLatestBuildForTestPlan(self, testplanid):
         """ getLastExecutionResult :
@@ -97,14 +120,14 @@ class TestLinkAPIClient(object):
         """  
         argsAPI = {'devKey' : self.devKey,
                 'testplanid':str(testplanid)}  
-        return self.server.tl.getLatestBuildForTestPlan(argsAPI)
+        return self._callServer('getLatestBuildForTestPlan', argsAPI)
 
     def getProjects(self):
         """ getProjects: 
         Gets a list of all projects 
         """
         argsAPI = {'devKey' : self.devKey} 
-        return self.server.tl.getProjects(argsAPI)
+        return self._callServer('getProjects', argsAPI)
 
     def getProjectTestPlans(self, testprojectid):
         """ getLastExecutionResult :
@@ -112,7 +135,7 @@ class TestLinkAPIClient(object):
         """ 
         argsAPI = {'devKey' : self.devKey,
                 'testprojectid':str(testprojectid)}  
-        return self.server.tl.getProjectTestPlans(argsAPI)
+        return self._callServer('getProjectTestPlans', argsAPI)
 
     def getTestCase(self, testcaseid):
         """ getTestCase :
@@ -120,7 +143,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testcaseid' : str(testcaseid)}  
-        return self.server.tl.getTestCase(argsAPI)          
+        return self._callServer('getTestCase', argsAPI)          
 
     def getTestCaseAttachments(self, testcaseid):
         """ getTestCaseAttachments :
@@ -128,7 +151,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testcaseid':str(testcaseid)}  
-        return self.server.tl.getTestCaseAttachments(argsAPI)    
+        return self._callServer('getTestCaseAttachments', argsAPI)    
 
     def getTestCaseCustomFieldDesignValue(self, testcaseexternalid, version, 
                                      testprojectid, customfieldname, details):
@@ -141,7 +164,7 @@ class TestLinkAPIClient(object):
                 'testprojectid' : str(testprojectid),
                 'customfieldname' : str(customfieldname),
                 'details' : str(details)}
-        return self.server.tl.getTestCaseCustomFieldDesignValue(argsAPI)                                                
+        return self._callServer('getTestCaseCustomFieldDesignValue', argsAPI)                                                
 
     def getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
         """ 
@@ -160,7 +183,7 @@ class TestLinkAPIClient(object):
 
         # Server return can be a list or a dictionnary !
         # This function always return a list
-        ret_srv = self.server.tl.getTestCaseIDByName(argsAPI)
+        ret_srv = self._callServer('getTestCaseIDByName', argsAPI)
         if type(ret_srv) == dict:
             retval = []
             for value in ret_srv.values():
@@ -184,7 +207,7 @@ class TestLinkAPIClient(object):
             for param in params:
                 paramlist = param.split("=")
                 argsAPI[paramlist[0]] = paramlist[1]  
-        return self.server.tl.getTestCasesForTestPlan(argsAPI)   
+        return self._callServer('getTestCasesForTestPlan', argsAPI)   
             
     def getTestCasesForTestSuite(self, testsuiteid, deep, details):
         """ getTestCasesForTestSuite :
@@ -194,7 +217,7 @@ class TestLinkAPIClient(object):
                 'testsuiteid' : str(testsuiteid),
                 'deep' : str(deep),
                 'details' : str(details)}                  
-        return self.server.tl.getTestCasesForTestSuite(argsAPI)
+        return self._callServer('getTestCasesForTestSuite', argsAPI)
   
     def getTestPlanByName(self, testprojectname, testplanname):
         """ getTestPlanByName :
@@ -203,7 +226,7 @@ class TestLinkAPIClient(object):
         argsAPI = {'devKey' : self.devKey,
                 'testprojectname' : str(testprojectname),
                 'testplanname' : str(testplanname)}    
-        return self.server.tl.getTestPlanByName(argsAPI)
+        return self._callServer('getTestPlanByName', argsAPI)
 
     def getTestPlanPlatforms(self, testplanid):
         """ getTestPlanPlatforms :
@@ -211,7 +234,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testplanid' : str(testplanid)}    
-        return self.server.tl.getTestPlanPlatforms(argsAPI)  
+        return self._callServer('getTestPlanPlatforms', argsAPI)  
 
     def getTestProjectByName(self, testprojectname):
         """ getTestProjectByName :
@@ -219,7 +242,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testprojectname' : str(testprojectname)}    
-        return self.server.tl.getTestProjectByName(argsAPI)    
+        return self._callServer('getTestProjectByName', argsAPI)    
   
     def getTestSuiteByID(self, testsuiteid):
         """ getTestSuiteByID :
@@ -227,7 +250,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testsuiteid' : str(testsuiteid)}    
-        return self.server.tl.getTestSuiteByID(argsAPI)   
+        return self._callServer('getTestSuiteByID', argsAPI)   
   
     def getTestSuitesForTestPlan(self, testplanid):
         """ getTestSuitesForTestPlan :
@@ -235,7 +258,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testplanid' : str(testplanid)}    
-        return self.server.tl.getTestSuitesForTestPlan(argsAPI)  
+        return self._callServer('getTestSuitesForTestPlan', argsAPI)  
         
     def getTestSuitesForTestSuite(self, testsuiteid):
         """ getTestSuitesForTestSuite :
@@ -243,7 +266,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testsuiteid' : str(testsuiteid)}    
-        return self.server.tl.getTestSuitesForTestSuite(argsAPI)        
+        return self._callServer('getTestSuitesForTestSuite', argsAPI)        
         
     def getTotalsForTestPlan(self, testplanid):
         """ getTotalsForTestPlan :
@@ -251,7 +274,7 @@ class TestLinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testplanid' : str(testplanid)}    
-        return self.server.tl.getTotalsForTestPlan(argsAPI)  
+        return self._callServer('getTotalsForTestPlan', argsAPI)  
 
     def createTestProject(self, *args):
         """ createTestProject :
@@ -279,7 +302,7 @@ class TestLinkAPIClient(object):
                     argsAPI[paramlist[0]] = options
                 else:
                     argsAPI[paramlist[0]] = paramlist[1]  
-        return self.server.tl.createTestProject(argsAPI)
+        return self._callServer('createTestProject', argsAPI)
         
     def createBuild(self, testplanid, buildname, buildnotes):
         """ createBuild :
@@ -289,7 +312,7 @@ class TestLinkAPIClient(object):
                 'testplanid' : str(testplanid),
                 'buildname' : str(buildname),
                 'buildnotes' : str(buildnotes)}                  
-        return self.server.tl.createBuild(argsAPI)        
+        return self._callServer('createBuild', argsAPI)        
     
     def createTestPlan(self, *args):
         """ createTestPlan :
@@ -307,7 +330,7 @@ class TestLinkAPIClient(object):
             for param in params:
                 paramlist = param.split("=")
                 argsAPI[paramlist[0]] = paramlist[1]  
-        return self.server.tl.createTestPlan(argsAPI)    
+        return self._callServer('createTestPlan', argsAPI)    
  
     def createTestSuite(self, *args):
         """ createTestSuite :
@@ -325,7 +348,7 @@ class TestLinkAPIClient(object):
             for param in params:
                 paramlist = param.split("=")
                 argsAPI[paramlist[0]] = paramlist[1]  
-        return self.server.tl.createTestSuite(argsAPI)       
+        return self._callServer('createTestSuite', argsAPI)       
 
     def createTestCase(self, *args):
         """ createTestCase :
@@ -347,7 +370,7 @@ class TestLinkAPIClient(object):
             for param in params:
                 paramlist = param.split("=")
                 argsAPI[paramlist[0]] = paramlist[1]
-        ret = self.server.tl.createTestCase(argsAPI) 
+        ret = self._callServer('createTestCase', argsAPI) 
         self.stepsList = []                    
         return ret 
 
@@ -369,7 +392,7 @@ class TestLinkAPIClient(object):
                 'buildname': buildname,
                 'notes': str(notes)
                 }
-        return self.server.tl.reportTCResult(argsAPI)
+        return self._callServer('reportTCResult', argsAPI)
 
 
         
@@ -393,7 +416,7 @@ class TestLinkAPIClient(object):
                  'filetype':mimetypes.guess_type(attachmentfile.name)[0],
                  'content':base64.encodestring(attachmentfile.read())
                  }
-        return self.server.tl.uploadExecutionAttachment(argsAPI)
+        return self._callServer('uploadExecutionAttachment', argsAPI)
                         
     #
     #  ADDITIONNAL FUNCTIONS
@@ -531,7 +554,7 @@ class TestLinkAPIClient(object):
         return True                
                                         
     def getProjectIDByName(self, projectName):   
-        projects=self.server.tl.getProjects({'devKey' : self.devKey})
+        projects=self._callServer('getProjects', {'devKey' : self.devKey})
         for project in projects:
             if (project['name'] == projectName): 
                 result = project['id']
