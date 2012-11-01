@@ -150,11 +150,11 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         response = self.api.countBuilds()
         self.assertEqual(0, response)
 
-    def test_listProjects(self):
-        self.api.loadScenario(SCENARIO_A)
-        self.api.listProjects()
-        # no assert check cause method returns nothing
-        # 'just' prints to stdout
+#    def test_listProjects(self):
+#        self.api.loadScenario(SCENARIO_A)
+#        self.api.listProjects()
+#         no assert check cause method returns nothing
+#         'just' prints to stdout
         
     def test_getProjectIDByName(self):
         self.api.loadScenario(SCENARIO_A)
