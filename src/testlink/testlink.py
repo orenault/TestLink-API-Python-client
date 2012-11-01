@@ -6,12 +6,12 @@
 #  Licensed under ???
 #  see https://github.com/orenault/TestLink-API-Python-client/issues/4
 
-from testlinkapi import TestLinkAPIClient, TestLinkHelper
+from testlinkapi import TestlinkAPIClient, TestLinkHelper
 from testlinkerrors import TestLinkError
 from datetime import date
 
 
-class TestLink(TestLinkAPIClient):
+class TestLink(TestlinkAPIClient):
     """
     TestLink API library 
     provide a user friendly library, with more robustness and error management

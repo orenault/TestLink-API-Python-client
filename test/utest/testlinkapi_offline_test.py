@@ -10,7 +10,7 @@
 # no calls are send to a TestLink Server
 
 import unittest
-from testlink import TestLinkAPIClient, TestLinkHelper
+from testlink import TestlinkAPIClient, TestLinkHelper
 
 # scenario_a includes response from a testlink 1.9.3 server
 SCENARIO_A = {'getProjects' : [
@@ -73,7 +73,7 @@ SCENARIO_A = {'getProjects' : [
               'getBuildsForTestPlan' : {'22' : ''}
               }
 
-class DummyAPIClient(TestLinkAPIClient):
+class DummyAPIClient(TestlinkAPIClient):
     """ Dummy for Simulation TestLinkAPICLient. 
     Overrides _callServer() Method to return test scenarios
     """
@@ -104,7 +104,7 @@ class DummyAPIClient(TestLinkAPIClient):
     
     
 class TestLinkAPIOfflineTestCase(unittest.TestCase):
-    """ TestCases for TestLinkAPIClient - does not interacts with a TestLink Server.
+    """ TestCases for TestlinkAPIClient - does not interacts with a TestLink Server.
     works with DummyAPIClientm which returns special test data
     """
 

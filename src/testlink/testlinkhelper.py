@@ -22,11 +22,11 @@ class TestLinkHelper(object):
        default value        - 42 
        command line arg     - devKey
        
-    Examples 1 - init TestLinkAPIClient with environment variables 
+    Examples 1 - init TestlinkAPIClient with environment variables 
     - define connection parameters in environment variables 
       TESTLINK_API_PYTHON_DEVKEY and TESTLINK_API_PYTHON_DEVKEY
-    - TestLinkHelper().connect(TestLinkAPIClient) 
-      -> returns a TestLinkAPIClient instance
+    - TestLinkHelper().connect(TestlinkAPIClient) 
+      -> returns a TestlinkAPIClient instance
       
     Examples 2 - init TestLink with command line arguments 
     - call python module with command line arguments --server_url and --devKey 

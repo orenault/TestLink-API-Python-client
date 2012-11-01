@@ -12,7 +12,7 @@ from testlinkhelper import TestLinkHelper, VERSION
 import testlinkerrors
 
 
-class TestLinkAPIClient(object):    
+class TestlinkAPIClient(object):    
     
     __slots__ = ['server', 'devKey', 'stepsList', '_server_url']
  
@@ -554,7 +554,7 @@ class TestLinkAPIClient(object):
 
     def __str__(self):
         message = """
-TestLinkAPIClient - class %s - version %s
+TestlinkAPIClient - class %s - version %s
 @author: Olivier Renault, James Stock, TestLink-API-Python-client developers
 """
         return message % (self.__class__.__name__, self.__VERSION__)
@@ -563,7 +563,7 @@ TestLinkAPIClient - class %s - version %s
 if __name__ == "__main__":
     tl_helper = TestLinkHelper()
     tl_helper.setParamsFromArgs()
-    myTestLink = tl_helper.connect(TestLinkAPIClient)
+    myTestLink = tl_helper.connect(TestlinkAPIClient)
     print myTestLink
     print myTestLink.about()
 

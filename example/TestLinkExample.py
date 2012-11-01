@@ -26,7 +26,7 @@ NewProject
                                            |   
                                            --- 5 automated test steps
 """                                       
-from testlink import TestLinkAPIClient, TestLinkHelper
+from testlink import TestlinkAPIClient, TestLinkHelper
 import sys
 
 # precondition a)
@@ -42,7 +42,7 @@ tl_helper = TestLinkHelper()
 tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI.
 => Counts and lists the Projects 
 => Create a new Project with the following structure:''')
-myTestLink = tl_helper.connect(TestLinkAPIClient) 
+myTestLink = tl_helper.connect(TestlinkAPIClient) 
 
 
 NEWPROJECT="NEW_PROJECT_API"
