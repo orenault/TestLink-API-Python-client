@@ -13,7 +13,7 @@ Fichier de test pour le module "TestLinkAPI.py"
 '''
 
 import re
-from testlink import TestLink, TestLinkErrors
+from testlink import TestLink, TestLinkError, TestLinkHelper
 from nose.tools import *
 
 class TestClass():
@@ -21,9 +21,10 @@ class TestClass():
         """Initialisation
         """
 
-        SERVEUR_URL = "http://localhost/testlink/lib/api/xmlrpc.php"
-        KEY = "7ec252ab966ce88fd92c25d08635672b"
-        self.client = TestLink(server_url=SERVEUR_URL, key=KEY)
+        # precondition - SERVEUR_URL and KEY are defined in environment
+        # TESTLINK_API_PYTHON_SERVER_URL=http://localhost/testlink/lib/api/xmlrpc.php
+        # TESTLINK_API_PYTHON_DEVKEY=7ec252ab966ce88fd92c25d08635672b
+        self.client = TestLinkHelper().connect(TestLink)
 
     def test_getTestCaseIDByName(self):
         """ getTestCaseIDByName test
@@ -33,13 +34,13 @@ class TestClass():
         assert_equal(val, '31' )
 
         # Check if an error is raised in case of bad parameters
-        assert_raises(TestLinkErrors, self.client.getTestCaseIDByName, "Initialisation", "Séquence 1", "Test 2")
+        assert_raises(TestLinkError, self.client.getTestCaseIDByName, "Initialisation", "Séquence 1", "Test 2")
 
     def test_getTestProjectByName(self):
         project = self.client.getTestProjectByName("Test 2")
         assert_equals(type(project), dict)
         # Check if an error is raised in case of bad parameters
-        assert_raises(TestLinkErrors, self.client.getTestProjectByName, "Unknown project")
+        assert_raises(TestLinkError, self.client.getTestProjectByName, "Unknown project")
 
     def test_getTestPlanByName(self):
         plan_ok = self.client.getTestPlanByName("Test 2", "Full")
@@ -47,7 +48,7 @@ class TestClass():
         # Assume that plan id is 33
         assert_equal(plan_ok['id'], '33')
 
-        assert_raises(TestLinkErrors, self.client.getTestPlanByName, "Test 2", "Name Error")
+        assert_raises(TestLinkError, self.client.getTestPlanByName, "Test 2", "Name Error")
 
     def test_getBuildByName(self):
         pass

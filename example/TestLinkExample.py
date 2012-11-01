@@ -26,13 +26,23 @@ NewProject
                                            |   
                                            --- 5 automated test steps
 """                                       
-import TestLinkAPI
+from testlink import TestlinkAPIClient, TestLinkHelper
 import sys
 
-myTestLinkServer = "http://YOURSERVER/testlink/lib/api/xmlrpc.php"  # YOURSERVER
-myDevKey = "" # Put here your devKey
-
-myTestLink = TestLinkAPI.TestlinkAPIClient(myTestLinkServer, myDevKey)
+# precondition a)
+# SERVEUR_URL and KEY are defined in environment
+# TESTLINK_API_PYTHON_SERVER_URL=http://YOURSERVER/testlink/lib/api/xmlrpc.php
+# TESTLINK_API_PYTHON_DEVKEY=7ec252ab966ce88fd92c25d08635672b
+# 
+# alternative precondition b)
+# SERVEUR_URL and KEY are defined as command line arguments
+# python TestLinkExample.py --server_url http://YOURSERVER/testlink/lib/api/xmlrpc.php
+#                           --devKey 7ec252ab966ce88fd92c25d08635672b
+tl_helper = TestLinkHelper()
+tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI.
+=> Counts and lists the Projects 
+=> Create a new Project with the following structure:''')
+myTestLink = tl_helper.connect(TestlinkAPIClient) 
 
 
 NEWPROJECT="NEW_PROJECT_API"
