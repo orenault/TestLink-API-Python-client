@@ -426,17 +426,17 @@ class TestLinkAPIClient(object):
         """ countProjects :
         Count all the test project   
         """
-        projects=TestLinkAPIClient.getProjects(self)
+        projects=self.getProjects()
         return len(projects)
     
     def countTestPlans(self):
         """ countProjects :
         Count all the test plans   
         """
-        projects=TestLinkAPIClient.getProjects(self)
+        projects=self.getProjects()
         nbTP = 0
         for project in projects:
-            ret = TestLinkAPIClient.getProjectTestPlans(self,project['id'])
+            ret = self.getProjectTestPlans(project['id'])
             nbTP += len(ret)
         return nbTP
 
@@ -444,14 +444,12 @@ class TestLinkAPIClient(object):
         """ countProjects :
         Count all the test suites   
         """
-        projects=TestLinkAPIClient.getProjects(self)
+        projects=self.getProjects()
         nbTS = 0
         for project in projects:
-            TestPlans = TestLinkAPIClient.getProjectTestPlans(self,
-                                                                 project['id'])
+            TestPlans = self.getProjectTestPlans(project['id'])
             for TestPlan in TestPlans:
-                TestSuites = TestLinkAPIClient.getTestSuitesForTestPlan(self, 
-                                                                TestPlan['id'])
+                TestSuites = self.getTestSuitesForTestPlan(TestPlan['id'])
                 nbTS += len(TestSuites)
         return nbTS
                
@@ -459,14 +457,12 @@ class TestLinkAPIClient(object):
         """ countProjects :
         Count all the test cases linked to a Test Plan   
         """
-        projects=TestLinkAPIClient.getProjects(self)
+        projects=self.getProjects()
         nbTC = 0
         for project in projects:
-            TestPlans = TestLinkAPIClient.getProjectTestPlans(self, 
-                                                                 project['id'])
+            TestPlans = self.getProjectTestPlans(project['id'])
             for TestPlan in TestPlans:
-                TestCases = TestLinkAPIClient.getTestCasesForTestPlan(self,
-                                                                TestPlan['id'])
+                TestCases = self.getTestCasesForTestPlan(TestPlan['id'])
                 nbTC += len(TestCases)
         return nbTC
         
@@ -474,16 +470,14 @@ class TestLinkAPIClient(object):
         """ countProjects :
         Count all the test cases linked to a Test Suite   
         """
-        projects=TestLinkAPIClient.getProjects(self)
+        projects=self.getProjects()
         nbTC = 0
         for project in projects:
-            TestPlans = TestLinkAPIClient.getProjectTestPlans(self,
-                                                                 project['id'])
+            TestPlans = self.getProjectTestPlans(project['id'])
             for TestPlan in TestPlans:
-                TestSuites = TestLinkAPIClient.getTestSuitesForTestPlan(self,
-                                                                TestPlan['id'])
+                TestSuites = self.getTestSuitesForTestPlan(TestPlan['id'])
                 for TestSuite in TestSuites:
-                    TestCases = TestLinkAPIClient.getTestCasesForTestSuite(self,
+                    TestCases = self.getTestCasesForTestSuite(
                                                  TestSuite['id'],'true','full')
                     for TestCase in TestCases:
                         nbTC += len(TestCases)
@@ -493,14 +487,12 @@ class TestLinkAPIClient(object):
         """ countPlatforms :
         Count all the Platforms  
         """
-        projects=TestLinkAPIClient.getProjects(self)
+        projects=self.getProjects()
         nbPlatforms = 0
         for project in projects:
-            TestPlans = TestLinkAPIClient.getProjectTestPlans(self,
-                                                                 project['id'])
+            TestPlans = self.getProjectTestPlans(project['id'])
             for TestPlan in TestPlans:
-                Platforms = TestLinkAPIClient.getTestPlanPlatforms(self,
-                                                                TestPlan['id'])
+                Platforms = self.getTestPlanPlatforms(TestPlan['id'])
                 nbPlatforms += len(Platforms)
         return nbPlatforms
         
@@ -508,14 +500,12 @@ class TestLinkAPIClient(object):
         """ countBuilds :
         Count all the Builds  
         """
-        projects=TestLinkAPIClient.getProjects(self)
+        projects=self.getProjects()
         nbBuilds = 0
         for project in projects:
-            TestPlans = TestLinkAPIClient.getProjectTestPlans(self,
-                                                                 project['id'])
+            TestPlans = self.getProjectTestPlans(project['id'])
             for TestPlan in TestPlans:
-                Builds = TestLinkAPIClient.getBuildsForTestPlan(self,
-                                                                TestPlan['id'])
+                Builds = self.getBuildsForTestPlan(TestPlan['id'])
                 nbBuilds += len(Builds)
         return nbBuilds
         
@@ -523,7 +513,7 @@ class TestLinkAPIClient(object):
         """ listProjects :
         Lists the Projects (display Name & ID)  
         """
-        projects=TestLinkAPIClient.getProjects(self)
+        projects=self.getProjects()
         for project in projects:
             print "Name: %s ID: %s " % (project['name'], project['id'])
   
@@ -554,12 +544,12 @@ class TestLinkAPIClient(object):
         return True                
                                         
     def getProjectIDByName(self, projectName):   
-        projects=self._callServer('getProjects', {'devKey' : self.devKey})
+        projects=self.getProjects()
+        result=-1
         for project in projects:
             if (project['name'] == projectName): 
                 result = project['id']
-            else:
-                result = -1
+                break
         return result
 
     def __str__(self):
