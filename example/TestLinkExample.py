@@ -151,7 +151,8 @@ myTestLink.appendStep("Step action 5", "Step result 5", AUTOMATED)
      
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, TestSuiteID_B, 
           newProjectID, "admin", "This is the summary of the Test Case B", 
-          "preconditions=these are the preconditions")               
+          "preconditions=these are the preconditions", 
+          "executiontype=%i" % AUTOMATED)               
 isOk = newTestCase[0]['message']
 if isOk=="Success!":
   newTestCaseID = newTestCase[0]['id'] 

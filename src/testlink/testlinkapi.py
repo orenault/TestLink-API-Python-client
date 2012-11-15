@@ -355,7 +355,7 @@ class TestlinkAPIClient(object):
         Create a test case  
           Mandatory parameters : testcasename, testsuiteid, testprojectid, 
                                  authorlogin, summary, steps 
-          Optional parameters : preconditions, importance, execution, order, 
+          Optional parameters : preconditions, importance, executiontype, order, 
                        internalid, checkduplicatedname, actiononduplicatedname   
         """
         argsAPI = {'devKey' : self.devKey,
