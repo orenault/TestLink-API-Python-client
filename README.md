@@ -4,7 +4,7 @@ TestLink API Python Client
 Copyright 2011-2012 
 James Stock, Olivier Renault, TestLink-API-Python-client developers
 
-License [unclear License Type]
+License [Apache License 2.0]
 
 Introduction
 ------------
@@ -81,7 +81,7 @@ TestLink-API-Python-client developers
 *   anyone forgotten?
 
 
-[unclear License Type]: https://github.com/orenault/TestLink-API-Python-client/issues/4
+
 [JinFeng]: http://www.sqaopen.net/blog/en/?p=63
 [TestLink API]: http://www.teamst.org/_tldoc/1.8/phpdoc_api/TestlinkAPI/TestlinkXMLRPCServer.html
 [TestLink]: http://www.teamst.org/
