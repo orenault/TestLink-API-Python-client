@@ -81,7 +81,7 @@ TestLink-API-Python-client developers
 *   anyone forgotten?
 
 
-
+[Apache License 2.0]: http://www.apache.org/licenses/LICENSE-2.0
 [JinFeng]: http://www.sqaopen.net/blog/en/?p=63
 [TestLink API]: http://www.teamst.org/_tldoc/1.8/phpdoc_api/TestlinkAPI/TestlinkXMLRPCServer.html
 [TestLink]: http://www.teamst.org/
