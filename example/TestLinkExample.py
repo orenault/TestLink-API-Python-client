@@ -1,3 +1,23 @@
+#! /usr/bin/python
+# -*- coding: UTF-8 -*-
+
+#  Copyright 2011-2012 Olivier Renault, TestLink-API-Python-client developers
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+# ------------------------------------------------------------------------
+
+
 """
 
 TestLinkExample - v0.20
@@ -26,13 +46,23 @@ NewProject
                                            |   
                                            --- 5 automated test steps
 """                                       
-import TestLinkAPI
+from testlink import TestlinkAPIClient, TestLinkHelper
 import sys
 
-myTestLinkServer = "http://YOURSERVER/testlink/lib/api/xmlrpc.php"  # YOURSERVER
-myDevKey = "" # Put here your devKey
-
-myTestLink = TestLinkAPI.TestlinkAPIClient(myTestLinkServer, myDevKey)
+# precondition a)
+# SERVEUR_URL and KEY are defined in environment
+# TESTLINK_API_PYTHON_SERVER_URL=http://YOURSERVER/testlink/lib/api/xmlrpc.php
+# TESTLINK_API_PYTHON_DEVKEY=7ec252ab966ce88fd92c25d08635672b
+# 
+# alternative precondition b)
+# SERVEUR_URL and KEY are defined as command line arguments
+# python TestLinkExample.py --server_url http://YOURSERVER/testlink/lib/api/xmlrpc.php
+#                           --devKey 7ec252ab966ce88fd92c25d08635672b
+tl_helper = TestLinkHelper()
+tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI.
+=> Counts and lists the Projects 
+=> Create a new Project with the following structure:''')
+myTestLink = tl_helper.connect(TestlinkAPIClient) 
 
 
 NEWPROJECT="NEW_PROJECT_API"
@@ -141,7 +171,8 @@ myTestLink.appendStep("Step action 5", "Step result 5", AUTOMATED)
      
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, TestSuiteID_B, 
           newProjectID, "admin", "This is the summary of the Test Case B", 
-          "preconditions=these are the preconditions")               
+          "preconditions=these are the preconditions", 
+          "executiontype=%i" % AUTOMATED)               
 isOk = newTestCase[0]['message']
 if isOk=="Success!":
   newTestCaseID = newTestCase[0]['id'] 
