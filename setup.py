@@ -3,7 +3,7 @@
 
 #  Copyright 2012 ??? , ???
 #
-#  Licensed under ???
+#  Licensed under Apache 2.0 
 #  
 
 from os.path import join, dirname
@@ -15,9 +15,9 @@ setup(name='TestLink',
       version=VERSION,
       description='Python XMLRPC client for the TestLink API',
       author='James Stock, Olivier Renault, TestLink-API-Python-client developers',
-      author_email='???, ???, ???',
+      author_email='orenault@gmail.com, ???, ???',
       url='https://github.com/lczub/TestLink-API-Python-client',
-      license      = 'unknown',
+      license      = 'Apache 2.0',
       package_dir  = {'': 'src'},
       packages=['testlink'],
      )
