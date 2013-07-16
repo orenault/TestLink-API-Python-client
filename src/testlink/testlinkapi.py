@@ -162,7 +162,8 @@ class TestlinkAPIClient(object):
         """
         argsAPI = {'devKey' : self.devKey,
                 'testcaseid':str(testcaseid)}  
-        return self._callServer('getTestCaseAttachments', argsAPI)    
+
+        return self._callServer('getTestCaseAttachments', argsAPI)
 
     def getTestCaseCustomFieldDesignValue(self, testcaseexternalid, version, 
                                      testprojectid, customfieldname, details):

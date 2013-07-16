@@ -76,7 +76,7 @@ see [downloads]
 
 TestLink-API-Python-client developers
 -------------------------------------
-*   [James Stock], [Olivier Renault], kereval.com
+*   [James Stock], [Olivier Renault]
 *   [g4l4drim], [pade], [lczub] 
 *   anyone forgotten?
 
