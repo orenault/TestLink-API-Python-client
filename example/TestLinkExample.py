@@ -50,7 +50,7 @@ from testlink import TestlinkAPIClient, TestLinkHelper
 import sys
 
 # precondition a)
-# SERVEUR_URL and KEY are defined in environment
+# SERVER_URL and KEY are defined in environment
 # TESTLINK_API_PYTHON_SERVER_URL=http://YOURSERVER/testlink/lib/api/xmlrpc.php
 # TESTLINK_API_PYTHON_DEVKEY=7ec252ab966ce88fd92c25d08635672b
 # 
@@ -58,6 +58,12 @@ import sys
 # SERVEUR_URL and KEY are defined as command line arguments
 # python TestLinkExample.py --server_url http://YOURSERVER/testlink/lib/api/xmlrpc.php
 #                           --devKey 7ec252ab966ce88fd92c25d08635672b
+#
+# ATTENTION: With TestLink 1.9.7, cause of the new REST API, the SERVER_URL 
+#            has changed from 
+#               (old) http://YOURSERVER/testlink/lib/api/xmlrpc.php
+#            to
+#               (new) http://YOURSERVER/testlink/lib/api/xmlrpc/v1/xmlrpc.php
 tl_helper = TestLinkHelper()
 tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI.
 => Counts and lists the Projects 

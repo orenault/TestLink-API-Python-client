@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2012 ??? , ???
+#  Copyright 2012 TestLink-API-Python-client developers
 #
 #  Licensed under Apache 2.0 
 #  

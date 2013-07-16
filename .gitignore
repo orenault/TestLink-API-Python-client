@@ -3,5 +3,5 @@
 .settings/
 build/
 *.pyc
-dist/ 
+dist/
 MANIFEST

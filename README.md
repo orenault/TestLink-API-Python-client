@@ -67,6 +67,10 @@ cd test\utest
 python -m unittest testlinkhelpertest testlinkapi_offline_test
 ```
 
+### Changes with TestLink 1.9.7
+
+The SERVER_URL path has changed with TestLink 1.9.7.
+Use http://[YOURSERVER]/testlink/lib/api/xmlrpc/v1/xmlrpc.php
 
 Download
 --------
@@ -77,7 +81,7 @@ see [downloads]
 TestLink-API-Python-client developers
 -------------------------------------
 *   [James Stock], [Olivier Renault]
-*   [g4l4drim], [pade], [lczub] 
+*   [g4l4drim], [pade], [lczub], [anton-matosov] 
 *   anyone forgotten?
 
 
@@ -93,3 +97,4 @@ TestLink-API-Python-client developers
 [g4l4drim]: https://github.com/g4l4drim/TestLink-API-Python-client
 [James Stock]: https://code.google.com/p/testlink-api-python-client/
 [lczub]: https://github.com/lczub/TestLink-API-Python-client
+[anton-matosov]: https://github.com/anton-matosov/TestLink-API-Python-client.git

@@ -19,7 +19,7 @@
 
 # this test requires an online TestLink Server, which connection parameters
 # are defined in environment variables
-#     TESTLINK_API_PYTHON_DEVKEY and TESTLINK_API_PYTHON_DEVKEY
+#     TESTLINK_API_PYTHON_SERVER_URL and TESTLINK_API_PYTHON_DEVKEY
 
 import unittest
 from testlink import TestlinkAPIClient, TestLinkHelper

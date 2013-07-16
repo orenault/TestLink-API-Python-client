@@ -47,6 +47,9 @@ class TestLinkHelper(object):
       tl_helper.connect(TestLink) 
       -> returns a TestLink instance
     
+    Attention: TL 197 changed the URL of XMLRPC 
+      from  http://localhost/testlink/lib/api/xmlrpc.php
+      to    http://localhost/testlink/lib/api/xmlrpc/v1/xmlrpc.php
     """
 
     __slots__ = ['_server_url', '_devkey']
