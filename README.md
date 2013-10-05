@@ -32,6 +32,13 @@ examples/
 Installation
 ------------
 
+### TestLink configuration
+The testLink configuration (config.inc.php or custom_config.inc.php) must have enabled the api interface
+*   $tlCfg->api->enabled = TRUE;
+   
+The user specific devKey are created inside TestLink, see
+*   My Settings -> API interface - Personal API access key [Generate a new key]
+
 ### Install TestLinkAPI into a virtualenv environment
 
 ```
@@ -75,13 +82,13 @@ Use http://[YOURSERVER]/testlink/lib/api/xmlrpc/v1/xmlrpc.php
 Download
 --------
 
-see [downloads]
+see [Releases]
 
 
 TestLink-API-Python-client developers
 -------------------------------------
 *   [James Stock], [Olivier Renault]
-*   [g4l4drim], [pade], [lczub], [anton-matosov] 
+*   [g4l4drim], [pade], [lczub], [anton-matosov], [citizen-stig]
 *   anyone forgotten?
 
 
@@ -91,10 +98,11 @@ TestLink-API-Python-client developers
 [TestLink]: http://www.teamst.org/
 [Robot Framework]: http://code.google.com/p/robotframework
 [Jenkins]: http://jenkins-ci.org/
-[downloads]: https://github.com/lczub/TestLink-API-Python-client/downloads
+[Releases]: https://github.com/lczub/TestLink-API-Python-client/releases
 [Olivier Renault]: https://github.com/orenault/TestLink-API-Python-client
 [pade]: https://github.com/pade/TestLink-API-Python-client
 [g4l4drim]: https://github.com/g4l4drim/TestLink-API-Python-client
 [James Stock]: https://code.google.com/p/testlink-api-python-client/
 [lczub]: https://github.com/lczub/TestLink-API-Python-client
-[anton-matosov]: https://github.com/anton-matosov/TestLink-API-Python-client.git
+[anton-matosov]: https://github.com/anton-matosov/TestLink-API-Python-client
+[citizen-stig]: https://github.com/citizen-stig/TestLink-API-Python-client
