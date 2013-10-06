@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2011-2012 Olivier Renault, James Stock, TestLink-API-Python-client developers
+#  Copyright 2011-2013 Olivier Renault, James Stock, TestLink-API-Python-client developers
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -17,66 +17,36 @@
 #
 # ------------------------------------------------------------------------
 
-import xmlrpclib
+#import xmlrpclib
 
-from testlinkhelper import TestLinkHelper, VERSION
-import testlinkerrors
+from testlinkapigeneric import TestlinkAPIGeneric, TestLinkHelper
+#import testlinkerrors
 
 
-class TestlinkAPIClient(object):    
+class TestlinkAPIClient(TestlinkAPIGeneric):    
     
-    __slots__ = ['server', 'devKey', 'stepsList', '_server_url']
- 
-    __VERSION__ = VERSION
-
-    def __init__(self, server_url, devKey):
-        self.server = xmlrpclib.Server(server_url)
-        self.devKey = devKey
-        self.stepsList = []
-        self._server_url = server_url
-        
-    def _callServer(self, methodAPI, argsAPI=None):
-        """ call server method METHODAPI with error handling and returns the 
-        responds """
-        
-        response = None
-        try:
-            if argsAPI is None:
-                response = getattr(self.server.tl, methodAPI)()
-            else:
-                response = getattr(self.server.tl, methodAPI)(argsAPI)
-        except (IOError, xmlrpclib.ProtocolError), msg:
-            new_msg = 'problems connecting the TestLink Server %s\n%s' %\
-            (self._server_url, msg) 
-            raise testlinkerrors.TLConnectionError(new_msg)
-        except xmlrpclib.Fault, msg:
-            new_msg = 'problems calling the API method %s\n%s' %\
-            (methodAPI, msg) 
-            raise testlinkerrors.TLAPIError(new_msg)
-
-        return response
         
     #
     #  BUILT-IN API CALLS
     #
     
-    def checkDevKey(self):
-        """ checkDevKey :
-        check if Developer Key exists   
-        """
-        argsAPI = {'devKey' : self.devKey}     
-        return self._callServer('checkDevKey', argsAPI)  
+#     def checkDevKey(self):
+#         """ checkDevKey :
+#         check if Developer Key exists   
+#         """
+#         argsAPI = {'devKey' : self.devKey}     
+#         return self._callServer('checkDevKey', argsAPI)  
     
-    def about(self):
-        """ about :
-        Gives basic information about the API    
-        """
-        return self._callServer('about')
+#     def about(self):
+#         """ about :
+#         Gives basic information about the API    
+#         """
+#         return self._callServer('about')
   
-    def ping(self):
-        """ ping :   
-        """
-        return self._callServer('ping')
+#     def ping(self):
+#         """ ping :   
+#         """
+#         return self._callServer('ping')
 
     def echo(self, message):
         return self._callServer('repeat', {'str': message})
@@ -133,12 +103,12 @@ class TestlinkAPIClient(object):
                 'testplanid':str(testplanid)}  
         return self._callServer('getLatestBuildForTestPlan', argsAPI)
 
-    def getProjects(self):
-        """ getProjects: 
-        Gets a list of all projects 
-        """
-        argsAPI = {'devKey' : self.devKey} 
-        return self._callServer('getProjects', argsAPI)
+#     def getProjects(self):
+#         """ getProjects: 
+#         Gets a list of all projects 
+#         """
+#         argsAPI = {'devKey' : self.devKey} 
+#         return self._callServer('getProjects', argsAPI)
 
     def getProjectTestPlans(self, testprojectid):
         """ getLastExecutionResult :
@@ -563,13 +533,6 @@ class TestlinkAPIClient(object):
                 result = project['id']
                 break
         return result
-
-    def __str__(self):
-        message = """
-TestlinkAPIClient - class %s - version %s
-@author: Olivier Renault, James Stock, TestLink-API-Python-client developers
-"""
-        return message % (self.__class__.__name__, self.__VERSION__)
 
     
 if __name__ == "__main__":
