@@ -25,6 +25,11 @@ from testlinkapigeneric import TestlinkAPIGeneric, TestLinkHelper
 
 class TestlinkAPIClient(TestlinkAPIGeneric):    
     
+    __slots__ = ['stepsList']
+    
+    def __init__(self, server_url, devKey):
+        super(TestlinkAPIClient, self).__init__(server_url, devKey)
+        self.stepsList = []
         
     #
     #  BUILT-IN API CALLS
@@ -49,15 +54,15 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #         return self._callServer('ping')
 
     def echo(self, message):
-        return self._callServer('repeat', {'str': message})
+        return self.repeat(message)
 
-    def doesUserExist(self, user):
-        """ doesUserExist :
-        Checks if a user name exists 
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'user':str(user)}   
-        return self._callServer('doesUserExist', argsAPI)
+#     def doesUserExist(self, user):
+#         """ doesUserExist :
+#         Checks if a user name exists 
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'user':str(user)}   
+#         return self._callServer('doesUserExist', argsAPI)
         
     def getBuildsForTestPlan(self, testplanid):
         """ getBuildsForTestPlan :
@@ -258,33 +263,33 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                 'testplanid' : str(testplanid)}    
         return self._callServer('getTotalsForTestPlan', argsAPI)  
 
-    def createTestProject(self, *args):
-        """ createTestProject :
-        Create a test project  
-            Mandatory parameters : testprojectname, testcaseprefix
-            Optional parameters : notes, options, active, public
-            Options: map of requirementsEnabled, testPriorityEnabled, 
-                            automationEnabled, inventoryEnabled 
-        """        
-        testprojectname = args[0]
-        testcaseprefix = args[1]
-        options={}
-        argsAPI = {'devKey' : self.devKey,
-                   'testprojectname' : str(testprojectname), 
-                   'testcaseprefix' : str(testcaseprefix)}
-        if len(args)>2:
-            params = args[2:] 
-            for param in params:
-                paramlist = param.split("=")
-                if paramlist[0] == "options":
-                    optionlist = paramlist[1].split(",")
-                    for option in optionlist:
-                        optiontuple = option.split(":")
-                        options[optiontuple[0]] = optiontuple[1]
-                    argsAPI[paramlist[0]] = options
-                else:
-                    argsAPI[paramlist[0]] = paramlist[1]  
-        return self._callServer('createTestProject', argsAPI)
+#     def createTestProject(self, *args):
+#         """ createTestProject :
+#         Create a test project  
+#             Mandatory parameters : testprojectname, testcaseprefix
+#             Optional parameters : notes, options, active, public
+#             Options: map of requirementsEnabled, testPriorityEnabled, 
+#                             automationEnabled, inventoryEnabled 
+#         """        
+#         testprojectname = args[0]
+#         testcaseprefix = args[1]
+#         options={}
+#         argsAPI = {'devKey' : self.devKey,
+#                    'testprojectname' : str(testprojectname), 
+#                    'testcaseprefix' : str(testcaseprefix)}
+#         if len(args)>2:
+#             params = args[2:] 
+#             for param in params:
+#                 paramlist = param.split("=")
+#                 if paramlist[0] == "options":
+#                     optionlist = paramlist[1].split(",")
+#                     for option in optionlist:
+#                         optiontuple = option.split(":")
+#                         options[optiontuple[0]] = optiontuple[1]
+#                     argsAPI[paramlist[0]] = options
+#                 else:
+#                     argsAPI[paramlist[0]] = paramlist[1]  
+#         return self._callServer('createTestProject', argsAPI)
         
     def createBuild(self, testplanid, buildname, buildnotes):
         """ createBuild :

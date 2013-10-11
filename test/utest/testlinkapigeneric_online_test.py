@@ -39,10 +39,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def setUp(self):
         self.client = TestLinkHelper().connect(TestlinkAPIGeneric)
 
-
 #    def tearDown(self):
 #        pass
-
 
     def test_checkDevKey(self):
         response = self.client.checkDevKey()
@@ -53,20 +51,30 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertIn('invalid', response[0]['message'])
         self.assertEqual(2000, response[0]['code'])
         
+    def test_sayHello(self):
+        response = self.client.sayHello()
+        self.assertEqual('Hello!', response)
+
+    def test_repeat(self):
+        response = self.client.repeat('Yellow Submarine')
+        self.assertEqual('You said: Yellow Submarine', response)
+        
     def test_about(self):
         response = self.client.about()
         self.assertIn('Testlink API', response)
 
-    def test_ping(self):
-        response = self.client.ping()
-        self.assertEqual('Hello!', response)
-
-    def test_echo(self):
-        response = self.client.repeat(str='Yellow Submarine')
-        self.assertEqual('You said: Yellow Submarine', response)
-        
+    def test_getProjects(self):
+        response = self.client.getProjects()
+        self.assertIsNotNone(response)
+         
+    def test_createTestProject_unknownID(self):
+        response = self.client.createTestProject(testprojectname='', 
+                                                 testcaseprefix='P4711')
+        self.assertIn('Empty name', response[0]['message'])
+        self.assertEqual(7001, response[0]['code'])
+ 
     def test_doesUserExist_unknownID(self):
-        response = self.client.doesUserExist(user='Big Bird')
+        response = self.client.doesUserExist('Big Bird')
         self.assertIn('Big Bird', response[0]['message'])
         self.assertEqual(10000, response[0]['code'])
         
@@ -94,10 +102,6 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #         response = self.client.getLatestBuildForTestPlan(4711)
 #         self.assertIn('4711', response[0]['message'])
 #         self.assertEqual(3000, response[0]['code'])
-         
-    def test_getProjects(self):
-        response = self.client.getProjects()
-        self.assertIsNotNone(response)
          
 #     def test_getProjectTestPlans_unknownID(self):
 #         response = self.client.getProjectTestPlans(4711)
@@ -173,12 +177,6 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #         response = self.client.getTotalsForTestPlan(4711)
 #         self.assertIn('4711', response[0]['message'])
 #         self.assertEqual(3000, response[0]['code'])
- 
-    def test_createTestProject_unknownID(self):
-        response = self.client.createTestProject(testprojectname='', 
-                                                 testcaseprefix='P4711')
-        self.assertIn('Empty name', response[0]['message'])
-        self.assertEqual(7001, response[0]['code'])
  
 #     def test_createBuild_unknownID(self):
 #         response = self.client.createBuild(4711, 'Build 4712', 'note 4713')

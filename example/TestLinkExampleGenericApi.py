@@ -100,11 +100,10 @@ print ""
 # "notes=This is a Project created with the API", "active=1", "public=1",
 # "options=requirementsEnabled:0,testPriorityEnabled:1,automationEnabled:1,inventoryEnabled:0")
 # GENERIC
-newProject = myTestLink.createTestProject(
-            testprojectname=NEWPROJECT, testcaseprefix='GPROAPI',
-            notes='This is a Project created with the Generic API', active=1, public=1,
-            requirementsEnabled=0, testPriorityEnabled=1, automationEnabled=1,
-            inventoryEnabled=0)
+newProject = myTestLink.createTestProject(NEWPROJECT, 'GPROAPI', 
+    notes='This is a Project created with the Generic API', active=1, public=1,
+    options={ 'requirementsEnabled' : 0, 'testPriorityEnabled' : 1, 
+             'automationEnabled' : 1,  'inventoryEnabled' : 0})
 print(newProject)
 isOk = newProject[0]['message']
 if isOk=="Success!":
