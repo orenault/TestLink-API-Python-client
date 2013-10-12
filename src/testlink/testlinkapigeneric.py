@@ -25,15 +25,19 @@ import testlinkerrors
 
 # Default Definition which (python) API-Method expects which postional arguments
 # this must not be equal to mandatory params of the (php) xmlrpc Methods
-# it defines argumenst, which values must be passed without explicit names
+# it defines arguments, which values must be passed without explicit names
 # to the API-Method
 # this is stored during the init in ._positionalArgNames
-# subclasses could override this definition, if there (python) method should
+# subclasses could override this definition, if their (python) method should
 # work with different positional arguments
 positionalArgNamesDefault = {
-            'repeat' : ['str'],
+            'createTestCase' : ['testcasename', 'testsuiteid', 'testprojectid',
+                                'authorlogin', 'summary', 'steps'],
+            'createTestPlan' : ['testplanname', 'testprojectname'],
             'createTestProject' : ['testprojectname', 'testcaseprefix'],
-            'doesUserExist' : ['user']
+            'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
+            'doesUserExist' : ['user'],
+            'repeat' : ['str']
 }
 
 # decorators for generic api calls
@@ -136,23 +140,6 @@ class TestlinkAPIGeneric(object):
 #    */
 #    public function getTestSuitesForTestPlan($args)
         
-#    * create a test project
-#    * 
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param string $args["testprojectname"]
-#    * @param string $args["testcaseprefix"]
-#    * @param string $args["notes"] OPTIONAL
-#    * @param map $args["options"] OPTIONAL ALL int treated as boolean
-#    *        keys  requirementsEnabled,testPriorityEnabled,automationEnabled,inventoryEnabled
-#    *
-#    * @param int $args["active"]  OPTIONAL
-#      * @param int $args["public"]  OPTIONAL
-#      *   
-#    * @return mixed $resultInfo
-#    */
-#   public function createTestProject($args)
-
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def createTestProject(self):
@@ -242,6 +229,24 @@ class TestlinkAPIGeneric(object):
 #       * @return string $resultInfo['message'] operation message
 #       */
 #    public function createTestCase($args)
+
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def createTestCase(self):
+        """ createTestCase: Create a test case
+        positional args: testcasename, testsuiteid, testprojectid, authorlogin,
+                         summary, steps
+        optional args : preconditions, importance, execution, order, internalid,
+                        checkduplicatedname, actiononduplicatedname 
+                        
+            steps is a list with dictionaries , example
+            [{'step_number' : 1, 'actions' : "action A" , 
+                'expected_results' : "result A", 'execution_type' : 0},
+                 {'step_number' : 2, 'actions' : "action B" , 
+                'expected_results' : "result B", 'execution_type' : 1},
+                 {'step_number' : 3, 'actions' : "action C" , 
+                'expected_results' : "result C", 'execution_type' : 0}]
+            """
 
 #    /**
 #    * Reports a result for a single test case
@@ -426,26 +431,13 @@ class TestlinkAPIGeneric(object):
 #  */
 # public function getTestCaseAttachments($args)
 
-#     /**
-#    * create a test suite
-#    * 
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testprojectid"]
-#    * @param string $args["testsuitename"]
-#    * @param string $args["details"]
-#    * @param int $args["parentid"] optional, if do not provided means test suite must be top level.
-#    * @param int $args["order"] optional. Order inside parent container
-#    * @param int $args["checkduplicatedname"] optional, default true.
-#    *                                          will check if there are siblings with same name.
-#      *
-#      * @param int $args["actiononduplicatedname"] optional
-#      *                                            applicable only if $args["checkduplicatedname"]=true
-#    *                                            what to do if already a sibling exists with same name.
-#    *   
-#    * @return mixed $resultInfo
-#    */
-#     public function createTestSuite($args)
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def createTestSuite(self):
+        """ createTestSuite: create a test suite
+        positional args: testprojectid, testsuitename, details
+        optional args : parentid, order, checkduplicatedname, 
+                        actiononduplicatedname """
 
 #     /**
 #      * Gets info about target test project
@@ -503,6 +495,14 @@ class TestlinkAPIGeneric(object):
 #    *  20100704 - franciscom - BUGID 3565
 #    */
 #   public function createTestPlan($args)
+
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def createTestPlan(self):
+        """ createTestPlan : create a test plan
+        positional args: testplanname, testprojectname
+        optional args : notes,  active, public """
+
 
 #   /**
 #    * Gets full path from the given node till the top using nodes_hierarchy_table
@@ -1155,12 +1155,12 @@ class TestlinkAPIGeneric(object):
             the expected positional argumenst of selfs method METHODNAME 
             
             if VALUELIST does not match the expectation, an error
-            testlinkerrors.TLParamError is raised             """
+            testlinkerrors.TLArgError is raised             """
             
         if not methodName in self._positionalArgNames:
-            new_msg = '%s - missing positional args configurtion' %\
+            new_msg = '%s - missing positional args configuration' %\
             (methodName)
-            raise testlinkerrors.TLParamError(new_msg)
+            raise testlinkerrors.TLArgError(new_msg)
             
         nameList = self._positionalArgNames[methodName]
         length_NameList = len(nameList)
@@ -1169,7 +1169,8 @@ class TestlinkAPIGeneric(object):
         if length_NameList != length_ValueList:
             new_msg = '%s - mismatching number of positional args %i vs %i' %\
             (methodName, length_NameList, length_ValueList)
-            raise testlinkerrors.TLParamError(new_msg)
+            new_msg = '%s\n expected args: %s' % (new_msg, ' - '.join(nameList))
+            raise testlinkerrors.TLArgError(new_msg)
         return {nameList[x] : valueList[x] for x in range(len(nameList)) }
             
     

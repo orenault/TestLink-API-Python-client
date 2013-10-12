@@ -35,7 +35,7 @@ class TLAPIError(TestLinkError):
     """ API error 
     - wrong method name ? - misssing required args? """
     
-class TLParamError(TestLinkError):
+class TLArgError(TestLinkError):
     """ Call error 
     - wrong number of mandatory params ? - wrong param type? """    
 

@@ -63,21 +63,38 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         response = self.client.about()
         self.assertIn('Testlink API', response)
 
-    def test_getProjects(self):
-        response = self.client.getProjects()
-        self.assertIsNotNone(response)
-         
+    def test_doesUserExist_unknownID(self):
+        response = self.client.doesUserExist('Big Bird')
+        self.assertIn('Big Bird', response[0]['message'])
+        self.assertEqual(10000, response[0]['code'])
+        
     def test_createTestProject_unknownID(self):
         response = self.client.createTestProject(testprojectname='', 
                                                  testcaseprefix='P4711')
         self.assertIn('Empty name', response[0]['message'])
         self.assertEqual(7001, response[0]['code'])
  
-    def test_doesUserExist_unknownID(self):
-        response = self.client.doesUserExist('Big Bird')
-        self.assertIn('Big Bird', response[0]['message'])
-        self.assertEqual(10000, response[0]['code'])
+    def test_getProjects(self):
+        response = self.client.getProjects()
+        self.assertIsNotNone(response)
+         
+    def test_createTestPlan_unknownID(self):
+        response = self.client.createTestPlan('plan 4711', 'project 4712')
+        self.assertIn('4712', response[0]['message'])
+        self.assertEqual(7011, response[0]['code'])
+ 
+    def test_createTestSuite_unknownID(self):
+        response = self.client.createTestSuite( 4711, 'suite 4712', 'detail 4713')
+        self.assertIn('4711', response[0]['message'])
+        self.assertEqual(7000, response[0]['code'])
         
+    def test_createTestCase_unknownID(self):
+        tc_steps = []
+        response = self.client.createTestCase('case 4711', 4712, 4713, 
+                                        'Big Bird', 'summary 4714', tc_steps)
+        self.assertIn('4713', response[0]['message'])
+        self.assertEqual(7000, response[0]['code'])
+ 
 #     def test_getBuildsForTestPlan_unknownID(self):
 #         response = self.client.getBuildsForTestPlan(4711)
 #         self.assertIn('4711', response[0]['message'])
@@ -182,22 +199,6 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #         response = self.client.createBuild(4711, 'Build 4712', 'note 4713')
 #         self.assertIn('4711', response[0]['message'])
 #         self.assertEqual(3000, response[0]['code'])
-# 
-#     def test_createTestPlan_unknownID(self):
-#         response = self.client.createTestPlan('plan 4711', 'project 4712')
-#         self.assertIn('4712', response[0]['message'])
-#         self.assertEqual(7011, response[0]['code'])
-# 
-#     def test_createTestSuite_unknownID(self):
-#         response = self.client.createTestSuite( 4711, 'suite 4712', 'detail 4713')
-#         self.assertIn('4711', response[0]['message'])
-#         self.assertEqual(7000, response[0]['code'])
-# 
-#     def test_createTestCase_unknownID(self):
-#         response = self.client.createTestCase('case 4711', 4712, 4713, 
-#                                                'Big Bird', 'summary 4714')
-#         self.assertIn('4713', response[0]['message'])
-#         self.assertEqual(7000, response[0]['code'])
 # 
 #     def test_reportTCResult_unknownID(self):
 #         response = self.client.reportTCResult(4711, 4712, 'build 4713', 'p', 

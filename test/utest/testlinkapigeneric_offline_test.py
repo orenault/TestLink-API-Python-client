@@ -30,8 +30,7 @@ SCENARIO_A = {'repeat' : 'You said: One World',
               'doesUserExist' : {
                 'Big Bird' :  [{'message': '(doesUserExist) - Cannot Find User Login provided (Big Bird).', 
                                 'code': 10000}],
-                'admin' : True },
-              'DummyMethod' : 'noScenarioData - args will return 1:1'
+                'admin' : True }
               }
 
 class DummyAPIGeneric(TestlinkAPIGeneric):
@@ -40,16 +39,21 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
     - _callServer() Method to return test scenarios
     - extend positional_arg_names for  method 'DummyMethod'
     """
+
+    __slots__ = ['scenario_data', 'callArgs']
   
     def __init__(self, server_url, devKey):
         super(DummyAPIGeneric, self).__init__(server_url, devKey)
         self._positionalArgNames['DummyMethod'] = ['Uno', 'due', 'tre']
         self.scenario_data = {}
+        self.callArgs = None
+
 
     def loadScenario(self, a_scenario):
         self.scenario_data = a_scenario
 
     def _callServer(self, methodAPI, argsAPI=None):
+        self.callArgs = argsAPI
         response = None
         if methodAPI in ['DummyMethod']:
             response = argsAPI
