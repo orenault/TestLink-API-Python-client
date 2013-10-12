@@ -84,19 +84,25 @@ SCENARIO_A = {'getProjects' : [
               'getBuildsForTestPlan' : {'22' : ''}
               }
 
+SCENARIO_STEPS = {'createTestCase' : ['noRealReponseData - ok for step tests']}
+
 class DummyAPIClient(TestlinkAPIClient):
     """ Dummy for Simulation TestLinkAPICLient. 
     Overrides _callServer() Method to return test scenarios
     """
+
+    __slots__ = ['scenario_data', 'callArgs']
     
     def __init__(self, server_url, devKey):
         super(DummyAPIClient, self).__init__(server_url, devKey)
         self.scenario_data = {}
+        self.callArgs = None
 
     def loadScenario(self, a_scenario):
         self.scenario_data = a_scenario
 
     def _callServer(self, methodAPI, argsAPI=None):
+        self.callArgs = argsAPI
         data = self.scenario_data[methodAPI]
         response = None
         if methodAPI in ['getProjectTestPlans', 
@@ -119,6 +125,12 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
     works with DummyAPIClientm which returns special test data
     """
 
+    example_steps = [{'step_number' : '1', 'actions' : "action A" , 
+                'expected_results' : "result A", 'execution_type' : "0"},
+                 {'step_number' : '2', 'actions' : "action B" , 
+                'expected_results' : "result B", 'execution_type' : "1"},
+                 {'step_number' : '3', 'actions' : "action C" , 
+                'expected_results' : "result C", 'execution_type' : "0"}]
     def setUp(self):
         self.api = TestLinkHelper().connect(DummyAPIClient)
 
@@ -173,6 +185,28 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual('21', response)
         response = self.api.getProjectIDByName('UNKNOWN_PROJECT')
         self.assertEqual(-1, response)
+        
+    def test_initStep(self):
+        self.api.initStep("action A", "result A", 0)
+        steps = self.example_steps[:1]
+        self.assertEqual(steps, self.api.stepsList)
+        
+    def test_appendStep(self):
+        steps = self.example_steps
+        self.api.stepsList = steps[:1] 
+        self.api.appendStep("action B", "result B", 1)
+        self.api.appendStep("action C", "result C", 0)
+        self.assertEqual(steps, self.api.stepsList)
+
+    def test_createTestCaseWithSteps(self):
+        self.api.loadScenario(SCENARIO_STEPS)
+        self.api.initStep("action A", "result A", 0)
+        self.api.appendStep("action B", "result B", 1)
+        self.api.appendStep("action C", "result C", 0)
+        self.api.createTestCase('case 4711', 4712, 4713, 'Big Bird', 
+                                'summary 4714')
+        self.assertEqual(self.example_steps, self.api.callArgs['steps'])
+        self.assertEqual([], self.api.stepsList)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

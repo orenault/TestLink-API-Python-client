@@ -30,6 +30,21 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
     def __init__(self, server_url, devKey):
         super(TestlinkAPIClient, self).__init__(server_url, devKey)
         self.stepsList = []
+        self._changePositionalArgConfig()
+        
+    def _changePositionalArgConfig(self):
+        """ set special positional arg configuration, which differs from the 
+            generic configuration """
+        pos_arg_config = self._positionalArgNames
+         
+        # createTestCases sets argument 'steps' with values from .stepsList
+        # - user must not passed a separate stepList
+        pos_arg_config['createTestCase'] = ['testcasename', 'testsuiteid', 
+                        'testprojectid', 'authorlogin', 'summary'] #, 'steps']
+        # getTestCase 
+        pos_arg_config['getTestCase'] = ['testcaseid']
+
+
         
     #
     #  BUILT-IN API CALLS
@@ -123,13 +138,13 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                 'testprojectid':str(testprojectid)}  
         return self._callServer('getProjectTestPlans', argsAPI)
 
-    def getTestCase(self, testcaseid):
-        """ getTestCase :
-        Gets test case specification using external or internal id  
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testcaseid' : str(testcaseid)}  
-        return self._callServer('getTestCase', argsAPI)          
+#     def getTestCase(self, testcaseid):
+#         """ getTestCase :
+#         Gets test case specification using external or internal id  
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testcaseid' : str(testcaseid)}  
+#         return self._callServer('getTestCase', argsAPI)          
 
     def getTestCaseAttachments(self, testcaseid):
         """ getTestCaseAttachments :
@@ -301,65 +316,82 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                 'buildnotes' : str(buildnotes)}                  
         return self._callServer('createBuild', argsAPI)        
     
-    def createTestPlan(self, *args):
-        """ createTestPlan :
-        Create a test plan 
-            Mandatory parameters : testplanname, testprojectname
-            Optional parameters : notes, active, public   
-        """        
-        testplanname = args[0]
-        testprojectname = args[1]
-        argsAPI = {'devKey' : self.devKey,
-                'testplanname' : str(testplanname),
-                'testprojectname' : str(testprojectname)}
-        if len(args)>2:
-            params = args[2:] 
-            for param in params:
-                paramlist = param.split("=")
-                argsAPI[paramlist[0]] = paramlist[1]  
-        return self._callServer('createTestPlan', argsAPI)    
+#     def createTestPlan(self, *args):
+#         """ createTestPlan :
+#         Create a test plan 
+#             Mandatory parameters : testplanname, testprojectname
+#             Optional parameters : notes, active, public   
+#         """        
+#         testplanname = args[0]
+#         testprojectname = args[1]
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testplanname' : str(testplanname),
+#                 'testprojectname' : str(testprojectname)}
+#         if len(args)>2:
+#             params = args[2:] 
+#             for param in params:
+#                 paramlist = param.split("=")
+#                 argsAPI[paramlist[0]] = paramlist[1]  
+#         return self._callServer('createTestPlan', argsAPI)    
  
-    def createTestSuite(self, *args):
-        """ createTestSuite :
-        Create a test suite  
-          Mandatory parameters : testprojectid, testsuitename, details
-          Optional parameters : parentid, order, checkduplicatedname, 
-                                actiononduplicatedname   
-        """        
-        argsAPI = {'devKey' : self.devKey,
-                'testprojectid' : str(args[0]),
-                'testsuitename' : str(args[1]),
-                'details' : str(args[2])}
-        if len(args)>3:
-            params = args[3:] 
-            for param in params:
-                paramlist = param.split("=")
-                argsAPI[paramlist[0]] = paramlist[1]  
-        return self._callServer('createTestSuite', argsAPI)       
+#     def createTestSuite(self, *args):
+#         """ createTestSuite :
+#         Create a test suite  
+#           Mandatory parameters : testprojectid, testsuitename, details
+#           Optional parameters : parentid, order, checkduplicatedname, 
+#                                 actiononduplicatedname   
+#         """        
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testprojectid' : str(args[0]),
+#                 'testsuitename' : str(args[1]),
+#                 'details' : str(args[2])}
+#         if len(args)>3:
+#             params = args[3:] 
+#             for param in params:
+#                 paramlist = param.split("=")
+#                 argsAPI[paramlist[0]] = paramlist[1]  
+#         return self._callServer('createTestSuite', argsAPI)       
 
-    def createTestCase(self, *args):
-        """ createTestCase :
-        Create a test case  
-          Mandatory parameters : testcasename, testsuiteid, testprojectid, 
-                                 authorlogin, summary, steps 
-          Optional parameters : preconditions, importance, executiontype, order, 
-                       internalid, checkduplicatedname, actiononduplicatedname   
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testcasename' : str(args[0]),
-                'testsuiteid' : str(args[1]),
-                'testprojectid' : str(args[2]),
-                'authorlogin' : str(args[3]),
-                'summary' : str(args[4]),
-                'steps' : self.stepsList}
-        if len(args)>5:
-            params = args[5:] 
-            for param in params:
-                paramlist = param.split("=")
-                argsAPI[paramlist[0]] = paramlist[1]
-        ret = self._callServer('createTestCase', argsAPI) 
-        self.stepsList = []                    
-        return ret 
+
+    def createTestCase(self, *argsPositional, **argsOptional):
+        """ createTestCase: Create a test case
+        positional args: testcasename, testsuiteid, testprojectid, authorlogin,
+                         summary
+        optional args : preconditions, importance, execution, order, internalid,
+                        checkduplicatedname, actiononduplicatedname
+                        
+        argument 'steps' will be set with values from .stepsList
+        must be filled before call via .initStep() and .appendStep()
+        """ 
+        
+        # store current stepsList aus arguments 'steps'
+        argsOptional['steps'] = self.stepsList
+        self.stepsList = []
+        return super(TestlinkAPIClient, self).createTestCase(*argsPositional, 
+                                                             **argsOptional)
+        
+#      def createTestCase(self, *args): :
+#         Create a test case  
+#           Mandatory parameters : testcasename, testsuiteid, testprojectid, 
+#                                  authorlogin, summary, steps 
+#           Optional parameters : preconditions, importance, executiontype, order, 
+#                        internalid, checkduplicatedname, actiononduplicatedname   
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testcasename' : str(args[0]),
+#                 'testsuiteid' : str(args[1]),
+#                 'testprojectid' : str(args[2]),
+#                 'authorlogin' : str(args[3]),
+#                 'summary' : str(args[4]),
+#                 'steps' : self.stepsList}
+#         if len(args)>5:
+#             params = args[5:] 
+#             for param in params:
+#                 paramlist = param.split("=")
+#                 argsAPI[paramlist[0]] = paramlist[1]
+#         ret = self._callServer('createTestCase', argsAPI) 
+#         self.stepsList = []                    
+#         return ret 
 
     def reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
         """

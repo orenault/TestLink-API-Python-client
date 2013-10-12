@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2011-2012 Olivier Renault, TestLink-API-Python-client developers
+#  Copyright 2011-2013 Olivier Renault, TestLink-API-Python-client developers
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -45,6 +45,13 @@ NewProject
                           --------- Test Case B
                                            |   
                                            --- 5 automated test steps
+                                           
+Update 12. Oct. 2013, L. Czub
+Integrates v0.4.5 changes for  optional arguments 
+The v0.4.0 method calls are still visible as comments (look for CHANGE v0.4.5)
+So this file helps to understand where existing own code needs adjustment.
+-  
+used as behaviour is still                                             
 """                                       
 from testlink import TestlinkAPIClient, TestLinkHelper
 import sys
@@ -90,9 +97,16 @@ myTestLink.listProjects()
 print ""
 
 # Creates the project
+
+# -- Start CHANGE v0.4.5 -- 
+# newProject = myTestLink.createTestProject(NEWPROJECT, "NPROAPI",
+# "notes=This is a Project created with the API", "active=1", "public=1",
+# "options=requirementsEnabled:0,testPriorityEnabled:1,automationEnabled:1,inventoryEnabled:0")
 newProject = myTestLink.createTestProject(NEWPROJECT, "NPROAPI",
-"notes=This is a Project created with the API", "active=1", "public=1",
-"options=requirementsEnabled:0,testPriorityEnabled:1,automationEnabled:1,inventoryEnabled:0")
+    notes='This is a Project created with the API', active=1, public=1,
+    options={'requirementsEnabled' : 0, 'testPriorityEnabled' : 1,
+             'automationEnabled' : 1, 'inventoryEnabled' : 0})
+# -- END CHANGE v0.4.5 -- 
 isOk = newProject[0]['message']
 if isOk=="Success!":
   newProjectID = newProject[0]['id'] 
@@ -102,8 +116,12 @@ else:
   sys.exit(-1)
 
 # Creates the test plan
+# -- Start CHANGE v0.4.5 -- 
+# newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
+#             "notes=New TestPlan created with the API","active=1", "public=1")    
 newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
-            "notes=New TestPlan created with the API","active=1", "public=1")    
+            notes='New TestPlan created with the API',active=1, public=1)    
+# -- END CHANGE v0.4.5 -- 
 isOk = newTestPlan[0]['message']
 if isOk=="Success!":
   newTestPlanID = newTestPlan[0]['id'] 
@@ -137,8 +155,12 @@ else:
   sys.exit(-1)
 
 #Creates the test Suite AA       
+# -- Start CHANGE v0.4.5 -- 
+# newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
+#             "Details of the Test Suite AA","parentid="+FirstLevelID)               
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
-            "Details of the Test Suite AA","parentid="+FirstLevelID)               
+            "Details of the Test Suite AA",parentid=FirstLevelID)               
+# -- END CHANGE v0.4.5 -- 
 isOk = newTestSuite[0]['message']
 if isOk=="ok":
   TestSuiteID_AA = newTestSuite[0]['id'] 
@@ -157,13 +179,18 @@ myTestLink.appendStep("Step action 3", "Step result 3", MANUAL)
 myTestLink.appendStep("Step action 4", "Step result 4", MANUAL)
 myTestLink.appendStep("Step action 5", "Step result 5", MANUAL)
      
+# -- Start CHANGE v0.4.5 -- 
+# newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, TestSuiteID_AA, 
+#           newProjectID, "admin", "This is the summary of the Test Case AA", 
+#           "preconditions=these are the preconditions")                 
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, TestSuiteID_AA, 
           newProjectID, "admin", "This is the summary of the Test Case AA", 
-          "preconditions=these are the preconditions")                 
+          preconditions='these are the preconditions')                 
+# -- END CHANGE v0.4.5 -- 
 isOk = newTestCase[0]['message']
 if isOk=="Success!":
-  newTestCaseID = newTestCase[0]['id'] 
-  print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID)
+  newTestCaseID_AA = newTestCase[0]['id'] 
+  print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA)
 else:
   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_AA, isOk)
   sys.exit(-1)
@@ -175,17 +202,41 @@ myTestLink.appendStep("Step action 3", "Step result 3", AUTOMATED)
 myTestLink.appendStep("Step action 4", "Step result 4", AUTOMATED)
 myTestLink.appendStep("Step action 5", "Step result 5", AUTOMATED)
      
+# -- Start CHANGE v0.4.5 -- 
+# newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, TestSuiteID_B, 
+#           newProjectID, "admin", "This is the summary of the Test Case B", 
+#           "preconditions=these are the preconditions", 
+#           "executiontype=%i" % AUTOMATED)               
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, TestSuiteID_B, 
           newProjectID, "admin", "This is the summary of the Test Case B", 
-          "preconditions=these are the preconditions", 
-          "executiontype=%i" % AUTOMATED)               
+          preconditions='these are the preconditions', executiontype=AUTOMATED)               
+# -- END CHANGE v0.4.5 -- 
 isOk = newTestCase[0]['message']
 if isOk=="Success!":
-  newTestCaseID = newTestCase[0]['id'] 
-  print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID)
+  newTestCaseID_B = newTestCase[0]['id'] 
+  print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
 else:
   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_B, isOk)
   sys.exit(-1)
+  
+# -- New Examples with v0.4.5 -- 
+  
+# Add  test cases to test plan - we need the full external id !
+tc_aa_full_ext_id = myTestLink.getTestCase(newTestCaseID_AA)[0]['full_tc_external_id']
+response = myTestLink._callServer('addTestCaseToTestPlan', 
+                {'devKey' : myTestLink.devKey, 
+                 'testprojectid' : newProjectID, 
+                 'testplanid' : newTestPlanID, 
+                 'testcaseexternalid' : tc_aa_full_ext_id, 'version' : 1})
+print response
+tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_tc_external_id']
+response = myTestLink._callServer('addTestCaseToTestPlan', 
+                {'devKey' : myTestLink.devKey, 
+                 'testprojectid' : newProjectID, 
+                 'testplanid' : newTestPlanID, 
+                 'testcaseexternalid' : tc_b_full_ext_id, 'version' : 1})
+print response
+  
 
 print ""
 print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)

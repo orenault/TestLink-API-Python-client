@@ -21,7 +21,8 @@
 # are defined in environment variables
 #     TESTLINK_API_PYTHON_DEVKEY and TESTLINK_API_PYTHON_DEVKEY
 #
-# works with the example project NEW_PROJECT_API  (see TestLinkExample.py)
+# works with the example project NEW_PROJECT_API_GENERIC
+#  (see TestLinkExampleGenericApi.py)
 # FIME LC 29.10.29: test does not really interacts with test link
 #                   only negative test with none existing IDs implemented
 #                   ok to check every implemented server call one time but not
@@ -63,21 +64,38 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         response = self.client.about()
         self.assertIn('Testlink API', response)
 
-    def test_getProjects(self):
-        response = self.client.getProjects()
-        self.assertIsNotNone(response)
-         
+    def test_doesUserExist_unknownID(self):
+        response = self.client.doesUserExist('Big Bird')
+        self.assertIn('Big Bird', response[0]['message'])
+        self.assertEqual(10000, response[0]['code'])
+        
     def test_createTestProject_unknownID(self):
         response = self.client.createTestProject(testprojectname='', 
                                                  testcaseprefix='P4711')
         self.assertIn('Empty name', response[0]['message'])
         self.assertEqual(7001, response[0]['code'])
  
-    def test_doesUserExist_unknownID(self):
-        response = self.client.doesUserExist('Big Bird')
-        self.assertIn('Big Bird', response[0]['message'])
-        self.assertEqual(10000, response[0]['code'])
+    def test_getProjects(self):
+        response = self.client.getProjects()
+        self.assertIsNotNone(response)
+         
+    def test_createTestPlan_unknownID(self):
+        response = self.client.createTestPlan('plan 4711', 'project 4712')
+        self.assertIn('4712', response[0]['message'])
+        self.assertEqual(7011, response[0]['code'])
+ 
+    def test_createTestSuite_unknownID(self):
+        response = self.client.createTestSuite( 4711, 'suite 4712', 'detail 4713')
+        self.assertIn('4711', response[0]['message'])
+        self.assertEqual(7000, response[0]['code'])
         
+    def test_createTestCase_unknownID(self):
+        tc_steps = []
+        response = self.client.createTestCase('case 4711', 4712, 4713, 
+                                        'Big Bird', 'summary 4714', tc_steps)
+        self.assertIn('4713', response[0]['message'])
+        self.assertEqual(7000, response[0]['code'])
+ 
 #     def test_getBuildsForTestPlan_unknownID(self):
 #         response = self.client.getBuildsForTestPlan(4711)
 #         self.assertIn('4711', response[0]['message'])
@@ -108,13 +126,21 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #         self.assertIn('4711', response[0]['message'])
 #         self.assertEqual(7000, response[0]['code'])
 #         
-#     def test_getTestCase_unknownID(self):
-#         response = self.client.getTestCase(4711)
-#         # FAILURE in 1.9.3 API message: replacement does not work
-#         # The Test Case ID (testcaseid: %s) provided does not exist!
-#         #self.assertIn('4711', response[0]['message'])
-#         self.assertEqual(5000, response[0]['code'])
-#         
+    def test_getTestCase_unknownID(self):
+        response = self.client.getTestCase(testcaseid=4711)
+        # FAILURE in 1.9.3 API message: replacement does not work
+        # The Test Case ID (testcaseid: %s) provided does not exist!
+        #self.assertIn('4711', response[0]['message'])
+        self.assertEqual(5000, response[0]['code'])
+         
+    def test_getTestCase_unknownExternalID(self):
+        response = self.client.getTestCase(testcaseexternalid='GPROAPI-4711')
+        # FAILURE in 1.9.3 API message: replacement does not work
+        # The Test Case ID (testcaseid: %s) provided does not exist!
+        #self.assertIn('4711', response[0]['message'])
+        print response
+        self.assertEqual(5040, response[0]['code'])
+         
 #     def test_getTestCaseAttachments_unknownID(self):
 #         response = self.client.getTestCaseAttachments(4711)
 #         # FAILURE in 1.9.3 API message: replacement does not work
@@ -182,22 +208,6 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #         response = self.client.createBuild(4711, 'Build 4712', 'note 4713')
 #         self.assertIn('4711', response[0]['message'])
 #         self.assertEqual(3000, response[0]['code'])
-# 
-#     def test_createTestPlan_unknownID(self):
-#         response = self.client.createTestPlan('plan 4711', 'project 4712')
-#         self.assertIn('4712', response[0]['message'])
-#         self.assertEqual(7011, response[0]['code'])
-# 
-#     def test_createTestSuite_unknownID(self):
-#         response = self.client.createTestSuite( 4711, 'suite 4712', 'detail 4713')
-#         self.assertIn('4711', response[0]['message'])
-#         self.assertEqual(7000, response[0]['code'])
-# 
-#     def test_createTestCase_unknownID(self):
-#         response = self.client.createTestCase('case 4711', 4712, 4713, 
-#                                                'Big Bird', 'summary 4714')
-#         self.assertIn('4713', response[0]['message'])
-#         self.assertEqual(7000, response[0]['code'])
 # 
 #     def test_reportTCResult_unknownID(self):
 #         response = self.client.reportTCResult(4711, 4712, 'build 4713', 'p', 

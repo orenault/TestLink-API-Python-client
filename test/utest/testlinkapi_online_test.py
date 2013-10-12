@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2012 Luiko Czub, TestLink-API-Python-client developers
+#  Copyright 2012-2013 Luiko Czub, TestLink-API-Python-client developers
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -105,6 +105,13 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         # The Test Case ID (testcaseid: %s) provided does not exist!
         #self.assertIn('4711', response[0]['message'])
         self.assertEqual(5000, response[0]['code'])
+        
+    def test_getTestCase_unknownExternalID(self):
+        response = self.client.getTestCase(testcaseexternalid='N-2')
+        # FAILURE in 1.9.3 API message: replacement does not work
+        # The Test Case ID (testcaseid: %s) provided does not exist!
+        #self.assertIn('4711', response[0]['message'])
+        self.assertEqual(5040, response[0]['code'])
         
     def test_getTestCaseAttachments_unknownID(self):
         response = self.client.getTestCaseAttachments(4711)
