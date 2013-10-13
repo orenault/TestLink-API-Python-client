@@ -43,8 +43,6 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                         'testprojectid', 'authorlogin', 'summary'] #, 'steps']
         # getTestCase 
         pos_arg_config['getTestCase'] = ['testcaseid']
-
-
         
     #
     #  BUILT-IN API CALLS

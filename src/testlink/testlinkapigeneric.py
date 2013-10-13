@@ -195,7 +195,6 @@ class TestlinkAPIGeneric(object):
 #   */
 #   public function getTestCaseIDByName($args)
 
-
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def createTestCase(self):
