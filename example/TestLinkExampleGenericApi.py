@@ -75,6 +75,7 @@ NEWTESTSUITE_B="B - First Level"
 NEWTESTSUITE_AA="AA - Second Level"
 NEWTESTCASE_AA="TESTCASE_AA"
 NEWTESTCASE_B="TESTCASE_B"
+NEWBUILD="Build v0.4.5"
 
 id_cache={}
 
@@ -105,7 +106,7 @@ else:
  
 # Creates the test plan
 newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
-            notes='New TestPlan created with the API',active=1, public=1)    
+            notes='New TestPlan created with the Generic API',active=1, public=1)    
 isOk = newTestPlan[0]['message']
 if isOk=="Success!":
   id_cache[NEWTESTPLAN] = newTestPlan[0]['id'] 
@@ -216,6 +217,29 @@ response = myTestLink._callServer('addTestCaseToTestPlan',
                  'testplanid' : id_cache[NEWTESTPLAN], 
                  'testcaseexternalid' : tc_b_full_ext_id, 'version' : 1})
 print response
+
+# -- Create Build
+newBuild = myTestLink.createBuild(id_cache[NEWTESTPLAN], NEWBUILD, 
+                                  buildnotes='Notes for the Build')
+print newBuild
+isOk = newBuild[0]['message']
+if isOk=="Success!":
+  id_cache[NEWBUILD] = newBuild[0]['id'] 
+  print "New Build '%s' - id: %s" % (NEWBUILD, id_cache[NEWBUILD])
+else:
+  print "Error creating the Build '%s': %s " % (NEWBUILD, isOk)
+  sys.exit(-1)
+  
+# report Test Case Results
+# TC_AA failed, build should be guessed, TC identified with external id
+newResult = myTestLink.reportTCResult(id_cache[NEWTESTPLAN], 'f', guess=True,
+                                     testcaseexternalid=tc_aa_full_ext_id)
+print newResult
+# TC_B passed, explicit build and some notes , TC identified with internal id
+newResult = myTestLink.reportTCResult(id_cache[NEWTESTPLAN], 'p', 
+                buildid=id_cache[NEWBUILD], testcaseid=id_cache[NEWTESTCASE_B], 
+                notes="first try")
+print newResult
 
 print ""
 print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())

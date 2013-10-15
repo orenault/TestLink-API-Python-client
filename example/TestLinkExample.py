@@ -85,6 +85,7 @@ NEWTESTSUITE_B="B - First Level"
 NEWTESTSUITE_AA="AA - Second Level"
 NEWTESTCASE_AA="TESTCASE_AA"
 NEWTESTCASE_B="TESTCASE_B"
+NEWBUILD="Build v0.4.5"
 
 
 if myTestLink.checkDevKey() != True:
@@ -237,6 +238,26 @@ response = myTestLink._callServer('addTestCaseToTestPlan',
                  'testcaseexternalid' : tc_b_full_ext_id, 'version' : 1})
 print response
   
+# -- Create Build
+newBuild = myTestLink.createBuild(newTestPlanID, NEWBUILD, 'Notes for the Build')
+print newBuild
+isOk = newBuild[0]['message']
+if isOk=="Success!":
+  newBuildID = newBuild[0]['id'] 
+  print "New Build '%s' - id: %s" % (NEWBUILD, newBuildID)
+else:
+  print "Error creating the Build '%s': %s " % (NEWBUILD, isOk)
+  sys.exit(-1)
+  
+# report Test Case Results
+# TC_AA failed
+newResult = myTestLink.reportTCResult(newTestPlanID, newTestCaseID_AA, NEWBUILD,
+                                       'f', '')
+print newResult
+# TC_B passed, explicit build and some notes , TC identified with internal id
+newResult = myTestLink.reportTCResult(newTestPlanID, newTestCaseID_B, NEWBUILD,
+                                      'p', 'first try')
+print newResult  
 
 print ""
 print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)

@@ -43,7 +43,11 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                         'testprojectid', 'authorlogin', 'summary'] #, 'steps']
         # getTestCase 
         pos_arg_config['getTestCase'] = ['testcaseid']
-        
+        # createVuild
+        pos_arg_config['createBuild'] = ['testplanid', 'buildname', 'buildnotes']
+        # reportTCResult
+        pos_arg_config['reportTCResult'] = ['testcaseid', 'testplanid', 
+                                            'buildname', 'status', 'notes']
     #
     #  BUILT-IN API CALLS
     #
@@ -304,15 +308,15 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #                     argsAPI[paramlist[0]] = paramlist[1]  
 #         return self._callServer('createTestProject', argsAPI)
         
-    def createBuild(self, testplanid, buildname, buildnotes):
-        """ createBuild :
-        Creates a new build for a specific test plan     
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testplanid' : str(testplanid),
-                'buildname' : str(buildname),
-                'buildnotes' : str(buildnotes)}                  
-        return self._callServer('createBuild', argsAPI)        
+#     def createBuild(self, testplanid, buildname, buildnotes):
+#         """ createBuild :
+#         Creates a new build for a specific test plan     
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testplanid' : str(testplanid),
+#                 'buildname' : str(buildname),
+#                 'buildnotes' : str(buildnotes)}                  
+#         return self._callServer('createBuild', argsAPI)        
     
 #     def createTestPlan(self, *args):
 #         """ createTestPlan :
@@ -391,25 +395,25 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #         self.stepsList = []                    
 #         return ret 
 
-    def reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
-        """
-        Report execution result
-        testcaseid: internal testlink id of the test case
-        testplanid: testplan associated with the test case
-        buildname: build name of the test case
-        status: test verdict ('p': pass,'f': fail,'b': blocked)
-
-        Return : [{'status': True, 'operation': 'reportTCResult', 'message': 'Success!', 'overwrite': False, 'id': '37'}]
-        id correspond to the executionID needed to attach files to a test execution
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testcaseid' : testcaseid,
-                'testplanid' : testplanid,
-                'status': status,
-                'buildname': buildname,
-                'notes': str(notes)
-                }
-        return self._callServer('reportTCResult', argsAPI)
+#     def reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
+#         """
+#         Report execution result
+#         testcaseid: internal testlink id of the test case
+#         testplanid: testplan associated with the test case
+#         buildname: build name of the test case
+#         status: test verdict ('p': pass,'f': fail,'b': blocked)
+# 
+#         Return : [{'status': True, 'operation': 'reportTCResult', 'message': 'Success!', 'overwrite': False, 'id': '37'}]
+#         id correspond to the executionID needed to attach files to a test execution
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testcaseid' : testcaseid,
+#                 'testplanid' : testplanid,
+#                 'status': status,
+#                 'buildname': buildname,
+#                 'notes': str(notes)
+#                 }
+#         return self._callServer('reportTCResult', argsAPI)
 
 
         

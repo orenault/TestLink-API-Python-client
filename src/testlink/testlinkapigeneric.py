@@ -31,13 +31,15 @@ import testlinkerrors
 # subclasses could override this definition, if their (python) method should
 # work with different positional arguments
 positionalArgNamesDefault = {
+            'createBuild' : ['testplanid', 'buildname'],
             'createTestCase' : ['testcasename', 'testsuiteid', 'testprojectid',
                                 'authorlogin', 'summary', 'steps'],
             'createTestPlan' : ['testplanname', 'testprojectname'],
             'createTestProject' : ['testprojectname', 'testcaseprefix'],
             'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
             'doesUserExist' : ['user'],
-            'repeat' : ['str']
+            'repeat' : ['str'],
+            'reportTCResult' : ['testplanid', 'status']
 }
 
 # decorators for generic api calls
@@ -106,17 +108,14 @@ class TestlinkAPIGeneric(object):
         positional args: ---
         optional args : --- """
 
-#    * Creates a new build for a specific test plan
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testplanid"]
-#    * @param string $args["buildname"];
-#    * @param string $args["buildnotes"];
-#    * @return mixed $resultInfo
-#   public function createBuild($args)
-
     @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def createBuild(self):
+        """ createBuild: Creates a new build for a specific test plan
+        positional args: testplanid, buildname
+        optional args : buildnotes """
+
+    @decoApiCallAddDevKey            
     @decoApiCallWithArgs
     def getProjects(self):
         """ getProjects: Gets a list of all projects
@@ -276,6 +275,20 @@ class TestlinkAPIGeneric(object):
 #    *
 #    */
 #   public function reportTCResult($args)
+
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def reportTCResult(self):
+        """ reportTCResult : Reports a result for a single test case
+        positional args: testplanid, status
+        optional args (variations): testcaseid - testcaseexternalid
+                                    buildid - buildname
+                                    platformid - platformname
+        optional args : notes, guess, bugid, customfields, overwrite 
+        
+        customfields : dictionary with customfields names + values
+            VERY IMPORTANT: value must be formatted in the way it's written to db
+ """
 
 #   /**
 #    * turn on/off testMode
@@ -1128,7 +1141,7 @@ class TestlinkAPIGeneric(object):
         if length_NameList != length_ValueList:
             new_msg = '%s - mismatching number of positional args %i vs %i' %\
             (methodName, length_NameList, length_ValueList)
-            new_msg = '%s\n expected args: %s' % (new_msg, ' - '.join(nameList))
+            new_msg = '%s\n expected args: %s' % (new_msg, ', '.join(nameList))
             raise testlinkerrors.TLArgError(new_msg)
         return {nameList[x] : valueList[x] for x in range(len(nameList)) }
             

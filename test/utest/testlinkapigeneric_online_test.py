@@ -138,7 +138,6 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         # FAILURE in 1.9.3 API message: replacement does not work
         # The Test Case ID (testcaseid: %s) provided does not exist!
         #self.assertIn('4711', response[0]['message'])
-        print response
         self.assertEqual(5040, response[0]['code'])
          
 #     def test_getTestCaseAttachments_unknownID(self):
@@ -204,19 +203,16 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #         self.assertIn('4711', response[0]['message'])
 #         self.assertEqual(3000, response[0]['code'])
  
-#     def test_createBuild_unknownID(self):
-#         response = self.client.createBuild(4711, 'Build 4712', 'note 4713')
-#         self.assertIn('4711', response[0]['message'])
-#         self.assertEqual(3000, response[0]['code'])
-# 
-#     def test_reportTCResult_unknownID(self):
-#         response = self.client.reportTCResult(4711, 4712, 'build 4713', 'p', 
-#                                               'note 4714')
-#         # FAILURE in 1.9.3 API message: replacement does not work
-#         # The Test Case ID (testcaseid: %s) provided does not exist!
-#         #self.assertIn('4711', response[0]['message'])
-#         self.assertEqual(5000, response[0]['code'])
-# 
+    def test_createBuild_unknownID(self):
+        response = self.client.createBuild(4711, 'Build 4712', buildnotes='note 4713')
+        self.assertIn('4711', response[0]['message'])
+        self.assertEqual(3000, response[0]['code'])
+ 
+    def test_reportTCResult_unknownID(self):
+        response = self.client.reportTCResult(4712, 'p', testcaseid=4711, buildname='build 4713', notes='note 4714' )
+        #response = self.client.reportTCResult(538, 'p', testcaseexternalid='GPROAPI-2', guess=True)
+        self.assertEqual(5000, response[0]['code'])
+ 
 # #    def test_uploadExecutionAttachment_unknownID(self):
 # #        response = self.client.uploadExecutionAttachment('file 4711', 4712, 
 # #                        'title 4713', 'descr. 4714')
