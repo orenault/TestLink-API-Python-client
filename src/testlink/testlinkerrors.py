@@ -39,4 +39,20 @@ class TLArgError(TestLinkError):
     """ Call error 
     - wrong number of mandatory params ? - wrong param type? """    
 
+class TLResponseError(TestLinkError):
+    """ Response error 
+    - Response is empty or includes error codes """
+    
+    def __init__(self, methodNameAPI, argsOptional, message, code=None):
+        self.methodNameAPI = methodNameAPI
+        self.argsOptional  = argsOptional
+        self.message       = message
+        self.code          = code
+        msg = '%s\n%s(%s)' % (message, methodNameAPI, argsOptional)
+        if code:
+            msg = '%i: %s' % (code, msg)
+        return super(TLResponseError, self).__init__(msg)
+        
+           
+
         

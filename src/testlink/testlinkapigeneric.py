@@ -21,6 +21,7 @@ import xmlrpclib
 
 from testlinkhelper import TestLinkHelper, VERSION
 import testlinkerrors
+from compiler.ast import TryExcept
 
 
 # Default Definition which (python) API-Method expects which postional arguments
@@ -75,8 +76,10 @@ class TestlinkAPIGeneric(object):
  
     __VERSION__ = VERSION
     
-    def __init__(self, server_url, devKey):
-        self.server = xmlrpclib.Server(server_url)
+    def __init__(self, server_url, devKey, 
+                 transport=None, encoding=None, verbose=0, allow_none=0):
+        self.server = xmlrpclib.Server(server_url, transport, encoding, 
+                                       verbose, allow_none)
         self.devKey = devKey
         self._server_url = server_url
         self._positionalArgNames = positionalArgNamesDefault.copy()
@@ -1093,7 +1096,11 @@ class TestlinkAPIGeneric(object):
             # extent optional keys+values with positional keys+vales  
             argsOptional.update(dictPos)
         # now, start calling the server with basic error handling
-        return self._callServer(methodNameAPI, argsOptional)
+        response = self._callServer(methodNameAPI, argsOptional)
+        # check if response is not empyt and not includes error code
+        self._checkResponse(response, methodNameAPI, argsOptional) 
+        # seams to be ok, so let give them the data
+        return response
 
     #
     #  internal methods for general server calls
@@ -1144,6 +1151,27 @@ class TestlinkAPIGeneric(object):
             new_msg = '%s\n expected args: %s' % (new_msg, ', '.join(nameList))
             raise testlinkerrors.TLArgError(new_msg)
         return {nameList[x] : valueList[x] for x in range(len(nameList)) }
+    
+    def _checkResponse(self, response, methodNameAPI, argsOptional):
+        """ Checks if RESPONSE is empty or includes Error Messages
+            Will raise TLRepsonseError in this case """
+        if response:
+            try:
+                if 'code' in response[0]:
+                    raise testlinkerrors.TLResponseError(
+                                    methodNameAPI, argsOptional,
+                                    response[0]['message'], response[0]['code'])
+            except TypeError:
+                # some Response like doesUserExist returns boolean
+                # they are not iterable an will raise an TypeError
+                # - this reponses are ok
+                pass
+        else:
+            raise testlinkerrors.TLResponseError(methodNameAPI, argsOptional,
+                                                 'Empty Response! ')
+            
+            
+        
             
     
     #

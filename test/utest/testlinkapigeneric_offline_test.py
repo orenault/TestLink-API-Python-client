@@ -56,7 +56,7 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
         self.callArgs = argsAPI
         response = None
         if methodAPI in ['DummyMethod']:
-            response = argsAPI
+            response = [argsAPI]
         else:
             data = self.scenario_data[methodAPI]
             if methodAPI in ['doesUserExist']:
@@ -85,33 +85,64 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     def test__convertPositionalArgs_missingConf(self):
         client = self.api
         def a_func(a_api): a_api._convertPostionalArgs('NoConfigMethod',  [1,2])
-        self.assertRaises(testlinkerrors.TLParamError, a_func, client)
+        self.assertRaises(testlinkerrors.TLArgError, a_func, client)
         
     def test__convertPositionalArgs_lessValues(self):
         client = self.api
         def a_func(a_api): a_api._convertPostionalArgs('DummyMethod',  [1,2])
-        self.assertRaises(testlinkerrors.TLParamError, a_func, client)
+        self.assertRaises(testlinkerrors.TLArgError, a_func, client)
         
     def test__convertPositionalArgs_moreValues(self):
         client = self.api
         def a_func(a_api): a_api._convertPostionalArgs('DummyMethod',  [1,2,3,4])
-        self.assertRaises(testlinkerrors.TLParamError, a_func, client)
+        self.assertRaises(testlinkerrors.TLArgError, a_func, client)
 
     def test_callServerWithPosArgs_pos(self):
         response = self.api.callServerWithPosArgs('DummyMethod',  1,2,3)
-        self.assertEqual({'Uno' : 1, 'due' :2, 'tre' : 3}, response)
+        self.assertEqual({'Uno' : 1, 'due' :2, 'tre' : 3}, self.api.callArgs)
 
     def test_callServerWithPosArgs_pos_opt(self):
         response = self.api.callServerWithPosArgs('DummyMethod',  1,2,3, quad=4)
-        self.assertEqual({'Uno' : 1, 'due' :2, 'tre' : 3, 'quad' : 4}, response)
+        self.assertEqual({'Uno' : 1, 'due' :2, 'tre' : 3, 'quad' : 4}, self.api.callArgs)
 
     def test_callServerWithPosArgs_opt(self):
         response = self.api.callServerWithPosArgs('DummyMethod',  quad=4)
-        self.assertEqual({'quad' : 4}, response)
+        self.assertEqual({'quad' : 4}, self.api.callArgs)
 
     def test_callServerWithPosArgs_none(self):
         response = self.api.callServerWithPosArgs('DummyMethod')
-        self.assertEqual({}, response)
+        self.assertEqual({}, self.api.callArgs)
+        
+    def test_checkResponse_emptyResponse(self):
+        client = self.api
+        def a_func(a_api, response): 
+            a_api._checkResponse(response, 'DummyMethod',  
+                                 {'Uno' : 1, 'due' :2, 'tre' : 3})
+        self.assertRaises(testlinkerrors.TLResponseError, a_func, client, '')
+        self.assertRaises(testlinkerrors.TLResponseError, a_func, client, [])
+        
+    def test_checkResponse_errorResponse(self):
+        client = self.api
+        responseA = [{'message': '(reportTCResult) - TC ID 709 does not exist!', 
+                      'code': 5000}]
+        def a_func(a_api, response): 
+            a_api._checkResponse(response, 'DummyMethod',  
+                                 {'Uno' : 1, 'due' :2, 'tre' : 3})
+        self.assertRaises(testlinkerrors.TLResponseError, a_func, client, 
+                          responseA)
+
+    def test_checkResponse_okResponse(self):
+        self.api._checkResponse(
+                        [{'message': 'all fine, cause no key with name code'}],
+                         'DummyMethod', {'Uno' : 1, 'due' :2, 'tre' : 3})
+        self.api._checkResponse(
+                        'some API Call juts returns one string without codes',
+                         'DummyMethod', {'Uno' : 1, 'due' :2, 'tre' : 3})
+        
+    def test_checkResponse_booleanResponse(self):
+        responseA = True
+        self.api._checkResponse(responseA, 'DummyMethod', 
+                                {'Uno' : 1, 'due' :2, 'tre' : 3})
         
     def test_ping(self):
         self.api.loadScenario(SCENARIO_A)

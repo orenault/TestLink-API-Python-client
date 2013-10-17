@@ -28,7 +28,8 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
     __slots__ = ['stepsList']
     
     def __init__(self, server_url, devKey):
-        super(TestlinkAPIClient, self).__init__(server_url, devKey)
+        super(TestlinkAPIClient, self).__init__(server_url, devKey,
+                        transport=None, encoding=None, verbose=0, allow_none=1)
         self.stepsList = []
         self._changePositionalArgConfig()
         

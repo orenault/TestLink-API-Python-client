@@ -67,8 +67,10 @@ tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI.
 => Create a new Project with the following structure:''')
 myTestLink = tl_helper.connect(TestlinkAPIGeneric) 
 
+projNr=len(myTestLink.getProjects())+1
 
-NEWPROJECT="NEW_PROJECT_API_GENERIC"
+NEWPROJECT="PROJECT_API_GENERIC-%i" % projNr
+NEWPREFIX="GPROAPI%i" % projNr
 NEWTESTPLAN="TestPlan_API_GENERIC"
 NEWTESTSUITE_A="A - First Level"
 NEWTESTSUITE_B="B - First Level"
@@ -79,10 +81,18 @@ NEWBUILD="Build v0.4.5"
 
 id_cache={}
 
-
-if myTestLink.checkDevKey() != True:
-    print "Error with the devKey."      
-    sys.exit(-1)
+# example handling Response Error Codes
+# first check an invalid devKey and than the own one
+try:
+     myTestLink.checkDevKey(devKey='007')
+except TLResponseError as tl_err:
+    if tl_err.code == 2000:
+        # expected invalid devKey Error
+        # now check the own one - just call with default settings
+        myTestLink.checkDevKey()
+    else:
+        # seems to be another response failure -  we forward it
+        raise   
 
 print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())
 print ""
@@ -91,64 +101,39 @@ for project in myTestLink.getProjects():
 print ""
 
 # # Creates the project
-newProject = myTestLink.createTestProject(NEWPROJECT, 'GPROAPI', 
+newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX, 
     notes='This is a Project created with the Generic API', active=1, public=1,
     options={'requirementsEnabled' : 1, 'testPriorityEnabled' : 1, 
              'automationEnabled' : 1,  'inventoryEnabled' : 1})
 print(newProject)
-isOk = newProject[0]['message']
-if isOk=="Success!":
-  id_cache[NEWPROJECT] = newProject[0]['id'] 
-  print "New Project '%s' - id: %s" % (NEWPROJECT,id_cache[NEWPROJECT])
-else:
-  print "Error creating the project '%s': %s " % (NEWPROJECT,isOk)
-  sys.exit(-1)
+id_cache[NEWPROJECT] = newProject[0]['id'] 
+print "New Project '%s' - id: %s" % (NEWPROJECT,id_cache[NEWPROJECT])
  
 # Creates the test plan
 newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
             notes='New TestPlan created with the Generic API',active=1, public=1)    
-isOk = newTestPlan[0]['message']
-if isOk=="Success!":
-  id_cache[NEWTESTPLAN] = newTestPlan[0]['id'] 
-  print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,id_cache[NEWTESTPLAN])
-else:
-  print "Error creating the Test Plan '%s': %s " % (NEWTESTPLAN, isOk)
-  sys.exit(-1)
+id_cache[NEWTESTPLAN] = newTestPlan[0]['id'] 
+print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,id_cache[NEWTESTPLAN])
  
 #Creates the test Suite A      
 newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_A,
             "Details of the Test Suite A")  
-isOk = newTestSuite[0]['message']
-if isOk=="ok":
-  id_cache[NEWTESTSUITE_A] = newTestSuite[0]['id'] 
-  print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, id_cache[NEWTESTSUITE_A])
-else:
-  print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_A, isOk)
-  sys.exit(-1)
+id_cache[NEWTESTSUITE_A] = newTestSuite[0]['id'] 
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, id_cache[NEWTESTSUITE_A])
  
 FirstLevelID = id_cache[NEWTESTSUITE_A]
   
 #Creates the test Suite B      
 newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_B,
             "Details of the Test Suite B")               
-isOk = newTestSuite[0]['message']
-if isOk=="ok":
-  id_cache[NEWTESTSUITE_B] = newTestSuite[0]['id'] 
-  print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, id_cache[NEWTESTSUITE_B])
-else:
-  print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_B, isOk)
-  sys.exit(-1)
+id_cache[NEWTESTSUITE_B] = newTestSuite[0]['id'] 
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, id_cache[NEWTESTSUITE_B])
  
 #Creates the test Suite AA       
 newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_AA,
             "Details of the Test Suite AA",parentid=FirstLevelID)               
-isOk = newTestSuite[0]['message']
-if isOk=="ok":
-  id_cache[NEWTESTSUITE_AA] = newTestSuite[0]['id'] 
-  print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, id_cache[NEWTESTSUITE_AA])
-else:
-  print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_AA, isOk)
-  sys.exit(-1)
+id_cache[NEWTESTSUITE_AA] = newTestSuite[0]['id'] 
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, id_cache[NEWTESTSUITE_AA])
  
 MANUAL = 1
 AUTOMATED = 2
@@ -169,13 +154,8 @@ steps_tc_aa = [
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, id_cache[NEWTESTSUITE_AA], 
           id_cache[NEWPROJECT], "admin", "This is the summary of the Test Case AA", 
           steps_tc_aa, preconditions='these are the preconditions')                 
-isOk = newTestCase[0]['message']
-if isOk=="Success!":
-  id_cache[NEWTESTCASE_AA] = newTestCase[0]['id'] 
-  print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, id_cache[NEWTESTCASE_AA])
-else:
-  print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_AA, isOk)
-  sys.exit(-1)
+id_cache[NEWTESTCASE_AA] = newTestCase[0]['id'] 
+print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, id_cache[NEWTESTCASE_AA])
  
 #Creates the test case TC_B 
 steps_tc_b = [
@@ -194,13 +174,8 @@ newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, id_cache[NEWTESTSUITE_B],
           id_cache[NEWPROJECT], "admin", "This is the summary of the Test Case B", 
           steps_tc_b, preconditions='these are the preconditions', 
           executiontype=AUTOMATED)               
-isOk = newTestCase[0]['message']
-if isOk=="Success!":
-  id_cache[NEWTESTCASE_B] = newTestCase[0]['id'] 
-  print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, id_cache[NEWTESTCASE_B])
-else:
-  print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_B, isOk)
-  sys.exit(-1)
+id_cache[NEWTESTCASE_B] = newTestCase[0]['id'] 
+print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, id_cache[NEWTESTCASE_B])
   
 # Add  test cases to test plan - we need the full external id !
 tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=id_cache[NEWTESTCASE_AA])[0]['full_tc_external_id']
@@ -222,18 +197,13 @@ print response
 newBuild = myTestLink.createBuild(id_cache[NEWTESTPLAN], NEWBUILD, 
                                   buildnotes='Notes for the Build')
 print newBuild
-isOk = newBuild[0]['message']
-if isOk=="Success!":
-  id_cache[NEWBUILD] = newBuild[0]['id'] 
-  print "New Build '%s' - id: %s" % (NEWBUILD, id_cache[NEWBUILD])
-else:
-  print "Error creating the Build '%s': %s " % (NEWBUILD, isOk)
-  sys.exit(-1)
+id_cache[NEWBUILD] = newBuild[0]['id'] 
+print "New Build '%s' - id: %s" % (NEWBUILD, id_cache[NEWBUILD])
   
 # report Test Case Results
 # TC_AA failed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(id_cache[NEWTESTPLAN], 'f', guess=True,
-                                     testcaseexternalid=tc_aa_full_ext_id)
+                                      testcaseexternalid=tc_aa_full_ext_id)
 print newResult
 # TC_B passed, explicit build and some notes , TC identified with internal id
 newResult = myTestLink.reportTCResult(id_cache[NEWTESTPLAN], 'p', 

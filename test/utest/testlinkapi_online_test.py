@@ -29,6 +29,7 @@
 
 import unittest
 from testlink import TestlinkAPIClient, TestLinkHelper
+from testlink.testlinkerrors import TLResponseError
 
 
 class TestLinkAPIOnlineTestCase(unittest.TestCase):
@@ -61,9 +62,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertEqual('You said: Yellow Submarine', response)
         
     def test_doesUserExist_unknownID(self):
-        response = self.client.doesUserExist('Big Bird')
-        self.assertIn('Big Bird', response[0]['message'])
-        self.assertEqual(10000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '10000.*Big Bird'):
+            self.client.doesUserExist('Big Bird')
         
     def test_getBuildsForTestPlan_unknownID(self):
         response = self.client.getBuildsForTestPlan(4711)
@@ -100,18 +100,12 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertEqual(7000, response[0]['code'])
         
     def test_getTestCase_unknownID(self):
-        response = self.client.getTestCase(4711)
-        # FAILURE in 1.9.3 API message: replacement does not work
-        # The Test Case ID (testcaseid: %s) provided does not exist!
-        #self.assertIn('4711', response[0]['message'])
-        self.assertEqual(5000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '5000.*4711'):
+            self.client.getTestCase(4711)
         
     def test_getTestCase_unknownExternalID(self):
-        response = self.client.getTestCase(testcaseexternalid='N-2')
-        # FAILURE in 1.9.3 API message: replacement does not work
-        # The Test Case ID (testcaseid: %s) provided does not exist!
-        #self.assertIn('4711', response[0]['message'])
-        self.assertEqual(5040, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '5040.*N-2'):
+            self.client.getTestCase(testcaseexternalid='N-2')
         
     def test_getTestCaseAttachments_unknownID(self):
         response = self.client.getTestCaseAttachments(4711)
@@ -177,38 +171,30 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertEqual(3000, response[0]['code'])
 
     def test_createTestProject_unknownID(self):
-        response = self.client.createTestProject('', 'P4711')
-        self.assertIn('Empty name', response[0]['message'])
-        self.assertEqual(7001, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '7001.*Empty name'):
+            self.client.createTestProject('', 'P4711')
 
     def test_createBuild_unknownID(self):
-        response = self.client.createBuild(4711, 'Build 4712', 'note 4713')
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(3000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.createBuild(4711, 'Build 4712', 'note 4713')
 
     def test_createTestPlan_unknownID(self):
-        response = self.client.createTestPlan('plan 4711', 'project 4712')
-        self.assertIn('4712', response[0]['message'])
-        self.assertEqual(7011, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '7011.*4712'):
+            self.client.createTestPlan('plan 4711', 'project 4712')
 
     def test_createTestSuite_unknownID(self):
-        response = self.client.createTestSuite( 4711, 'suite 4712', 'detail 4713')
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(7000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.createTestSuite( 4711, 'suite 4712', 'detail 4713')
 
     def test_createTestCase_unknownID(self):
-        response = self.client.createTestCase('case 4711', 4712, 4713, 
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4713'):
+            self.client.createTestCase('case 4711', 4712, 4713, 
                                                'Big Bird', 'summary 4714')
-        self.assertIn('4713', response[0]['message'])
-        self.assertEqual(7000, response[0]['code'])
 
     def test_reportTCResult_unknownID(self):
-        response = self.client.reportTCResult(4711, 4712, 'build 4713', 'p', 
+        with self.assertRaisesRegexp(TLResponseError, '5000.*4711'):
+            self.client.reportTCResult(4711, 4712, 'build 4713', 'p', 
                                               'note 4714')
-        # FAILURE in 1.9.3 API message: replacement does not work
-        # The Test Case ID (testcaseid: %s) provided does not exist!
-        #self.assertIn('4711', response[0]['message'])
-        self.assertEqual(5000, response[0]['code'])
 
 #    def test_uploadExecutionAttachment_unknownID(self):
 #        response = self.client.uploadExecutionAttachment('file 4711', 4712, 
