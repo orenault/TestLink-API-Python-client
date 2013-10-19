@@ -44,7 +44,8 @@ NewProject
                                            --- 5 automated test steps
 """                                       
 from testlink import TestlinkAPIGeneric, TestLinkHelper
-import sys
+from testlink.testlinkerrors import TLResponseError
+import sys, os.path
 
 # precondition a)
 # SERVER_URL and KEY are defined in environment
@@ -78,6 +79,10 @@ NEWTESTSUITE_AA="AA - Second Level"
 NEWTESTCASE_AA="TESTCASE_AA"
 NEWTESTCASE_B="TESTCASE_B"
 NEWBUILD="Build v0.4.5"
+
+NEWATTACHMENT_PY= os.path.realpath(__file__)
+this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
+NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
 id_cache={}
 
@@ -205,11 +210,29 @@ print "New Build '%s' - id: %s" % (NEWBUILD, id_cache[NEWBUILD])
 newResult = myTestLink.reportTCResult(id_cache[NEWTESTPLAN], 'f', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id)
 print newResult
+newResultID_AA = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id
 newResult = myTestLink.reportTCResult(id_cache[NEWTESTPLAN], 'p', 
                 buildid=id_cache[NEWBUILD], testcaseid=id_cache[NEWTESTCASE_B], 
                 notes="first try")
 print newResult
+newResultID_B = newResult[0]['id']
+
+# add this python file as Attachemnt to last execution of TC_B with 
+# different filename 'MyPyExampleApiGeneric.py'
+a_file=open(NEWATTACHMENT_PY)
+newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_B, 
+        title='Textfile Example', description='Text Attachment Example for a TestCase',
+        filename='MyPyExampleApiGeneric.py')
+print newAttachment
+# add png file as Attachemnt to last execution of TC_AA
+# !Attention - on WINDOWS use binary mode for none text file
+# see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+a_file=open(NEWATTACHMENT_PNG, mode='rb')
+newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_AA, 
+            title='PNG Example', description='PNG Attachment Example for a TestCase')
+print newAttachment
+
 
 print ""
 print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())

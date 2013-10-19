@@ -21,7 +21,7 @@ import xmlrpclib
 
 from testlinkhelper import TestLinkHelper, VERSION
 import testlinkerrors
-from compiler.ast import TryExcept
+
 
 
 # Default Definition which (python) API-Method expects which postional arguments
@@ -40,7 +40,8 @@ positionalArgNamesDefault = {
             'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
             'doesUserExist' : ['user'],
             'repeat' : ['str'],
-            'reportTCResult' : ['testplanid', 'status']
+            'reportTCResult' : ['testplanid', 'status'],
+            'uploadExecutionAttachment' : ['executionid']
 }
 
 # decorators for generic api calls
@@ -69,6 +70,21 @@ def decoApiCallAddDevKey(methodAPI):
         return methodAPI(self, *argsPositional, **argsOptional)
     return wrapper
 
+def decoApiCallAddAttachment(methodAPI):
+    """ Decorator to expand parameter list with devKey and attachmentfile
+        attachmentfile  is a python file descriptor pointing to the file
+    """  
+    def wrapper(self, attachmentfile, *argsPositional, **argsOptional):
+        if not ('devKey' in argsOptional):
+            argsOptional['devKey'] = self.devKey
+        argsAttachment = self._getAttachmentArgs(attachmentfile)
+        # add additional key/value pairs from argsOptional 
+        # although overwrites filename, filetype, content with user definition
+        # if they exist
+        argsAttachment.update(argsOptional)
+        return methodAPI(self, *argsPositional, **argsAttachment)
+    return wrapper
+
 
 class TestlinkAPIGeneric(object):    
     
@@ -76,8 +92,11 @@ class TestlinkAPIGeneric(object):
  
     __VERSION__ = VERSION
     
-    def __init__(self, server_url, devKey, 
-                 transport=None, encoding=None, verbose=0, allow_none=0):
+    def __init__(self, server_url, devKey, **args):
+        transport=args.get('transport')
+        encoding=args.get('encoding')
+        verbose=args.get('verbose',0)
+        allow_none=args.get('allow_none',0)
         self.server = xmlrpclib.Server(server_url, transport, encoding, 
                                        verbose, allow_none)
         self.devKey = devKey
@@ -692,26 +711,24 @@ class TestlinkAPIGeneric(object):
 #  */
 # public function uploadTestCaseAttachment($args)
 
-# /**
-#  * Uploads an attachment for an execution.
-#  * 
-#  * The attachment content must be Base64 encoded by the client before sending it.
-#  * 
-#  * @param struct $args
-#  * @param string $args["devKey"] Developer key
-#  * @param int $args["executionid"] execution ID
-#  * @param string $args["title"] (Optional) The title of the Attachment 
-#  * @param string $args["description"] (Optional) The description of the Attachment
-#  * @param string $args["filename"] The file name of the Attachment (e.g.:notes.txt)
-#  * @param string $args["filetype"] The file type of the Attachment (e.g.: text/plain)
-#  * @param string $args["content"] The content (Base64 encoded) of the Attachment
-#  * 
-#  * @since 1.9beta6
-#  * @return mixed $resultInfo an array containing the fk_id, fk_table, title, 
-#  * description, file_name, file_size and file_type. If any errors occur it 
-#  * returns the erros map.
-#  */
-# public function uploadExecutionAttachment($args)
+
+    @decoApiCallAddAttachment            
+    @decoApiCallWithArgs
+    def uploadExecutionAttachment(self):
+        """ uploadExecutionAttachment: Uploads an attachment for an execution
+        mandatory args: attachmentfile
+        positional args: executionid
+        optional args : title, description, filename, filetype, content
+        
+        attachmentfile: python file descriptor pointing to the file
+        !Attention - on WINDOWS use binary mode for none text file
+        see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        
+        default values for filename, filetype, content are determine from 
+        ATTACHMENTFILE, but user could overwrite it, if they want to store the
+        attachment with a different name 
+        """
+
 
 # /**
 #  * Uploads an attachment for specified table. You must specify the table that 
@@ -1152,6 +1169,19 @@ class TestlinkAPIGeneric(object):
             raise testlinkerrors.TLArgError(new_msg)
         return {nameList[x] : valueList[x] for x in range(len(nameList)) }
     
+    def _getAttachmentArgs(self, attachmentfile):
+        """ returns dictionary with key/value pairs needed, to transfer 
+            ATTACHMENTFILE via the api to into TL
+            ATTACHMENTFILE: python file descriptor pointing to the file """
+        import mimetypes
+        import base64
+        import os.path
+        return {'filename':os.path.basename(attachmentfile.name),
+                'filetype':mimetypes.guess_type(attachmentfile.name)[0],
+                'content':base64.encodestring(attachmentfile.read())
+                }
+
+    
     def _checkResponse(self, response, methodNameAPI, argsOptional):
         """ Checks if RESPONSE is empty or includes Error Messages
             Will raise TLRepsonseError in this case """
@@ -1161,10 +1191,14 @@ class TestlinkAPIGeneric(object):
                     raise testlinkerrors.TLResponseError(
                                     methodNameAPI, argsOptional,
                                     response[0]['message'], response[0]['code'])
-            except TypeError:
-                # some Response like doesUserExist returns boolean
-                # they are not iterable an will raise an TypeError
-                # - this reponses are ok
+            except (TypeError, KeyError):
+                # if the reponse has not a [{..}] structure, the check
+                #    'code' in response[0]
+                # raise an error. Following causes are ok
+                # TypeError: raised from doesUserExist, cause the postiv 
+                #            response is simply 'True'
+                # KeyError: raise from uploadExecutionAttachment, cause the 
+                #           positiv response is directly a dictionary
                 pass
         else:
             raise testlinkerrors.TLResponseError(methodNameAPI, argsOptional,

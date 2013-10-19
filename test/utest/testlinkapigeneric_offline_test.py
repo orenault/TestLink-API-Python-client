@@ -98,19 +98,19 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertRaises(testlinkerrors.TLArgError, a_func, client)
 
     def test_callServerWithPosArgs_pos(self):
-        response = self.api.callServerWithPosArgs('DummyMethod',  1,2,3)
+        self.api.callServerWithPosArgs('DummyMethod',  1,2,3)
         self.assertEqual({'Uno' : 1, 'due' :2, 'tre' : 3}, self.api.callArgs)
 
     def test_callServerWithPosArgs_pos_opt(self):
-        response = self.api.callServerWithPosArgs('DummyMethod',  1,2,3, quad=4)
+        self.api.callServerWithPosArgs('DummyMethod',  1,2,3, quad=4)
         self.assertEqual({'Uno' : 1, 'due' :2, 'tre' : 3, 'quad' : 4}, self.api.callArgs)
 
     def test_callServerWithPosArgs_opt(self):
-        response = self.api.callServerWithPosArgs('DummyMethod',  quad=4)
+        self.api.callServerWithPosArgs('DummyMethod',  quad=4)
         self.assertEqual({'quad' : 4}, self.api.callArgs)
 
     def test_callServerWithPosArgs_none(self):
-        response = self.api.callServerWithPosArgs('DummyMethod')
+        self.api.callServerWithPosArgs('DummyMethod')
         self.assertEqual({}, self.api.callArgs)
         
     def test_checkResponse_emptyResponse(self):
@@ -140,8 +140,13 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
                          'DummyMethod', {'Uno' : 1, 'due' :2, 'tre' : 3})
         
     def test_checkResponse_booleanResponse(self):
-        responseA = True
-        self.api._checkResponse(responseA, 'DummyMethod', 
+        response = True
+        self.api._checkResponse(response, 'DummyMethod', 
+                                {'Uno' : 1, 'due' :2, 'tre' : 3})
+        
+    def test_checkResponse_dictionaryResponse(self):
+        response = {'note' : 'uploadAttachment Calls return {..} and not [{..}]'}
+        self.api._checkResponse(response, 'DummyMethod', 
                                 {'Uno' : 1, 'due' :2, 'tre' : 3})
         
     def test_ping(self):

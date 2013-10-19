@@ -1,7 +1,5 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
-from compiler.pycodegen import TRY_FINALLY
-from symbol import except_clause
 
 #  Copyright 2011-2013 Olivier Renault, TestLink-API-Python-client developers
 #
@@ -57,7 +55,7 @@ used as behaviour is still
 """                                       
 from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
-import sys
+import sys, os.path
 
 # precondition a)
 # SERVER_URL and KEY are defined in environment
@@ -91,6 +89,10 @@ NEWTESTSUITE_AA="AA - Second Level"
 NEWTESTCASE_AA="TESTCASE_AA"
 NEWTESTCASE_B="TESTCASE_B"
 NEWBUILD="Build v0.4.5"
+
+NEWATTACHMENT_PY= os.path.realpath(__file__)
+this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
+NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
 # -- Start CHANGE v0.4.5 -- 
 # if myTestLink.checkDevKey() != True:
@@ -286,10 +288,27 @@ print "New Build '%s' - id: %s" % (NEWBUILD, newBuildID)
 newResult = myTestLink.reportTCResult(None, newTestPlanID, None, 'f', '', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id)
 print newResult
+newResultID_AA = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id
 newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID, NEWBUILD,
                                       'p', 'first try')
-print newResult  
+print newResult 
+newResultID_B = newResult[0]['id']
+
+# add this (text) file as Attachemnt to last execution of TC_B  with 
+# different filename 'MyPyExampleApiClient.py'
+a_file=open(NEWATTACHMENT_PY)
+newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_B, 
+            'Textfile Example', 'Text Attachment Example for a TestCase',
+            filename='MyPyExampleApiClient.py')
+print newAttachment
+# add png file as Attachemnt to last execution of TC_AA
+# !Attention - on WINDOWS use binary mode for none text file
+# see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+a_file=open(NEWATTACHMENT_PNG, mode='rb')
+newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_AA, 
+            'PNG Example', 'PNG Attachment Example for a TestCase')
+print newAttachment
 
 print ""
 print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)

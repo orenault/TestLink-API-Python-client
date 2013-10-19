@@ -1,4 +1,5 @@
 include MANIFEST.in LICENSE-2.0.txt README.md
 recursive-include src *.py
 recursive-include example *.py
+recursive-include example *.png
 recursive-include test *.py

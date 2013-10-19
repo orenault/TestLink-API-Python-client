@@ -28,7 +28,7 @@
 #                   ok to check every implemented server call one time but not
 #                   to cover all possible responses or argument combinations
 
-import unittest
+import unittest, os.path
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 
@@ -201,11 +201,12 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.reportTCResult(4712, 'p', testcaseid=4711, 
                                        buildname='build 4713', notes='note 4714' )
  
-# #    def test_uploadExecutionAttachment_unknownID(self):
-# #        response = self.client.uploadExecutionAttachment('file 4711', 4712, 
-# #                        'title 4713', 'descr. 4714')
-# #        self.assertIn('4711', response[0]['message'])
-# 
+    def test_uploadExecutionAttachment_unknownID(self):
+        attachemantFile = open(os.path.realpath(__file__), 'r')
+        with self.assertRaisesRegexp(TLResponseError, '6004.*4712'):
+            self.client.uploadExecutionAttachment(attachemantFile, 4712, 
+                        title='title 4713', description='descr. 4714')
+ 
 #     def test_getProjectIDByName_unknownID(self):
 #         response = self.client.getProjectIDByName('project 4711')
 #         self.assertEqual(-1, response)

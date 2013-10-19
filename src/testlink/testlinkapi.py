@@ -28,8 +28,17 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
     __slots__ = ['stepsList']
     
     def __init__(self, server_url, devKey):
-        super(TestlinkAPIClient, self).__init__(server_url, devKey,
-                        transport=None, encoding=None, verbose=0, allow_none=1)
+        """ call super for init generell slots, init sepcial slots for teststeps
+            and define special positional arg settings """ 
+        super(TestlinkAPIClient, self).__init__(server_url, devKey, 
+                                                allow_none=1)
+        # allow_none is an argument from xmlrpclib.Server()
+        # with set to True, it is possible to set postional args to None, so 
+        # alternative optional arguments could be set
+        # example - testcaseid is set : 
+        # reportTCResult(None, newTestPlanID, None, 'f', '', guess=True,
+        #                             testcaseexternalid=tc_aa_full_ext_id)
+        # otherwise xmlrpclib raise an error, that None values are not allowed
         self.stepsList = []
         self._changePositionalArgConfig()
         
@@ -49,6 +58,9 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         # reportTCResult
         pos_arg_config['reportTCResult'] = ['testcaseid', 'testplanid', 
                                             'buildname', 'status', 'notes']
+        # uploadExecutionAttachment
+        pos_arg_config['uploadExecutionAttachment'] = ['executionid', 'title', 'description']
+        
     #
     #  BUILT-IN API CALLS
     #
@@ -418,27 +430,27 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 
 
         
-    def uploadExecutionAttachment(self,attachmentfile,executionid,title,description):
-        """
-        Attach a file to a test execution
-        attachmentfile: python file descriptor pointing to the file
-        name : name of the file
-        title : title of the attachment
-        description : description of the attachment
-        content type : mimetype of the file
-        """
-        import mimetypes
-        import base64
-        import os.path
-        argsAPI={'devKey' : self.devKey,
-                 'executionid':executionid,
-                 'title':title,
-                 'filename':os.path.basename(attachmentfile.name),
-                 'description':description,
-                 'filetype':mimetypes.guess_type(attachmentfile.name)[0],
-                 'content':base64.encodestring(attachmentfile.read())
-                 }
-        return self._callServer('uploadExecutionAttachment', argsAPI)
+#     def uploadExecutionAttachment(self,attachmentfile,executionid,title,description):
+#         """
+#         Attach a file to a test execution
+#         attachmentfile: python file descriptor pointing to the file
+#         name : name of the file
+#         title : title of the attachment
+#         description : description of the attachment
+#         content type : mimetype of the file
+#         """
+#         import mimetypes
+#         import base64
+#         import os.path
+#         argsAPI={'devKey' : self.devKey,
+#                  'executionid':executionid,
+#                  'title':title,
+#                  'filename':os.path.basename(attachmentfile.name),
+#                  'description':description,
+#                  'filetype':mimetypes.guess_type(attachmentfile.name)[0],
+#                  'content':base64.encodestring(attachmentfile.read())
+#                  }
+#         return self._callServer('uploadExecutionAttachment', argsAPI)
                         
     #
     #  ADDITIONNAL FUNCTIONS
