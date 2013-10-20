@@ -20,18 +20,26 @@
 from testlinkapi import TestlinkAPIClient, TestLinkHelper
 from testlinkerrors import TestLinkError
 from datetime import date
-
+import warnings
 
 class TestLink(TestlinkAPIClient):
     """
     TestLink API library 
     provide a user friendly library, with more robustness and error management
+    
+    v0.4.5: 
+    this class is deprecated, please use TestlinkAPIGeneric or TestlinkAPIClient
     """
+
+    __author__ = 'pade (Patrick Dassier), TestLink-API-Python-client developers'
 
     def __init__(self, server_url, key):
         """
         Class initialisation
         """
+        warnings.warn("""class TestLink is deprecated!
+please use testlinkapigeneric.TestlinkAPIGeneric or testlinkapi.TestlinkAPIClient""", 
+        DeprecationWarning)
         super(TestLink, self).__init__(server_url, key)
 
     def getTestCaseIDByName(self, testCaseName, testSuiteName, testProjectName):

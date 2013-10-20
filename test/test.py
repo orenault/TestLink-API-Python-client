@@ -23,6 +23,8 @@
  Creation date: 04-10-2012
  Author: dassier
 
+ v0.4.5: 
+ these tests are deprecated, please use unit test from test/utest
 '''
 
 '''

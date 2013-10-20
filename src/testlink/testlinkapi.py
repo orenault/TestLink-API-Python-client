@@ -23,9 +23,25 @@ from testlinkapigeneric import TestlinkAPIGeneric, TestLinkHelper
 #import testlinkerrors
 
 
-class TestlinkAPIClient(TestlinkAPIGeneric):    
+class TestlinkAPIClient(TestlinkAPIGeneric):
+    """ client for xmlrpc communication between Python and TestLlink 
+    
+        Inherits Testlink API methods from the generic client TestlinkAPIGeneric.
+        
+        Defines Service Methods like "countProjects" and change the 
+        configuration for positional and optional arguments in a way, that often
+        used arguments are positional.
+        - see _changePositionalArgConfig()
+        - configuration of positional arguments is consistent with v0.4.0
+        
+        Changes on Service Methods like "countProjects" should be implemented in
+        this class or sub classes
+        Changes of TestLink API methods should be implemented in generic API 
+        TestlinkAPIGeneric. 
+    """   
     
     __slots__ = ['stepsList']
+    __author__ = 'Olivier Renault, James Stock, TestLink-API-Python-client developers'
     
     def __init__(self, server_url, devKey):
         """ call super for init generell slots, init sepcial slots for teststeps

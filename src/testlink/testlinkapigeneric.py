@@ -23,7 +23,6 @@ from testlinkhelper import TestLinkHelper, VERSION
 import testlinkerrors
 
 
-
 # Default Definition which (python) API-Method expects which postional arguments
 # this must not be equal to mandatory params of the (php) xmlrpc Methods
 # it defines arguments, which values must be passed without explicit names
@@ -86,12 +85,24 @@ def decoApiCallAddAttachment(methodAPI):
     return wrapper
 
 
-class TestlinkAPIGeneric(object):    
+class TestlinkAPIGeneric(object): 
+    """ client for xmlrpc communication between Python and TestLlink 
+        Implements the Testlink API methods as generic PY methods with 
+        error handling.
+        
+        Allows the configuration of arguments for these API method as positional
+        or optional arguments.
+        
+        Changes of TestLink API methods should be implemented in this base class.
+        Service Methods like "countProjects" should be implemented on subclasses
+        like TestlinkAPIClient
+    """   
     
     __slots__ = ['server', 'devKey', '_server_url', '_positionalArgNames']
  
-    __VERSION__ = VERSION
-    
+    __version__ = VERSION
+    __author__ = 'Luiko Czub, TestLink-API-Python-client developers'
+
     def __init__(self, server_url, devKey, **args):
         transport=args.get('transport')
         encoding=args.get('encoding')
@@ -1216,9 +1227,14 @@ class TestlinkAPIGeneric(object):
     def __str__(self):
         message = """
 Testlink API - class %s - version %s
-@author: Olivier Renault, James Stock, TestLink-API-Python-client developers
+@authors: %s
+
+Current connection settings
+ Server URL: %s
+ DevKey    : %s
 """
-        return message % (self.__class__.__name__, self.__VERSION__)
+        return message % (self.__class__.__name__, self.__version__, 
+                          self.__author__, self._server_url, self.devKey)
 
     
 if __name__ == "__main__":
