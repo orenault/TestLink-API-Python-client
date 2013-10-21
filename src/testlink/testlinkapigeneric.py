@@ -23,7 +23,7 @@ from testlinkhelper import TestLinkHelper, VERSION
 import testlinkerrors
 
 
-# Default Definition which (python) API-Method expects which postional arguments
+# Default Definition which (python) API-Method expects which positional arguments
 # this must not be equal to mandatory params of the (php) xmlrpc Methods
 # it defines arguments, which values must be passed without explicit names
 # to the API-Method
@@ -37,6 +37,11 @@ positionalArgNamesDefault = {
             'createTestPlan' : ['testplanname', 'testprojectname'],
             'createTestProject' : ['testprojectname', 'testcaseprefix'],
             'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
+            'getBuildsForTestPlan' : ['testplanid'],
+            'getProjectTestPlans' : ['testprojectid'],
+            'getTestPlanByName' : ['testprojectname', 'testplanname'],
+            'getTestProjectByName' : ['testprojectname'],
+            'getTotalsForTestPlan' : ['testplanid'],
             'doesUserExist' : ['user'],
             'repeat' : ['str'],
             'reportTCResult' : ['testplanid', 'status'],
@@ -155,13 +160,48 @@ class TestlinkAPIGeneric(object):
         positional args: ---
         optional args : --- """
 
+#   /**
 #    * Gets a list of test plans within a project
 #    *
 #    * @param struct $args
 #    * @param string $args["devKey"]
 #    * @param int $args["testprojectid"]
 #    * @return mixed $resultInfo
+#    *         
+#    * @access public
+#    */    
+#   public function getProjectTestPlans($args)
+
+    @decoApiCallAddDevKey            
+    @decoApiCallWithArgs
+    def getProjectTestPlans(self):
+        """ getProjectTestPlans: Gets a list of test plans within a project
+        positional args: testprojectid
+        optional args : --- """
+
+#   /**
+#    * Gets a list of builds within a test plan
+#    *
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["testplanid"]
+#    * @return 
+#    *         if no errors
+#    *            no build present => null
+#    *            array of builds
+#    *         
+#    *         
+#    * @access public
+#    */    
 #   public function getBuildsForTestPlan($args)
+
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getBuildsForTestPlan(self):
+        """ getBuildsForTestPlan : Gets a list of builds within a test plan 
+        positional args: testplanid
+        optional args : --- """
+
 
 #    * List test suites within a test plan alphabetically
 #    * 
@@ -245,69 +285,6 @@ class TestlinkAPIGeneric(object):
                 'expected_results' : "result C", 'execution_type' : 0}]
             """
 
-#    /**
-#    * Reports a result for a single test case
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testcaseid"]: optional, if not present           
-#      *                                 testcaseexternalid must be present
-#      *
-#      * @param int $args["testcaseexternalid"]: optional, if does not is present           
-#      *                                         testcaseid must be present
-#      *
-#    *
-#    *
-#    * @param int $args["testplanid"] 
-#      * @param string $args["status"] - status is {@link $validStatusList}
-#    * @param int $args["buildid"] - optional.
-#    *                               if not present and $args["buildname"] exists
-#    *                               then 
-#    *                                    $args["buildname"] will be checked and used if valid
-#    *                               else 
-#    *                                    build with HIGHEST ID will be used
-#    *
-#    * @param int $args["buildname"] - optional.
-#    *                               if not present Build with higher internal ID will be used
-#    *
-#      *
-#    * @param string $args["notes"] - optional
-#    * @param bool $args["guess"] - optional defining whether to guess optinal params or require them 
-#    *                               explicitly default is true (guess by default)
-#    *
-#    * @param string $args["bugid"] - optional
-#      *
-#      * @param string $args["platformid"] - optional, if not present platformname must be present
-#    * @param string $args["platformname"] - optional, if not present platformid must be present
-#      *    
-#      *
-#      * @param string $args["customfields"] - optional
-#      *               contains an map with key:Custom Field Name, value: value for CF.
-#      *               VERY IMPORTANT: value must be formatted in the way it's written to db,
-#      *               this is important for types like:
-#      *
-#      *               DATE: strtotime()
-#      *               DATETIME: mktime()
-#      *               MULTISELECTION LIST / CHECKBOX / RADIO: se multipli selezione ! come separatore
-#      *
-#      *
-#      *               these custom fields must be configured to be writte during execution.
-#      *               If custom field do not meet condition value will not be written
-#      *
-#      * @param boolean $args["overwrite"] - optional, if present and true, then last execution
-#      *                for (testcase,testplan,build,platform) will be overwritten.            
-#      *
-#    * @return mixed $resultInfo 
-#    *         [status]  => true/false of success
-#    *         [id]      => result id or error code
-#    *         [message]  => optional message for error message string
-#    * @access public
-#    *
-#    * @internal revisions
-#    * 20101208 - franciscom - BUGID 4082 - no check on overwrite value
-#    *
-#    */
-#   public function reportTCResult($args)
 
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
@@ -450,28 +427,20 @@ class TestlinkAPIGeneric(object):
         optional args : parentid, order, checkduplicatedname, 
                         actiononduplicatedname """
 
-#     /**
-#      * Gets info about target test project
-#      *
-#      * @param struct $args
-#      * @param string $args["devKey"]
-#      * @param string $args["testprojectname"]     
-#      * @return mixed $resultInfo      
-#      * @access public
-#      */    
-#     public function getTestProjectByName($args)
+    @decoApiCallAddDevKey            
+    @decoApiCallWithArgs
+    def getTestProjectByName(self):
+        """ getTestProjectByName: Gets info about target test project
+        positional args: testprojectname
+        optional args : --- """
 
-#     /**
-#      * Gets info about target test project
-#      *
-#      * @param struct $args
-#      * @param string $args["devKey"]
-#      * @param string $args["testprojectname"]     
-#      * @param string $args["testplanname"]     
-#      * @return mixed $resultInfo      
-#      * @access public
-#      */    
-#     public function getTestPlanByName($args)
+    @decoApiCallAddDevKey            
+    @decoApiCallWithArgs
+    def getTestPlanByName(self):
+        """ getTestPlanByName: Gets info about target test project
+        positional args: testprojectname, testplanname
+        optional args : --- """
+
 
 # /**
 # * get test case specification using external ir internal id
@@ -601,6 +570,12 @@ class TestlinkAPIGeneric(object):
 #    */
 #   public function getTotalsForTestPlan($args)
 
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTotalsForTestPlan(self):
+        """ getTotalsForTestPlan :  Gets the summarized results grouped by platform.
+        positional args: testplanid
+        optional args : ---  """
 
     @decoApiCallWithArgs
     def doesUserExist(self):

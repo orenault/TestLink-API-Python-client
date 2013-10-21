@@ -20,7 +20,7 @@
 #import xmlrpclib
 
 from testlinkapigeneric import TestlinkAPIGeneric, TestLinkHelper
-#import testlinkerrors
+from testlinkerrors import TLResponseError
 
 
 class TestlinkAPIClient(TestlinkAPIGeneric):
@@ -78,7 +78,7 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         pos_arg_config['uploadExecutionAttachment'] = ['executionid', 'title', 'description']
         
     #
-    #  BUILT-IN API CALLS
+    #  BUILT-IN API CALLS - extented / customised against generic behaviour
     #
     
 #     def checkDevKey(self):
@@ -111,12 +111,24 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #         return self._callServer('doesUserExist', argsAPI)
         
     def getBuildsForTestPlan(self, testplanid):
-        """ getBuildsForTestPlan :
-        Gets a list of builds within a test plan 
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testplanid':str(testplanid)}   
-        return self._callServer('getBuildsForTestPlan', argsAPI)
+        """ getBuildsForTestPlan : Gets a list of builds within a test plan 
+        positional args: testplanid
+        optional args : --- 
+        
+        returns an empty list, if no testplan is assigned """
+        
+        response = None
+        try:
+            response = super(TestlinkAPIClient, self).getBuildsForTestPlan(testplanid)
+        except TLResponseError as tl_err:
+            if tl_err.code is None:
+                # empty result (response == ''), project has no testplans
+                response = []
+            else:
+                # seems to be another response failure - we forward it
+                raise  
+        return response
+
 
     def getFirstLevelTestSuitesForTestProject(self,testprojectid):
         """ getFirstLevelTestSuitesForTestProject :
@@ -162,13 +174,23 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #         return self._callServer('getProjects', argsAPI)
 
     def getProjectTestPlans(self, testprojectid):
-        """ getLastExecutionResult :
-        Gets a list of test plans within a project 
-        """ 
-        argsAPI = {'devKey' : self.devKey,
-                'testprojectid':str(testprojectid)}  
-        return self._callServer('getProjectTestPlans', argsAPI)
-
+        """ getProjectTestPlans: Gets a list of test plans within a project
+        positional args: testprojectid
+        optional args : --- 
+        
+        returns an empty list, if no testplan is assigned """
+        response = None
+        try:
+            response = super(TestlinkAPIClient, self).getProjectTestPlans(testprojectid)
+        except TLResponseError as tl_err:
+            if tl_err.code is None:
+                # empty result (repsonse == ''), project has no testplans
+                response = []
+            else:
+                # seems to be another response failure - we forward it
+                raise  
+        return response
+                
 #     def getTestCase(self, testcaseid):
 #         """ getTestCase :
 #         Gets test case specification using external or internal id  
@@ -252,14 +274,14 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                 'details' : str(details)}                  
         return self._callServer('getTestCasesForTestSuite', argsAPI)
   
-    def getTestPlanByName(self, testprojectname, testplanname):
-        """ getTestPlanByName :
-        Gets info about target test project   
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testprojectname' : str(testprojectname),
-                'testplanname' : str(testplanname)}    
-        return self._callServer('getTestPlanByName', argsAPI)
+#     def getTestPlanByName(self, testprojectname, testplanname):
+#         """ getTestPlanByName :
+#         Gets info about target test project   
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testprojectname' : str(testprojectname),
+#                 'testplanname' : str(testplanname)}    
+#         return self._callServer('getTestPlanByName', argsAPI)
 
     def getTestPlanPlatforms(self, testplanid):
         """ getTestPlanPlatforms :
@@ -269,13 +291,13 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                 'testplanid' : str(testplanid)}    
         return self._callServer('getTestPlanPlatforms', argsAPI)  
 
-    def getTestProjectByName(self, testprojectname):
-        """ getTestProjectByName :
-        Gets info about target test project    
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testprojectname' : str(testprojectname)}    
-        return self._callServer('getTestProjectByName', argsAPI)    
+#     def getTestProjectByName(self, testprojectname):
+#         """ getTestProjectByName :
+#         Gets info about target test project    
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testprojectname' : str(testprojectname)}    
+#         return self._callServer('getTestProjectByName', argsAPI)    
   
     def getTestSuiteByID(self, testsuiteid):
         """ getTestSuiteByID :
@@ -301,13 +323,13 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                 'testsuiteid' : str(testsuiteid)}    
         return self._callServer('getTestSuitesForTestSuite', argsAPI)        
         
-    def getTotalsForTestPlan(self, testplanid):
-        """ getTotalsForTestPlan :
-        Gets the summarized results grouped by platform    
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testplanid' : str(testplanid)}    
-        return self._callServer('getTotalsForTestPlan', argsAPI)  
+#     def getTotalsForTestPlan(self, testplanid):
+#         """ getTotalsForTestPlan :
+#         Gets the summarized results grouped by platform    
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testplanid' : str(testplanid)}    
+#         return self._callServer('getTotalsForTestPlan', argsAPI)  
 
 #     def createTestProject(self, *args):
 #         """ createTestProject :

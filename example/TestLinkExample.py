@@ -135,6 +135,7 @@ newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX,
     notes='This is a Project created with the API', active=1, public=1,
     options={'requirementsEnabled' : 0, 'testPriorityEnabled' : 1,
              'automationEnabled' : 1, 'inventoryEnabled' : 0})
+print "createTestProject", newProject
 newProjectID = newProject[0]['id']
 print "New Project '%s' - id: %s" % (NEWPROJECT,newProjectID)
 # -- END CHANGE v0.4.5 -- 
@@ -268,18 +269,18 @@ response = myTestLink._callServer('addTestCaseToTestPlan',
                  'testprojectid' : newProjectID, 
                  'testplanid' : newTestPlanID, 
                  'testcaseexternalid' : tc_aa_full_ext_id, 'version' : 1})
-print response
+print "addTestCaseToTestPlan", response
 tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_tc_external_id']
 response = myTestLink._callServer('addTestCaseToTestPlan', 
                 {'devKey' : myTestLink.devKey, 
                  'testprojectid' : newProjectID, 
                  'testplanid' : newTestPlanID, 
                  'testcaseexternalid' : tc_b_full_ext_id, 'version' : 1})
-print response
+print "addTestCaseToTestPlan", response
   
 # -- Create Build
 newBuild = myTestLink.createBuild(newTestPlanID, NEWBUILD, 'Notes for the Build')
-print newBuild
+print "createBuild", newBuild
 newBuildID = newBuild[0]['id'] 
 print "New Build '%s' - id: %s" % (NEWBUILD, newBuildID)
   
@@ -287,12 +288,12 @@ print "New Build '%s' - id: %s" % (NEWBUILD, newBuildID)
 # TC_AA failed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(None, newTestPlanID, None, 'f', '', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id)
-print newResult
+print "reportTCResult", newResult
 newResultID_AA = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id
 newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID, NEWBUILD,
                                       'p', 'first try')
-print newResult 
+print "reportTCResult", newResult 
 newResultID_B = newResult[0]['id']
 
 # add this (text) file as Attachemnt to last execution of TC_B  with 
@@ -301,14 +302,28 @@ a_file=open(NEWATTACHMENT_PY)
 newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_B, 
             'Textfile Example', 'Text Attachment Example for a TestCase',
             filename='MyPyExampleApiClient.py')
-print newAttachment
+print "uploadExecutionAttachment", newAttachment
 # add png file as Attachemnt to last execution of TC_AA
 # !Attention - on WINDOWS use binary mode for none text file
 # see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 a_file=open(NEWATTACHMENT_PNG, mode='rb')
 newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_AA, 
             'PNG Example', 'PNG Attachment Example for a TestCase')
-print newAttachment
+print "uploadExecutionAttachment", newAttachment
+
+# get information - TestProject
+response = myTestLink.getTestProjectByName(NEWPROJECT)
+print "getTestProjectByName", response
+response = myTestLink.getProjectTestPlans(newProjectID)
+print "getProjectTestPlans", response
+
+# get information - testPlan
+response = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN)
+print "getTestPlanByName", response
+response = myTestLink.getTotalsForTestPlan(newTestPlanID)
+print "getTotalsForTestPlan", response
+response = myTestLink.getBuildsForTestPlan(newTestPlanID)
+print "getBuildsForTestPlan", response
 
 print ""
 print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)

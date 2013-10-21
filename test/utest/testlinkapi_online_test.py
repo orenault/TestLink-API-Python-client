@@ -66,9 +66,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.doesUserExist('Big Bird')
         
     def test_getBuildsForTestPlan_unknownID(self):
-        response = self.client.getBuildsForTestPlan(4711)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(3000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getBuildsForTestPlan(4711)
         
     def test_getFirstLevelTestSuitesForTestProject_unknownID(self):
         response = self.client.getFirstLevelTestSuitesForTestProject(4711)
@@ -95,9 +94,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertIsNotNone(response)
         
     def test_getProjectTestPlans_unknownID(self):
-        response = self.client.getProjectTestPlans(4711)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(7000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.getProjectTestPlans(4711)
         
     def test_getTestCase_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '5000.*4711'):
@@ -136,9 +134,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertEqual(8000, response[0]['code'])
 
     def test_getTestPlanByName_unknownID(self):
-        response = self.client.getTestPlanByName('project 4711', 'plan 4712')
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(7011, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '7011.*4711'):
+            self.client.getTestPlanByName('project 4711', 'plan 4712')
 
     def test_getTestPlanPlatforms_unknownID(self):
         response = self.client.getTestPlanPlatforms(4711)
@@ -146,9 +143,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertEqual(3000, response[0]['code'])
 
     def test_getTestProjectByName_unknownID(self):
-        response = self.client.getTestProjectByName('project 4711')
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(7011, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '7011.*4711'):
+            self.client.getTestProjectByName('project 4711')
 
     def test_getTestSuiteByID_unknownID(self):
         response = self.client.getTestSuiteByID(4711)
@@ -166,9 +162,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertEqual(8000, response[0]['code'])
 
     def test_getTotalsForTestPlan_unknownID(self):
-        response = self.client.getTotalsForTestPlan(4711)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(3000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getTotalsForTestPlan(4711)
 
     def test_createTestProject_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '7001.*Empty name'):
