@@ -21,19 +21,26 @@
 # no calls are send to a TestLink Server
 
 import unittest
-from testlink import TestlinkAPIGeneric, TestLinkHelper
+#from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink import testlinkerrors
-
+from testlink import testlinkapigeneric
 # scenario_a includes response from a testlink 1.9.8 server
 SCENARIO_A = {'repeat' : 'You said: One World',
               'sayHello' : 'Hey Folks!',
               'doesUserExist' : {
                 'Big Bird' :  [{'message': '(doesUserExist) - Cannot Find User Login provided (Big Bird).', 
                                 'code': 10000}],
-                'admin' : True }
+                'admin' : True },
+              'getProjectTestPlans' : {
+                'NotEmpty' : [{'name': 'TestPlan_API', 
+                         'notes': 'New TestPlan created with the API', 
+                         'active': '1', 'is_public': '1', 
+                         'testproject_id': '21', 'id': '22'}] ,
+                'Empty' : '' },
+
               }
 
-class DummyAPIGeneric(TestlinkAPIGeneric):
+class DummyAPIGeneric(testlinkapigeneric.TestlinkAPIGeneric):
     """ Dummy for Simulation TestLinkAPIGeneric. 
     Overrides 
     - _callServer() Method to return test scenarios
@@ -61,6 +68,8 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
             data = self.scenario_data[methodAPI]
             if methodAPI in ['doesUserExist']:
                 response = data[argsAPI['user']]
+            elif methodAPI in ['getProjectTestPlans']:
+                response = data[argsAPI['testprojectid']]
             else:
                 response = data
         return response
@@ -72,8 +81,9 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.api = TestLinkHelper().connect(DummyAPIGeneric)
-
+        self.api = testlinkapigeneric.TestLinkHelper().connect(DummyAPIGeneric)
+        self.callArgs = None
+        
 #    def tearDown(self):
 #        pass
 
@@ -153,6 +163,57 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.ping()
         self.assertEqual('Hey Folks!', response)
+        
+    def test_decoApiCallAddDevKey(self):
+        
+        @testlinkapigeneric.decoApiCallAddDevKey
+        def a_func(a_api, *argsPositional, **argsOptional):
+            return argsPositional, argsOptional
+        
+        response = a_func(self.api)
+        self.assertEqual({'devKey' : self.api.devKey}, response[1])
+        
+    def test_decoApiCallReplaceEmptyResponse_NoCodeError(self):
+        
+        @testlinkapigeneric.decoApiCallReplaceEmptyResponse
+        def a_func(a_api, *argsPositional, **argsOptional):
+            raise testlinkerrors.TLResponseError('DummyMethod', 
+                                argsOptional, 'Empty Response! ')
+
+        response = a_func(self.api)
+        self.assertEqual([], response)
+        
+    def test_decoApiCallReplaceEmptyResponse_CodeError(self):
+        
+        @testlinkapigeneric.decoApiCallReplaceEmptyResponse
+        def a_func(a_api, *argsPositional, **argsOptional):
+            raise testlinkerrors.TLResponseError('DummyMethod', 
+                                argsOptional, 'Empty Response! ', 777)
+
+        with self.assertRaisesRegexp(testlinkerrors.TLResponseError, 
+                                     '777.*Empty'):
+            a_func(self.api)
+        
+    def test_decoApiCallReplaceEmptyResponse_NoError(self):
+        
+        @testlinkapigeneric.decoApiCallReplaceEmptyResponse
+        def a_func(a_api, *argsPositional, **argsOptional):
+            return argsOptional
+
+        response = a_func(self.api, name='BigBird')
+        self.assertEqual({'name' : 'BigBird'}, response)
+        
+    def test_getProjectTestPlans_EmpytResult(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getProjectTestPlans('Empty')
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getProjectTestPlans_NoEmpytResult(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getProjectTestPlans('NotEmpty')
+        self.assertEqual('21', response[0]['testproject_id'])
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -182,7 +182,7 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #         response = self.client.getTestSuitesForTestSuite(4711)
 #         self.assertIn('4711', response[0]['message'])
 #         self.assertEqual(8000, response[0]['code'])
-# 
+ 
     def test_getTotalsForTestPlan_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
             self.client.getTotalsForTestPlan(4711)

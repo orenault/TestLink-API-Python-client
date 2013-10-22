@@ -110,24 +110,24 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #                 'user':str(user)}   
 #         return self._callServer('doesUserExist', argsAPI)
         
-    def getBuildsForTestPlan(self, testplanid):
-        """ getBuildsForTestPlan : Gets a list of builds within a test plan 
-        positional args: testplanid
-        optional args : --- 
-        
-        returns an empty list, if no testplan is assigned """
-        
-        response = None
-        try:
-            response = super(TestlinkAPIClient, self).getBuildsForTestPlan(testplanid)
-        except TLResponseError as tl_err:
-            if tl_err.code is None:
-                # empty result (response == ''), project has no testplans
-                response = []
-            else:
-                # seems to be another response failure - we forward it
-                raise  
-        return response
+#     def getBuildsForTestPlan(self, testplanid):
+#         """ getBuildsForTestPlan : Gets a list of builds within a test plan 
+#         positional args: testplanid
+#         optional args : --- 
+#         
+#         returns an empty list, if no build is assigned """
+#         
+#         response = None
+#         try:
+#             response = super(TestlinkAPIClient, self).getBuildsForTestPlan(testplanid)
+#         except TLResponseError as tl_err:
+#             if tl_err.code is None:
+#                 # empty result (response == ''), project has no testplans
+#                 response = []
+#             else:
+#                 # seems to be another response failure - we forward it
+#                 raise  
+#         return response
 
 
     def getFirstLevelTestSuitesForTestProject(self,testprojectid):
@@ -173,24 +173,24 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #         argsAPI = {'devKey' : self.devKey} 
 #         return self._callServer('getProjects', argsAPI)
 
-    def getProjectTestPlans(self, testprojectid):
-        """ getProjectTestPlans: Gets a list of test plans within a project
-        positional args: testprojectid
-        optional args : --- 
-        
-        returns an empty list, if no testplan is assigned """
-        response = None
-        try:
-            response = super(TestlinkAPIClient, self).getProjectTestPlans(testprojectid)
-        except TLResponseError as tl_err:
-            if tl_err.code is None:
-                # empty result (repsonse == ''), project has no testplans
-                response = []
-            else:
-                # seems to be another response failure - we forward it
-                raise  
-        return response
-                
+#     def getProjectTestPlans(self, testprojectid):
+#         """ getProjectTestPlans: Gets a list of test plans within a project
+#         positional args: testprojectid
+#         optional args : --- 
+#         
+#         returns an empty list, if no testplan is assigned """
+#         response = None
+#         try:
+#             response = super(TestlinkAPIClient, self).getProjectTestPlans(testprojectid)
+#         except TLResponseError as tl_err:
+#             if tl_err.code is None:
+#                 # empty result (repsonse == ''), project has no testplans
+#                 response = []
+#             else:
+#                 # seems to be another response failure - we forward it
+#                 raise  
+#         return response
+#                 
 #     def getTestCase(self, testcaseid):
 #         """ getTestCase :
 #         Gets test case specification using external or internal id  

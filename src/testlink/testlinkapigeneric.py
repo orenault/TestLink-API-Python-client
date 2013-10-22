@@ -53,32 +53,48 @@ positionalArgNamesDefault = {
 
 def decoApiCallWithoutArgs(methodAPI):
     """ Decorator for calling server methods without arguments """  
-    def wrapper(self):
+    def wrapperWithoutArgs(self):
 #        print methodAPI.__name__
         return self.callServerWithPosArgs(methodAPI.__name__)
-    return wrapper
+    return wrapperWithoutArgs
 
 def decoApiCallWithArgs(methodAPI):
     """ Decorator for calling server methods with arguments """  
-    def wrapper(self, *argsPositional, **argsOptional):
+    def wrapperWithArgs(self, *argsPositional, **argsOptional):
         return self.callServerWithPosArgs(methodAPI.__name__, 
                                           *argsPositional, **argsOptional)
-    return wrapper
+    return wrapperWithArgs
 
 def decoApiCallAddDevKey(methodAPI):
     """ Decorator to expand parameter list with devKey"""  
-    def wrapper(self, *argsPositional, **argsOptional):
+    def wrapperAddDevKey(self, *argsPositional, **argsOptional):
         if not ('devKey' in argsOptional):
             argsOptional['devKey'] = self.devKey
 #        print argsAPI
         return methodAPI(self, *argsPositional, **argsOptional)
-    return wrapper
+    return wrapperAddDevKey
+
+def decoApiCallReplaceEmptyResponse(methodAPI):
+    """ Decorator to replace an empty response error with an empty list """  
+    def wrapperReplaceEmptyResponse(self, *argsPositional, **argsOptional):
+        response = None
+        try:
+            response = methodAPI(self, *argsPositional, **argsOptional)
+        except testlinkerrors.TLResponseError as tl_err:
+            if tl_err.code is None:
+                # empty result (response == '')
+                response = []
+            else:
+                # seems to be another response failure - we forward it
+                raise  
+        return response
+    return wrapperReplaceEmptyResponse
 
 def decoApiCallAddAttachment(methodAPI):
     """ Decorator to expand parameter list with devKey and attachmentfile
         attachmentfile  is a python file descriptor pointing to the file
     """  
-    def wrapper(self, attachmentfile, *argsPositional, **argsOptional):
+    def wrapperAddAttachment(self, attachmentfile, *argsPositional, **argsOptional):
         if not ('devKey' in argsOptional):
             argsOptional['devKey'] = self.devKey
         argsAttachment = self._getAttachmentArgs(attachmentfile)
@@ -87,7 +103,7 @@ def decoApiCallAddAttachment(methodAPI):
         # if they exist
         argsAttachment.update(argsOptional)
         return methodAPI(self, *argsPositional, **argsAttachment)
-    return wrapper
+    return wrapperAddAttachment
 
 
 class TestlinkAPIGeneric(object): 
@@ -172,12 +188,15 @@ class TestlinkAPIGeneric(object):
 #    */    
 #   public function getProjectTestPlans($args)
 
-    @decoApiCallAddDevKey            
+    @decoApiCallReplaceEmptyResponse            
+    @decoApiCallAddDevKey
     @decoApiCallWithArgs
     def getProjectTestPlans(self):
         """ getProjectTestPlans: Gets a list of test plans within a project
         positional args: testprojectid
-        optional args : --- """
+        optional args : ---  
+        
+        returns an empty list, if no testplan is assigned """
 
 #   /**
 #    * Gets a list of builds within a test plan
@@ -195,12 +214,15 @@ class TestlinkAPIGeneric(object):
 #    */    
 #   public function getBuildsForTestPlan($args)
 
+    @decoApiCallReplaceEmptyResponse            
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def getBuildsForTestPlan(self):
         """ getBuildsForTestPlan : Gets a list of builds within a test plan 
         positional args: testplanid
-        optional args : --- """
+        optional args : --- 
+        
+        returns an empty list, if no build is assigned """
 
 
 #    * List test suites within a test plan alphabetically
