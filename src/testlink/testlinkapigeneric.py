@@ -38,8 +38,10 @@ positionalArgNamesDefault = {
             'createTestProject' : ['testprojectname', 'testcaseprefix'],
             'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
             'getBuildsForTestPlan' : ['testplanid'],
+            'getLatestBuildForTestPlan' : ['testplanid'],
             'getProjectTestPlans' : ['testprojectid'],
             'getTestPlanByName' : ['testprojectname', 'testplanname'],
+            'getTestPlanPlatforms' : ['testplanid'],
             'getTestProjectByName' : ['testprojectname'],
             'getTotalsForTestPlan' : ['testplanid'],
             'doesUserExist' : ['user'],
@@ -74,21 +76,38 @@ def decoApiCallAddDevKey(methodAPI):
         return methodAPI(self, *argsPositional, **argsOptional)
     return wrapperAddDevKey
 
-def decoApiCallReplaceEmptyResponse(methodAPI):
-    """ Decorator to replace an empty response error with an empty list """  
-    def wrapperReplaceEmptyResponse(self, *argsPositional, **argsOptional):
-        response = None
-        try:
-            response = methodAPI(self, *argsPositional, **argsOptional)
-        except testlinkerrors.TLResponseError as tl_err:
-            if tl_err.code is None:
-                # empty result (response == '')
-                response = []
-            else:
-                # seems to be another response failure - we forward it
-                raise  
-        return response
-    return wrapperReplaceEmptyResponse
+def decoMakerApiCallReplaceTLResponseError(replaceCode=None):
+    """ creates a decorator, which replace an TLResponseError with an empty list,
+
+     Default (replaceCode=None) handles the cause 'Empty Result'
+     - ok for getProjectTestPlans, getBuildsForTestPlan, which returns just ''
+     Problem is getTestPlanByName
+     - this does not return just '', it returns the error message
+        3041: Test plan (name:TestPlan_API) has no platforms linked
+      coudl be handled with replaceCode=3041
+
+     """  
+    # for understanding, what we are doing here please read
+    # # see http://stackoverflow.com/questions/739654/how-can-i-make-a-chain-of-function-decorators-in-python
+    # - Passing arguments to the decorator
+    
+    def decoApiCallReplaceTLResponseError(methodAPI):
+        """ Decorator to replace an TLResponseError with an empty list """
+        def wrapperReplaceTLResponseError(self, *argsPositional, **argsOptional):
+            response = None
+            try:
+                response = methodAPI(self, *argsPositional, **argsOptional)
+            except testlinkerrors.TLResponseError as tl_err:
+                if tl_err.code == replaceCode:
+                    # empty result (response == '') -> code == None
+                    # special case NoPlatform -> code == 3041
+                    response = []
+                else:
+                    # seems to be another response failure - we forward it
+                    raise  
+            return response
+        return wrapperReplaceTLResponseError
+    return decoApiCallReplaceTLResponseError
 
 def decoApiCallAddAttachment(methodAPI):
     """ Decorator to expand parameter list with devKey and attachmentfile
@@ -139,7 +158,53 @@ class TestlinkAPIGeneric(object):
         
     # GENERIC API CALLS - using decorators
     # http://stackoverflow.com/questions/1015307/python-bind-an-unbound-method
+
+#   /**
+#    * Gets the latest build by choosing the maximum build id for a specific test plan 
+#    *
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["tplanid"]
+#    * @return mixed 
+#    *         
+#    * @access public
+#    */    
+#   public function getLatestBuildForTestPlan($args)
+
+    @decoApiCallAddDevKey            
+    @decoApiCallWithArgs
+    def getLatestBuildForTestPlan(self):
+        """ getLatestBuildForTestPlan: Gets the latest build by choosing the 
+                                    maximum build id for a specific test plan 
+        positional args: testplanid
+        optional args : --- """
     
+#   /**
+#      * Gets the result of LAST EXECUTION for a particular testcase 
+#      * on a test plan, but WITHOUT checking for a particular build
+#      *
+#      * @param struct $args
+#      * @param string $args["devKey"]
+#      * @param int $args["tplanid"]
+#      * @param int $args["testcaseid"]: optional, if does not is present           
+#      *                                 testcaseexternalid must be present
+#      *
+#      * @param int $args["testcaseexternalid"]: optional, if does not is present           
+#      *                                         testcaseid must be present
+#      *
+#      * @return mixed $resultInfo
+#      *               if execution found, array with these keys:
+#      *               id (execution id),build_id,tester_id,execution_ts,
+#      *               status,testplan_id,tcversion_id,tcversion_number,
+#      *               execution_type,notes.
+#      *
+#      *               if test case has not been execute,
+#      *               array('id' => -1)
+#      *
+#      * @access public
+#      */
+#     public function getLastExecutionResult($args)
+
     @decoApiCallWithoutArgs
     def sayHello(self):
         """ sayHello: Lets you see if the server is up and running
@@ -188,7 +253,7 @@ class TestlinkAPIGeneric(object):
 #    */    
 #   public function getProjectTestPlans($args)
 
-    @decoApiCallReplaceEmptyResponse            
+    @decoMakerApiCallReplaceTLResponseError()            
     @decoApiCallAddDevKey
     @decoApiCallWithArgs
     def getProjectTestPlans(self):
@@ -214,7 +279,7 @@ class TestlinkAPIGeneric(object):
 #    */    
 #   public function getBuildsForTestPlan($args)
 
-    @decoApiCallReplaceEmptyResponse            
+    @decoMakerApiCallReplaceTLResponseError()            
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def getBuildsForTestPlan(self):
@@ -570,6 +635,18 @@ class TestlinkAPIGeneric(object):
 #      * @access public
 #      */
 #   public function getTestPlanPlatforms($args)
+
+    @decoMakerApiCallReplaceTLResponseError(3041)            
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestPlanPlatforms(self):
+        """ getTestPlanPlatforms :  Returns the list of platforms associated to 
+                                    a given test plan
+        positional args: testplanid
+        optional args : ---  
+        
+        returns an empty list, if no platform is assigned 
+        - details see comments for decoMakerApiCallReplaceTLResponseError """
 
 #   /**
 #    * Gets the summarized results grouped by platform.

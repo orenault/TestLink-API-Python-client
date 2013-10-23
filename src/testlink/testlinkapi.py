@@ -157,14 +157,14 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                 'testcaseid' : str(testcaseid)}     
         return self._callServer('getLastExecutionResult', argsAPI)
 
-    def getLatestBuildForTestPlan(self, testplanid):
-        """ getLastExecutionResult :
-        Gets the latest build by choosing the maximum build id for a 
-        specific test plan  
-        """  
-        argsAPI = {'devKey' : self.devKey,
-                'testplanid':str(testplanid)}  
-        return self._callServer('getLatestBuildForTestPlan', argsAPI)
+#     def getLatestBuildForTestPlan(self, testplanid):
+#         """ getLastExecutionResult :
+#         Gets the latest build by choosing the maximum build id for a 
+#         specific test plan  
+#         """  
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testplanid':str(testplanid)}  
+#         return self._callServer('getLatestBuildForTestPlan', argsAPI)
 
 #     def getProjects(self):
 #         """ getProjects: 
@@ -283,13 +283,13 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #                 'testplanname' : str(testplanname)}    
 #         return self._callServer('getTestPlanByName', argsAPI)
 
-    def getTestPlanPlatforms(self, testplanid):
-        """ getTestPlanPlatforms :
-        Returns the list of platforms associated to a given test plan    
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testplanid' : str(testplanid)}    
-        return self._callServer('getTestPlanPlatforms', argsAPI)  
+#     def getTestPlanPlatforms(self, testplanid):
+#         """ getTestPlanPlatforms :
+#         Returns the list of platforms associated to a given test plan    
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testplanid' : str(testplanid)}    
+#         return self._callServer('getTestPlanPlatforms', argsAPI)  
 
 #     def getTestProjectByName(self, testprojectname):
 #         """ getTestProjectByName :

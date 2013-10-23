@@ -32,11 +32,17 @@ SCENARIO_A = {'repeat' : 'You said: One World',
                                 'code': 10000}],
                 'admin' : True },
               'getProjectTestPlans' : {
-                'NotEmpty' : [{'name': 'TestPlan_API', 
+                'onePlan' : [{'name': 'TestPlan_API', 
                          'notes': 'New TestPlan created with the API', 
                          'active': '1', 'is_public': '1', 
                          'testproject_id': '21', 'id': '22'}] ,
-                'Empty' : '' },
+                'noPlan' : '' },
+              'getTestPlanPlatforms' : {
+                'twoPlatforms' : [{'notes': '', 'id': '1', 'name': 'dutch'}, 
+                                  {'notes': '', 'id': '2', 'name': 'platt'}],
+                'noPlatform' : [{'message': 'Test plan (name:TestPlan_API) has no platforms linked', 
+                         'code': 3041}]},
+
 
               }
 
@@ -70,6 +76,8 @@ class DummyAPIGeneric(testlinkapigeneric.TestlinkAPIGeneric):
                 response = data[argsAPI['user']]
             elif methodAPI in ['getProjectTestPlans']:
                 response = data[argsAPI['testprojectid']]
+            elif methodAPI in ['getTestPlanPlatforms']:
+                response = data[argsAPI['testplanid']]
             else:
                 response = data
         return response
@@ -173,9 +181,9 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         response = a_func(self.api)
         self.assertEqual({'devKey' : self.api.devKey}, response[1])
         
-    def test_decoApiCallReplaceEmptyResponse_NoCodeError(self):
+    def test_decoApiCallReplaceTLResponseError_NoCodeError(self):
         
-        @testlinkapigeneric.decoApiCallReplaceEmptyResponse
+        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError()
         def a_func(a_api, *argsPositional, **argsOptional):
             raise testlinkerrors.TLResponseError('DummyMethod', 
                                 argsOptional, 'Empty Response! ')
@@ -183,9 +191,9 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         response = a_func(self.api)
         self.assertEqual([], response)
         
-    def test_decoApiCallReplaceEmptyResponse_CodeError(self):
+    def test_decoApiCallReplaceTLResponseError_CodeError(self):
         
-        @testlinkapigeneric.decoApiCallReplaceEmptyResponse
+        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError()
         def a_func(a_api, *argsPositional, **argsOptional):
             raise testlinkerrors.TLResponseError('DummyMethod', 
                                 argsOptional, 'Empty Response! ', 777)
@@ -194,27 +202,50 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
                                      '777.*Empty'):
             a_func(self.api)
         
-    def test_decoApiCallReplaceEmptyResponse_NoError(self):
+    def test_decoApiCallReplaceTLResponseError_CodeErrorOk(self):
         
-        @testlinkapigeneric.decoApiCallReplaceEmptyResponse
+        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError(777)
+        def a_func(a_api, *argsPositional, **argsOptional):
+            raise testlinkerrors.TLResponseError('DummyMethod', 
+                                argsOptional, 'Empty Response! ', 777)
+
+        response = a_func(self.api)
+        self.assertEqual([], response)
+
+    def test_decoApiCallReplaceTLResponseError_NoError(self):
+        
+        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError()            
         def a_func(a_api, *argsPositional, **argsOptional):
             return argsOptional
 
         response = a_func(self.api, name='BigBird')
         self.assertEqual({'name' : 'BigBird'}, response)
         
-    def test_getProjectTestPlans_EmpytResult(self):
+    def test_getProjectTestPlans_noPlan(self):
         self.api.loadScenario(SCENARIO_A)
-        response = self.api.getProjectTestPlans('Empty')
+        response = self.api.getProjectTestPlans('noPlan')
         self.assertEqual([], response)
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
         
-    def test_getProjectTestPlans_NoEmpytResult(self):
+    def test_getProjectTestPlans_onePlan(self):
         self.api.loadScenario(SCENARIO_A)
-        response = self.api.getProjectTestPlans('NotEmpty')
+        response = self.api.getProjectTestPlans('onePlan')
         self.assertEqual('21', response[0]['testproject_id'])
-
-
+        self.assertEqual(1, len(response))
+        
+    def test_getTestPlanPlatforms_noPlatform(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestPlanPlatforms('noPlatform')
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getTestPlanPlatforms_twoPlatforms(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestPlanPlatforms('twoPlatforms')
+        self.assertEqual('dutch', response[0]['name'])
+        self.assertEqual(2, len(response))
+       
+           
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

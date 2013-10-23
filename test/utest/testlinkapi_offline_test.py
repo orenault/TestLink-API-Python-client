@@ -45,7 +45,11 @@ SCENARIO_A = {'getProjects' : [
                 '21' : [{'name': 'TestPlan_API', 
                          'notes': 'New TestPlan created with the API', 
                          'active': '1', 'is_public': '1', 
-                         'testproject_id': '21', 'id': '22'}] ,
+                         'testproject_id': '21', 'id': '22'},
+                        {'name': 'TestPlan_NoSuite', 
+                         'notes': 'TestPlan with No Suites and No Platforms', 
+                         'active': '1', 'is_public': '1', 
+                         'testproject_id': '21', 'id': '222'}] ,
                 '1' : '' },
               'getFirstLevelTestSuitesForTestProject' : {
                 '21' :  [{'node_type_id': '2', 'name': 'A - First Level', 
@@ -56,8 +60,8 @@ SCENARIO_A = {'getProjects' : [
                           'node_table': 'testsuites', 'id': '24'}],
                 '1' : [{'message': '(getFirstLevelTestSuitesForTestProject) - Test Project (TestProject) is empty.', 
                         'code': 7008}] },
-              'getTestSuitesForTestPlan' : {'22' : ''},
-              'getTestCasesForTestPlan' : {'22' : ''},
+              'getTestSuitesForTestPlan' : {'22' : '', '222' : ''},
+              'getTestCasesForTestPlan' : {'22' : '', '222' : ''},
               # TL(1.9.3)->getTestSuitesForTestSuite really returns {...} and not [{....}] !!!
               'getTestSuitesForTestSuite' : {
                 '23' : {'node_type_id': '2', 'name': 'AA - Second Level', 
@@ -79,9 +83,10 @@ SCENARIO_A = {'getProjects' : [
                          'external_id': 'NPROAPI-1',  'id': '26'}]
                  },
               'getTestPlanPlatforms' : {
-                '22' : [{'message': 'Test plan (name:TestPlan_API) has no platforms linked', 
+                '22' : [{'notes': '', 'id': '1', 'name': 'dutch'}, {'notes': '', 'id': '2', 'name': 'platt'}],
+                '222' : [{'message': 'Test plan (name:TestPlan_API) has no platforms linked', 
                          'code': 3041}]},
-              'getBuildsForTestPlan' : {'22' : ''}
+              'getBuildsForTestPlan' : {'22' : '', '222' : ''}
               }
 
 SCENARIO_STEPS = {'createTestCase' : ['noRealReponseData - ok for step tests']}
@@ -146,7 +151,7 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
     def test_countTestPlans(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countTestPlans()
-        self.assertEqual(1, response)
+        self.assertEqual(2, response)
         
     def test_countTestSuites(self):
         self.api.loadScenario(SCENARIO_A)
@@ -163,11 +168,11 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         response = self.api.countTestCasesTS()
         self.assertEqual(0, response)
 
-    @unittest.expectedFailure
+#    @unittest.expectedFailure
     def test_countPlatforms(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countPlatforms()
-        self.assertEqual(0, response)
+        self.assertEqual(2, response)
         
     def test_countBuilds(self):
         self.api.loadScenario(SCENARIO_A)

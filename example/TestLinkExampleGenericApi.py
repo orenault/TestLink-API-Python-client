@@ -117,12 +117,14 @@ print "New Project '%s' - id: %s" % (NEWPROJECT,id_cache[NEWPROJECT])
 # Creates the test plan
 newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
             notes='New TestPlan created with the Generic API',active=1, public=1)    
+print "createTestPlan", newTestPlan
 id_cache[NEWTESTPLAN] = newTestPlan[0]['id'] 
 print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,id_cache[NEWTESTPLAN])
  
 #Creates the test Suite A      
 newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_A,
             "Details of the Test Suite A")  
+print "createTestSuite", newTestSuite
 id_cache[NEWTESTSUITE_A] = newTestSuite[0]['id'] 
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, id_cache[NEWTESTSUITE_A])
  
@@ -131,12 +133,14 @@ FirstLevelID = id_cache[NEWTESTSUITE_A]
 #Creates the test Suite B      
 newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_B,
             "Details of the Test Suite B")               
+print "createTestSuite", newTestSuite
 id_cache[NEWTESTSUITE_B] = newTestSuite[0]['id'] 
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, id_cache[NEWTESTSUITE_B])
  
 #Creates the test Suite AA       
 newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_AA,
             "Details of the Test Suite AA",parentid=FirstLevelID)               
+print "createTestSuite", newTestSuite
 id_cache[NEWTESTSUITE_AA] = newTestSuite[0]['id'] 
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, id_cache[NEWTESTSUITE_AA])
  
@@ -159,6 +163,7 @@ steps_tc_aa = [
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, id_cache[NEWTESTSUITE_AA], 
           id_cache[NEWPROJECT], "admin", "This is the summary of the Test Case AA", 
           steps_tc_aa, preconditions='these are the preconditions')                 
+print "createTestCase", newTestCase
 id_cache[NEWTESTCASE_AA] = newTestCase[0]['id'] 
 print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, id_cache[NEWTESTCASE_AA])
  
@@ -179,6 +184,7 @@ newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, id_cache[NEWTESTSUITE_B],
           id_cache[NEWPROJECT], "admin", "This is the summary of the Test Case B", 
           steps_tc_b, preconditions='these are the preconditions', 
           executiontype=AUTOMATED)               
+print "createTestCase", newTestCase
 id_cache[NEWTESTCASE_B] = newTestCase[0]['id'] 
 print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, id_cache[NEWTESTCASE_B])
   
@@ -246,6 +252,10 @@ response = myTestLink.getTotalsForTestPlan(id_cache[NEWTESTPLAN])
 print "getTotalsForTestPlan", response
 response = myTestLink.getBuildsForTestPlan(id_cache[NEWTESTPLAN])
 print "getBuildsForTestPlan", response
+response = myTestLink.getLatestBuildForTestPlan(id_cache[NEWTESTPLAN])
+print "getLatestBuildForTestPlan", response
+response = myTestLink.getTestPlanPlatforms(id_cache[NEWTESTPLAN])
+print "getTestPlanPlatforms", response
 
 print ""
 print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())

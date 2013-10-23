@@ -153,6 +153,7 @@ print "New Project '%s' - id: %s" % (NEWPROJECT,newProjectID)
 #   sys.exit(-1)
 newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
             notes='New TestPlan created with the API',active=1, public=1)    
+print "createTestPlan", newTestPlan
 newTestPlanID = newTestPlan[0]['id']
 print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,newTestPlanID)
 # -- END CHANGE v0.4.5 -- 
@@ -168,6 +169,7 @@ newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_A,
 # else:
 #   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_A, isOk)
 #   sys.exit(-1)
+print "createTestSuite", newTestSuite
 newTestSuiteID = newTestSuite[0]['id']
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, newTestSuiteID)
 # -- END CHANGE v0.4.5 -- 
@@ -185,6 +187,7 @@ newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_B,
 # else:
 #   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_B, isOk)
 #   sys.exit(-1)
+print "createTestSuite", newTestSuite
 TestSuiteID_B = newTestSuite[0]['id']
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, TestSuiteID_B)
 # -- END CHANGE v0.4.5 -- 
@@ -202,6 +205,7 @@ print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, TestSuiteID_B)
 #   sys.exit(-1)
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
             "Details of the Test Suite AA",parentid=FirstLevelID)               
+print "createTestSuite", newTestSuite
 TestSuiteID_AA = newTestSuite[0]['id']
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, TestSuiteID_AA)
 # -- END CHANGE v0.4.5 -- 
@@ -230,6 +234,7 @@ myTestLink.appendStep("Step action 5", "Step result 5", MANUAL)
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, TestSuiteID_AA, 
           newProjectID, "admin", "This is the summary of the Test Case AA", 
           preconditions='these are the preconditions')
+print "createTestCase", newTestCase
 newTestCaseID_AA = newTestCase[0]['id']
 print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA)              
 # -- END CHANGE v0.4.5 -- 
@@ -256,6 +261,7 @@ myTestLink.appendStep("Step action 5", "Step result 5", AUTOMATED)
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, TestSuiteID_B, 
           newProjectID, "admin", "This is the summary of the Test Case B", 
           preconditions='these are the preconditions', executiontype=AUTOMATED)
+print "createTestCase", newTestCase
 newTestCaseID_B = newTestCase[0]['id']
 print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)               
 # -- END CHANGE v0.4.5 -- 
@@ -324,6 +330,10 @@ response = myTestLink.getTotalsForTestPlan(newTestPlanID)
 print "getTotalsForTestPlan", response
 response = myTestLink.getBuildsForTestPlan(newTestPlanID)
 print "getBuildsForTestPlan", response
+response = myTestLink.getLatestBuildForTestPlan(newTestPlanID)
+print "getLatestBuildForTestPlan", response
+response = myTestLink.getTestPlanPlatforms(newTestPlanID)
+print "getTestPlanPlatforms", response
 
 print ""
 print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)
