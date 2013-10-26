@@ -244,8 +244,10 @@ response = myTestLink.getTestProjectByName(NEWPROJECT)
 print "getTestProjectByName", response
 response = myTestLink.getProjectTestPlans(id_cache[NEWPROJECT])
 print "getProjectTestPlans", response
+response = myTestLink.getFirstLevelTestSuitesForTestProject(id_cache[NEWPROJECT])
+print "getFirstLevelTestSuitesForTestProject", response
 
-# get information - testPlan
+# get information - TestPlan
 response = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN)
 print "getTestPlanByName", response
 response = myTestLink.getTotalsForTestPlan(id_cache[NEWTESTPLAN])
@@ -256,6 +258,18 @@ response = myTestLink.getLatestBuildForTestPlan(id_cache[NEWTESTPLAN])
 print "getLatestBuildForTestPlan", response
 response = myTestLink.getTestPlanPlatforms(id_cache[NEWTESTPLAN])
 print "getTestPlanPlatforms", response
+response = myTestLink.getTestSuitesForTestPlan(id_cache[NEWTESTPLAN])
+print "getTestSuitesForTestPlan", response
+
+# get information - TestSuite
+response = myTestLink.getTestSuiteByID(id_cache[NEWTESTSUITE_B])
+print "getTestSuiteByID", response
+response = myTestLink.getTestSuitesForTestSuite(id_cache[NEWTESTSUITE_A])
+print "getTestSuitesForTestSuite", response
+response = myTestLink.getTestCasesForTestSuite(id_cache[NEWTESTSUITE_AA],
+                                               deep=True, detail='full')
+print "getTestCasesForTestSuite", response
+
 
 print ""
 print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())

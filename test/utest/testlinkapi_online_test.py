@@ -70,9 +70,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.getBuildsForTestPlan(4711)
         
     def test_getFirstLevelTestSuitesForTestProject_unknownID(self):
-        response = self.client.getFirstLevelTestSuitesForTestProject(4711)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(7000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.getFirstLevelTestSuitesForTestProject(4711)
 
     def test_getFullPath_unknownID(self):
         response = self.client.getFullPath(4711)
@@ -128,9 +127,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertEqual(3000, response[0]['code'])
 
     def test_getTestCasesForTestSuite_unknownID(self):
-        response = self.client.getTestCasesForTestSuite(4711, 2, 'a_detail')
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(8000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '8000.*4711'):
+            self.client.getTestCasesForTestSuite(4711, 2, 'a_detail')
 
     def test_getTestPlanByName_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '7011.*4711'):
@@ -145,19 +143,16 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.getTestProjectByName('project 4711')
 
     def test_getTestSuiteByID_unknownID(self):
-        response = self.client.getTestSuiteByID(4711)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(8000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '8000.*4711'):
+            self.client.getTestSuiteByID(4711)
 
     def test_getTestSuitesForTestPlan_unknownID(self):
-        response = self.client.getTestSuitesForTestPlan(4711)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(3000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getTestSuitesForTestPlan(4711)
 
     def test_getTestSuitesForTestSuite_unknownID(self):
-        response = self.client.getTestSuitesForTestSuite(4711)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(8000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '8000.*4711'):
+            self.client.getTestSuitesForTestSuite(4711)
 
     def test_getTotalsForTestPlan_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):

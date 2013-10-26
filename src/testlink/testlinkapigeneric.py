@@ -38,11 +38,16 @@ positionalArgNamesDefault = {
             'createTestProject' : ['testprojectname', 'testcaseprefix'],
             'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
             'getBuildsForTestPlan' : ['testplanid'],
+            'getFirstLevelTestSuitesForTestProject' : ['testprojectid'],
             'getLatestBuildForTestPlan' : ['testplanid'],
             'getProjectTestPlans' : ['testprojectid'],
+            'getTestCasesForTestSuite' : ['testsuiteid'],
             'getTestPlanByName' : ['testprojectname', 'testplanname'],
             'getTestPlanPlatforms' : ['testplanid'],
             'getTestProjectByName' : ['testprojectname'],
+            'getTestSuiteByID' : ['testsuiteid'],
+            'getTestSuitesForTestPlan' : ['testplanid'],
+            'getTestSuitesForTestSuite' : ['testsuiteid'],
             'getTotalsForTestPlan' : ['testplanid'],
             'doesUserExist' : ['user'],
             'repeat' : ['str'],
@@ -81,10 +86,11 @@ def decoMakerApiCallReplaceTLResponseError(replaceCode=None):
 
      Default (replaceCode=None) handles the cause 'Empty Result'
      - ok for getProjectTestPlans, getBuildsForTestPlan, which returns just ''
-     Problem is getTestPlanByName
-     - this does not return just '', it returns the error message
-        3041: Test plan (name:TestPlan_API) has no platforms linked
-      coudl be handled with replaceCode=3041
+     Problems are getTestPlanByName, getFirstLevelTestSuitesForTestProject
+     - they do not return just '', they returns the error message
+        3041: Test plan (noPlatform) has no platforms linked
+        7008: Test Project (noSuite) is empty
+      could be handled with replaceCode=3041 / replaceCode=7008
 
      """  
     # for understanding, what we are doing here please read
@@ -279,7 +285,7 @@ class TestlinkAPIGeneric(object):
 #    */    
 #   public function getBuildsForTestPlan($args)
 
-    @decoMakerApiCallReplaceTLResponseError()            
+    @decoMakerApiCallReplaceTLResponseError()          
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def getBuildsForTestPlan(self):
@@ -290,14 +296,15 @@ class TestlinkAPIGeneric(object):
         returns an empty list, if no build is assigned """
 
 
-#    * List test suites within a test plan alphabetically
-#    * 
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testplanid"]
-#    * @return mixed $resultInfo
-#    */
-#    public function getTestSuitesForTestPlan($args)
+    @decoMakerApiCallReplaceTLResponseError()          
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestSuitesForTestPlan(self):
+        """ getTestSuitesForTestPlan : List test suites within a test plan alphabetically
+        positional args: testplanid
+        optional args : ---  
+        
+        returns an empty list, if no build is assigned """
         
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
@@ -333,6 +340,18 @@ class TestlinkAPIGeneric(object):
 #    */
 #    public function getTestCasesForTestSuite($args)
 
+    @decoMakerApiCallReplaceTLResponseError()          
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestCasesForTestSuite(self):
+        """ getTestCasesForTestSuite : List test suites within a test plan alphabetically
+        positional args: testsuiteid
+        optional args : deep, details
+        
+        details - default is simple, 
+                  use full if you want to get summary,steps & expected_results
+        
+        returns an empty list, if no build is assigned """
 
 #   /**
 #   * Find a test case by its name
@@ -473,6 +492,19 @@ class TestlinkAPIGeneric(object):
 #     */
 #    public function getFirstLevelTestSuitesForTestProject($args)
 
+    @decoMakerApiCallReplaceTLResponseError(7008)            
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getFirstLevelTestSuitesForTestProject(self):
+        """ getFirstLevelTestSuitesForTestProject :  get set of test suites 
+                            AT TOP LEVEL of tree on a Test Project
+                            
+        positional args: testprojectid
+        optional args : ---  
+        
+        returns an empty list, if no suite is assigned (api error 7008) 
+        - details see comments for decoMakerApiCallReplaceTLResponseError """
+
 #    /**
 #     *  Assign Requirements to a test case 
 #     *  we can assign multiple requirements.
@@ -598,30 +630,26 @@ class TestlinkAPIGeneric(object):
 #    */  
 #    public function deleteExecution($args)
 
-#    /**
-#      * Return a TestSuite by ID
-#      *
-#      * @param
-#      * @param struct $args
-#      * @param string $args["devKey"]
-#      * @param int $args["testsuiteid"]
-#      * @return mixed $resultInfo
-#      * 
-#      * @access public
-#      */
-#     public function getTestSuiteByID($args)
 
-#   /**
-#    * get list of TestSuites which are DIRECT children of a given TestSuite
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testsuiteid"]
-#    * @return mixed $resultInfo
-#    *
-#    * @access public
-#    */
-#   public function getTestSuitesForTestSuite($args)
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestSuiteByID(self):
+        """ getTestSuiteByID : Return a TestSuite by ID
+        
+        positional args: testsuiteid
+        optional args : ---  """
+
+
+    @decoMakerApiCallReplaceTLResponseError()            
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestSuitesForTestSuite(self):
+        """ getTestSuitesForTestSuite :  get list of TestSuites which are DIRECT
+                                         children of a given TestSuite
+        positional args: testsuiteid
+        optional args : ---  
+        
+        returns an empty list, if no platform is assigned """
 
 #   /**
 #      * Returns the list of platforms associated to a given test plan
@@ -645,7 +673,7 @@ class TestlinkAPIGeneric(object):
         positional args: testplanid
         optional args : ---  
         
-        returns an empty list, if no platform is assigned 
+        returns an empty list, if no platform is assigned (api error 3041) 
         - details see comments for decoMakerApiCallReplaceTLResponseError """
 
 #   /**

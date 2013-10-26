@@ -75,7 +75,11 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         pos_arg_config['reportTCResult'] = ['testcaseid', 'testplanid', 
                                             'buildname', 'status', 'notes']
         # uploadExecutionAttachment
-        pos_arg_config['uploadExecutionAttachment'] = ['executionid', 'title', 'description']
+        pos_arg_config['uploadExecutionAttachment'] = ['executionid', 'title', 
+                                                       'description']
+        # getTestCasesForTestSuite
+        pos_arg_config['getTestCasesForTestSuite'] = ['testsuiteid', 'deep', 
+                                                      'details']
         
     #
     #  BUILT-IN API CALLS - extented / customised against generic behaviour
@@ -130,13 +134,13 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #         return response
 
 
-    def getFirstLevelTestSuitesForTestProject(self,testprojectid):
-        """ getFirstLevelTestSuitesForTestProject :
-        Get set of test suites AT TOP LEVEL of tree on a Test Project 
-        """  
-        argsAPI = {'devKey' : self.devKey,
-                'testprojectid':str(testprojectid)}   
-        return self._callServer('getFirstLevelTestSuitesForTestProject', argsAPI)
+#     def getFirstLevelTestSuitesForTestProject(self,testprojectid):
+#         """ getFirstLevelTestSuitesForTestProject :
+#         Get set of test suites AT TOP LEVEL of tree on a Test Project 
+#         """  
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testprojectid':str(testprojectid)}   
+#         return self._callServer('getFirstLevelTestSuitesForTestProject', argsAPI)
         
     def getFullPath(self,nodeid):
         """ getFullPath :
@@ -264,15 +268,15 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                 argsAPI[paramlist[0]] = paramlist[1]  
         return self._callServer('getTestCasesForTestPlan', argsAPI)   
             
-    def getTestCasesForTestSuite(self, testsuiteid, deep, details):
-        """ getTestCasesForTestSuite :
-        List test cases within a test suite    
-        """        
-        argsAPI = {'devKey' : self.devKey,
-                'testsuiteid' : str(testsuiteid),
-                'deep' : str(deep),
-                'details' : str(details)}                  
-        return self._callServer('getTestCasesForTestSuite', argsAPI)
+#     def getTestCasesForTestSuite(self, testsuiteid, deep, details):
+#         """ getTestCasesForTestSuite :
+#         List test cases within a test suite    
+#         """        
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testsuiteid' : str(testsuiteid),
+#                 'deep' : str(deep),
+#                 'details' : str(details)}                  
+#         return self._callServer('getTestCasesForTestSuite', argsAPI)
   
 #     def getTestPlanByName(self, testprojectname, testplanname):
 #         """ getTestPlanByName :
@@ -299,29 +303,29 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #                 'testprojectname' : str(testprojectname)}    
 #         return self._callServer('getTestProjectByName', argsAPI)    
   
-    def getTestSuiteByID(self, testsuiteid):
-        """ getTestSuiteByID :
-        Return a TestSuite by ID    
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testsuiteid' : str(testsuiteid)}    
-        return self._callServer('getTestSuiteByID', argsAPI)   
+#     def getTestSuiteByID(self, testsuiteid):
+#         """ getTestSuiteByID :
+#         Return a TestSuite by ID    
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testsuiteid' : str(testsuiteid)}    
+#         return self._callServer('getTestSuiteByID', argsAPI)   
   
-    def getTestSuitesForTestPlan(self, testplanid):
-        """ getTestSuitesForTestPlan :
-        List test suites within a test plan alphabetically     
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testplanid' : str(testplanid)}    
-        return self._callServer('getTestSuitesForTestPlan', argsAPI)  
+#     def getTestSuitesForTestPlan(self, testplanid):
+#         """ getTestSuitesForTestPlan :
+#         List test suites within a test plan alphabetically     
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testplanid' : str(testplanid)}    
+#         return self._callServer('getTestSuitesForTestPlan', argsAPI)  
         
-    def getTestSuitesForTestSuite(self, testsuiteid):
-        """ getTestSuitesForTestSuite :
-        get list of TestSuites which are DIRECT children of a given TestSuite     
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testsuiteid' : str(testsuiteid)}    
-        return self._callServer('getTestSuitesForTestSuite', argsAPI)        
+#     def getTestSuitesForTestSuite(self, testsuiteid):
+#         """ getTestSuitesForTestSuite :
+#         get list of TestSuites which are DIRECT children of a given TestSuite     
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testsuiteid' : str(testsuiteid)}    
+#         return self._callServer('getTestSuitesForTestSuite', argsAPI)        
         
 #     def getTotalsForTestPlan(self, testplanid):
 #         """ getTotalsForTestPlan :

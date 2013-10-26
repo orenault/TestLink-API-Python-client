@@ -170,11 +170,11 @@ newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_A,
 #   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_A, isOk)
 #   sys.exit(-1)
 print "createTestSuite", newTestSuite
-newTestSuiteID = newTestSuite[0]['id']
-print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, newTestSuiteID)
+newTestSuiteID_A = newTestSuite[0]['id']
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, newTestSuiteID_A)
 # -- END CHANGE v0.4.5 -- 
 
-FirstLevelID = newTestSuiteID 
+FirstLevelID = newTestSuiteID_A
  
 #Creates the test Suite B      
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_B,
@@ -188,8 +188,8 @@ newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_B,
 #   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_B, isOk)
 #   sys.exit(-1)
 print "createTestSuite", newTestSuite
-TestSuiteID_B = newTestSuite[0]['id']
-print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, TestSuiteID_B)
+newTestSuiteID_B = newTestSuite[0]['id']
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, newTestSuiteID_B)
 # -- END CHANGE v0.4.5 -- 
 
 #Creates the test Suite AA       
@@ -206,8 +206,8 @@ print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, TestSuiteID_B)
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
             "Details of the Test Suite AA",parentid=FirstLevelID)               
 print "createTestSuite", newTestSuite
-TestSuiteID_AA = newTestSuite[0]['id']
-print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, TestSuiteID_AA)
+newTestSuiteID_AA = newTestSuite[0]['id']
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, newTestSuiteID_AA)
 # -- END CHANGE v0.4.5 -- 
 
 MANUAL = 1
@@ -231,7 +231,7 @@ myTestLink.appendStep("Step action 5", "Step result 5", MANUAL)
 # else:
 #   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_AA, isOk)
 #   sys.exit(-1)
-newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, TestSuiteID_AA, 
+newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, newTestSuiteID_AA, 
           newProjectID, "admin", "This is the summary of the Test Case AA", 
           preconditions='these are the preconditions')
 print "createTestCase", newTestCase
@@ -258,7 +258,7 @@ myTestLink.appendStep("Step action 5", "Step result 5", AUTOMATED)
 # else:
 #   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_B, isOk)
 #   sys.exit(-1)
-newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, TestSuiteID_B, 
+newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, newTestSuiteID_B, 
           newProjectID, "admin", "This is the summary of the Test Case B", 
           preconditions='these are the preconditions', executiontype=AUTOMATED)
 print "createTestCase", newTestCase
@@ -322,6 +322,8 @@ response = myTestLink.getTestProjectByName(NEWPROJECT)
 print "getTestProjectByName", response
 response = myTestLink.getProjectTestPlans(newProjectID)
 print "getProjectTestPlans", response
+response = myTestLink.getFirstLevelTestSuitesForTestProject(newProjectID)
+print "getFirstLevelTestSuitesForTestProject", response
 
 # get information - testPlan
 response = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN)
@@ -334,6 +336,16 @@ response = myTestLink.getLatestBuildForTestPlan(newTestPlanID)
 print "getLatestBuildForTestPlan", response
 response = myTestLink.getTestPlanPlatforms(newTestPlanID)
 print "getTestPlanPlatforms", response
+response = myTestLink.getTestSuitesForTestPlan(newTestPlanID)
+print "getTestSuitesForTestPlan", response
+
+# get information - TestSuite
+response = myTestLink.getTestSuiteByID(newTestSuiteID_B)
+print "getTestSuiteByID", response
+response = myTestLink.getTestSuitesForTestSuite(newTestSuiteID_A)
+print "getTestSuitesForTestSuite", response
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_AA, True, 'full')
+print "getTestCasesForTestSuite", response
 
 print ""
 print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)

@@ -37,11 +37,18 @@ SCENARIO_A = {'repeat' : 'You said: One World',
                          'active': '1', 'is_public': '1', 
                          'testproject_id': '21', 'id': '22'}] ,
                 'noPlan' : '' },
+              'getBuildsForTestPlan' : {'noBuild' : '' },
               'getTestPlanPlatforms' : {
                 'twoPlatforms' : [{'notes': '', 'id': '1', 'name': 'dutch'}, 
                                   {'notes': '', 'id': '2', 'name': 'platt'}],
-                'noPlatform' : [{'message': 'Test plan (name:TestPlan_API) has no platforms linked', 
+                'noPlatform' : [{'message': 'Test plan (noPlatform) has no platforms linked', 
                          'code': 3041}]},
+              'getTestSuitesForTestPlan' : {'noSuite' : ''},
+              'getTestSuitesForTestSuite' : {'noSuite' : ''},
+              'getFirstLevelTestSuitesForTestProject' : {
+                'noSuite' : [{'message': 'Test Project (noSuite) is empty.', 
+                              'code': 7008}]},
+              'getTestCasesForTestSuite' : {'noTestCase' : [] }
 
 
               }
@@ -74,10 +81,15 @@ class DummyAPIGeneric(testlinkapigeneric.TestlinkAPIGeneric):
             data = self.scenario_data[methodAPI]
             if methodAPI in ['doesUserExist']:
                 response = data[argsAPI['user']]
-            elif methodAPI in ['getProjectTestPlans']:
+            elif methodAPI in ['getProjectTestPlans', 
+                               'getFirstLevelTestSuitesForTestProject']:
                 response = data[argsAPI['testprojectid']]
-            elif methodAPI in ['getTestPlanPlatforms']:
+            elif methodAPI in ['getBuildsForTestPlan', 'getTestPlanPlatforms', 
+                               'getTestSuitesForTestPlan']:
                 response = data[argsAPI['testplanid']]
+            elif methodAPI in ['getTestSuitesForTestSuite', 
+                               'getTestCasesForTestSuite']:
+                response = data[argsAPI['testsuiteid']]
             else:
                 response = data
         return response
@@ -233,6 +245,12 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertEqual('21', response[0]['testproject_id'])
         self.assertEqual(1, len(response))
         
+    def test_getBuildsForTestPlan_noBuild(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getBuildsForTestPlan('noBuild')
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
     def test_getTestPlanPlatforms_noPlatform(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.getTestPlanPlatforms('noPlatform')
@@ -244,7 +262,30 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         response = self.api.getTestPlanPlatforms('twoPlatforms')
         self.assertEqual('dutch', response[0]['name'])
         self.assertEqual(2, len(response))
+
+    def test_getTestSuitesForTestPlan_noSuite(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestSuitesForTestPlan('noSuite')
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
        
+    def test_getTestSuitesForTestSuite_noSuite(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestSuitesForTestSuite('noSuite')
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getFirstLevelTestSuitesForTestProject_noSuite(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getFirstLevelTestSuitesForTestProject('noSuite')
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getTestCasesForTestSuite_noTestCase(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestCasesForTestSuite('noTestCase')
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
            
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
