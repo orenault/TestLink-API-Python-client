@@ -84,8 +84,6 @@ NEWATTACHMENT_PY= os.path.realpath(__file__)
 this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
 NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
-id_cache={}
-
 # example handling Response Error Codes
 # first check an invalid devKey and than the own one
 try:
@@ -111,38 +109,38 @@ newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX,
     options={'requirementsEnabled' : 1, 'testPriorityEnabled' : 1, 
              'automationEnabled' : 1,  'inventoryEnabled' : 1})
 print "createTestProject", newProject
-id_cache[NEWPROJECT] = newProject[0]['id'] 
-print "New Project '%s' - id: %s" % (NEWPROJECT,id_cache[NEWPROJECT])
+newProjectID = newProject[0]['id'] 
+print "New Project '%s' - id: %s" % (NEWPROJECT,newProjectID)
  
 # Creates the test plan
 newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
             notes='New TestPlan created with the Generic API',active=1, public=1)    
 print "createTestPlan", newTestPlan
-id_cache[NEWTESTPLAN] = newTestPlan[0]['id'] 
-print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,id_cache[NEWTESTPLAN])
+newTestPlanID = newTestPlan[0]['id'] 
+print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,newTestPlanID)
  
 #Creates the test Suite A      
-newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_A,
+newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_A,
             "Details of the Test Suite A")  
 print "createTestSuite", newTestSuite
-id_cache[NEWTESTSUITE_A] = newTestSuite[0]['id'] 
-print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, id_cache[NEWTESTSUITE_A])
+newTestSuiteID_A = newTestSuite[0]['id'] 
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, newTestSuiteID_A)
  
-FirstLevelID = id_cache[NEWTESTSUITE_A]
+FirstLevelID = newTestSuiteID_A
   
 #Creates the test Suite B      
-newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_B,
+newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_B,
             "Details of the Test Suite B")               
 print "createTestSuite", newTestSuite
-id_cache[NEWTESTSUITE_B] = newTestSuite[0]['id'] 
-print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, id_cache[NEWTESTSUITE_B])
+newTestSuiteID_B = newTestSuite[0]['id'] 
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, newTestSuiteID_B)
  
 #Creates the test Suite AA       
-newTestSuite = myTestLink.createTestSuite(id_cache[NEWPROJECT], NEWTESTSUITE_AA,
+newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
             "Details of the Test Suite AA",parentid=FirstLevelID)               
 print "createTestSuite", newTestSuite
-id_cache[NEWTESTSUITE_AA] = newTestSuite[0]['id'] 
-print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, id_cache[NEWTESTSUITE_AA])
+newTestSuiteID_AA = newTestSuite[0]['id'] 
+print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, newTestSuiteID_AA)
  
 MANUAL = 1
 AUTOMATED = 2
@@ -160,12 +158,12 @@ steps_tc_aa = [
         {'step_number' : 5, 'actions' : "Step action 5 - aa" , 
          'expected_results' : "Step result 5 - aa", 'execution_type' : MANUAL}
                ]  
-newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, id_cache[NEWTESTSUITE_AA], 
-          id_cache[NEWPROJECT], "admin", "This is the summary of the Test Case AA", 
+newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, newTestSuiteID_AA, 
+          newProjectID, "admin", "This is the summary of the Test Case AA", 
           steps_tc_aa, preconditions='these are the preconditions')                 
 print "createTestCase", newTestCase
-id_cache[NEWTESTCASE_AA] = newTestCase[0]['id'] 
-print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, id_cache[NEWTESTCASE_AA])
+newTestCaseID_AA = newTestCase[0]['id'] 
+print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA)
  
 #Creates the test case TC_B 
 steps_tc_b = [
@@ -180,46 +178,46 @@ steps_tc_b = [
         {'step_number' : 5, 'actions' : "Step action 5 -b " , 
          'expected_results' : "Step result 5 - b", 'execution_type' : AUTOMATED}]
       
-newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, id_cache[NEWTESTSUITE_B], 
-          id_cache[NEWPROJECT], "admin", "This is the summary of the Test Case B", 
+newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, newTestSuiteID_B, 
+          newProjectID, "admin", "This is the summary of the Test Case B", 
           steps_tc_b, preconditions='these are the preconditions', 
           executiontype=AUTOMATED)               
 print "createTestCase", newTestCase
-id_cache[NEWTESTCASE_B] = newTestCase[0]['id'] 
-print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, id_cache[NEWTESTCASE_B])
+newTestCaseID_B = newTestCase[0]['id'] 
+print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
   
 # Add  test cases to test plan - we need the full external id !
-tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=id_cache[NEWTESTCASE_AA])[0]['full_tc_external_id']
+tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)[0]['full_tc_external_id']
 response = myTestLink._callServer('addTestCaseToTestPlan', 
                 {'devKey' : myTestLink.devKey, 
-                 'testprojectid' : id_cache[NEWPROJECT], 
-                 'testplanid' : id_cache[NEWTESTPLAN], 
+                 'testprojectid' : newProjectID, 
+                 'testplanid' : newTestPlanID, 
                  'testcaseexternalid' : tc_aa_full_ext_id, 'version' : 1})
 print "addTestCaseToTestPlan", response
-tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=id_cache[NEWTESTCASE_B])[0]['full_tc_external_id']
+tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_tc_external_id']
 response = myTestLink._callServer('addTestCaseToTestPlan', 
                 {'devKey' : myTestLink.devKey, 
-                 'testprojectid' : id_cache[NEWPROJECT], 
-                 'testplanid' : id_cache[NEWTESTPLAN], 
+                 'testprojectid' : newProjectID, 
+                 'testplanid' : newTestPlanID, 
                  'testcaseexternalid' : tc_b_full_ext_id, 'version' : 1})
 print "addTestCaseToTestPlan", response
 
 # -- Create Build
-newBuild = myTestLink.createBuild(id_cache[NEWTESTPLAN], NEWBUILD, 
+newBuild = myTestLink.createBuild(newTestPlanID, NEWBUILD, 
                                   buildnotes='Notes for the Build')
 print "createBuild", newBuild
-id_cache[NEWBUILD] = newBuild[0]['id'] 
-print "New Build '%s' - id: %s" % (NEWBUILD, id_cache[NEWBUILD])
+newBuildID = newBuild[0]['id'] 
+print "New Build '%s' - id: %s" % (NEWBUILD, newBuildID)
   
 # report Test Case Results
 # TC_AA failed, build should be guessed, TC identified with external id
-newResult = myTestLink.reportTCResult(id_cache[NEWTESTPLAN], 'f', guess=True,
+newResult = myTestLink.reportTCResult(newTestPlanID, 'f', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id)
 print "reportTCResult", newResult
 newResultID_AA = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id
-newResult = myTestLink.reportTCResult(id_cache[NEWTESTPLAN], 'p', 
-                buildid=id_cache[NEWBUILD], testcaseid=id_cache[NEWTESTCASE_B], 
+newResult = myTestLink.reportTCResult(newTestPlanID, 'p', 
+                buildid=newBuildID, testcaseid=newTestCaseID_B, 
                 notes="first try")
 print "reportTCResult", newResult
 newResultID_B = newResult[0]['id']
@@ -242,34 +240,53 @@ print "uploadExecutionAttachment", newAttachment
 # get information - TestProject
 response = myTestLink.getTestProjectByName(NEWPROJECT)
 print "getTestProjectByName", response
-response = myTestLink.getProjectTestPlans(id_cache[NEWPROJECT])
+response = myTestLink.getProjectTestPlans(newProjectID)
 print "getProjectTestPlans", response
-response = myTestLink.getFirstLevelTestSuitesForTestProject(id_cache[NEWPROJECT])
+response = myTestLink.getFirstLevelTestSuitesForTestProject(newProjectID)
 print "getFirstLevelTestSuitesForTestProject", response
 
 # get information - TestPlan
 response = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN)
 print "getTestPlanByName", response
-response = myTestLink.getTotalsForTestPlan(id_cache[NEWTESTPLAN])
+response = myTestLink.getTotalsForTestPlan(newTestPlanID)
 print "getTotalsForTestPlan", response
-response = myTestLink.getBuildsForTestPlan(id_cache[NEWTESTPLAN])
+response = myTestLink.getBuildsForTestPlan(newTestPlanID)
 print "getBuildsForTestPlan", response
-response = myTestLink.getLatestBuildForTestPlan(id_cache[NEWTESTPLAN])
+response = myTestLink.getLatestBuildForTestPlan(newTestPlanID)
 print "getLatestBuildForTestPlan", response
-response = myTestLink.getTestPlanPlatforms(id_cache[NEWTESTPLAN])
+response = myTestLink.getTestPlanPlatforms(newTestPlanID)
 print "getTestPlanPlatforms", response
-response = myTestLink.getTestSuitesForTestPlan(id_cache[NEWTESTPLAN])
+response = myTestLink.getTestSuitesForTestPlan(newTestPlanID)
 print "getTestSuitesForTestPlan", response
+# get failed Testcases 
+response = myTestLink.getTestCasesForTestPlan(newTestPlanID, executestatus='f')
+print "getTestCasesForTestPlan", response
 
 # get information - TestSuite
-response = myTestLink.getTestSuiteByID(id_cache[NEWTESTSUITE_B])
+response = myTestLink.getTestSuiteByID(newTestSuiteID_B)
 print "getTestSuiteByID", response
-response = myTestLink.getTestSuitesForTestSuite(id_cache[NEWTESTSUITE_A])
+response = myTestLink.getTestSuitesForTestSuite(newTestSuiteID_A)
 print "getTestSuitesForTestSuite", response
-response = myTestLink.getTestCasesForTestSuite(id_cache[NEWTESTSUITE_AA],
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A,
                                                deep=True, detail='full')
 print "getTestCasesForTestSuite", response
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B,
+                                               deep=False, detail='only_id')
+print "getTestCasesForTestSuite", response
 
+# get informationen - TestCase_B
+response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
+print "getTestCaseIDByName", response
+# get informationen - TestCase_AA via Pathname
+tcpathname = '::'.join([NEWPROJECT, NEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
+response = myTestLink.getTestCaseIDByName('unknown', testcasepathname=tcpathname)
+print "getTestCaseIDByName", response
+
+# get information - general 
+response = myTestLink.getFullPath(int(newTestSuiteID_AA))
+print "getFullPath", response
+response = myTestLink.getFullPath([int(newTestCaseID_AA), int(newTestCaseID_B)])
+print "getFullPath", response
 
 print ""
 print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())

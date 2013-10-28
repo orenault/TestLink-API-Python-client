@@ -48,9 +48,15 @@ SCENARIO_A = {'repeat' : 'You said: One World',
               'getFirstLevelTestSuitesForTestProject' : {
                 'noSuite' : [{'message': 'Test Project (noSuite) is empty.', 
                               'code': 7008}]},
-              'getTestCasesForTestSuite' : {'noTestCase' : [] }
-
-
+              'getTestCasesForTestSuite' : {'noTestCase' : [] },
+              'getTestCasesForTestPlan'  : {'noTestCase' : [] },
+              'getTestCaseIDByName' : {
+                'dictResult' :  {'1': {'parent_id': '24', 'tc_external_id': '2', 
+                                       'id': '33', 'tsuite_name': 'B - First Level', 
+                                       'name': 'TESTCASE_B'}}, 
+                'listResult' : [{'parent_id': '25', 'tc_external_id': '1', 
+                                 'id': '26', 'tsuite_name': 'AA - Second Level', 
+                                 'name': 'TESTCASE_AA'}]}
               }
 
 class DummyAPIGeneric(testlinkapigeneric.TestlinkAPIGeneric):
@@ -85,11 +91,13 @@ class DummyAPIGeneric(testlinkapigeneric.TestlinkAPIGeneric):
                                'getFirstLevelTestSuitesForTestProject']:
                 response = data[argsAPI['testprojectid']]
             elif methodAPI in ['getBuildsForTestPlan', 'getTestPlanPlatforms', 
-                               'getTestSuitesForTestPlan']:
+                        'getTestSuitesForTestPlan', 'getTestCasesForTestPlan']:
                 response = data[argsAPI['testplanid']]
             elif methodAPI in ['getTestSuitesForTestSuite', 
                                'getTestCasesForTestSuite']:
                 response = data[argsAPI['testsuiteid']]
+            elif methodAPI in ['getTestCaseIDByName']:
+                response = data[argsAPI['testcasename']]
             else:
                 response = data
         return response
@@ -286,6 +294,28 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         response = self.api.getTestCasesForTestSuite('noTestCase')
         self.assertEqual([], response)
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+           
+    def test_getTestCasesForTestPlan_noTestCase(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestCasesForTestPlan('noTestCase')
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getTestCaseIDByName_dictResult(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestCaseIDByName('dictResult', 
+                                            testprojectname='NEW_PROJECT_API')
+        self.assertEqual(dict, type(response))
+        self.assertEqual('TESTCASE_B', response['1']['name']) 
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getTestCaseIDByName_listResult(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestCaseIDByName('listResult')
+        self.assertEqual(list, type(response))
+        self.assertEqual('TESTCASE_AA', response[0]['name']) 
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
            
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

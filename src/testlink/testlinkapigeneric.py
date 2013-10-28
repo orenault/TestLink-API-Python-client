@@ -39,8 +39,11 @@ positionalArgNamesDefault = {
             'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
             'getBuildsForTestPlan' : ['testplanid'],
             'getFirstLevelTestSuitesForTestProject' : ['testprojectid'],
+            'getFullPath' : ['nodeid'],
             'getLatestBuildForTestPlan' : ['testplanid'],
             'getProjectTestPlans' : ['testprojectid'],
+            'getTestCaseIDByName' : ['testcasename'], 
+            'getTestCasesForTestPlan' : ['testplanid'],
             'getTestCasesForTestSuite' : ['testsuiteid'],
             'getTestPlanByName' : ['testprojectname', 'testplanname'],
             'getTestPlanPlatforms' : ['testplanid'],
@@ -348,31 +351,24 @@ class TestlinkAPIGeneric(object):
         positional args: testsuiteid
         optional args : deep, details
         
-        details - default is simple, 
-                  use full if you want to get summary,steps & expected_results
+        details - default is 'simple', 
+                  use 'full' if you want to get summary,steps & expected_results
+                  or 'only_id', if you just need an ID list
         
         returns an empty list, if no build is assigned """
 
-#   /**
-#   * Find a test case by its name
-#   * 
-#   * <b>Searching is case sensitive.</b> The test case will only be returned if there is a definite match.
-#   * If possible also pass the string for the test suite name. 
-#   *
-#   * No results will be returned if there are test cases with the same name that match the criteria provided.  
-#   * 
-#   * @param struct $args
-#   * @param string $args["devKey"]
-#   * @param string $args["testcasename"]
-#   * @param string $args["testsuitename"] - optional
-#   * @param string $args["testprojectname"] - optional
-#   * @param string $args["testcasepathname"] - optional
-#   *               Full test case path name, starts with test project name
-#   *               pieces separator -> :: -> default value of getByPathName()
-#   * @return mixed $resultInfo
-#   */
-#   public function getTestCaseIDByName($args)
-
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestCaseIDByName(self):
+        """ getTestCaseIDByName : Find a test case by its name 
+        positional args: testcasename, 
+        optional args : testsuitename, testprojectname, testcasepathname
+        
+        testcasepathname : Full test case path name, 
+                starts with test project name , pieces separator -> ::   
+        server return can be a list or a dictionary 
+        - optional arg testprojectname seems to create a dictionary response """
+ 
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def createTestCase(self):
@@ -444,6 +440,22 @@ class TestlinkAPIGeneric(object):
 #    * 20111226 - franciscom - TICKET 4843: 'getTestCasesForTestPlan' - add support for new argument 'details'
 #    */
 # public function getTestCasesForTestPlan($args)
+
+    @decoMakerApiCallReplaceTLResponseError()          
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestCasesForTestPlan(self):
+        """ getTestCasesForTestPlan : List test cases linked to a test plan
+        positional args: testplanid
+        optional args : testcaseid, keywordid, keywords, executed, assignedto,
+                        executestatus, executiontype, getstepinfo, details
+        
+        details - default is 'full', 
+                  'simple', 'details' ??
+
+        
+        returns an empty list, if no build is assigned """
+
 
 #   /**
 #    * Gets value of a Custom Field with scope='design' for a given Test case
@@ -614,6 +626,16 @@ class TestlinkAPIGeneric(object):
 #    *
 #    */    
 #   public function getFullPath($args)
+
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getFullPath(self):
+        """ getFullPath : Gets full path from the given node till the top using 
+                          nodes_hierarchy_table
+        positional args: nodeid
+        optional args : ---  
+        
+        nodeid = can be just a single id or a list with ids """
 
 #    /**
 #    * delete an execution

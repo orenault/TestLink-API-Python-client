@@ -74,9 +74,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.getFirstLevelTestSuitesForTestProject(4711)
 
     def test_getFullPath_unknownID(self):
-        response = self.client.getFullPath(4711)
-        self.assertIn('getFullPath', response[0]['message'])
-        self.assertEqual(234, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, 'getFullPath.*234'):
+            self.client.getFullPath('4711')
 
     def test_getLastExecutionResult_unknownID(self):
         response = self.client.getLastExecutionResult(4711, 4712)
@@ -117,14 +116,12 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         self.assertEqual(7000, response[0]['code'])
         
     def test_getTestCaseIDByName_unknownID(self):
-        response = self.client.getTestCaseIDByName('Big Bird')
-        self.assertIn('getTestCaseIDByName', response[0]['message'])
-        self.assertEqual(5030, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '5030.*Cannot find'):
+            self.client.getTestCaseIDByName('Big Bird')
 
     def test_getTestCasesForTestPlan_unknownID(self):
-        response = self.client.getTestCasesForTestPlan(4711)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(3000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getTestCasesForTestPlan(4711)
 
     def test_getTestCasesForTestSuite_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '8000.*4711'):

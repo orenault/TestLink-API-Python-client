@@ -98,12 +98,11 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_getFirstLevelTestSuitesForTestProject_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
             self.client.getFirstLevelTestSuitesForTestProject(4711)
-# 
-#     def test_getFullPath_unknownID(self):
-#         response = self.client.getFullPath(4711)
-#         self.assertIn('getFullPath', response[0]['message'])
-#         self.assertEqual(234, response[0]['code'])
-# 
+ 
+    def test_getFullPath_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, 'getFullPath.*234'):
+            self.client.getFullPath('4711')
+ 
 #     def test_getLastExecutionResult_unknownID(self):
 #         response = self.client.getLastExecutionResult(4711, 4712)
 #         self.assertIn('4711', response[0]['message'])
@@ -137,17 +136,15 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #                    4712, 1, 4711, 'a_field', 'a_detail')
 #         self.assertIn('4711', response[0]['message'])
 #         self.assertEqual(7000, response[0]['code'])
-#         
-#     def test_getTestCaseIDByName_unknownID(self):
-#         response = self.client.getTestCaseIDByName('Big Bird')
-#         self.assertIn('getTestCaseIDByName', response[0]['message'])
-#         self.assertEqual(5030, response[0]['code'])
-# 
-#     def test_getTestCasesForTestPlan_unknownID(self):
-#         response = self.client.getTestCasesForTestPlan(4711)
-#         self.assertIn('4711', response[0]['message'])
-#         self.assertEqual(3000, response[0]['code'])
-# 
+         
+    def test_getTestCaseIDByName_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '5030.*Cannot find'):
+            self.client.getTestCaseIDByName('Big Bird')
+ 
+    def test_getTestCasesForTestPlan_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getTestCasesForTestPlan(4711)
+ 
     def test_getTestCasesForTestSuite_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '8000.*4711'):
             self.client.getTestCasesForTestSuite(4711)

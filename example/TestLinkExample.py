@@ -338,14 +338,39 @@ response = myTestLink.getTestPlanPlatforms(newTestPlanID)
 print "getTestPlanPlatforms", response
 response = myTestLink.getTestSuitesForTestPlan(newTestPlanID)
 print "getTestSuitesForTestPlan", response
+# get failed Testcases 
+# -- Start CHANGE v0.4.5 -- 
+#response = myTestLink.getTestCasesForTestPlan(newTestPlanID, 'executestatus=f')
+response = myTestLink.getTestCasesForTestPlan(newTestPlanID, executestatus='f')
+# -- END CHANGE v0.4.5 -- 
+print "getTestCasesForTestPlan", response
 
 # get information - TestSuite
 response = myTestLink.getTestSuiteByID(newTestSuiteID_B)
 print "getTestSuiteByID", response
 response = myTestLink.getTestSuitesForTestSuite(newTestSuiteID_A)
 print "getTestSuitesForTestSuite", response
-response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_AA, True, 'full')
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A, True, 'full')
 print "getTestCasesForTestSuite", response
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 'only_id')
+print "getTestCasesForTestSuite", response
+
+# get informationen - TestCase
+# -- Start CHANGE v0.4.5 -- 
+#response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, None, NEWPROJECT)
+response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
+# -- END CHANGE v0.4.5 -- 
+print "getTestCaseIDByName", response
+tcpathname = '::'.join([NEWPROJECT, NEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
+response = myTestLink.getTestCaseIDByName('unknown', testcasepathname=tcpathname)
+print "getTestCaseIDByName", response
+
+# get information - general 
+response = myTestLink.getFullPath(int(newTestSuiteID_AA))
+print "getFullPath", response
+response = myTestLink.getFullPath([int(newTestCaseID_AA), int(newTestCaseID_B)])
+print "getFullPath", response
+
 
 print ""
 print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)

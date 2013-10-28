@@ -20,7 +20,6 @@
 #import xmlrpclib
 
 from testlinkapigeneric import TestlinkAPIGeneric, TestLinkHelper
-from testlinkerrors import TLResponseError
 
 
 class TestlinkAPIClient(TestlinkAPIGeneric):
@@ -142,14 +141,14 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #                 'testprojectid':str(testprojectid)}   
 #         return self._callServer('getFirstLevelTestSuitesForTestProject', argsAPI)
         
-    def getFullPath(self,nodeid):
-        """ getFullPath :
-        Gets full path from the given node till the top using 
-        nodes_hierarchy_table 
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'nodeid':str(nodeid)}    
-        return self._callServer('getFullPath', argsAPI)
+#     def getFullPath(self,nodeid):
+#         """ getFullPath :
+#         Gets full path from the given node till the top using 
+#         nodes_hierarchy_table 
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'nodeid':str(nodeid)}    
+#         return self._callServer('getFullPath', argsAPI)
 
     def getLastExecutionResult(self, testplanid, testcaseid):
         """ getLastExecutionResult :
@@ -225,48 +224,69 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
                    'details' : str(details)}
         return self._callServer('getTestCaseCustomFieldDesignValue', argsAPI)                                                
 
-    def getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
-        """ 
-        Find a test case by its name
-        testSuiteName and testProjectName are optionals arguments
-        This function return a list of tests cases
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testcasename':str(testCaseName)}
+#     def getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
+#         """ 
+#         Find a test case by its name
+#         testSuiteName and testProjectName are optionals arguments
+#         This function return a list of tests cases
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testcasename':str(testCaseName)}
+#  
+#         if testSuiteName is not None:
+#             argsAPI.update({'testsuitename':str(testSuiteName)})
+#      
+#         if testProjectName is not None:
+#             argsAPI.update({'testprojectname':str(testProjectName)})
+#  
+#         # Server return can be a list or a dictionnary !
+#         # This function always return a list
+#         ret_srv = self._callServer('getTestCaseIDByName', argsAPI)
+#         if type(ret_srv) == dict:
+#             retval = []
+#             for value in ret_srv.values():
+#                 retval.append(value)
+#             return retval
+#         else:
+#             return ret_srv
 
-        if testSuiteName is not None:
-            argsAPI.update({'testsuitename':str(testSuiteName)})
-    
-        if testProjectName is not None:
-            argsAPI.update({'testprojectname':str(testProjectName)})
+    def getTestCaseIDByName(self, *argsPositional, **argsOptional):
+        """ getTestCaseIDByName : Find a test case by its name 
+        positional args: testcasename, 
+        optional args : testsuitename, testprojectname, testcasepathname
+        
+        testcasepathname : Full test case path name, 
+                starts with test project name , pieces separator -> :: 
+                  
+        server return can be a list or a dictionary 
+        - optional arg testprojectname seems to create a dictionary response 
+        
+        this methods customize the generic behaviour and converts a dictionary 
+        response into a list, so methods return will be always a list """
 
-        # Server return can be a list or a dictionnary !
-        # This function always return a list
-        ret_srv = self._callServer('getTestCaseIDByName', argsAPI)
-        if type(ret_srv) == dict:
-            retval = []
-            for value in ret_srv.values():
-                retval.append(value)
-            return retval
-        else:
-            return ret_srv
+        response = super(TestlinkAPIClient, self).getTestCaseIDByName(
+                                                *argsPositional, **argsOptional)
+        if type(response) == dict:
+            # convert dict into list - just use dicts values
+            response = response.values()
+        return response
 
-    def getTestCasesForTestPlan(self, *args):
-        """ getTestCasesForTestPlan :
-        List test cases linked to a test plan    
-            Mandatory parameters : testplanid
-            Optional parameters : testcaseid, buildid, keywordid, keywords,
-                executed, assignedto, executestatus, executiontype, getstepinfo 
-        """        
-        testplanid = args[0]
-        argsAPI = {'devKey' : self.devKey,
-                'testplanid' : str(testplanid)}
-        if len(args)>1:
-            params = args[1:] 
-            for param in params:
-                paramlist = param.split("=")
-                argsAPI[paramlist[0]] = paramlist[1]  
-        return self._callServer('getTestCasesForTestPlan', argsAPI)   
+#     def getTestCasesForTestPlan(self, *args):
+#         """ getTestCasesForTestPlan :
+#         List test cases linked to a test plan    
+#             Mandatory parameters : testplanid
+#             Optional parameters : testcaseid, buildid, keywordid, keywords,
+#                 executed, assignedto, executestatus, executiontype, getstepinfo 
+#         """        
+#         testplanid = args[0]
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testplanid' : str(testplanid)}
+#         if len(args)>1:
+#             params = args[1:] 
+#             for param in params:
+#                 paramlist = param.split("=")
+#                 argsAPI[paramlist[0]] = paramlist[1]  
+#         return self._callServer('getTestCasesForTestPlan', argsAPI)   
             
 #     def getTestCasesForTestSuite(self, testsuiteid, deep, details):
 #         """ getTestCasesForTestSuite :

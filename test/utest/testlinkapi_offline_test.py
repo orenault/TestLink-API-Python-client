@@ -86,7 +86,15 @@ SCENARIO_A = {'getProjects' : [
                 '22' : [{'notes': '', 'id': '1', 'name': 'dutch'}, {'notes': '', 'id': '2', 'name': 'platt'}],
                 '222' : [{'message': 'Test plan (name:TestPlan_API) has no platforms linked', 
                          'code': 3041}]},
-              'getBuildsForTestPlan' : {'22' : '', '222' : ''}
+              'getBuildsForTestPlan' : {'22' : '', '222' : ''},
+              'getTestCaseIDByName' : {
+                'dictResult' :  {'1': {'parent_id': '24', 'tc_external_id': '2', 
+                                       'id': '33', 'tsuite_name': 'B - First Level', 
+                                       'name': 'TESTCASE_B'}}, 
+                'listResult' : [{'parent_id': '25', 'tc_external_id': '1', 
+                                 'id': '26', 'tsuite_name': 'AA - Second Level', 
+                                 'name': 'TESTCASE_AA'}]},
+
               }
 
 SCENARIO_STEPS = {'createTestCase' : ['noRealReponseData - ok for step tests']}
@@ -120,6 +128,8 @@ class DummyAPIClient(TestlinkAPIClient):
         elif methodAPI in ['getTestCasesForTestSuite', 
                            'getTestSuitesForTestSuite']:
             response = data[argsAPI['testsuiteid']]
+        elif methodAPI in ['getTestCaseIDByName']:
+            response = data[argsAPI['testcasename']]
         else:
             response = data
         return response
@@ -213,6 +223,26 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
                                 'summary 4714')
         self.assertEqual(self.example_steps, self.api.callArgs['steps'])
         self.assertEqual([], self.api.stepsList)
+        
+    def test_getTestCaseIDByName_dictResult(self):
+        "test that getTestCaseIDByName converts dictionary result into a list"
+        self.api.loadScenario(SCENARIO_A)
+        # v0.4.0 version for optional args testsuitename + testprojectname
+        #response = self.api.getTestCaseIDByName('dictResult', None, 'NEW_PROJECT_API')
+        # v0.4.5 version
+        response = self.api.getTestCaseIDByName('dictResult', 
+                                            testprojectname='NEW_PROJECT_API')
+        self.assertEqual(list, type(response))
+        self.assertEqual('TESTCASE_B', response[0]['name']) 
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getTestCaseIDByName_listResult(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestCaseIDByName('listResult')
+        self.assertEqual(list, type(response))
+        self.assertEqual('TESTCASE_AA', response[0]['name']) 
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
