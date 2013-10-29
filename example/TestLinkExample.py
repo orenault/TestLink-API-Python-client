@@ -364,12 +364,31 @@ print "getTestCaseIDByName", response
 tcpathname = '::'.join([NEWPROJECT, NEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
 response = myTestLink.getTestCaseIDByName('unknown', testcasepathname=tcpathname)
 print "getTestCaseIDByName", response
+# get execution result
+response = myTestLink.getLastExecutionResult(newTestPlanID, None,
+                                             testcaseexternalid=tc_aa_full_ext_id)
+print "getLastExecutionResult", response
+response = myTestLink.getLastExecutionResult(newTestPlanID, newTestCaseID_B)
+print "getLastExecutionResult", response
+
 
 # get information - general 
 response = myTestLink.getFullPath(int(newTestSuiteID_AA))
 print "getFullPath", response
 response = myTestLink.getFullPath([int(newTestCaseID_AA), int(newTestCaseID_B)])
 print "getFullPath", response
+
+# no test data
+# response = myTestLink.getTestCaseCustomFieldDesignValue(
+#             tc_aa_full_ext_id, 1, newProjectID, 'cfieldname', 'simple')
+# print "getTestCaseCustomFieldDesignValue", response
+print "getTestCaseCustomFieldDesignValue", "Sorry currently no testdata"
+
+# response = myTestLink.getTestCaseAttachments(None, testcaseexternalid=tc_aa_full_ext_id)
+# print "getTestCaseAttachments", response
+# response = myTestLink.getTestCaseAttachments(newTestCaseID_B)
+# print "getTestCaseAttachments", response
+print "getTestCaseAttachments", "Sorry currently no testdata"
 
 
 print ""

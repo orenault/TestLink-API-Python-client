@@ -281,12 +281,34 @@ print "getTestCaseIDByName", response
 tcpathname = '::'.join([NEWPROJECT, NEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
 response = myTestLink.getTestCaseIDByName('unknown', testcasepathname=tcpathname)
 print "getTestCaseIDByName", response
+# get execution result
+response = myTestLink.getLastExecutionResult(newTestPlanID, 
+                                             testcaseexternalid=tc_aa_full_ext_id)
+print "getLastExecutionResult", response
+response = myTestLink.getLastExecutionResult(newTestPlanID, 
+                                             testcaseid=newTestCaseID_B)
+print "getLastExecutionResult", response
+
 
 # get information - general 
 response = myTestLink.getFullPath(int(newTestSuiteID_AA))
 print "getFullPath", response
 response = myTestLink.getFullPath([int(newTestCaseID_AA), int(newTestCaseID_B)])
 print "getFullPath", response
+
+# no test data
+# response = myTestLink.getTestCaseCustomFieldDesignValue(
+#             tc_aa_full_ext_id, 1, newProjectID, 'cfieldname', details='simple')
+# print "getTestCaseCustomFieldDesignValue", response
+print "getTestCaseCustomFieldDesignValue", "Sorry currently no testdata"
+
+# response = myTestLink.getTestCaseAttachments(testcaseexternalid=tc_aa_full_ext_id)
+# print "getTestCaseAttachments", response
+# response = myTestLink.getTestCaseAttachments(testcaseid=newTestCaseID_B)
+# print "getTestCaseAttachments", response
+print "getTestCaseAttachments", "Sorry currently no testdata"
+
+
 
 print ""
 print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())

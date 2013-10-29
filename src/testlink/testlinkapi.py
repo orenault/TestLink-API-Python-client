@@ -79,6 +79,15 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         # getTestCasesForTestSuite
         pos_arg_config['getTestCasesForTestSuite'] = ['testsuiteid', 'deep', 
                                                       'details']
+        # getLastExecutionResult
+        pos_arg_config['getLastExecutionResult'] = ['testplanid', 'testcaseid']
+        # getTestCaseCustomFieldDesignValue
+        pos_arg_config['getTestCaseCustomFieldDesignValue'] = [
+                        'testcaseexternalid', 'version' , 'testprojectid', 
+                        'customfieldname', 'details']
+        # getTestCaseAttachments
+        pos_arg_config['getTestCaseAttachments'] = ['testcaseid']
+        
         
     #
     #  BUILT-IN API CALLS - extented / customised against generic behaviour
@@ -150,15 +159,15 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #                 'nodeid':str(nodeid)}    
 #         return self._callServer('getFullPath', argsAPI)
 
-    def getLastExecutionResult(self, testplanid, testcaseid):
-        """ getLastExecutionResult :
-        Gets the result of LAST EXECUTION for a particular testcase on a 
-        test plan, but WITHOUT checking for a particular build 
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testplanid' : str(testplanid),
-                'testcaseid' : str(testcaseid)}     
-        return self._callServer('getLastExecutionResult', argsAPI)
+#     def getLastExecutionResult(self, testplanid, testcaseid):
+#         """ getLastExecutionResult :
+#         Gets the result of LAST EXECUTION for a particular testcase on a 
+#         test plan, but WITHOUT checking for a particular build 
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testplanid' : str(testplanid),
+#                 'testcaseid' : str(testcaseid)}     
+#         return self._callServer('getLastExecutionResult', argsAPI)
 
 #     def getLatestBuildForTestPlan(self, testplanid):
 #         """ getLastExecutionResult :
@@ -202,27 +211,27 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 #                 'testcaseid' : str(testcaseid)}  
 #         return self._callServer('getTestCase', argsAPI)          
 
-    def getTestCaseAttachments(self, testcaseid):
-        """ getTestCaseAttachments :
-        Gets attachments for specified test case  
-        """
-        argsAPI = {'devKey' : self.devKey,
-                'testcaseid':str(testcaseid)}  
+#     def getTestCaseAttachments(self, testcaseid):
+#         """ getTestCaseAttachments :
+#         Gets attachments for specified test case  
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                 'testcaseid':str(testcaseid)}  
+# 
+#         return self._callServer('getTestCaseAttachments', argsAPI)
 
-        return self._callServer('getTestCaseAttachments', argsAPI)
-
-    def getTestCaseCustomFieldDesignValue(self, testcaseexternalid, version, 
-                                     testprojectid, customfieldname, details):
-        """ getTestCaseCustomFieldDesignValue :
-        Gets value of a Custom Field with scope='design' for a given Test case  
-        """
-        argsAPI = {'devKey' : self.devKey,
-                   'testcaseexternalid' : str(testcaseexternalid),
-                   'version' : int(version),
-                   'testprojectid' : str(testprojectid),
-                   'customfieldname' : str(customfieldname),
-                   'details' : str(details)}
-        return self._callServer('getTestCaseCustomFieldDesignValue', argsAPI)                                                
+#     def getTestCaseCustomFieldDesignValue(self, testcaseexternalid, version, 
+#                                      testprojectid, customfieldname, details):
+#         """ getTestCaseCustomFieldDesignValue :
+#         Gets value of a Custom Field with scope='design' for a given Test case  
+#         """
+#         argsAPI = {'devKey' : self.devKey,
+#                    'testcaseexternalid' : str(testcaseexternalid),
+#                    'version' : int(version),
+#                    'testprojectid' : str(testprojectid),
+#                    'customfieldname' : str(customfieldname),
+#                    'details' : str(details)}
+#         return self._callServer('getTestCaseCustomFieldDesignValue', argsAPI)                                                
 
 #     def getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
 #         """ 

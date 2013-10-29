@@ -31,31 +31,34 @@ import testlinkerrors
 # subclasses could override this definition, if their (python) method should
 # work with different positional arguments
 positionalArgNamesDefault = {
-            'createBuild' : ['testplanid', 'buildname'],
-            'createTestCase' : ['testcasename', 'testsuiteid', 'testprojectid',
-                                'authorlogin', 'summary', 'steps'],
-            'createTestPlan' : ['testplanname', 'testprojectname'],
-            'createTestProject' : ['testprojectname', 'testcaseprefix'],
-            'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
-            'getBuildsForTestPlan' : ['testplanid'],
-            'getFirstLevelTestSuitesForTestProject' : ['testprojectid'],
-            'getFullPath' : ['nodeid'],
-            'getLatestBuildForTestPlan' : ['testplanid'],
-            'getProjectTestPlans' : ['testprojectid'],
-            'getTestCaseIDByName' : ['testcasename'], 
-            'getTestCasesForTestPlan' : ['testplanid'],
-            'getTestCasesForTestSuite' : ['testsuiteid'],
-            'getTestPlanByName' : ['testprojectname', 'testplanname'],
-            'getTestPlanPlatforms' : ['testplanid'],
-            'getTestProjectByName' : ['testprojectname'],
-            'getTestSuiteByID' : ['testsuiteid'],
-            'getTestSuitesForTestPlan' : ['testplanid'],
-            'getTestSuitesForTestSuite' : ['testsuiteid'],
-            'getTotalsForTestPlan' : ['testplanid'],
-            'doesUserExist' : ['user'],
-            'repeat' : ['str'],
-            'reportTCResult' : ['testplanid', 'status'],
-            'uploadExecutionAttachment' : ['executionid']
+        'createBuild' : ['testplanid', 'buildname'],
+        'createTestCase' : ['testcasename', 'testsuiteid', 'testprojectid',
+                            'authorlogin', 'summary', 'steps'],
+        'createTestPlan' : ['testplanname', 'testprojectname'],
+        'createTestProject' : ['testprojectname', 'testcaseprefix'],
+        'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
+        'getBuildsForTestPlan' : ['testplanid'],
+        'getFirstLevelTestSuitesForTestProject' : ['testprojectid'],
+        'getFullPath' : ['nodeid'],
+        'getLastExecutionResult' : ['testplanid'],
+        'getLatestBuildForTestPlan' : ['testplanid'],
+        'getProjectTestPlans' : ['testprojectid'],
+        'getTestCaseCustomFieldDesignValue' : ['testcaseexternalid', 'version',
+                                            'testprojectid', 'customfieldname'], 
+        'getTestCaseIDByName' : ['testcasename'], 
+        'getTestCasesForTestPlan' : ['testplanid'],
+        'getTestCasesForTestSuite' : ['testsuiteid'],
+        'getTestPlanByName' : ['testprojectname', 'testplanname'],
+        'getTestPlanPlatforms' : ['testplanid'],
+        'getTestProjectByName' : ['testprojectname'],
+        'getTestSuiteByID' : ['testsuiteid'],
+        'getTestSuitesForTestPlan' : ['testplanid'],
+        'getTestSuitesForTestSuite' : ['testsuiteid'],
+        'getTotalsForTestPlan' : ['testplanid'],
+        'doesUserExist' : ['user'],
+        'repeat' : ['str'],
+        'reportTCResult' : ['testplanid', 'status'],
+        'uploadExecutionAttachment' : ['executionid']
 }
 
 # decorators for generic api calls
@@ -168,18 +171,6 @@ class TestlinkAPIGeneric(object):
     # GENERIC API CALLS - using decorators
     # http://stackoverflow.com/questions/1015307/python-bind-an-unbound-method
 
-#   /**
-#    * Gets the latest build by choosing the maximum build id for a specific test plan 
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["tplanid"]
-#    * @return mixed 
-#    *         
-#    * @access public
-#    */    
-#   public function getLatestBuildForTestPlan($args)
-
     @decoApiCallAddDevKey            
     @decoApiCallWithArgs
     def getLatestBuildForTestPlan(self):
@@ -188,31 +179,14 @@ class TestlinkAPIGeneric(object):
         positional args: testplanid
         optional args : --- """
     
-#   /**
-#      * Gets the result of LAST EXECUTION for a particular testcase 
-#      * on a test plan, but WITHOUT checking for a particular build
-#      *
-#      * @param struct $args
-#      * @param string $args["devKey"]
-#      * @param int $args["tplanid"]
-#      * @param int $args["testcaseid"]: optional, if does not is present           
-#      *                                 testcaseexternalid must be present
-#      *
-#      * @param int $args["testcaseexternalid"]: optional, if does not is present           
-#      *                                         testcaseid must be present
-#      *
-#      * @return mixed $resultInfo
-#      *               if execution found, array with these keys:
-#      *               id (execution id),build_id,tester_id,execution_ts,
-#      *               status,testplan_id,tcversion_id,tcversion_number,
-#      *               execution_type,notes.
-#      *
-#      *               if test case has not been execute,
-#      *               array('id' => -1)
-#      *
-#      * @access public
-#      */
-#     public function getLastExecutionResult($args)
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getLastExecutionResult(self):
+        """ getLastExecutionResult: 
+        Gets the result of LAST EXECUTION for a particular testcase
+        on a test plan, but WITHOUT checking for a particular build
+        positional args: testplanid
+        optional args : testcaseid, testcaseexternalid """
 
     @decoApiCallWithoutArgs
     def sayHello(self):
@@ -250,18 +224,6 @@ class TestlinkAPIGeneric(object):
         positional args: ---
         optional args : --- """
 
-#   /**
-#    * Gets a list of test plans within a project
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testprojectid"]
-#    * @return mixed $resultInfo
-#    *         
-#    * @access public
-#    */    
-#   public function getProjectTestPlans($args)
-
     @decoMakerApiCallReplaceTLResponseError()            
     @decoApiCallAddDevKey
     @decoApiCallWithArgs
@@ -272,22 +234,6 @@ class TestlinkAPIGeneric(object):
         
         returns an empty list, if no testplan is assigned """
 
-#   /**
-#    * Gets a list of builds within a test plan
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testplanid"]
-#    * @return 
-#    *         if no errors
-#    *            no build present => null
-#    *            array of builds
-#    *         
-#    *         
-#    * @access public
-#    */    
-#   public function getBuildsForTestPlan($args)
-
     @decoMakerApiCallReplaceTLResponseError()          
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
@@ -297,7 +243,6 @@ class TestlinkAPIGeneric(object):
         optional args : --- 
         
         returns an empty list, if no build is assigned """
-
 
     @decoMakerApiCallReplaceTLResponseError()          
     @decoApiCallAddDevKey               
@@ -321,28 +266,6 @@ class TestlinkAPIGeneric(object):
                     automationEnabled,inventoryEnabled
                  and values 0 (false) and 1 (true)     """
         
-#   /**
-#    * List test cases within a test suite
-#    * 
-#    * By default test cases that are contained within child suites 
-#    * will be returned. 
-#    * Set the deep flag to false if you only want test cases in the test suite provided 
-#    * and no child test cases.
-#    *  
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testsuiteid"]
-#    * @param boolean $args["deep"] - optional (default is true)
-#    * @param boolean $args["details"] - optional (default is simple)
-#    *                                use full if you want to get 
-#    *                                summary,steps & expected_results
-#    *
-#    * @return mixed $resultInfo
-#    *
-#    *
-#    */
-#    public function getTestCasesForTestSuite($args)
-
     @decoMakerApiCallReplaceTLResponseError()          
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
@@ -387,7 +310,6 @@ class TestlinkAPIGeneric(object):
                 'expected_results' : "result C", 'execution_type' : 0}]
             """
 
-
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def reportTCResult(self):
@@ -412,35 +334,6 @@ class TestlinkAPIGeneric(object):
 #    */  
 #   public function setTestMode($args)
 
-#   /**
-#    * getTestCasesForTestPlan
-#    * List test cases linked to a test plan
-#    * 
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testplanid"]
-#    * @param int $args["testcaseid"] - optional
-#    * @param int $args["buildid"] - optional
-#    * @param int $args["keywordid"] - optional mutual exclusive with $args["keywords"]
-#    * @param int $args["keywords"] - optional  mutual exclusive with $args["keywordid"]
-#    *
-#    * @param boolean $args["executed"] - optional
-#    * @param int $args["$assignedto"] - optional
-#    * @param string $args["executestatus"] - optional
-#    * @param array $args["executiontype"] - optional
-#    * @param array $args["getstepinfo"] - optional - default false
-#    * @param string $args["details"] - optional 
-#    *                  'full': (default) get summary,steps,expected_results,test suite name
-#    *                   'simple':
-#    *                   'details':
-#    * @return mixed $resultInfo
-#    *
-#    * @internal revisions
-#    * @since 1.9.4
-#    * 20111226 - franciscom - TICKET 4843: 'getTestCasesForTestPlan' - add support for new argument 'details'
-#    */
-# public function getTestCasesForTestPlan($args)
-
     @decoMakerApiCallReplaceTLResponseError()          
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
@@ -456,29 +349,24 @@ class TestlinkAPIGeneric(object):
         
         returns an empty list, if no build is assigned """
 
-
-#   /**
-#    * Gets value of a Custom Field with scope='design' for a given Test case
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]: used to check if operation can be done.
-#    *                                if devKey is not valid => abort.
-#    *
-#    * @param string $args["testcaseexternalid"]:  
-#    * @param string $args["version"]: version number  
-#    * @param string $args["testprojectid"]: 
-#    * @param string $args["customfieldname"]: custom field name
-#    * @param string $args["details"] optional, changes output information
-#    *                                null or 'value' => just value
-#    *                                'full' => a map with all custom field definition
-#    *                                             plus value and internal test case id
-#    *                                'simple' => value plus custom field name, label, and type (as code).
-#      *
-#      * @return mixed $resultInfo
-#    *         
-#    * @access public
-#    */    
-#   public function getTestCaseCustomFieldDesignValue($args)
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestCaseCustomFieldDesignValue(self):
+        """ getTestCaseCustomFieldDesignValue : 
+        Gets value of a Custom Field with scope='design' for a given Test case
+        positional args: testcaseexternalid, version, testprojectid, 
+                        customfieldname
+        optional args :  details
+        
+        details =  changes output information
+            null or 'value' => just value
+            'full' => a map with all custom field definition
+                          plus value and internal test case id
+            'simple' => value plus custom field name, label, and type (as code).
+            
+        attention - becareful with testcaseexternalid - it must include an '-'. 
+        otherwise TL returns 
+        <ProtocolError for xmlrpc.php: 500 Internal Server Error>  """
 
 #    /**
 #     * Add a test case version to a test plan 
@@ -493,16 +381,6 @@ class TestlinkAPIGeneric(object):
 #     *
 #     */
 #   public function addTestCaseToTestPlan($args)
-
-#    /**
-#     * get set of test suites AT TOP LEVEL of tree on a Test Project
-#     *
-#     * @param args['testprojectid']
-#     *  
-#     * @return array
-#     *
-#     */
-#    public function getFirstLevelTestSuitesForTestProject($args)
 
     @decoMakerApiCallReplaceTLResponseError(7008)            
     @decoApiCallAddDevKey               
@@ -533,22 +411,14 @@ class TestlinkAPIGeneric(object):
 #     */
 #    public function assignRequirements($args)
 
-# /**
-#  * Gets attachments for specified test case.
-#  * The attachment file content is Base64 encoded. To save the file to disk in client,
-#  * Base64 decode the content and write file in binary mode. 
-#  * 
-#  * @param struct $args
-#  * @param string $args["devKey"] Developer key
-#  * @param int $args["testcaseid"]: optional, if does not is present           
-#  *                                 testcaseexternalid must be present
-#  *
-#  * @param int $args["testcaseexternalid"]: optional, if does not is present           
-#  *                                         testcaseid must be present
-#  * 
-#  * @return mixed $resultInfo
-#  */
-# public function getTestCaseAttachments($args)
+    @decoApiCallAddDevKey               
+    @decoApiCallWithArgs
+    def getTestCaseAttachments(self):
+        """ getTestCaseAttachments: Gets attachments for specified test case.
+        The attachment file content is Base64 encoded. To save the file to disk 
+        in client, Base64 decode the content and write file in binary mode. 
+        positional args: ---
+        optional args : testcaseid, testcaseexternalid """
 
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
@@ -573,23 +443,6 @@ class TestlinkAPIGeneric(object):
         optional args : --- """
 
 
-# /**
-# * get test case specification using external ir internal id
-# * 
-# * @param struct $args
-# * @param string $args["devKey"]
-# * @param int $args["testcaseid"]: optional, if does not is present           
-# *                                 testcaseexternalid must be present
-# *
-# * @param int $args["testcaseexternalid"]: optional, if does not is present           
-# *                                         testcaseid must be present
-# * @param int $args["version"]: optional, if does not is present max version number will be
-# *                                        retuned
-# *
-# * @return mixed $resultInfo
-# */
-# public function getTestCase($args)
-
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def getTestCase(self):
@@ -609,24 +462,6 @@ class TestlinkAPIGeneric(object):
         optional args : notes,  active, public """
 
 
-#   /**
-#    * Gets full path from the given node till the top using nodes_hierarchy_table
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param mixed $args["nodeID"] can be just a single node or an array of INTERNAL (DB) ID
-#    * @return mixed $resultInfo      
-#    * @access public
-#    *
-#    * @internal revision
-#    * BUGID 3993
-#    * $args["nodeID"] can be just a single node or an array
-#    * when path can not be found same date structure will be returned, that on situations
-#    * where all is ok, but content for KEY(nodeID) will be NULL instead of rising ERROR  
-#    *
-#    */    
-#   public function getFullPath($args)
-
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
     def getFullPath(self):
@@ -635,7 +470,8 @@ class TestlinkAPIGeneric(object):
         positional args: nodeid
         optional args : ---  
         
-        nodeid = can be just a single id or a list with ids """
+        nodeid = can be just a single id or a list with ids 
+                 ATTENTION: id must be an integer. """
 
 #    /**
 #    * delete an execution
@@ -673,19 +509,6 @@ class TestlinkAPIGeneric(object):
         
         returns an empty list, if no platform is assigned """
 
-#   /**
-#      * Returns the list of platforms associated to a given test plan
-#      *
-#      * @param
-#      * @param struct $args
-#      * @param string $args["devKey"]
-#      * @param int $args["testplanid"]
-#      * @return mixed $resultInfo
-#      * 
-#      * @access public
-#      */
-#   public function getTestPlanPlatforms($args)
-
     @decoMakerApiCallReplaceTLResponseError(3041)            
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs
@@ -697,27 +520,6 @@ class TestlinkAPIGeneric(object):
         
         returns an empty list, if no platform is assigned (api error 3041) 
         - details see comments for decoMakerApiCallReplaceTLResponseError """
-
-#   /**
-#    * Gets the summarized results grouped by platform.
-#    * @see 
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["tplanid"] test plan id
-#    *
-#    * @return map where every element has:
-#    *
-#    *  'type' => 'platform'
-#    *  'total_tc => ZZ
-#    *  'details' => array ( 'passed' => array( 'qty' => X)
-#    *                       'failed' => array( 'qty' => Y)
-#    *                       'blocked' => array( 'qty' => U)
-#    *                       ....)
-#    *
-#    * @access public
-#    */
-#   public function getTotalsForTestPlan($args)
 
     @decoApiCallAddDevKey               
     @decoApiCallWithArgs

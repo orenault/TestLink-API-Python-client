@@ -78,9 +78,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.getFullPath('4711')
 
     def test_getLastExecutionResult_unknownID(self):
-        response = self.client.getLastExecutionResult(4711, 4712)
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(3000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getLastExecutionResult(4711, 4712)
         
     def test_getLatestBuildForTestPlan_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
@@ -103,17 +102,13 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.getTestCase(testcaseexternalid='N-2')
         
     def test_getTestCaseAttachments_unknownID(self):
-        response = self.client.getTestCaseAttachments(4711)
-        # FAILURE in 1.9.3 API message: replacement does not work
-        # The Test Case ID (testcaseid: %s) provided does not exist!
-        #self.assertIn('4711', response[0]['message'])
-        self.assertEqual(5000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '5000.*4711'):
+            self.client.getTestCaseAttachments(4711)
         
     def test_getTestCaseCustomFieldDesignValue_unknownID(self):
-        response = self.client.getTestCaseCustomFieldDesignValue(
-                   4712, 1, 4711, 'a_field', 'a_detail')
-        self.assertIn('4711', response[0]['message'])
-        self.assertEqual(7000, response[0]['code'])
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.getTestCaseCustomFieldDesignValue(
+                   'TC-4712', 1, 4711, 'a_field', 'a_detail')
         
     def test_getTestCaseIDByName_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '5030.*Cannot find'):
