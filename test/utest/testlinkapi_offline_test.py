@@ -178,7 +178,6 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         response = self.api.countTestCasesTS()
         self.assertEqual(0, response)
 
-#    @unittest.expectedFailure
     def test_countPlatforms(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countPlatforms()

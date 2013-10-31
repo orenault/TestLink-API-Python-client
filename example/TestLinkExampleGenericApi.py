@@ -188,18 +188,16 @@ print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
   
 # Add  test cases to test plan - we need the full external id !
 tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)[0]['full_tc_external_id']
-response = myTestLink._callServer('addTestCaseToTestPlan', 
-                {'devKey' : myTestLink.devKey, 
-                 'testprojectid' : newProjectID, 
-                 'testplanid' : newTestPlanID, 
-                 'testcaseexternalid' : tc_aa_full_ext_id, 'version' : 1})
+response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan', 
+                devKey=myTestLink.devKey, testprojectid=newProjectID, 
+                testplanid=newTestPlanID, testcaseexternalid=tc_aa_full_ext_id,
+                version=1)
 print "addTestCaseToTestPlan", response
 tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_tc_external_id']
-response = myTestLink._callServer('addTestCaseToTestPlan', 
-                {'devKey' : myTestLink.devKey, 
-                 'testprojectid' : newProjectID, 
-                 'testplanid' : newTestPlanID, 
-                 'testcaseexternalid' : tc_b_full_ext_id, 'version' : 1})
+response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan', 
+                devKey=myTestLink.devKey, testprojectid=newProjectID, 
+                testplanid=newTestPlanID, testcaseexternalid=tc_b_full_ext_id,
+                version=1)
 print "addTestCaseToTestPlan", response
 
 # -- Create Build

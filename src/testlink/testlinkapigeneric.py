@@ -18,7 +18,7 @@
 # ------------------------------------------------------------------------
 
 import xmlrpclib
-
+from functools import wraps
 from testlinkhelper import TestLinkHelper, VERSION
 import testlinkerrors
 
@@ -66,24 +66,25 @@ positionalArgNamesDefault = {
 
 def decoApiCallWithoutArgs(methodAPI):
     """ Decorator for calling server methods without arguments """  
+    @wraps(methodAPI)  
     def wrapperWithoutArgs(self):
-#        print methodAPI.__name__
         return self.callServerWithPosArgs(methodAPI.__name__)
     return wrapperWithoutArgs
 
 def decoApiCallWithArgs(methodAPI):
     """ Decorator for calling server methods with arguments """  
+    @wraps(methodAPI)  
     def wrapperWithArgs(self, *argsPositional, **argsOptional):
         return self.callServerWithPosArgs(methodAPI.__name__, 
                                           *argsPositional, **argsOptional)
     return wrapperWithArgs
 
 def decoApiCallAddDevKey(methodAPI):
-    """ Decorator to expand parameter list with devKey"""  
+    """ Decorator to expand parameter list with devKey"""
+    @wraps(methodAPI)  
     def wrapperAddDevKey(self, *argsPositional, **argsOptional):
         if not ('devKey' in argsOptional):
             argsOptional['devKey'] = self.devKey
-#        print argsAPI
         return methodAPI(self, *argsPositional, **argsOptional)
     return wrapperAddDevKey
 
@@ -105,6 +106,7 @@ def decoMakerApiCallReplaceTLResponseError(replaceCode=None):
     
     def decoApiCallReplaceTLResponseError(methodAPI):
         """ Decorator to replace an TLResponseError with an empty list """
+        @wraps(methodAPI)  
         def wrapperReplaceTLResponseError(self, *argsPositional, **argsOptional):
             response = None
             try:
