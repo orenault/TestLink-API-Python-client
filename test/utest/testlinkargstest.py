@@ -1,0 +1,81 @@
+#! /usr/bin/python
+# -*- coding: UTF-8 -*-
+
+#  Copyright 2013 Luiko Czub, TestLink-API-Python-client developers
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+#
+# ------------------------------------------------------------------------
+
+# this test works WITHOUT an online TestLink Server
+# no calls are send to a TestLink Server
+
+
+import unittest
+from testlink.testlinkapigeneric import testlinkargs
+
+
+class testlinkargsTestCase(unittest.TestCase):
+    """ TestCases for module testlinkargs """
+    
+    def setUp(self):
+        """ backup TestLinkHelper related environment variables """
+        
+        # module under test
+        self.mut = testlinkargs
+        # reset the args cache
+        self.mut.resetRegister()
+
+
+    def test_resetRegister(self):
+        self.mut._apiMethodsArgs['BigBird'] = 'not a Small Bird'
+        self.assertIsNotNone(self.mut._apiMethodsArgs.get('BigBird'))
+        self.mut.resetRegister()
+        self.assertIsNone(self.mut._apiMethodsArgs.get('BigBird'))
+
+    def test_registerMethod(self):
+        self.mut.registerMethod('DummyMethod', ['Uno', 'due', 'tre'],  
+                                ['quad','tre'], ['cinque'])
+        a_def = self.mut._apiMethodsArgs['DummyMethod']
+        self.assertEqual((['Uno', 'due', 'tre'], ['Uno', 'due', 'tre', 'quad'],
+                          ['cinque']), a_def )
+
+    def test_registerMethod_noArgs(self):
+        self.mut.registerMethod('DummyMethod')
+        a_def = self.mut._apiMethodsArgs['DummyMethod']
+        self.assertEqual(([], [], []), a_def )
+        
+    def test_registerMethod_onlyArgsOptional(self):
+        self.mut.registerMethod('DummyMethod', apiArgsOptional=['quad','tre'])
+        a_def = self.mut._apiMethodsArgs['DummyMethod']
+        self.assertEqual(([], ['quad','tre'], []), a_def )
+        
+    def test_registerMethod_onlyArgsPositional(self):
+        self.mut.registerMethod('DummyMethod', ['Uno', 'due', 'tre'])
+        a_def = self.mut._apiMethodsArgs['DummyMethod']
+        self.assertEqual((['Uno', 'due', 'tre'], ['Uno', 'due', 'tre'], []), 
+                         a_def )
+        
+    def test_getMethodsWithPositionalArgs(self):
+        self.mut.registerMethod('Method_3pos_0opt', ['Uno', 'due', 'tre']) 
+        self.mut.registerMethod('Method_0pos_2opt', [], ['Uno', 'due'])        
+        self.mut.registerMethod('Method_1pos_2opt',  ['Uno'], ['due', 'tre']) 
+        a_def = self.mut.getMethodsWithPositionalArgs()
+        self.assertEqual({'Method_3pos_0opt' : ['Uno', 'due', 'tre'],
+                          'Method_1pos_2opt' : ['Uno']}, 
+                         a_def )
+        
+
+if __name__ == "__main__":
+    #import sys;sys.argv = ['', 'Test.testName']
+    unittest.main()
