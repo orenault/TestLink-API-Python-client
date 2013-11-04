@@ -20,7 +20,9 @@
 import xmlrpclib
 from functools import wraps
 from .testlinkhelper import TestLinkHelper, VERSION
-import testlinkerrors, testlinkargs
+#from .testlinkargs import registerMethod, registerArgOptional, getMethodsWithPositionalArgs
+from .testlinkargs import *
+import testlinkerrors #, testlinkargs
 
 
 # # Default Definition which (python) API-Method expects which positional arguments
@@ -68,7 +70,7 @@ def decoApiCallWithoutArgs(methodAPI):
     """ Decorator for calling server methods without arguments """ 
     
     # register methods without positional and optional arguments 
-    testlinkargs.registerMethod(methodAPI.__name__)
+    registerMethod(methodAPI.__name__)
  
     @wraps(methodAPI)  
     def wrapperWithoutArgs(self):
@@ -89,8 +91,7 @@ def decoMakerApiCallWithArgs(argNamesPositional=[], argNamesOptional=[]):
         """ Decorator for calling a server method with arguments """
         
         # register methods positional and optional arguments 
-        testlinkargs.registerMethod(methodAPI.__name__, 
-                                    argNamesPositional, argNamesOptional)
+        registerMethod(methodAPI.__name__, argNamesPositional, argNamesOptional)
         # define the method server call           
         @wraps(methodAPI)  
         def wrapperWithArgs(self, *argsPositional, **argsOptional):
@@ -101,6 +102,8 @@ def decoMakerApiCallWithArgs(argNamesPositional=[], argNamesOptional=[]):
 
 def decoApiCallAddDevKey(methodAPI):
     """ Decorator to expand parameter list with devKey"""
+    # register additional optional argument devKey 
+    registerArgOptional(methodAPI.__name__, 'devKey')
     @wraps(methodAPI)  
     def wrapperAddDevKey(self, *argsPositional, **argsOptional):
         if not ('devKey' in argsOptional):
@@ -186,7 +189,7 @@ class TestlinkAPIGeneric(object):
                                        verbose, allow_none)
         self.devKey = devKey
         self._server_url = server_url
-        self._positionalArgNames = testlinkargs.getMethodsWithPositionalArgs()
+        self._positionalArgNames = getMethodsWithPositionalArgs()
         
         
         

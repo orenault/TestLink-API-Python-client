@@ -17,6 +17,9 @@
 #
 # ------------------------------------------------------------------------
 
+from .testlinkerrors import TLArgError
+
+
 __doc__ = """ This modul is used as a 'singleton' to register the supported
 TestLink API methods and there (positional and optional) arguments """
 
@@ -31,9 +34,18 @@ TestLink API methods and there (positional and optional) arguments """
 #  mandatory Args
 _apiMethodsArgs = {}
 
-def resetRegister():
+def _resetRegister():
     " clears all entries in _apiMethodsArgs"
     _apiMethodsArgs.clear()
+    
+def _getMethodsArgDefinition(methodName):
+    """ returns argument definition for api methodName """
+    
+    try:
+        return _apiMethodsArgs[methodName]
+    except KeyError:
+        raise TLArgError('apiMethod %s not registered!' % methodName)
+    
     
 def registerMethod(methodName, apiArgsPositional=[], apiArgsOptional=[], 
                         otherArgsMandatory=[]):
@@ -48,7 +60,7 @@ def registerMethod(methodName, apiArgsPositional=[], apiArgsOptional=[],
     print 'register args for', methodName
        
     if methodName in _apiMethodsArgs:
-        raise StandardError('apiMethod %s already registered!' % methodName)
+        raise TLArgError('apiMethod %s already registered!' % methodName)
     
     allArgs = apiArgsPositional[:]
     for argName in apiArgsOptional:
@@ -56,6 +68,13 @@ def registerMethod(methodName, apiArgsPositional=[], apiArgsOptional=[],
             allArgs.append(argName)
     _apiMethodsArgs[methodName] = (apiArgsPositional[:], allArgs, 
                                    otherArgsMandatory[:])
+    
+def registerArgOptional(methodName, argName):
+    """ Update _apiMethodsArgs[methodName] with additional optional argument """ 
+       
+    allArgs = _getMethodsArgDefinition(methodName)[1]
+    if not argName in allArgs:
+        allArgs.append(argName)
     
 
 def getMethodsWithPositionalArgs():
@@ -66,3 +85,7 @@ def getMethodsWithPositionalArgs():
         if argdef[0]:
             positionalArgNames[mname] = argdef[0][:]
     return positionalArgNames
+
+def getApiArgsForMethod(methodName):
+    """ returns list with all argument name api methodName """
+    return _getMethodsArgDefinition(methodName)[1][:]

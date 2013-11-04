@@ -210,7 +210,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         def DummyMethod(a_api):
             "a dummy api method with 3 positional args and 1 optional arg"
             pass
-        posArgs = testlinkapigeneric.testlinkargs.getMethodsWithPositionalArgs()
+        posArgs = testlinkapigeneric.getMethodsWithPositionalArgs()
         print posArgs
         self.assertEqual(['Uno', 'due', 'tre'], posArgs['DummyMethod'])
 
@@ -227,15 +227,20 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_decoApiCallAddDevKey(self):
         " decorator test: argsOptional should be extended with devKey"
+        testlinkapigeneric.registerMethod('a_func')
         @testlinkapigeneric.decoApiCallAddDevKey
         def a_func(a_api, *argsPositional, **argsOptional):
             return argsPositional, argsOptional
-        
+        # check method argument definition
+        allArgs = testlinkapigeneric.getApiArgsForMethod('a_func')
+        self.assertEqual(['devKey'], allArgs)
+        # check call arguments
         response = a_func(self.api)
         self.assertEqual({'devKey' : self.api.devKey}, response[1])
 
     def test_noWrapperName_decoApiCallAddDevKey(self):
         " decorator test: original function name should be unchanged "
+        testlinkapigeneric.registerMethod('orig_funcname3')
         @testlinkapigeneric.decoApiCallAddDevKey
         def orig_funcname3(a_api, *argsPositional, **argsOptional):
             "orig doc string"
