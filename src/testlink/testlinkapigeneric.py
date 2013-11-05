@@ -18,148 +18,12 @@
 # ------------------------------------------------------------------------
 
 import xmlrpclib
-from functools import wraps
+import testlinkerrors
 from .testlinkhelper import TestLinkHelper, VERSION
-#from .testlinkargs import registerMethod, registerArgOptional, getMethodsWithPositionalArgs
-from .testlinkargs import *
-import testlinkerrors #, testlinkargs
-
-
-# # Default Definition which (python) API-Method expects which positional arguments
-# # this must not be equal to mandatory params of the (php) xmlrpc Methods
-# # it defines arguments, which values must be passed without explicit names
-# # to the API-Method
-# # this is stored during the init in ._positionalArgNames
-# # subclasses could override this definition, if their (python) method should
-# # work with different positional arguments
-# positionalArgNamesDefault = {
-#         'createBuild' : ['testplanid', 'buildname'],
-#         'createTestCase' : ['testcasename', 'testsuiteid', 'testprojectid',
-#                             'authorlogin', 'summary', 'steps'],
-#         'createTestPlan' : ['testplanname', 'testprojectname'],
-#         'createTestProject' : ['testprojectname', 'testcaseprefix'],
-#         'createTestSuite' : ['testprojectid', 'testsuitename', 'details'],
-#         'getBuildsForTestPlan' : ['testplanid'],
-#         'getFirstLevelTestSuitesForTestProject' : ['testprojectid'],
-#         'getFullPath' : ['nodeid'],
-#         'getLastExecutionResult' : ['testplanid'],
-#         'getLatestBuildForTestPlan' : ['testplanid'],
-#         'getProjectTestPlans' : ['testprojectid'],
-#         'getTestCaseCustomFieldDesignValue' : ['testcaseexternalid', 'version',
-#                                             'testprojectid', 'customfieldname'], 
-#         'getTestCaseIDByName' : ['testcasename'], 
-#         'getTestCasesForTestPlan' : ['testplanid'],
-#         'getTestCasesForTestSuite' : ['testsuiteid'],
-#         'getTestPlanByName' : ['testprojectname', 'testplanname'],
-#         'getTestPlanPlatforms' : ['testplanid'],
-#         'getTestProjectByName' : ['testprojectname'],
-#         'getTestSuiteByID' : ['testsuiteid'],
-#         'getTestSuitesForTestPlan' : ['testplanid'],
-#         'getTestSuitesForTestSuite' : ['testsuiteid'],
-#         'getTotalsForTestPlan' : ['testplanid'],
-#         'doesUserExist' : ['user'],
-#         'repeat' : ['str'],
-#         'reportTCResult' : ['testplanid', 'status'],
-#         'uploadExecutionAttachment' : ['executionid']
-# }
-
-# decorators for generic api calls
-# see http://stackoverflow.com/questions/739654/how-can-i-make-a-chain-of-function-decorators-in-python
-
-def decoApiCallWithoutArgs(methodAPI):
-    """ Decorator for calling server methods without arguments """ 
-    
-    # register methods without positional and optional arguments 
-    registerMethod(methodAPI.__name__)
- 
-    @wraps(methodAPI)  
-    def wrapperWithoutArgs(self):
-        return self.callServerWithPosArgs(methodAPI.__name__)
-    return wrapperWithoutArgs
-
-def decoMakerApiCallWithArgs(argNamesPositional=[], argNamesOptional=[]):
-    """ creates a decorator for calling a server method with arguments
-
-     argNamesPositional defines a list of positional arguments, which should be
-     registered in the global apiMethodsArgNames for the server method
-     argNamesOptional defines a list of optional arguments, which should be
-     registered in the global apiMethodsArgNames for the server method
-     
-     """
-
-    def decoApiCallWithArgs(methodAPI):
-        """ Decorator for calling a server method with arguments """
-        
-        # register methods positional and optional arguments 
-        registerMethod(methodAPI.__name__, argNamesPositional, argNamesOptional)
-        # define the method server call           
-        @wraps(methodAPI)  
-        def wrapperWithArgs(self, *argsPositional, **argsOptional):
-            return self.callServerWithPosArgs(methodAPI.__name__, 
-                                              *argsPositional, **argsOptional)
-        return wrapperWithArgs
-    return decoApiCallWithArgs
-
-def decoApiCallAddDevKey(methodAPI):
-    """ Decorator to expand parameter list with devKey"""
-    # register additional optional argument devKey 
-    registerArgOptional(methodAPI.__name__, 'devKey')
-    @wraps(methodAPI)  
-    def wrapperAddDevKey(self, *argsPositional, **argsOptional):
-        if not ('devKey' in argsOptional):
-            argsOptional['devKey'] = self.devKey
-        return methodAPI(self, *argsPositional, **argsOptional)
-    return wrapperAddDevKey
-
-def decoMakerApiCallReplaceTLResponseError(replaceCode=None):
-    """ creates a decorator, which replace an TLResponseError with an empty list,
-
-     Default (replaceCode=None) handles the cause 'Empty Result'
-     - ok for getProjectTestPlans, getBuildsForTestPlan, which returns just ''
-     Problems are getTestPlanByName, getFirstLevelTestSuitesForTestProject
-     - they do not return just '', they returns the error message
-        3041: Test plan (noPlatform) has no platforms linked
-        7008: Test Project (noSuite) is empty
-      could be handled with replaceCode=3041 / replaceCode=7008
-
-     """  
-    # for understanding, what we are doing here please read
-    # # see http://stackoverflow.com/questions/739654/how-can-i-make-a-chain-of-function-decorators-in-python
-    # - Passing arguments to the decorator
-    
-    def decoApiCallReplaceTLResponseError(methodAPI):
-        """ Decorator to replace an TLResponseError with an empty list """
-        @wraps(methodAPI)  
-        def wrapperReplaceTLResponseError(self, *argsPositional, **argsOptional):
-            response = None
-            try:
-                response = methodAPI(self, *argsPositional, **argsOptional)
-            except testlinkerrors.TLResponseError as tl_err:
-                if tl_err.code == replaceCode:
-                    # empty result (response == '') -> code == None
-                    # special case NoPlatform -> code == 3041
-                    response = []
-                else:
-                    # seems to be another response failure - we forward it
-                    raise  
-            return response
-        return wrapperReplaceTLResponseError
-    return decoApiCallReplaceTLResponseError
-
-def decoApiCallAddAttachment(methodAPI):
-    """ Decorator to expand parameter list with devKey and attachmentfile
-        attachmentfile  is a python file descriptor pointing to the file
-    """  
-    def wrapperAddAttachment(self, attachmentfile, *argsPositional, **argsOptional):
-        if not ('devKey' in argsOptional):
-            argsOptional['devKey'] = self.devKey
-        argsAttachment = self._getAttachmentArgs(attachmentfile)
-        # add additional key/value pairs from argsOptional 
-        # although overwrites filename, filetype, content with user definition
-        # if they exist
-        argsAttachment.update(argsOptional)
-        return methodAPI(self, *argsPositional, **argsAttachment)
-    return wrapperAddAttachment
+from .testlinkargs import getMethodsWithPositionalArgs
+from .testlinkdecorators import decoApiCallAddAttachment,\
+decoApiCallAddDevKey, decoApiCallWithoutArgs, \
+decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs 
 
 
 class TestlinkAPIGeneric(object): 
@@ -195,6 +59,37 @@ class TestlinkAPIGeneric(object):
         
     # GENERIC API CALLS - using decorators
     # http://stackoverflow.com/questions/1015307/python-bind-an-unbound-method
+    
+    # Method definitions should be build either with 
+    # @decoMakerApiCallWithArgs(argNamesPositional, argNamesOptional)
+    #    for calling a server method with arguments 
+    #    - argNamesPositional = list default positional args
+    #    - argNamesOptional   = list additional optional args
+    #    to check the server response, if it includes TestLink Error Codes or 
+    #    an empty result (which raise a TLResponseError) 
+    # or   
+    # @decoApiCallWithoutArgs
+    #    for calling server methods without arguments
+    #    to check the server response, if it includes TestLink Error Codes or 
+    #    an empty result (which raise a TLResponseError)
+    #  
+    # Additional behavior could be added with
+    #    
+    # @decoApiCallAddDevKey
+    #    - to expand the parameter list with devKey key/value pair
+    #      before calling the server method
+    # @decoMakerApiCallReplaceTLResponseError(replaceCode)
+    #    - to catch an TLResponseError after calling the server method and 
+    #      with an empty list
+    #      - replaceCode : TestLink Error Code, which should be handled 
+    #                      default is None for "Empty Results"
+    # @decoApiCallAddAttachment(methodAPI):
+    #     - to add an mandatory argument 'attachmentfile'
+    #       - attachmentfile is a python file descriptor pointing to the file 
+    #     - to expand parameter list with key/value pairs
+    #          'filename', 'filetype', 'content'
+    #       from 'attachmentfile' before calling the server method
+
 
     @decoApiCallAddDevKey            
     @decoMakerApiCallWithArgs(['testplanid'])

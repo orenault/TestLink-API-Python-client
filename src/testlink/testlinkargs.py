@@ -20,8 +20,8 @@
 from .testlinkerrors import TLArgError
 
 
-__doc__ = """ This modul is used as a 'singleton' to register the supported
-TestLink API methods and there (positional and optional) arguments """
+__doc__ = """ This internal module is used as a 'singleton' to register the 
+supported TestLink API methods and there (positional and optional) arguments """
 
 
 # main hash, where the registered methods and there arguments are stored

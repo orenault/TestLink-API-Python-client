@@ -21,9 +21,9 @@
 # no calls are send to a TestLink Server
 
 import unittest
-#from testlink import TestlinkAPIGeneric, TestLinkHelper
-from testlink import testlinkerrors
-from testlink import testlinkapigeneric
+from testlink import TestlinkAPIGeneric, TestLinkHelper
+from testlink.testlinkerrors import TLArgError, TLResponseError
+
 #from testlink.testlinkapigeneric import positionalArgNamesDefault
 # scenario_a includes response from a testlink 1.9.8 server
 SCENARIO_A = {'repeat' : 'You said: One World',
@@ -60,7 +60,7 @@ SCENARIO_A = {'repeat' : 'You said: One World',
                                  'name': 'TESTCASE_AA'}]}
               }
 
-class DummyAPIGeneric(testlinkapigeneric.TestlinkAPIGeneric):
+class DummyAPIGeneric(TestlinkAPIGeneric):
     """ Dummy for Simulation TestLinkAPIGeneric. 
     Overrides 
     - _callServer() Method to return test scenarios
@@ -110,7 +110,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     """
 
     def setUp(self):
-        self.api = testlinkapigeneric.TestLinkHelper().connect(DummyAPIGeneric)
+        self.api = TestLinkHelper().connect(DummyAPIGeneric)
         self.callArgs = None
         
 #    def tearDown(self):
@@ -124,17 +124,17 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     def test__convertPositionalArgs_missingConf(self):
         client = self.api
         def a_func(a_api): a_api._convertPostionalArgs('NoConfigMethod',  [1,2])
-        self.assertRaises(testlinkerrors.TLArgError, a_func, client)
+        self.assertRaises(TLArgError, a_func, client)
         
     def test__convertPositionalArgs_lessValues(self):
         client = self.api
         def a_func(a_api): a_api._convertPostionalArgs('DummyMethod',  [1,2])
-        self.assertRaises(testlinkerrors.TLArgError, a_func, client)
+        self.assertRaises(TLArgError, a_func, client)
         
     def test__convertPositionalArgs_moreValues(self):
         client = self.api
         def a_func(a_api): a_api._convertPostionalArgs('DummyMethod',  [1,2,3,4])
-        self.assertRaises(testlinkerrors.TLArgError, a_func, client)
+        self.assertRaises(TLArgError, a_func, client)
 
     def test_callServerWithPosArgs_pos(self):
         self.api.callServerWithPosArgs('DummyMethod',  1,2,3)
@@ -157,8 +157,8 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         def a_func(a_api, response): 
             a_api._checkResponse(response, 'DummyMethod',  
                                  {'Uno' : 1, 'due' :2, 'tre' : 3})
-        self.assertRaises(testlinkerrors.TLResponseError, a_func, client, '')
-        self.assertRaises(testlinkerrors.TLResponseError, a_func, client, [])
+        self.assertRaises(TLResponseError, a_func, client, '')
+        self.assertRaises(TLResponseError, a_func, client, [])
         
     def test_checkResponse_errorResponse(self):
         client = self.api
@@ -167,8 +167,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         def a_func(a_api, response): 
             a_api._checkResponse(response, 'DummyMethod',  
                                  {'Uno' : 1, 'due' :2, 'tre' : 3})
-        self.assertRaises(testlinkerrors.TLResponseError, a_func, client, 
-                          responseA)
+        self.assertRaises(TLResponseError, a_func, client, responseA)
 
     def test_checkResponse_okResponse(self):
         self.api._checkResponse(
@@ -188,119 +187,6 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.api._checkResponse(response, 'DummyMethod', 
                                 {'Uno' : 1, 'due' :2, 'tre' : 3})
         
-    def test_ping(self):
-        self.api.loadScenario(SCENARIO_A)
-        response = self.api.ping()
-        self.assertEqual('Hey Folks!', response)
-        
-    def test_noWrapperName_decoApiCallWithoutArgs(self):
-        " decorator test: original function name should be unchanged "
-        @testlinkapigeneric.decoApiCallWithoutArgs
-        def orig_funcname1(a_api):
-            "orig doc string"
-            return 'noArgs'
-        
-        self.assertEqual('orig_funcname1', orig_funcname1.__name__)
-        self.assertEqual('orig doc string', orig_funcname1.__doc__)
-        self.assertEqual('testlinkapigeneric_offline_test', orig_funcname1.__module__)
-
-    def test_decoApiCallWithArgs(self):
-        " decorator test: positional and optional arguments should be registered "
-        @testlinkapigeneric.decoMakerApiCallWithArgs(['Uno', 'due', 'tre'], ['quad'])
-        def DummyMethod(a_api):
-            "a dummy api method with 3 positional args and 1 optional arg"
-            pass
-        posArgs = testlinkapigeneric.getMethodsWithPositionalArgs()
-        print posArgs
-        self.assertEqual(['Uno', 'due', 'tre'], posArgs['DummyMethod'])
-
-    def test_noWrapperName_decoApiCallWithArgs(self):
-        " decorator test: original function name should be unchanged "
-        @testlinkapigeneric.decoMakerApiCallWithArgs()
-        def orig_funcname2(a_api):
-            "orig doc string"
-            return 'noArgs'
-        
-        self.assertEqual('orig_funcname2', orig_funcname2.__name__)
-        self.assertEqual('orig doc string', orig_funcname2.__doc__)
-        self.assertEqual('testlinkapigeneric_offline_test', orig_funcname2.__module__)
-
-    def test_decoApiCallAddDevKey(self):
-        " decorator test: argsOptional should be extended with devKey"
-        testlinkapigeneric.registerMethod('a_func')
-        @testlinkapigeneric.decoApiCallAddDevKey
-        def a_func(a_api, *argsPositional, **argsOptional):
-            return argsPositional, argsOptional
-        # check method argument definition
-        allArgs = testlinkapigeneric.getApiArgsForMethod('a_func')
-        self.assertEqual(['devKey'], allArgs)
-        # check call arguments
-        response = a_func(self.api)
-        self.assertEqual({'devKey' : self.api.devKey}, response[1])
-
-    def test_noWrapperName_decoApiCallAddDevKey(self):
-        " decorator test: original function name should be unchanged "
-        testlinkapigeneric.registerMethod('orig_funcname3')
-        @testlinkapigeneric.decoApiCallAddDevKey
-        def orig_funcname3(a_api, *argsPositional, **argsOptional):
-            "orig doc string"
-            return argsPositional, argsOptional
-        
-        self.assertEqual('orig_funcname3', orig_funcname3.__name__)
-        self.assertEqual('orig doc string', orig_funcname3.__doc__)
-        self.assertEqual('testlinkapigeneric_offline_test', orig_funcname3.__module__)
-        
-    def test_decoApiCallReplaceTLResponseError_NoCodeError(self):
-        " decorator test: TLResponseError (code=None) should be handled "
-        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError()
-        def a_func(a_api, *argsPositional, **argsOptional):
-            raise testlinkerrors.TLResponseError('DummyMethod', 
-                                argsOptional, 'Empty Response! ')
-
-        response = a_func(self.api)
-        self.assertEqual([], response)
-        
-    def test_decoApiCallReplaceTLResponseError_CodeError(self):
-        " decorator test: TLResponseError (code=777) should be raised "
-        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError()
-        def a_func(a_api, *argsPositional, **argsOptional):
-            raise testlinkerrors.TLResponseError('DummyMethod', 
-                                argsOptional, 'Empty Response! ', 777)
-
-        with self.assertRaisesRegexp(testlinkerrors.TLResponseError, 
-                                     '777.*Empty'):
-            a_func(self.api)
-        
-    def test_decoApiCallReplaceTLResponseError_CodeErrorOk(self):
-        " decorator test: TLResponseError (code=777) should be handled "
-        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError(777)
-        def a_func(a_api, *argsPositional, **argsOptional):
-            raise testlinkerrors.TLResponseError('DummyMethod', 
-                                argsOptional, 'Empty Response! ', 777)
-
-        response = a_func(self.api)
-        self.assertEqual([], response)
-
-    def test_decoApiCallReplaceTLResponseError_NoError(self):
-        " decorator test: response without TLResponseError should be passed "
-        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError()            
-        def a_func(a_api, *argsPositional, **argsOptional):
-            return argsOptional
-
-        response = a_func(self.api, name='BigBird')
-        self.assertEqual({'name' : 'BigBird'}, response)
-
-    def test_noWrapperName_decoApiCallReplaceTLResponseError(self):
-        " decorator test: original function name should be unchanged "
-        @testlinkapigeneric.decoMakerApiCallReplaceTLResponseError()
-        def orig_funcname4(a_api, *argsPositional, **argsOptional):
-            "orig doc string"
-            return argsPositional, argsOptional
-        
-        self.assertEqual('orig_funcname4', orig_funcname4.__name__)
-        self.assertEqual('orig doc string', orig_funcname4.__doc__)
-        self.assertEqual('testlinkapigeneric_offline_test', orig_funcname4.__module__)
-        
     def test_noWrapperName_apiMethods(self):
         " decorator test: API Methods internal function name should be unchanged "
         
@@ -313,7 +199,11 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         # apiMethod with decorator @decoMakerApiCallReplaceTLResponseError()
         self.assertEqual('getProjectTestPlans', self.api.getProjectTestPlans.__name__)
         
-
+    def test_ping(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.ping()
+        self.assertEqual('Hey Folks!', response)
+        
         
     def test_getProjectTestPlans_noPlan(self):
         self.api.loadScenario(SCENARIO_A)
