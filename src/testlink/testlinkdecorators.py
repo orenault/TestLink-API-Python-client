@@ -18,7 +18,7 @@
 # ------------------------------------------------------------------------
 
 from functools import wraps
-from .testlinkargs import registerMethod, registerArgOptional
+from .testlinkargs import registerMethod, registerArgOptional, registerArgNonApi
 from .testlinkerrors import TLResponseError
 
 __doc__ = """ This internal module defines the decorator functions, which are 
@@ -144,6 +144,8 @@ def decoApiCallAddAttachment(methodAPI):
     """ Decorator to expand parameter list with devKey and attachmentfile
         attachmentfile  is a python file descriptor pointing to the file
     """  
+    registerArgOptional(methodAPI.__name__, 'devKey')
+    registerArgNonApi(methodAPI.__name__, 'attachmentfile')
     @wraps(methodAPI)  
     def wrapperAddAttachment(self, attachmentfile, *argsPositional, **argsOptional):
         if not ('devKey' in argsOptional):

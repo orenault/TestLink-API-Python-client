@@ -20,7 +20,7 @@
 import xmlrpclib
 import testlinkerrors
 from .testlinkhelper import TestLinkHelper, VERSION
-from .testlinkargs import getMethodsWithPositionalArgs
+from .testlinkargs import getMethodsWithPositionalArgs, getArgsForMethod
 from .testlinkdecorators import decoApiCallAddAttachment,\
 decoApiCallAddDevKey, decoApiCallWithoutArgs, \
 decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs 
@@ -1086,6 +1086,65 @@ class TestlinkAPIGeneric(object):
     #  ADDITIONNAL FUNCTIONS
     #                                   
 
+    def whatArgs(self, methodNameAPI):
+        """ returns for METHODNAME a description with 
+            - positional, optional and other (non api) mandatory args
+            - methods doc/help string
+        """
+        
+        # collect arg names 
+        posArgNames = self._positionalArgNames.get(methodNameAPI, [])
+        otherArgs = ([],[])
+        registeredApiMethod = True
+        try:
+            otherArgs = getArgsForMethod(methodNameAPI, posArgNames)
+        except testlinkerrors.TLArgError:
+            # no API args registered for methodName 
+            registeredApiMethod = False
+        optArgNames=otherArgs[0]
+        manArgNames=otherArgs[1]
+            
+        # get method doc string
+        ownMethod = True
+        docString = None
+        argSeparator = ''
+        try:
+            apiMethod = self.__getattribute__(methodNameAPI)
+            docString = apiMethod.__doc__
+        except AttributeError:
+            # no real method defined for methodNameAPI
+            ownMethod = False
+            
+        # now we start to build the description
+        # first the method name
+        methDescr = ''
+        if not ownMethod:
+            methDescr = "callServerWithPosArgs('%s'" % methodNameAPI
+            argSeparator = ', '
+            if not optArgNames:
+                optArgNames = ['apiArg']
+        else:
+            methDescr = "%s(" % methodNameAPI
+
+        # description pos and mandatory args
+        manArgNames.extend(posArgNames) 
+        if manArgNames:
+            tmp_l = ['<%s>' % x for x in manArgNames]
+            methDescr += '%s%s' % (argSeparator, ", ".join(tmp_l))
+            argSeparator = ', '
+        # description optional args
+        if optArgNames:
+            tmp_l = ['%s=<%s>' % (x,x) for x in optArgNames]
+            methDescr += '%s[%s]' % (argSeparator, "], [".join(tmp_l))
+            
+        # closing the method call
+        methDescr += ")" 
+
+        # now append methods docstring
+        if docString:
+            methDescr += "\n%s" % docString 
+                        
+        return methDescr
 
     def __str__(self):
         message = """

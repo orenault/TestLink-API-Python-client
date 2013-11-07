@@ -22,7 +22,7 @@
 
 import unittest
 from testlink.testlinkerrors import TLResponseError
-from testlink.testlinkargs import registerMethod, getApiArgsForMethod
+from testlink.testlinkargs import registerMethod, getArgsForMethod
 from testlink.testlinkdecorators import decoApiCallAddAttachment,\
 decoApiCallAddDevKey, decoApiCallWithoutArgs, \
 decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs 
@@ -34,6 +34,13 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
     devKey = '007'
     def setUp(self):
         self.api = self
+        
+    def _getAttachmentArgs(self, attachmentfile):
+        # simulation of TestlinkAPIGeneric._getAttachmentArgs()
+        # needed in test_decoApiCallAddAttachment
+        return {'filename': 'name %s' % attachmentfile,
+                'filetype': 'type %s' % attachmentfile,
+                'content' : 'content %s' % attachmentfile}
 
 #     def tearDown(self):
 #         pass
@@ -60,7 +67,6 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
             pass
         
         posArgs = getMethodsWithPositionalArgs()
-        print posArgs
         self.assertEqual(['Uno', 'due', 'tre'], posArgs['DummyMethod'])
 
     def test_noWrapperName_decoApiCallWithArgs(self):
@@ -84,8 +90,8 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
             return argsPositional, argsOptional
         
         # check method argument definition
-        allArgs = getApiArgsForMethod('a_func')
-        self.assertEqual(['devKey'], allArgs)
+        allArgs = getArgsForMethod('a_func')
+        self.assertEqual((['devKey'], []), allArgs)
         # check call arguments
         response = a_func(self.api)
         self.assertEqual({'devKey' : self.api.devKey}, response[1])
@@ -158,9 +164,27 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         self.assertEqual('orig doc string', orig_funcname4.__doc__)
         self.assertEqual('testlinkdecoratorstest', orig_funcname4.__module__)
         
+    def test_decoApiCallAddAttachment(self):
+        " decorator test: argsOptional should be extended attachment file infos"
+        
+        registerMethod('func_addAttachment')
+        @decoApiCallAddAttachment
+        def func_addAttachment(a_api, *argsPositional, **argsOptional):
+            return argsPositional, argsOptional
+        
+        # check method argument definition
+        allArgs = getArgsForMethod('func_addAttachment')
+        self.assertEqual((['devKey'], ['attachmentfile']), allArgs)
+        # check call arguments
+        response = func_addAttachment(self.api, 'a_file')
+        self.assertEqual({'devKey' : self.api.devKey, 'filename': 'name a_file',
+                    'filetype': 'type a_file', 'content' : 'content a_file'}, 
+                         response[1])
+        
     def test_noWrapperName_decoApiCallAddAttachment(self):
         " decorator test: original function name should be unchanged "
         
+        registerMethod('orig_funcname5')
         @decoApiCallAddAttachment
         def orig_funcname5(a_api):
             "orig doc string"

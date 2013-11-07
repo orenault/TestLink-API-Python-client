@@ -187,6 +187,28 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.api._checkResponse(response, 'DummyMethod', 
                                 {'Uno' : 1, 'due' :2, 'tre' : 3})
         
+    def test_whatArgs_noArgs(self):
+        response = self.api.whatArgs('sayHello')
+        self.assertRegexpMatches(response, 'sayHello().*')
+        
+    def test_whatArgs_onlyOptionalArgs(self):
+        response = self.api.whatArgs('getTestCaseAttachments')
+        self.assertRegexpMatches(response, 'getTestCaseAttachments\(\[.*=<.*>\].*\).*')
+        
+    def test_whatArgs_OptionalAndPositionalArgs(self):
+        response = self.api.whatArgs('createBuild')
+        self.assertRegexpMatches(response, 'createBuild\(<.*>.*\).*')
+
+    def test_whatArgs_MandatoryArgs(self):
+        response = self.api.whatArgs('uploadExecutionAttachment')
+        self.assertRegexpMatches(response, 
+                    'uploadExecutionAttachment\(<attachmentfile>, <.*>.*\).*')
+
+    def test_whatArgs_unknownMethods(self):
+        response = self.api.whatArgs('apiUnknown')
+        self.assertRegexpMatches(response, 
+                "callServerWithPosArgs\('apiUnknown', \[apiArg=<apiArg>\]\)")
+        
     def test_noWrapperName_apiMethods(self):
         " decorator test: API Methods internal function name should be unchanged "
         
@@ -198,6 +220,8 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertEqual('createBuild', self.api.createBuild.__name__)
         # apiMethod with decorator @decoMakerApiCallReplaceTLResponseError()
         self.assertEqual('getProjectTestPlans', self.api.getProjectTestPlans.__name__)
+        # apiMethod with decorator @decoApiCallAddAttachment
+        self.assertEqual('uploadExecutionAttachment', self.api.uploadExecutionAttachment.__name__)
         
     def test_ping(self):
         self.api.loadScenario(SCENARIO_A)

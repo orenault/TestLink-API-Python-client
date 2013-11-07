@@ -36,7 +36,12 @@ class testlinkargsTestCase(unittest.TestCase):
         self.mut = testlinkargs
         # reset the args cache
         self.mut._resetRegister()
+        # api simulation
+        self.api = self 
 
+    def tearDown(self):
+        # reset the args cache
+        self.mut._resetRegister()
 
     def test__resetRegister(self):
         self.mut._apiMethodsArgs['BigBird'] = 'not a Small Bird'
@@ -97,11 +102,39 @@ class testlinkargsTestCase(unittest.TestCase):
                                      'DummyMethod not registered'):
             self.mut.registerArgOptional('DummyMethod', 'sei')
 
-    def test_getApiArgsForMethod(self):
+    def test_registerArgNonApi(self):
         self.mut.registerMethod('DummyMethod', ['Uno', 'due', 'tre'],  
                                 ['quad','tre'], ['cinque'])
-        allArgs = self.mut.getApiArgsForMethod('DummyMethod')
-        self.assertEqual(['Uno', 'due', 'tre', 'quad'], allArgs )
+        self.mut.registerArgNonApi('DummyMethod', 'sei')
+        a_def = self.mut._apiMethodsArgs['DummyMethod']
+        self.assertEqual((['Uno', 'due', 'tre'], 
+                          ['Uno', 'due', 'tre', 'quad'],
+                          ['cinque', 'sei']), a_def )
+        
+    def test_getArgsForMethod_onlyOptionalArgs(self):
+        self.mut.registerMethod('DummyMethod', ['Uno', 'due', 'tre'],  
+                                ['quad','tre'])
+        response = self.mut.getArgsForMethod('DummyMethod')
+        self.assertEqual(response, (['Uno', 'due', 'tre', 'quad'], []) )
+        
+    def test_getArgsForMethod_OptionalAndPositionalArgs(self):
+        self.mut.registerMethod('DummyMethod', ['Uno', 'due', 'tre'],  
+                                ['quad','tre']) 
+        response = self.mut.getArgsForMethod('DummyMethod', ['Uno', 'quad'])
+        self.assertEqual(response, (['due', 'tre'], []) )
+
+    def test_getArgsForMethod_nonApiArgs(self):
+        self.mut.registerMethod('DummyMethod', ['Uno', 'due', 'tre'],  
+                                ['quad','tre'], ['cinque'])
+        response = self.mut.getArgsForMethod('DummyMethod', 
+                                             ['Uno', 'due', 'tre'])
+        self.assertEqual(response,  (['quad'], ['cinque']) )
+
+    def test_getArgsForMethod_unknownMethods(self):
+        with self.assertRaisesRegexp(testlinkargs.TLArgError, 
+                                     'unknownMethod not registered'):
+            self.mut.getArgsForMethod('unknownMethod')
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

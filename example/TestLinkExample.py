@@ -88,16 +88,21 @@ NEWTESTSUITE_B="B - First Level"
 NEWTESTSUITE_AA="AA - Second Level"
 NEWTESTCASE_AA="TESTCASE_AA"
 NEWTESTCASE_B="TESTCASE_B"
-NEWBUILD="Build v0.4.5"
+NEWBUILD='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
 
 NEWATTACHMENT_PY= os.path.realpath(__file__)
 this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
 NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
+# example asking the api client about methods arguments
+print myTestLink.whatArgs('createTestCase')
+
+
 # -- Start CHANGE v0.4.5 -- 
 # if myTestLink.checkDevKey() != True:
 #     print "Error with the devKey."      
 #     sys.exit(-1)
+
 # example handling Response Error Codes
 # first check an invalid devKey and than the own one
 try:

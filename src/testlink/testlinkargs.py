@@ -29,7 +29,7 @@ supported TestLink API methods and there (positional and optional) arguments """
 #
 # definitions structure is
 # key(apiMethodeName) = ( [default positional apiArgs], [all apiArgs], 
-#                         [other mandatory Args] )
+#                         [other mandatory non api Args] )
 # [all apiArgs] includes all positional and optional args without other 
 #  mandatory Args
 _apiMethodsArgs = {}
@@ -53,11 +53,9 @@ def registerMethod(methodName, apiArgsPositional=[], apiArgsOptional=[],
 
         definitions structure is
         key(apiMethodeName) = ( [default positional apiArgs], [all apiArgs], 
-                                 [other mandatory Args] )
+                                 [other mandatory non api Args] )
        [all apiArgs] includes all positional and optional args without other 
        mandatory Args  """ 
-       
-    print 'register args for', methodName
        
     if methodName in _apiMethodsArgs:
         raise TLArgError('apiMethod %s already registered!' % methodName)
@@ -76,6 +74,13 @@ def registerArgOptional(methodName, argName):
     if not argName in allArgs:
         allArgs.append(argName)
     
+def registerArgNonApi(methodName, argName):
+    """ Update _apiMethodsArgs[methodName] with additional non api argument """ 
+       
+    nonApiArgs = _getMethodsArgDefinition(methodName)[2]
+    if not argName in nonApiArgs:
+        nonApiArgs.append(argName)
+    
 
 def getMethodsWithPositionalArgs():
     """ returns a dictionary with method names and there positional args """
@@ -86,6 +91,26 @@ def getMethodsWithPositionalArgs():
             positionalArgNames[mname] = argdef[0][:]
     return positionalArgNames
 
-def getApiArgsForMethod(methodName):
-    """ returns list with all argument name api methodName """
-    return _getMethodsArgDefinition(methodName)[1][:]
+# def getApiArgsForMethod(methodName):
+#     """ returns list with all api argument name for METHODNAME """
+#     return _getMethodsArgDefinition(methodName)[1][:]
+
+def getArgsForMethod(methodName, knownArgNames=[]):
+    """ returns for METHODNAME additional arg names as a tuple with two lists 
+        a) optional api arguments, not listed in knownArgNames
+        b) additional mandatory non api arguments 
+        
+        raise TLArgError, if METHODNAME is not registered """ 
+    
+    # argument definitions in _apiMethodsArgs 
+    argDef = _getMethodsArgDefinition(methodName)
+    
+    # find missing optional arg names
+    apiArgsAll = argDef[1]
+    apiArgs = [x for x in apiArgsAll if x not in knownArgNames]
+    
+    # other mandatory arg names
+    manArgs = argDef[2][:]
+    
+    return (apiArgs, manArgs)
+    
