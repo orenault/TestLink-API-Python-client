@@ -94,26 +94,18 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey            
     @decoMakerApiCallWithArgs(['testplanid'])
     def getLatestBuildForTestPlan(self):
-        """ getLatestBuildForTestPlan: Gets the latest build by choosing the 
-                                    maximum build id for a specific test plan 
-        positional args: testplanid
-        optional args : --- """
+        """ Gets the latest build by choosing the maximum build id for a specific test plan """
     
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid'], 
                               ['testcaseid', 'testcaseexternalid'])
     def getLastExecutionResult(self):
-        """ getLastExecutionResult: 
-        Gets the result of LAST EXECUTION for a particular testcase
-        on a test plan, but WITHOUT checking for a particular build
-        positional args: testplanid
-        optional args : testcaseid, testcaseexternalid """
+        """ Gets the result of LAST EXECUTION for a particular testcase on a test plan, 
+ but WITHOUT checking for a particular build """
 
     @decoApiCallWithoutArgs
     def sayHello(self):
-        """ sayHello: Lets you see if the server is up and running
-        positional args: ---
-        optional args : --- """
+        """ Lets you see if the server is up and running """
 
     def ping(self):
         """ alias for methodAPI sayHello """ 
@@ -121,38 +113,28 @@ class TestlinkAPIGeneric(object):
     
     @decoMakerApiCallWithArgs(['str'])
     def repeat(self):
-        """ repeat: Repeats a message back
-        positional args: str
-        optional args : --- """
+        """ Repeats a message back """
     
     @decoApiCallWithoutArgs
     def about(self):
-        """ about: Gives basic information about the API
-        positional args: ---
-        optional args : --- """
+        """ Gives basic information about the API """
 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid', 'buildname'], 
                               ['buildnotes'])
     def createBuild(self):
-        """ createBuild: Creates a new build for a specific test plan
-        positional args: testplanid, buildname
-        optional args : buildnotes """
+        """ Creates a new build for a specific test plan """
 
     @decoApiCallAddDevKey            
     @decoMakerApiCallWithArgs()
     def getProjects(self):
-        """ getProjects: Gets a list of all projects
-        positional args: ---
-        optional args : --- """
+        """ Gets a list of all projects """
 
     @decoMakerApiCallReplaceTLResponseError()            
     @decoApiCallAddDevKey
     @decoMakerApiCallWithArgs(['testprojectid'])
     def getProjectTestPlans(self):
-        """ getProjectTestPlans: Gets a list of test plans within a project
-        positional args: testprojectid
-        optional args : ---  
+        """ Gets a list of test plans within a project   
         
         returns an empty list, if no testplan is assigned """
 
@@ -160,9 +142,7 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid'])
     def getBuildsForTestPlan(self):
-        """ getBuildsForTestPlan : Gets a list of builds within a test plan 
-        positional args: testplanid
-        optional args : --- 
+        """ Gets a list of builds within a test plan 
         
         returns an empty list, if no build is assigned """
 
@@ -170,9 +150,7 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid'])
     def getTestSuitesForTestPlan(self):
-        """ getTestSuitesForTestPlan : List test suites within a test plan alphabetically
-        positional args: testplanid
-        optional args : ---  
+        """ List test suites within a test plan alphabetically
         
         returns an empty list, if no build is assigned """
         
@@ -180,9 +158,7 @@ class TestlinkAPIGeneric(object):
     @decoMakerApiCallWithArgs(['testprojectname', 'testcaseprefix'],
                               ['notes', 'active', 'public', 'options'])
     def createTestProject(self):
-        """ createTestProject : Create a test project  
-        positional args: testprojectname, testcaseprefix
-        optional args : notes,  active, public, options
+        """ Create a test project  
         
         options : dictionary with keys
                     requirementsEnabled, testPriorityEnabled, 
@@ -193,9 +169,7 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testsuiteid'], ['deep', 'details'])
     def getTestCasesForTestSuite(self):
-        """ getTestCasesForTestSuite : List test suites within a test plan alphabetically
-        positional args: testsuiteid
-        optional args : deep, details
+        """ List test suites within a test plan alphabetically
         
         details - default is 'simple', 
                   use 'full' if you want to get summary,steps & expected_results
@@ -207,9 +181,7 @@ class TestlinkAPIGeneric(object):
     @decoMakerApiCallWithArgs(['testcasename'], 
                     ['testsuitename', 'testprojectname', 'testcasepathname'])
     def getTestCaseIDByName(self):
-        """ getTestCaseIDByName : Find a test case by its name 
-        positional args: testcasename, 
-        optional args : testsuitename, testprojectname, testcasepathname
+        """ Find a test case by its name 
         
         testcasepathname : Full test case path name, 
                 starts with test project name , pieces separator -> ::   
@@ -222,11 +194,7 @@ class TestlinkAPIGeneric(object):
                 ['preconditions', 'importance', 'execution', 'order', 
                  'internalid', 'checkduplicatedname', 'actiononduplicatedname'])
     def createTestCase(self):
-        """ createTestCase: Create a test case
-        positional args: testcasename, testsuiteid, testprojectid, authorlogin,
-                         summary, steps
-        optional args : preconditions, importance, execution, order, internalid,
-                        checkduplicatedname, actiononduplicatedname 
+        """ Create a test case
                         
             steps is a list with dictionaries , example
             [{'step_number' : 1, 'actions' : "action A" , 
@@ -243,16 +211,15 @@ class TestlinkAPIGeneric(object):
                  'platformid', 'platformname', 'notes', 'guess', 'bugid', 
                  'customfields', 'overwrite'])
     def reportTCResult(self):
-        """ reportTCResult : Reports a result for a single test case
-        positional args: testplanid, status
-        optional args (variations): testcaseid - testcaseexternalid
-                                    buildid - buildname
-                                    platformid - platformname
-        optional args : notes, guess, bugid, customfields, overwrite 
+        """ Reports a result for a single test case
+
+        args variations: testcaseid - testcaseexternalid
+                         buildid - buildname
+                         platformid - platformname
         
         customfields : dictionary with customfields names + values
             VERY IMPORTANT: value must be formatted in the way it's written to db
- """
+             """
 
 #   /**
 #    * turn on/off testMode
@@ -270,14 +237,10 @@ class TestlinkAPIGeneric(object):
                 ['testcaseid', 'keywordid', 'keywords', 'executed', 'assignedto', 
                  'executestatus', 'executiontype', 'getstepinfo', 'details'])
     def getTestCasesForTestPlan(self):
-        """ getTestCasesForTestPlan : List test cases linked to a test plan
-        positional args: testplanid
-        optional args : testcaseid, keywordid, keywords, executed, assignedto,
-                        executestatus, executiontype, getstepinfo, details
+        """ List test cases linked to a test plan
         
         details - default is 'full', 
                   'simple', 'details' ??
-
         
         returns an empty list, if no build is assigned """
 
@@ -285,11 +248,7 @@ class TestlinkAPIGeneric(object):
     @decoMakerApiCallWithArgs(['testcaseexternalid', 'version', 'testprojectid', 
                                'customfieldname'], ['details'])
     def getTestCaseCustomFieldDesignValue(self):
-        """ getTestCaseCustomFieldDesignValue : 
-        Gets value of a Custom Field with scope='design' for a given Test case
-        positional args: testcaseexternalid, version, testprojectid, 
-                        customfieldname
-        optional args :  details
+        """ Gets value of a Custom Field with scope='design' for a given Test case
         
         details =  changes output information
             null or 'value' => just value
@@ -319,12 +278,8 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testprojectid'])
     def getFirstLevelTestSuitesForTestProject(self):
-        """ getFirstLevelTestSuitesForTestProject :  get set of test suites 
-                            AT TOP LEVEL of tree on a Test Project
+        """ get set of test suites AT TOP LEVEL of tree on a Test Project
                             
-        positional args: testprojectid
-        optional args : ---  
-        
         returns an empty list, if no suite is assigned (api error 7008) 
         - details see comments for decoMakerApiCallReplaceTLResponseError """
 
@@ -347,43 +302,32 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs([], ['testcaseid', 'testcaseexternalid'])
     def getTestCaseAttachments(self):
-        """ getTestCaseAttachments: Gets attachments for specified test case.
+        """ Gets attachments for specified test case.
         The attachment file content is Base64 encoded. To save the file to disk 
-        in client, Base64 decode the content and write file in binary mode. 
-        positional args: ---
-        optional args : testcaseid, testcaseexternalid """
+        in client, Base64 decode the content and write file in binary mode.  """
 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testprojectid', 'testsuitename', 'details'], 
                               ['parentid', 'order', 'checkduplicatedname', 
                                'actiononduplicatedname'])
     def createTestSuite(self):
-        """ createTestSuite: create a test suite
-        positional args: testprojectid, testsuitename, details
-        optional args : parentid, order, checkduplicatedname, 
-                        actiononduplicatedname """
+        """ create a test suite """
 
     @decoApiCallAddDevKey            
     @decoMakerApiCallWithArgs(['testprojectname'])
     def getTestProjectByName(self):
-        """ getTestProjectByName: Gets info about target test project
-        positional args: testprojectname
-        optional args : --- """
+        """ Gets info about target test project """
 
     @decoApiCallAddDevKey            
     @decoMakerApiCallWithArgs(['testprojectname', 'testplanname'])
     def getTestPlanByName(self):
-        """ getTestPlanByName: Gets info about target test project
-        positional args: testprojectname, testplanname
-        optional args : --- """
+        """ Gets info about target test project """
 
 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs([], ['testcaseid', 'testcaseexternalid', 'version'])
     def getTestCase(self):
-        """ getTestCase: get test case specification using external or internal id
-        positional args: ---
-        optional args : testcaseid, testcaseexternalid, version
+        """ get test case specification using external or internal id
         
         attention - becareful with testcaseexternalid - it must inlcude an '-'. 
         otherwise TL returns 
@@ -393,18 +337,13 @@ class TestlinkAPIGeneric(object):
     @decoMakerApiCallWithArgs(['testplanname', 'testprojectname'], 
                               ['note', 'active', 'public'])
     def createTestPlan(self):
-        """ createTestPlan : create a test plan
-        positional args: testplanname, testprojectname
-        optional args : notes,  active, public """
+        """ create a test plan """
 
 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['nodeid'])
     def getFullPath(self):
-        """ getFullPath : Gets full path from the given node till the top using 
-                          nodes_hierarchy_table
-        positional args: nodeid
-        optional args : ---  
+        """ Gets full path from the given node till the top using nodes_hierarchy_table
         
         nodeid = can be just a single id or a list with ids 
                  ATTENTION: id must be an integer. """
@@ -428,20 +367,13 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testsuiteid'])
     def getTestSuiteByID(self):
-        """ getTestSuiteByID : Return a TestSuite by ID
-        
-        positional args: testsuiteid
-        optional args : ---  """
-
+        """ Return a TestSuite by ID """
 
     @decoMakerApiCallReplaceTLResponseError()            
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testsuiteid'])
     def getTestSuitesForTestSuite(self):
-        """ getTestSuitesForTestSuite :  get list of TestSuites which are DIRECT
-                                         children of a given TestSuite
-        positional args: testsuiteid
-        optional args : ---  
+        """ get list of TestSuites which are DIRECT children of a given TestSuite
         
         returns an empty list, if no platform is assigned """
 
@@ -449,10 +381,7 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid'])
     def getTestPlanPlatforms(self):
-        """ getTestPlanPlatforms :  Returns the list of platforms associated to 
-                                    a given test plan
-        positional args: testplanid
-        optional args : ---  
+        """ Returns the list of platforms associated to a given test plan
         
         returns an empty list, if no platform is assigned (api error 3041) 
         - details see comments for decoMakerApiCallReplaceTLResponseError """
@@ -460,23 +389,17 @@ class TestlinkAPIGeneric(object):
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid'])
     def getTotalsForTestPlan(self):
-        """ getTotalsForTestPlan :  Gets the summarized results grouped by platform.
-        positional args: testplanid
-        optional args : ---  """
+        """ Gets the summarized results grouped by platform. """
 
     @decoMakerApiCallWithArgs(['user'])
     def doesUserExist(self):
-        """ doesUserExist : Checks if user name exists 
-        positional args: user
-        optional args : --- 
+        """ Checks if user name exists 
         returns true if everything OK, otherwise error structure """
                
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['devKey'])
     def checkDevKey(self):
-        """ checkDevKey :  check if Developer Key exists 
-        positional args: ---
-        optional args : --- 
+        """ check if Developer Key exists 
         returns true if everything OK, otherwise error structure """
         
 # /**
@@ -589,10 +512,8 @@ class TestlinkAPIGeneric(object):
     @decoMakerApiCallWithArgs(['executionid'], 
                     ['title', 'description', 'filename', 'filetype', 'content'])
     def uploadExecutionAttachment(self):
-        """ uploadExecutionAttachment: Uploads an attachment for an execution
-        mandatory args: attachmentfile
-        positional args: executionid
-        optional args : title, description, filename, filetype, content
+        """ Uploads an attachment for an execution
+        mandatory non api args: attachmentfile
         
         attachmentfile: python file descriptor pointing to the file
         !Attention - on WINDOWS use binary mode for none text file
