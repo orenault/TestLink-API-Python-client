@@ -52,7 +52,7 @@ The user specific devKey are created inside TestLink, see
 ```
 [PYTHON27]\Scripts\virtualenv [PYENV]\testlink
 [PYENV]\testlink\Scripts\activate
-python setup.py install
+pip install TestLink-0.4.5-RC1.zip
 ```
 
 ### Run example with command line arguments
@@ -97,9 +97,38 @@ Download
 --------
 
 see [Releases]
+*    please read [v0.4.5 release notes](https://github.com/lczub/TestLink-API-Python-client/releases/tag/v0.4.5-RC1)
+     for changes between v0.4.0 and v0.4.5    
+
+Help
+----
 
 Questions, Enhancements, Issues are welcome under [Issues]
 
+For (nearly all) implemented API methods you find in 
+[example/TestLinkExample.py](https://github.com/lczub/TestLink-API-Python-client/blob/master/example/TestLinkExample.py) 
+an example, which although prints the reponse.
+
+The Teslink API Client could be ask, what arguments a API method expects
+
+```
+import testlink
+tlh = testlink.TestLinkHelper()
+tls = tlh.connect(testlink.TestlinkAPIClient)
+print tls.whatArgs('createTestPlan')
+createTestPlan(<testplanname>, <testprojectname>, [note=<note>], [active=<active>], [public=<public>], [devKey=<devKey>])
+ create a test plan 
+```
+
+or a description of all implemented API method could be generated
+
+```
+import testlink
+tlh = testlink.TestLinkHelper()
+tls = tlh.connect(testlink.TestlinkAPIClient)
+for m in testlink.testlinkargs._apiMethodsArgs.keys():
+	print tls.whatArgs(m), '\n'
+```
 
 TestLink-API-Python-client developers
 -------------------------------------
