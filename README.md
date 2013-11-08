@@ -106,7 +106,7 @@ Help
 Questions, Enhancements, Issues are welcome under [Issues]
 
 For (nearly all) implemented API methods you find in 
-[example/TestLinkExample.py](https://github.com/lczub/TestLink-API-Python-client/blob/master/example/TestLinkExample.py) 
+[example/TestLinkExample.py](example/TestLinkExample.py) 
 an example, which although prints the reponse.
 
 The Teslink API Client could be ask, what arguments a API method expects
