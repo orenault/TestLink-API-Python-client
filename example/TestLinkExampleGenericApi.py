@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2011-2013 Olivier Renault, Luiko Czub, TestLink-API-Python-client developers
+#  Copyright 2013 Luiko Czub, TestLink-API-Python-client developers
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -20,11 +20,8 @@
 
 """
 
-TestLinkExample - v0.20
-Created on 6 nov. 2011
-@author: Olivier Renault (admin@sqaopen.net)
-
-Shows how to use the TestLinkAPI.
+Shows how to use the TestLinkAPIGeneric.
+- does equal things as Example TestLinkAPI in TestLinkExample.py
 
 => Counts and lists the Projects 
 => Create a new Project with the following structure:
@@ -45,15 +42,8 @@ NewProject
                           --------- Test Case B
                                            |   
                                            --- 5 automated test steps
-                                           
-Update Oct. 2013, L. Czub
-Integrates v0.4.5 changes for  optional arguments and response error handling
-The v0.4.0 method calls are still visible as comments (look for CHANGE v0.4.5)
-So this file helps to understand where existing own code needs adjustment.
--  
-used as behaviour is still                                             
 """                                       
-from testlink import TestlinkAPIClient, TestLinkHelper
+from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 import sys, os.path
 
@@ -76,13 +66,13 @@ tl_helper = TestLinkHelper()
 tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI.
 => Counts and lists the Projects 
 => Create a new Project with the following structure:''')
-myTestLink = tl_helper.connect(TestlinkAPIClient) 
+myTestLink = tl_helper.connect(TestlinkAPIGeneric) 
 
 projNr=len(myTestLink.getProjects())+1
 
-NEWPROJECT="NEW_PROJECT_API-%i" % projNr
-NEWPREFIX="NPROAPI%i" % projNr
-NEWTESTPLAN="TestPlan_API"
+NEWPROJECT="PROJECT_API_GENERIC-%i" % projNr
+NEWPREFIX="GPROAPI%i" % projNr
+NEWTESTPLAN="TestPlan_API_GENERIC"
 NEWTESTSUITE_A="A - First Level"
 NEWTESTSUITE_B="B - First Level"
 NEWTESTSUITE_AA="AA - Second Level"
@@ -98,11 +88,6 @@ NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 print myTestLink.whatArgs('createTestCase')
 
 
-# -- Start CHANGE v0.4.5 -- 
-# if myTestLink.checkDevKey() != True:
-#     print "Error with the devKey."      
-#     sys.exit(-1)
-
 # example handling Response Error Codes
 # first check an invalid devKey and than the own one
 try:
@@ -113,168 +98,100 @@ except TLResponseError as tl_err:
         # now check the own one - just call with default settings
         myTestLink.checkDevKey()
     else:
-        # seems to be another response failure - we forward it 
+        # seems to be another response failure -  we forward it
         raise   
-# -- END CHANGE v0.4.5 -- 
-            
 
-print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)
+print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())
 print ""
-myTestLink.listProjects()
+for project in myTestLink.getProjects():
+    print "Name: %(name)s ID: %(id)s " % project
 print ""
 
-# Creates the project
-
-# -- Start CHANGE v0.4.5 -- 
-# newProject = myTestLink.createTestProject(NEWPROJECT, "NPROAPI",
-# "notes=This is a Project created with the API", "active=1", "public=1",
-# "options=requirementsEnabled:0,testPriorityEnabled:1,automationEnabled:1,inventoryEnabled:0")
-# isOk = newProject[0]['message']
-# if isOk=="Success!":
-#   newProjectID = newProject[0]['id'] 
-#   print "New Project '%s' - id: %s" % (NEWPROJECT,newProjectID)
-# else:
-#   print "Error creating the project '%s': %s " % (NEWPROJECT,isOk)
-#   sys.exit(-1)
-newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX,
-    notes='This is a Project created with the API', active=1, public=1,
-    options={'requirementsEnabled' : 0, 'testPriorityEnabled' : 1,
-             'automationEnabled' : 1, 'inventoryEnabled' : 0})
+# # Creates the project
+newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX, 
+    notes='This is a Project created with the Generic API', active=1, public=1,
+    options={'requirementsEnabled' : 1, 'testPriorityEnabled' : 1, 
+             'automationEnabled' : 1,  'inventoryEnabled' : 1})
 print "createTestProject", newProject
-newProjectID = newProject[0]['id']
+newProjectID = newProject[0]['id'] 
 print "New Project '%s' - id: %s" % (NEWPROJECT,newProjectID)
-# -- END CHANGE v0.4.5 -- 
-
+ 
 # Creates the test plan
-# -- Start CHANGE v0.4.5 -- 
-# newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
-#             "notes=New TestPlan created with the API","active=1", "public=1")    
-# isOk = newTestPlan[0]['message']
-# if isOk=="Success!":
-#   newTestPlanID = newTestPlan[0]['id'] 
-#   print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,newTestPlanID)
-# else:
-#   print "Error creating the Test Plan '%s': %s " % (NEWTESTPLAN, isOk)
-#   sys.exit(-1)
 newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
-            notes='New TestPlan created with the API',active=1, public=1)    
+            notes='New TestPlan created with the Generic API',active=1, public=1)    
 print "createTestPlan", newTestPlan
-newTestPlanID = newTestPlan[0]['id']
+newTestPlanID = newTestPlan[0]['id'] 
 print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,newTestPlanID)
-# -- END CHANGE v0.4.5 -- 
-
+ 
 #Creates the test Suite A      
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_A,
             "Details of the Test Suite A")  
-# -- Start CHANGE v0.4.5 -- 
-# isOk = newTestSuite[0]['message']
-# if isOk=="ok":
-#   newTestSuiteID = newTestSuite[0]['id'] 
-#   print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, newTestSuiteID)
-# else:
-#   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_A, isOk)
-#   sys.exit(-1)
 print "createTestSuite", newTestSuite
-newTestSuiteID_A = newTestSuite[0]['id']
+newTestSuiteID_A = newTestSuite[0]['id'] 
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, newTestSuiteID_A)
-# -- END CHANGE v0.4.5 -- 
-
-FirstLevelID = newTestSuiteID_A
  
+FirstLevelID = newTestSuiteID_A
+  
 #Creates the test Suite B      
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_B,
             "Details of the Test Suite B")               
-# -- Start CHANGE v0.4.5 -- 
-# isOk = newTestSuite[0]['message']
-# if isOk=="ok":
-#   TestSuiteID_B = newTestSuite[0]['id'] 
-#   print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, TestSuiteID_B)
-# else:
-#   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_B, isOk)
-#   sys.exit(-1)
 print "createTestSuite", newTestSuite
-newTestSuiteID_B = newTestSuite[0]['id']
+newTestSuiteID_B = newTestSuite[0]['id'] 
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, newTestSuiteID_B)
-# -- END CHANGE v0.4.5 -- 
-
+ 
 #Creates the test Suite AA       
-# -- Start CHANGE v0.4.5 -- 
-# newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
-#             "Details of the Test Suite AA","parentid="+FirstLevelID)               
-# isOk = newTestSuite[0]['message']
-# if isOk=="ok":
-#   TestSuiteID_AA = newTestSuite[0]['id'] 
-#   print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, TestSuiteID_AA)
-# else:
-#   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_AA, isOk)
-#   sys.exit(-1)
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
             "Details of the Test Suite AA",parentid=FirstLevelID)               
 print "createTestSuite", newTestSuite
-newTestSuiteID_AA = newTestSuite[0]['id']
+newTestSuiteID_AA = newTestSuite[0]['id'] 
 print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, newTestSuiteID_AA)
-# -- END CHANGE v0.4.5 -- 
-
+ 
 MANUAL = 1
 AUTOMATED = 2
-
-#Creates the test case TC_AA  
-myTestLink.initStep("Step action 1", "Step result 1", MANUAL)
-myTestLink.appendStep("Step action 2", "Step result 2", MANUAL)
-myTestLink.appendStep("Step action 3", "Step result 3", MANUAL)
-myTestLink.appendStep("Step action 4", "Step result 4", MANUAL)
-myTestLink.appendStep("Step action 5", "Step result 5", MANUAL)
-     
-# -- Start CHANGE v0.4.5 -- 
-# newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, TestSuiteID_AA, 
-#           newProjectID, "admin", "This is the summary of the Test Case AA", 
-#           "preconditions=these are the preconditions")                 
-# isOk = newTestCase[0]['message']
-# if isOk=="Success!":
-#   newTestCaseID_AA = newTestCase[0]['id'] 
-#   print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA)
-# else:
-#   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_AA, isOk)
-#   sys.exit(-1)
+# 
+# #Creates the test case TC_AA
+steps_tc_aa = [
+        {'step_number' : 1, 'actions' : "Step action 1 - aa" , 
+         'expected_results' : "Step result 1 - aa", 'execution_type' : MANUAL},
+        {'step_number' : 2, 'actions' : "Step action 2 - aa" , 
+         'expected_results' : "Step result 2 - aa", 'execution_type' : MANUAL},
+        {'step_number' : 3, 'actions' : "Step action 3 - aa" , 
+         'expected_results' : "Step result 3 - aa", 'execution_type' : MANUAL},
+        {'step_number' : 4, 'actions' : "Step action 4 - aa" , 
+         'expected_results' : "Step result 4 - aa", 'execution_type' : MANUAL},
+        {'step_number' : 5, 'actions' : "Step action 5 - aa" , 
+         'expected_results' : "Step result 5 - aa", 'execution_type' : MANUAL}
+               ]  
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, newTestSuiteID_AA, 
           newProjectID, "admin", "This is the summary of the Test Case AA", 
-          preconditions='these are the preconditions')
+          steps_tc_aa, preconditions='these are the preconditions')                 
 print "createTestCase", newTestCase
-newTestCaseID_AA = newTestCase[0]['id']
-print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA)              
-# -- END CHANGE v0.4.5 -- 
-
-#Creates the test case TC_B  
-myTestLink.initStep("Step action 1", "Step result 1", AUTOMATED)
-myTestLink.appendStep("Step action 2", "Step result 2", AUTOMATED)
-myTestLink.appendStep("Step action 3", "Step result 3", AUTOMATED)
-myTestLink.appendStep("Step action 4", "Step result 4", AUTOMATED)
-myTestLink.appendStep("Step action 5", "Step result 5", AUTOMATED)
-     
-# -- Start CHANGE v0.4.5 -- 
-# newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, TestSuiteID_B, 
-#           newProjectID, "admin", "This is the summary of the Test Case B", 
-#           "preconditions=these are the preconditions", 
-#           "executiontype=%i" % AUTOMATED)               
-# isOk = newTestCase[0]['message']
-# if isOk=="Success!":
-#   newTestCaseID_B = newTestCase[0]['id'] 
-#   print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
-# else:
-#   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_B, isOk)
-#   sys.exit(-1)
+newTestCaseID_AA = newTestCase[0]['id'] 
+print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA)
+ 
+#Creates the test case TC_B 
+steps_tc_b = [
+        {'step_number' : 1, 'actions' : "Step action 1 -b " , 
+         'expected_results' : "Step result 1 - b", 'execution_type' : AUTOMATED},
+        {'step_number' : 2, 'actions' : "Step action 2 -b " , 
+         'expected_results' : "Step result 2 - b", 'execution_type' : AUTOMATED},
+        {'step_number' : 3, 'actions' : "Step action 3 -b " , 
+         'expected_results' : "Step result 3 - b", 'execution_type' : AUTOMATED},
+        {'step_number' : 4, 'actions' : "Step action 4 -b " , 
+         'expected_results' : "Step result 4 - b", 'execution_type' : AUTOMATED},
+        {'step_number' : 5, 'actions' : "Step action 5 -b " , 
+         'expected_results' : "Step result 5 - b", 'execution_type' : AUTOMATED}]
+      
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, newTestSuiteID_B, 
           newProjectID, "admin", "This is the summary of the Test Case B", 
-          preconditions='these are the preconditions', executiontype=AUTOMATED)
+          steps_tc_b, preconditions='these are the preconditions', 
+          executiontype=AUTOMATED)               
 print "createTestCase", newTestCase
-newTestCaseID_B = newTestCase[0]['id']
-print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)               
-# -- END CHANGE v0.4.5 -- 
-  
-# -- New Examples with v0.4.5 -- 
+newTestCaseID_B = newTestCase[0]['id'] 
+print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
   
 # Add  test cases to test plan - we need the full external id !
-tc_aa_full_ext_id = myTestLink.getTestCase(newTestCaseID_AA)[0]['full_tc_external_id']
+tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)[0]['full_tc_external_id']
 response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan', 
                 devKey=myTestLink.devKey, testprojectid=newProjectID, 
                 testplanid=newTestPlanID, testcaseexternalid=tc_aa_full_ext_id,
@@ -286,38 +203,40 @@ response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan',
                 testplanid=newTestPlanID, testcaseexternalid=tc_b_full_ext_id,
                 version=1)
 print "addTestCaseToTestPlan", response
-  
+
 # -- Create Build
-newBuild = myTestLink.createBuild(newTestPlanID, NEWBUILD, 'Notes for the Build')
+newBuild = myTestLink.createBuild(newTestPlanID, NEWBUILD, 
+                                  buildnotes='Notes for the Build')
 print "createBuild", newBuild
 newBuildID = newBuild[0]['id'] 
 print "New Build '%s' - id: %s" % (NEWBUILD, newBuildID)
   
 # report Test Case Results
 # TC_AA failed, build should be guessed, TC identified with external id
-newResult = myTestLink.reportTCResult(None, newTestPlanID, None, 'f', '', guess=True,
+newResult = myTestLink.reportTCResult(newTestPlanID, 'f', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id)
 print "reportTCResult", newResult
 newResultID_AA = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id
-newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID, NEWBUILD,
-                                      'p', 'first try')
-print "reportTCResult", newResult 
+newResult = myTestLink.reportTCResult(newTestPlanID, 'p', 
+                buildid=newBuildID, testcaseid=newTestCaseID_B, 
+                notes="first try")
+print "reportTCResult", newResult
 newResultID_B = newResult[0]['id']
 
-# add this (text) file as Attachemnt to last execution of TC_B  with 
-# different filename 'MyPyExampleApiClient.py'
+# add this python file as Attachemnt to last execution of TC_B with 
+# different filename 'MyPyExampleApiGeneric.py'
 a_file=open(NEWATTACHMENT_PY)
 newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_B, 
-            'Textfile Example', 'Text Attachment Example for a TestCase',
-            filename='MyPyExampleApiClient.py')
+        title='Textfile Example', description='Text Attachment Example for a TestCase',
+        filename='MyPyExampleApiGeneric.py')
 print "uploadExecutionAttachment", newAttachment
 # add png file as Attachemnt to last execution of TC_AA
 # !Attention - on WINDOWS use binary mode for none text file
 # see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 a_file=open(NEWATTACHMENT_PNG, mode='rb')
 newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_AA, 
-            'PNG Example', 'PNG Attachment Example for a TestCase')
+            title='PNG Example', description='PNG Attachment Example for a TestCase')
 print "uploadExecutionAttachment", newAttachment
 
 # get information - TestProject
@@ -328,7 +247,7 @@ print "getProjectTestPlans", response
 response = myTestLink.getFirstLevelTestSuitesForTestProject(newProjectID)
 print "getFirstLevelTestSuitesForTestProject", response
 
-# get information - testPlan
+# get information - TestPlan
 response = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN)
 print "getTestPlanByName", response
 response = myTestLink.getTotalsForTestPlan(newTestPlanID)
@@ -342,10 +261,7 @@ print "getTestPlanPlatforms", response
 response = myTestLink.getTestSuitesForTestPlan(newTestPlanID)
 print "getTestSuitesForTestPlan", response
 # get failed Testcases 
-# -- Start CHANGE v0.4.5 -- 
-#response = myTestLink.getTestCasesForTestPlan(newTestPlanID, 'executestatus=f')
 response = myTestLink.getTestCasesForTestPlan(newTestPlanID, executestatus='f')
-# -- END CHANGE v0.4.5 -- 
 print "getTestCasesForTestPlan", response
 
 # get information - TestSuite
@@ -353,25 +269,26 @@ response = myTestLink.getTestSuiteByID(newTestSuiteID_B)
 print "getTestSuiteByID", response
 response = myTestLink.getTestSuitesForTestSuite(newTestSuiteID_A)
 print "getTestSuitesForTestSuite", response
-response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A, True, 'full')
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A,
+                                               deep=True, detail='full')
 print "getTestCasesForTestSuite", response
-response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 'only_id')
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B,
+                                               deep=False, detail='only_id')
 print "getTestCasesForTestSuite", response
 
-# get informationen - TestCase
-# -- Start CHANGE v0.4.5 -- 
-#response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, None, NEWPROJECT)
+# get informationen - TestCase_B
 response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
-# -- END CHANGE v0.4.5 -- 
 print "getTestCaseIDByName", response
+# get informationen - TestCase_AA via Pathname
 tcpathname = '::'.join([NEWPROJECT, NEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
 response = myTestLink.getTestCaseIDByName('unknown', testcasepathname=tcpathname)
 print "getTestCaseIDByName", response
 # get execution result
-response = myTestLink.getLastExecutionResult(newTestPlanID, None,
+response = myTestLink.getLastExecutionResult(newTestPlanID, 
                                              testcaseexternalid=tc_aa_full_ext_id)
 print "getLastExecutionResult", response
-response = myTestLink.getLastExecutionResult(newTestPlanID, newTestCaseID_B)
+response = myTestLink.getLastExecutionResult(newTestPlanID, 
+                                             testcaseid=newTestCaseID_B)
 print "getLastExecutionResult", response
 
 
@@ -383,22 +300,26 @@ print "getFullPath", response
 
 # no test data
 # response = myTestLink.getTestCaseCustomFieldDesignValue(
-#             tc_aa_full_ext_id, 1, newProjectID, 'cfieldname', 'simple')
+#             tc_aa_full_ext_id, 1, newProjectID, 'cfieldname', details='simple')
 # print "getTestCaseCustomFieldDesignValue", response
 print "getTestCaseCustomFieldDesignValue", "Sorry currently no testdata"
 
-# response = myTestLink.getTestCaseAttachments(None, testcaseexternalid=tc_aa_full_ext_id)
+# response = myTestLink.getTestCaseAttachments(testcaseexternalid=tc_aa_full_ext_id)
 # print "getTestCaseAttachments", response
-# response = myTestLink.getTestCaseAttachments(newTestCaseID_B)
+# response = myTestLink.getTestCaseAttachments(testcaseid=newTestCaseID_B)
 # print "getTestCaseAttachments", response
 print "getTestCaseAttachments", "Sorry currently no testdata"
 
 
-print ""
-print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)
-print ""
-myTestLink.listProjects()
 
-
+print ""
+print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())
+print ""
+for project in myTestLink.getProjects():
+    print "Name: %(name)s ID: %(id)s " % project
+print ""
 
  
+# 
+# 
+#  
