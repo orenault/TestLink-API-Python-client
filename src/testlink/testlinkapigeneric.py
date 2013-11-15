@@ -256,8 +256,8 @@ class TestlinkAPIGeneric(object):
                           plus value and internal test case id
             'simple' => value plus custom field name, label, and type (as code).
             
-        attention - becareful with testcaseexternalid - it must include an '-'. 
-        otherwise TL returns 
+        attention - be careful with testcaseexternalid - it must include an '-'. 
+        otherwise TL (<=1.9.8) returns 
         <ProtocolError for xmlrpc.php: 500 Internal Server Error>  """
 
 #    /**
@@ -329,8 +329,8 @@ class TestlinkAPIGeneric(object):
     def getTestCase(self):
         """ get test case specification using external or internal id
         
-        attention - becareful with testcaseexternalid - it must inlcude an '-'. 
-        otherwise TL returns 
+        attention - be careful with testcaseexternalid - it must include an '-'. 
+        otherwise TL (<=1.9.8) returns 
         <ProtocolError for xmlrpc.php: 500 Internal Server Error>"""
 
     @decoApiCallAddDevKey               

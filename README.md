@@ -52,7 +52,7 @@ The user specific devKey are created inside TestLink, see
 ```
 [PYTHON27]\Scripts\virtualenv [PYENV]\testlink
 [PYENV]\testlink\Scripts\activate
-pip install TestLink-0.4.5-RC1.zip
+pip install TestLink-0.4.5.zip
 ```
 
 Usage
@@ -115,7 +115,7 @@ Download
 --------
 
 see [Releases]
-*    please read [v0.4.5 release notes](https://github.com/lczub/TestLink-API-Python-client/releases/tag/v0.4.5-RC1)
+*    please read [v0.4.5 release notes](https://github.com/lczub/TestLink-API-Python-client/releases/tag/v0.4.5)
      for changes between v0.4.0 and v0.4.5    
 
 Help
@@ -127,7 +127,7 @@ For (nearly all) implemented API methods you find in
 [example/TestLinkExample.py](example/TestLinkExample.py) 
 an example, which although prints the reponse.
 
-The Teslink API Client could be ask, what arguments a API method expects
+The Teslink API Client can be asked, what arguments a API method expects
 
 ```
 import testlink
@@ -138,7 +138,7 @@ createTestPlan(<testplanname>, <testprojectname>, [note=<note>], [active=<active
  create a test plan 
 ```
 
-or a description of all implemented API method could be generated
+or a description of all implemented API method can be generated
 
 ```
 import testlink
