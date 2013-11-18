@@ -114,9 +114,11 @@ Use http://[YOURSERVER]/testlink/lib/api/xmlrpc/v1/xmlrpc.php
 Download
 --------
 
-see [Releases]
+latest stable release see [SourceForge]
 *    please read [v0.4.5 release notes](https://github.com/lczub/TestLink-API-Python-client/releases/tag/v0.4.5)
      for changes between v0.4.0 and v0.4.5    
+
+development version see [Releases]
 
 Help
 ----
@@ -162,6 +164,7 @@ TestLink-API-Python-client developers
 [Robot Framework]: http://code.google.com/p/robotframework
 [Jenkins]: http://jenkins-ci.org/
 [Releases]: https://github.com/lczub/TestLink-API-Python-client/releases
+[SourceForge]: http://sourceforge.net/projects/testlink-api-python-client/files/latest/download
 [Issues]: https://github.com/lczub/TestLink-API-Python-client/issues
 [Olivier Renault]: https://github.com/orenault/TestLink-API-Python-client
 [pade]: https://github.com/pade/TestLink-API-Python-client
