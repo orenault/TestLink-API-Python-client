@@ -27,8 +27,8 @@ decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs
 
 
 class TestlinkAPIGeneric(object): 
-    """ client for xmlrpc communication between Python and TestLlink 
-        Implements the Testlink API methods as generic PY methods with 
+    """ client for XML-RPC communication between Python and TestLink 
+        Implements the TestLink API methods as generic PY methods with 
         error handling.
         
         Allows the configuration of arguments for these API method as positional
@@ -1069,7 +1069,7 @@ class TestlinkAPIGeneric(object):
 
     def __str__(self):
         message = """
-Testlink API - class %s - version %s
+TestLink API - class %s - version %s
 @authors: %s
 
 Current connection settings

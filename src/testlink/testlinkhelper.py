@@ -24,7 +24,7 @@ from version import VERSION
 
 class TestLinkHelper(object):
     """ Helper Class to find out the TestLink connection parameters.
-    a) TestLink Server URL of XMLRPC
+    a) TestLink Server URL of XML-RPC
        environment variable - TESTLINK_API_PYTHON_SERVER_URL
        default value        - http://localhost/testlink/lib/api/xmlrpc.php
        command line arg     - server_url
@@ -47,7 +47,7 @@ class TestLinkHelper(object):
       tl_helper.connect(TestLink) 
       -> returns a TestLink instance
     
-    Attention: TL 197 changed the URL of XMLRPC 
+    Attention: TL 197 changed the URL of XML-RPC 
       from  http://localhost/testlink/lib/api/xmlrpc.php
       to    http://localhost/testlink/lib/api/xmlrpc/v1/xmlrpc.php
     """
@@ -58,7 +58,7 @@ class TestLinkHelper(object):
     ENVNAME_DEVKEY      = 'TESTLINK_API_PYTHON_DEVKEY'
     DEFAULT_SERVER_URL  = 'http://localhost/testlink/lib/api/xmlrpc.php'
     DEFAULT_DEVKEY      = '42'
-    DEFAULT_DESCRIPTION = 'Python XMLRPC client for the TestLink API v%s' \
+    DEFAULT_DESCRIPTION = 'Python XML-RPC client for the TestLink API v%s' \
                             % VERSION
 
     def __init__(self, server_url=None, devkey=None):
@@ -91,7 +91,7 @@ class TestLinkHelper(object):
         a_parser = ArgumentParser( description=usage)
         # optional command line parameters
         a_parser.add_argument('--server_url', default=self._server_url,
-                help='TestLink Server URL of XMLRPC (default: %(default)s) ')
+                help='TestLink Server URL of XML-RPC (default: %(default)s) ')
         # pseudo optional command line parameters, 
         # must be set individual for each user
         a_parser.add_argument('--devKey', default=self._devkey,

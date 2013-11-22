@@ -9,32 +9,31 @@ License [Apache License 2.0]
 Introduction
 ------------
 
-TestLink-API-Python-client is a Python XMLRPC client for the [TestLink API].
+TestLink-API-Python-client is a Python XML-RPC client for [TestLink].
 
-Initially based on the James Stock testlink-api-python-client R7 and  Olivier 
+Initially based on James Stock testlink-api-python-client R7 and  Olivier 
 Renault [JinFeng] idea - an interaction of [TestLink], [Robot Framework] and [Jenkins].
 
 TestLink-API-Python-client delivers two main classes
-*   TestlinkAPIGeneric - Implements the Testlink API methods as generic PY 
-    methods with error handling.
-    *   Allows the configuration of arguments for these API method as positional
-        or optional arguments.
-    
-*   TestlinkAPIClient - Inherits Testlink API methods from the generic client
-    TestlinkAPIGeneric and defines service methods like "countProjects".
-    *   Change the configuration for positional and optional arguments in a way, 
-        that often used arguments are positional (consistent with v0.4.0).
+
+- TestlinkAPIGeneric - Implements the TestLink API methods as generic PY methods
+  with error handling
+- TestlinkAPIClient - Inherits from TestlinkAPIGeneric and defines service 
+  methods like "countProjects".
 
 Directory Layout
 ----------------
 
 src/
+
 *   Source for TestLink API Python Client
 
 tests/
+
 *   Unit Tests for TestLink API Python Client
 
 examples/
+
 *   Examples, how to use the TestLink API Python Client
 
 Installation
@@ -58,7 +57,7 @@ pip install TestLink-0.4.5.zip
 Usage
 -----
 
-### Connect TestLink in a python shell
+### How to talk with TestLink in a python shell
 
 ```
 [PYENV]\testlink\Scripts\activate
@@ -127,9 +126,9 @@ Questions, Enhancements, Issues are welcome under [Issues]
 
 For (nearly all) implemented API methods you find in 
 [example/TestLinkExample.py](example/TestLinkExample.py) 
-an example, which although prints the reponse.
+an example, how to call it and how the response looks like.
 
-The Teslink API Client can be asked, what arguments a API method expects
+The TestLink API Client can be asked, what arguments a API method expects
 
 ```
 import testlink

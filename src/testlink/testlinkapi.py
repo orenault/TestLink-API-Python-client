@@ -23,9 +23,9 @@ from testlinkapigeneric import TestlinkAPIGeneric, TestLinkHelper
 
 
 class TestlinkAPIClient(TestlinkAPIGeneric):
-    """ client for xmlrpc communication between Python and TestLlink 
+    """ client for XML-RPC communication between Python and TestLink 
     
-        Inherits Testlink API methods from the generic client TestlinkAPIGeneric.
+        Inherits TestLink API methods from the generic client TestlinkAPIGeneric.
         
         Defines Service Methods like "countProjects" and change the 
         configuration for positional and optional arguments in a way, that often
