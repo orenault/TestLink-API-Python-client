@@ -54,7 +54,6 @@ How to talk with TestLink in a python shell: ::
  createTestPlan(<testplanname>, <testprojectname>, [note=<note>], [active=<active>], [public=<public>], [devKey=<devKey>])
    create a test plan 
 
- 
 More information about this library can be found on the Wiki_ 
 
 .. _TestLink: http://testlink.org

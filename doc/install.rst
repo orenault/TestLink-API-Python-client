@@ -11,13 +11,13 @@ TestLink configuration
 ----------------------
 
 The TestLink configuration (config.inc.php or custom_config.inc.php) must have 
-enabled the api interface
+enabled the api interface::
 
-   $tlCfg->api->enabled = TRUE;
+ $tlCfg->api->enabled = TRUE;
    
 Create the user specific devKey inside TestLink, see
 
--   My Settings -> API interface - Personal API access key [Generate a new key]
+- My Settings -> API interface - Personal API access key [Generate a new key]
 
 Installing from PyPI
 --------------------
@@ -27,7 +27,7 @@ with Release v0.4.6. It is recommended that you use `pip`_ to install.
 
 Install from PyPI using pip by running::
 
-	pip install TestLink-API-Python-client
+ pip install TestLink-API-Python-client
 
 Installing from source distribution
 -----------------------------------
@@ -39,7 +39,7 @@ The source code can be retrieved as source distribution either
 
 Install the archives using pip by running::
 
-    pip install TestLink-0.4.6.zip
+ pip install TestLink-0.4.6.zip
     
 Installing from source
 ----------------------    
@@ -47,7 +47,7 @@ Installing from source
 Install the extracted source distribution or download of the last (none tested) 
 changes from `GitHup Master`_ by running::
 
-    python setup.py install
+ python setup.py install
     
 Verifying Installation
 ----------------------
@@ -81,7 +81,7 @@ Changed SERVER_URL with TestLink 1.9.7
 The SERVER_URL path has changed with TestLink 1.9.7.
 
 - TL Version < 1.9.7: Use http://[YOURSERVER]/testlink/lib/api/xmlrpc.php
-- TL Version =>1.9.7: Use http://[YOURSERVER]/testlink/lib/api/xmlrpc/v1/xmlrpc.php
+- TL Version >=1.9.7: Use http://[YOURSERVER]/testlink/lib/api/xmlrpc/v1/xmlrpc.php
 
 Install in virtualenv TestLink
 ------------------------------
@@ -89,9 +89,9 @@ Install in virtualenv TestLink
 Cause most linux system (and although newer windows systems too) expect root 
 privileges for installation, a separate TestLink virtualenv_ may help::
 
-    [PYTHON27]\Scripts\virtualenv [PYENV]\testlink
-    [PYENV]\testlink\Scripts\activate
-    pip install TestLink-API-Python-client
+ [PYTHON27]\Scripts\virtualenv [PYENV]\testlink
+ [PYENV]\testlink\Scripts\activate
+ pip install TestLink-API-Python-client
 
 If you always work with the same TestLink server, extend the script
 
