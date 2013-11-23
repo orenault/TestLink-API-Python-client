@@ -3,3 +3,4 @@ recursive-include src *.py
 recursive-include example *.py
 recursive-include example *.png
 recursive-include test *.py
+recursive-include doc *.rst

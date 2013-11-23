@@ -50,6 +50,10 @@ How to talk with TestLink in a python shell: ::
  3
  >>> tls.getTestCase(None, testcaseexternalid='NPROAPI3-1')
  [{'full_tc_external_id': 'NPROAPI3-1', 'node_order': '0', 'is_open': '1', 'id': '2757', ...}]
+ >>> print tls.whatArgs('createTestPlan')
+ createTestPlan(<testplanname>, <testprojectname>, [note=<note>], [active=<active>], [public=<public>], [devKey=<devKey>])
+   create a test plan 
+
  
 More information about this library can be found on the Wiki_ 
 

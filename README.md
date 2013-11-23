@@ -21,6 +21,11 @@ TestLink-API-Python-client delivers two main classes
 - TestlinkAPIClient - Inherits from TestlinkAPIGeneric and defines service 
   methods like "countProjects".
 
+and the helper class
+
+- TestLinkHelper - search connection parameter from environment variables and 
+  command line arguments  
+
 Directory Layout
 ----------------
 
@@ -28,13 +33,19 @@ src/
 
 *   Source for TestLink API Python Client
 
-tests/
+doc/
 
-*   Unit Tests for TestLink API Python Client
+*   [Installation] and [Usage] documentation
 
 examples/
 
-*   Examples, how to use the TestLink API Python Client
+*   Examples, how to use [TestlinkAPIGeneric] and [TestlinkAPIClient].
+*   For (nearly all) implemented API methods you find an example, how to call 
+    it and how the response looks like.
+ 
+tests/
+
+*   Unit Tests for TestLink API Python Client
 
 Installation
 ------------
@@ -163,6 +174,10 @@ TestLink-API-Python-client developers
 [Robot Framework]: http://code.google.com/p/robotframework
 [Jenkins]: http://jenkins-ci.org/
 [Releases]: https://github.com/lczub/TestLink-API-Python-client/releases
+[Installation]: doc/install.rst
+[Usage]: doc/usage.rst
+[TestlinkAPIGeneric]: example/TestLinkExampleGenericApi.py
+[TestlinkAPIClient]: example/TestLinkExample.py
 [SourceForge]: http://sourceforge.net/projects/testlink-api-python-client/files/latest/download
 [Issues]: https://github.com/lczub/TestLink-API-Python-client/issues
 [Olivier Renault]: https://github.com/orenault/TestLink-API-Python-client
