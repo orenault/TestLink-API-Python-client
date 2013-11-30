@@ -395,10 +395,19 @@ print "getTestCaseAttachments", "Sorry currently no testdata"
 
 
 print ""
-print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)
+print "Number of Projects      in TestLink: %s " % myTestLink.countProjects()
+print "Number of Platforms  (in TestPlans): %s " % myTestLink.countPlatforms()
+print "Number of Builds                   : %s " % myTestLink.countBuilds()
+print "Number of TestPlans                : %s " % myTestLink.countTestPlans()
+print "Number of TestSuites               : %s " % myTestLink.countTestSuites()
+print "Number of TestCases (in TestSuites): %s " % myTestLink.countTestCasesTS()
+print "Number of TestCases (in TestPlans) : %s " % myTestLink.countTestCasesTP()
 print ""
 myTestLink.listProjects()
 
+print 
+print ""
+myTestLink.listProjects()
 
 
  

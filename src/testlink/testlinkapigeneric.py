@@ -375,7 +375,7 @@ class TestlinkAPIGeneric(object):
     def getTestSuitesForTestSuite(self):
         """ get list of TestSuites which are DIRECT children of a given TestSuite
         
-        returns an empty list, if no platform is assigned """
+        returns an empty list, if no TestSuite is assigned """
 
     @decoMakerApiCallReplaceTLResponseError(3041)            
     @decoApiCallAddDevKey               
@@ -778,47 +778,30 @@ class TestlinkAPIGeneric(object):
 #    */
 #   public function getExecCountersByBuild($args)
 
-#   /**
-#    * create platform 
-#    * 
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testprojectname"]
-#    * @param map $args["platformname"]
-#    * @param map $args["notes"]
-#    * @return mixed $resultInfo
-#    * @internal revisions
-#    */
-#   public function createPlatform($args)
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testprojectname', 'platformname'], 
+                              ['notes'])
+    def createPlatform(self):
+        """ Creates a platform for test project """
 
-#   /**
-#    *
-#    */
-#   public function getProjectPlatforms($args)
 
-#   /**
-#    * addPlatformToTestPlan 
-#    * 
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testplanid"]
-#    * @param map $args["platformname"]
-#    * @return mixed $resultInfo
-#    * @internal revisions
-#    */
-#   public function addPlatformToTestPlan($args)
+    @decoMakerApiCallReplaceTLResponseError(replaceValue={})            
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testprojectid'])
+    def getProjectPlatforms(self):
+        """ Gets a dictionary of platforms for a project   
+        
+        returns an empty dictionary, if no platform is assigned """
 
-#   /**
-#    * removePlatformFromTestPlan 
-#    * 
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param int $args["testplanid"]
-#    * @param map $args["platformname"]
-#    * @return mixed $resultInfo
-#    * @internal revisions
-#    */
-#   public function removePlatformFromTestPlan($args)
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testplanid', 'platformname'])
+    def addPlatformToTestPlan(self):
+        """ Adds a platform to a test plan """
+
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testplanid', 'platformname'])
+    def removePlatformFromTestPlan(self):
+        """ Removes a platform from a test plan """
 
 #   /**
 #    * if everything ok returns an array on just one element with following user data

@@ -57,7 +57,12 @@ SCENARIO_A = {'repeat' : 'You said: One World',
                                        'name': 'TESTCASE_B'}}, 
                 'listResult' : [{'parent_id': '25', 'tc_external_id': '1', 
                                  'id': '26', 'tsuite_name': 'AA - Second Level', 
-                                 'name': 'TESTCASE_AA'}]}
+                                 'name': 'TESTCASE_AA'}]},
+              'getProjectPlatforms' : {
+                   'twoPlatforms' : {'dutch' : {'id': '1', 'name': 'dutch'}, 
+                                     'platt' : {'id': '2', 'name': 'platt'}},
+                    'noPlatform'  : {}   
+                    }
               }
 
 class DummyAPIGeneric(TestlinkAPIGeneric):
@@ -88,7 +93,7 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
             data = self.scenario_data[methodAPI]
             if methodAPI in ['doesUserExist']:
                 response = data[argsAPI['user']]
-            elif methodAPI in ['getProjectTestPlans', 
+            elif methodAPI in ['getProjectTestPlans', 'getProjectPlatforms',
                                'getFirstLevelTestSuitesForTestProject']:
                 response = data[argsAPI['testprojectid']]
             elif methodAPI in ['getBuildsForTestPlan', 'getTestPlanPlatforms', 
@@ -240,6 +245,19 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         response = self.api.getProjectTestPlans('onePlan')
         self.assertEqual('21', response[0]['testproject_id'])
         self.assertEqual(1, len(response))
+        
+    def test_getProjectPlatforms_noPlatform(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getProjectPlatforms('noPlatform')
+        self.assertEqual({}, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getProjectPlatforms_twoPlatforms(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getProjectPlatforms('twoPlatforms')
+        self.assertEqual('1', response['dutch']['id'])
+        self.assertEqual(2, len(response))
+        
         
     def test_getBuildsForTestPlan_noBuild(self):
         self.api.loadScenario(SCENARIO_A)

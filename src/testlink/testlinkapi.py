@@ -590,7 +590,7 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
 
     def countPlatforms(self):
         """ countPlatforms :
-        Count all the Platforms  
+        Count all the Platforms in TestPlans 
         """
         projects=self.getProjects()
         nbPlatforms = 0

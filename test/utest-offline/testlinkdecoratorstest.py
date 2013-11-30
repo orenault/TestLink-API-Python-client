@@ -152,6 +152,17 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         response = a_func(self.api, name='BigBird')
         self.assertEqual({'name' : 'BigBird'}, response)
 
+    def test_decoApiCallReplaceTLResponseError_replaceValue(self):
+        " decorator test: TLResponseError should be replaced with {}"
+        
+        @decoMakerApiCallReplaceTLResponseError(replaceValue={})
+        def a_func(a_api, *argsPositional, **argsOptional):
+            raise TLResponseError('DummyMethod', 
+                                argsOptional, 'Empty Response! ')
+
+        response = a_func(self.api)
+        self.assertEqual({}, response)
+
     def test_noWrapperName_decoApiCallReplaceTLResponseError(self):
         " decorator test: original function name should be unchanged "
         

@@ -92,6 +92,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_getProjectTestPlans_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
             self.client.getProjectTestPlans(4711)
+
+    def test_getProjectPlatforms_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.getProjectPlatforms(4711)
         
     def test_getTestCase_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '5000.*4711'):
@@ -185,6 +189,12 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_getProjectIDByName_unknownID(self):
         response = self.client.getProjectIDByName('project 4711')
         self.assertEqual(-1, response)
+        
+    def test_createPlatform_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7011.*4711'):
+            self.client.createPlatform('Project 4711', 'Platform 4712', 
+                                       notes='note 4713')
+        
 
         
 if __name__ == "__main__":

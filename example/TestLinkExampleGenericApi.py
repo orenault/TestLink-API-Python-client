@@ -22,6 +22,7 @@
 
 Shows how to use the TestLinkAPIGeneric.
 - does equal things as Example TestLinkAPI in TestLinkExample.py
+  - exception - this test project uses platforms 
 
 => Counts and lists the Projects 
 => Create a new Project with the following structure:
@@ -72,7 +73,10 @@ projNr=len(myTestLink.getProjects())+1
 
 NEWPROJECT="PROJECT_API_GENERIC-%i" % projNr
 NEWPREFIX="GPROAPI%i" % projNr
-NEWTESTPLAN="TestPlan_API_GENERIC"
+NEWTESTPLAN="TestPlan_API_GENERIC %i" % projNr
+NEWPLATFORM_A='Big Bird %i' % projNr
+NEWPLATFORM_B='Small Bird'
+NEWPLATFORM_C='Ugly Bird'
 NEWTESTSUITE_A="A - First Level"
 NEWTESTSUITE_B="B - First Level"
 NEWTESTSUITE_AA="AA - Second Level"
@@ -122,6 +126,39 @@ newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN, NEWPROJECT,
 print "createTestPlan", newTestPlan
 newTestPlanID = newTestPlan[0]['id'] 
 print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN,newTestPlanID)
+ 
+# Create platform 'Big Bird x' 
+newPlatForm = myTestLink.createPlatform(NEWPROJECT, NEWPLATFORM_A, 
+        notes='Platform for Big Birds, unique name, only used in this project')
+print "createPlatform", newPlatForm
+newPlatFormID_A = newPlatForm['id']
+# Add Platform  'Big Bird x' to platform 
+response = myTestLink.addPlatformToTestPlan(newTestPlanID, NEWPLATFORM_A) 
+print "addPlatformToTestPlan", response
+
+# Create platform 'Small Bird'
+newPlatForm = myTestLink.createPlatform(NEWPROJECT, NEWPLATFORM_B, 
+                notes='Platform for Small Birds, name used in all example projects')
+print "createPlatform", newPlatForm
+newPlatFormID_B = newPlatForm['id']
+# Add Platform  'Small Bird' to platform 
+response = myTestLink.addPlatformToTestPlan(newTestPlanID, NEWPLATFORM_B) 
+print "addPlatformToTestPlan", response
+
+# Create platform 'Ugly Bird'
+newPlatForm = myTestLink.createPlatform(NEWPROJECT, NEWPLATFORM_C, 
+                notes='Platform for Ugly Birds, will be removed from test plan')
+print "createPlatform", newPlatForm
+newPlatFormID_C = newPlatForm['id']
+# Add Platform  'Ugly Bird' to platform 
+response = myTestLink.addPlatformToTestPlan(newTestPlanID, NEWPLATFORM_C) 
+print "addPlatformToTestPlan", response
+
+# looking, which platforms exists
+response = myTestLink.getProjectPlatforms(newProjectID) 
+print "getProjectPlatforms", response
+
+
  
 #Creates the test Suite A      
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_A,
@@ -191,18 +228,35 @@ newTestCaseID_B = newTestCase[0]['id']
 print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
   
 # Add  test cases to test plan - we need the full external id !
+# TC AA should be tested with platforms 'Big Bird'+'Small Bird'
 tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)[0]['full_tc_external_id']
 response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan', 
                 devKey=myTestLink.devKey, testprojectid=newProjectID, 
                 testplanid=newTestPlanID, testcaseexternalid=tc_aa_full_ext_id,
-                version=1)
+                platformid=newPlatFormID_A,version=1)
 print "addTestCaseToTestPlan", response
+tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)[0]['full_tc_external_id']
+response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan', 
+                devKey=myTestLink.devKey, testprojectid=newProjectID, 
+                testplanid=newTestPlanID, testcaseexternalid=tc_aa_full_ext_id,
+                platformid=newPlatFormID_B,version=1)
+print "addTestCaseToTestPlan", response
+# TC B should be tested with platforms 'Small Bird'
 tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_tc_external_id']
 response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan', 
                 devKey=myTestLink.devKey, testprojectid=newProjectID, 
                 testplanid=newTestPlanID, testcaseexternalid=tc_b_full_ext_id,
-                version=1)
+                platformid=newPlatFormID_B,version=1)
 print "addTestCaseToTestPlan", response
+
+# Remove Platform  'Big Bird' from platform 
+response = myTestLink.removePlatformFromTestPlan(newTestPlanID, NEWPLATFORM_C) 
+print "removePlatformFromTestPlan", response
+
+# Remove Platform  'Ugly Bird' from platform 
+response = myTestLink.removePlatformFromTestPlan(newTestPlanID, NEWPLATFORM_C) 
+print "removePlatformFromTestPlan", response
+
 
 # -- Create Build
 newBuild = myTestLink.createBuild(newTestPlanID, NEWBUILD, 
@@ -211,16 +265,24 @@ print "createBuild", newBuild
 newBuildID = newBuild[0]['id'] 
 print "New Build '%s' - id: %s" % (NEWBUILD, newBuildID)
   
-# report Test Case Results
+# report Test Case Results for platform 'Big Bird'
 # TC_AA failed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(newTestPlanID, 'f', guess=True,
-                                      testcaseexternalid=tc_aa_full_ext_id)
+                                      testcaseexternalid=tc_aa_full_ext_id,
+                                      platformname=NEWPLATFORM_A)
 print "reportTCResult", newResult
 newResultID_AA = newResult[0]['id']
+# report Test Case Results for platform 'Small Bird'
+# TC_AA passed, build should be guessed, TC identified with external id
+newResult = myTestLink.reportTCResult(newTestPlanID, 'p', guess=True,
+                                      testcaseexternalid=tc_aa_full_ext_id,
+                                      platformid=newPlatFormID_B)
+print "reportTCResult", newResult
+newResultID_AA_p = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id
 newResult = myTestLink.reportTCResult(newTestPlanID, 'p', 
                 buildid=newBuildID, testcaseid=newTestCaseID_B, 
-                notes="first try")
+                platformname=NEWPLATFORM_B, notes="first try")
 print "reportTCResult", newResult
 newResultID_B = newResult[0]['id']
 

@@ -105,8 +105,8 @@ def decoApiCallAddDevKey(methodAPI):
         return methodAPI(self, *argsPositional, **argsOptional)
     return wrapperAddDevKey
 
-def decoMakerApiCallReplaceTLResponseError(replaceCode=None):
-    """ creates a decorator, which replace an TLResponseError with an empty list,
+def decoMakerApiCallReplaceTLResponseError(replaceCode=None, replaceValue=[]):
+    """ creates a decorator, which replace an TLResponseError with a new value
 
      Default (replaceCode=None) handles the cause 'Empty Result'
      - ok for getProjectTestPlans, getBuildsForTestPlan, which returns just ''
@@ -115,6 +115,9 @@ def decoMakerApiCallReplaceTLResponseError(replaceCode=None):
         3041: Test plan (noPlatform) has no platforms linked
         7008: Test Project (noSuite) is empty
       could be handled with replaceCode=3041 / replaceCode=7008
+      
+     Default (replaceValue=[]) new return value is an empty list
+     - could be changed to other things like {}       
 
      """  
     # for understanding, what we are doing here please read
@@ -132,7 +135,7 @@ def decoMakerApiCallReplaceTLResponseError(replaceCode=None):
                 if tl_err.code == replaceCode:
                     # empty result (response == '') -> code == None
                     # special case NoPlatform -> code == 3041
-                    response = []
+                    response = replaceValue
                 else:
                     # seems to be another response failure - we forward it
                     raise  
