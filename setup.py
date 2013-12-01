@@ -13,10 +13,9 @@ execfile(join(dirname(__file__), 'src', 'testlink', 'version.py'))
 
 CLASSIFIERS = [
   'Development Status :: 4 - Beta',
-  'License :: OSI Approved :: Apache License V2.0',
+  'License :: OSI Approved :: Apache Software License',
   'Operating System :: OS Independent',
   'Programming Language :: Python',
-  'Topic :: Formats and Protocols :: Protocols :: XML-RPC',
   'Topic :: Software Development :: Testing',
   'Topic :: Software Development :: Libraries :: Python Modules'
 ]
