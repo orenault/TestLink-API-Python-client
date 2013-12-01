@@ -241,7 +241,7 @@ response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan',
                 testplanid=newTestPlanID, testcaseexternalid=tc_aa_full_ext_id,
                 platformid=newPlatFormID_B,version=1)
 print "addTestCaseToTestPlan", response
-# TC B should be tested with platforms 'Small Bird'
+# TC B should be tested with platform 'Small Bird'
 tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_tc_external_id']
 response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan', 
                 devKey=myTestLink.devKey, testprojectid=newProjectID, 
@@ -249,9 +249,9 @@ response = myTestLink.callServerWithPosArgs('addTestCaseToTestPlan',
                 platformid=newPlatFormID_B,version=1)
 print "addTestCaseToTestPlan", response
 
-# Remove Platform  'Big Bird' from platform 
-response = myTestLink.removePlatformFromTestPlan(newTestPlanID, NEWPLATFORM_C) 
-print "removePlatformFromTestPlan", response
+# # Try to Remove Platform  'Big Bird' from platform 
+# response = myTestLink.removePlatformFromTestPlan(newTestPlanID, NEWPLATFORM_C) 
+# print "removePlatformFromTestPlan", response
 
 # Remove Platform  'Ugly Bird' from platform 
 response = myTestLink.removePlatformFromTestPlan(newTestPlanID, NEWPLATFORM_C) 

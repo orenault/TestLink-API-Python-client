@@ -1,6 +1,18 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+TestLink-API-Python-client release notes v0.4.6 (Dec. 2013)
+-----------------------------------------------------------
+
+TestLink-API-Python-client is now installable via PyPI #15
+
+    pip install TestLink-API-Python-client
+
+new api methods for Platforms implemented #10
+
+- createPlatform, getProjectPlatforms
+- addPlatformToTestPlan, removePlatformFromTestPlan
+
 TestLink-API-Python-client release notes v0.4.5 (Nov. 2013)
 -----------------------------------------------------------
 

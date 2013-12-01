@@ -5,7 +5,8 @@ Preconditions
 -------------
 
 Currently only the combination Python 2.7 and TestLink 1.9.8/1.9.9 is tested.
-Other combination might work - feedback is welcome :-) 
+
+- Other combination might work - feedback is welcome :-) 
 
 TestLink configuration
 ----------------------
@@ -95,7 +96,7 @@ privileges for installation, a separate TestLink virtualenv_ may help::
 
 If you always work with the same TestLink server, extend the script
 
-- [PYENV]\testlink\Scripts\activate.
+- [PYENV]/testlink/Scripts/activate[.bat|.ps1]
 
 with connection parameter as environment variables  
 
