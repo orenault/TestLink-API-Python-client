@@ -208,6 +208,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
             self.client.removePlatformFromTestPlan(4711, 'Platform 4712')
             
+    def test_addTestCaseToTestPlan_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.addTestCaseToTestPlan(4711, 4712, 'N-4713', 1)
+            
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

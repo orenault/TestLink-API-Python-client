@@ -274,6 +274,13 @@ class TestlinkAPIGeneric(object):
 #     */
 #   public function addTestCaseToTestPlan($args)
 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testprojectid',
+                               'testplanid', 'testcaseexternalid', 'version'],
+                              ['platformid', 'executionorder', 'urgency'])
+    def addTestCaseToTestPlan(self):
+        """ Add a test case version to a test plan """
+        
     @decoMakerApiCallReplaceTLResponseError(7008)            
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testprojectid'])

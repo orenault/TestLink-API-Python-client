@@ -195,6 +195,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.createPlatform('Project 4711', 'Platform 4712', 
                                        notes='note 4713')
         
+    def test_addTestCaseToTestPlan_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.addTestCaseToTestPlan(4711, 4712, 'N-4713', 1)
+            
 
         
 if __name__ == "__main__":
