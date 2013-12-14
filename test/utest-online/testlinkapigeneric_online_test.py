@@ -212,6 +212,9 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
             self.client.addTestCaseToTestPlan(4711, 4712, 'N-4713', 1)
             
+    def test_updateTestCase_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '5040.*N-4711'):
+            self.client.updateTestCase('N-4711', version=1)
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

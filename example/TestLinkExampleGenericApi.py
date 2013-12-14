@@ -83,7 +83,9 @@ NEWTESTSUITE_B="B - First Level"
 NEWTESTSUITE_AA="AA - Second Level"
 NEWTESTCASE_AA="TESTCASE_AA"
 NEWTESTCASE_B="TESTCASE_B"
-NEWBUILD='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
+myApiVersion='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
+NEWBUILD_A='%s' % myApiVersion
+NEWBUILD_B='%s' % myApiVersion
 
 NEWATTACHMENT_PY= os.path.realpath(__file__)
 this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
@@ -114,7 +116,7 @@ print ""
 
 # # Creates the project
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX, 
-    notes='Example created with Python API class %s' % NEWBUILD, 
+    notes='Example created with Python API class %s' % myApiVersion, 
     active=1, public=1,
     options={'requirementsEnabled' : 1, 'testPriorityEnabled' : 1, 
              'automationEnabled' : 1,  'inventoryEnabled' : 1})
@@ -237,7 +239,7 @@ newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, newTestSuiteID_B,
 print "createTestCase", newTestCase
 newTestCaseID_B = newTestCase[0]['id'] 
 print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
-  
+
 # Add  test cases to test plan - we need the full external id !
 # for every test case version 1 is used
 tc_version=1
@@ -255,7 +257,20 @@ tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_t
 response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_A, 
                     tc_b_full_ext_id, tc_version, platformid=newPlatFormID_B)
 print "addTestCaseToTestPlan", response
-# In test plan B TC B should be tested without  platform 
+
+#Update test case TC_B -> high, change step 5, new step 6
+steps_tc_b_v1u = steps_tc_b[:4] 
+steps_tc_b_v1u.append(
+    {'step_number' : 5, 'actions' : "Step action 5 -b changed by updateTestCase" , 
+     'expected_results' : "Step result 5 - b changed", 'execution_type' : AUTOMATED})
+steps_tc_b_v1u.append(
+    {'step_number' : 6, 'actions' : "Step action 6 -b added by updateTestCase" , 
+     'expected_results' : "Step result 6 - b added", 'execution_type' : AUTOMATED})                 
+response = myTestLink.updateTestCase(tc_b_full_ext_id, version=tc_version,
+                steps=steps_tc_b_v1u, importance='high', estimatedexecduration=3)
+print "updateTestCase", response
+
+# In test plan B TC B  should be tested without  platform 
 response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_B, 
                                             tc_b_full_ext_id, tc_version)
 print "addTestCaseToTestPlan", response
@@ -269,13 +284,13 @@ response = myTestLink.removePlatformFromTestPlan(newTestPlanID_A, NEWPLATFORM_C)
 print "removePlatformFromTestPlan", response
 
 
-# -- Create Build
-newBuild = myTestLink.createBuild(newTestPlanID_A, NEWBUILD, 
-                                  buildnotes='Notes for the Build')
+# -- Create Build for TestPlan A (uses platforms)
+newBuild = myTestLink.createBuild(newTestPlanID_A, NEWBUILD_A, 
+                                  buildnotes='Build for TestPlan with platforms')
 print "createBuild", newBuild
-newBuildID = newBuild[0]['id'] 
-print "New Build '%s' - id: %s" % (NEWBUILD, newBuildID)
-  
+newBuildID_A = newBuild[0]['id'] 
+print "New Build '%s' - id: %s" % (NEWBUILD_A, newBuildID_A)
+
 # report Test Case Results for platform 'Big Bird'
 # TC_AA failed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(newTestPlanID_A, 'f', guess=True,
@@ -292,7 +307,7 @@ print "reportTCResult", newResult
 newResultID_AA_p = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id
 newResult = myTestLink.reportTCResult(newTestPlanID_A, 'p', 
-                buildid=newBuildID, testcaseid=newTestCaseID_B, 
+                buildid=newBuildID_A, testcaseid=newTestCaseID_B, 
                 platformname=NEWPLATFORM_B, notes="first try")
 print "reportTCResult", newResult
 newResultID_B = newResult[0]['id']
@@ -311,6 +326,27 @@ a_file=open(NEWATTACHMENT_PNG, mode='rb')
 newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_AA, 
             title='PNG Example', description='PNG Attachment Example for a TestCase')
 print "uploadExecutionAttachment", newAttachment
+
+# -- Create Build for TestPlan B (uses no platforms)
+newBuild = myTestLink.createBuild(newTestPlanID_B, NEWBUILD_B, 
+                                  buildnotes='Build for TestPlan without platforms')
+print "createBuild", newBuild
+newBuildID_B = newBuild[0]['id'] 
+print "New Build '%s' - id: %s" % (NEWBUILD_B, newBuildID_B)
+  
+# TC_B in test plan b (without platform)
+# first try failed, second blocked
+newResult = myTestLink.reportTCResult(newTestPlanID_B, 'f', 
+                buildid=newBuildID_B, testcaseid=newTestCaseID_B, 
+                notes="no birds are singing")
+print "reportTCResult", newResult
+newResultID_B_f = newResult[0]['id']
+newResult = myTestLink.reportTCResult(newTestPlanID_B, 'b', 
+                buildid=newBuildID_B, testcaseid=newTestCaseID_B, 
+                notes="hungry birds blocks the execution")
+print "reportTCResult", newResult
+newResultID_B_b = newResult[0]['id']
+
 
 # get information - TestProject
 response = myTestLink.getTestProjectByName(NEWPROJECT)

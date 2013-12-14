@@ -882,6 +882,20 @@ class TestlinkAPIGeneric(object):
 #     */
 #    public function updateTestCase($args)
 
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testcaseexternalid'], 
+            ['version', 'testcasename','summary', 'preconditions', 'steps', 
+             'importance', 'executiontype', 'status', 'estimatedexecduration', 
+             'user'])
+    def updateTestCase(self):
+        """ Update an existing test case
+        
+        Not all test case attributes will be able to be updated using this method
+        steps     array - each element is a hash with following keys
+                  step_number,actions,expected_results,execution_type
+        user      login name used as updater - optional
+                  if not provided will be set to user that request update
+ """
 
     
     #
