@@ -717,6 +717,26 @@ class TestlinkAPIGeneric(object):
 #    */
 #   function createTestCaseSteps($args)
 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['action', 'steps'], 
+                              ['testcaseexternalid', 'testcaseid', 'version'])
+    def createTestCaseSteps(self):
+        """ creates new test steps or updates existing test steps 
+        
+        action - possible values: 'create','update','push'
+            create: if step exist NOTHING WILL BE DONE
+            update: if step DOES NOT EXIST will be created else will be updated.
+            push: NOT IMPLEMENTED YET (TL 1.9.9)
+                  shift down all steps with step number >= step number provided
+                  and use provided data to create step number requested.
+        steps - each element is a hash with following keys
+            step_number,actions,expected_results,execution_type
+        args variations: testcaseid - testcaseexternalid
+        version - optional if not provided LAST ACTIVE version will be used
+                  if all versions are INACTIVE, then latest version will be used. 
+        """
+
+
 #   /**
 #    * deleteTestCaseSteps
 #    * @param struct $args

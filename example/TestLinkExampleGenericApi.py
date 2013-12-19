@@ -270,6 +270,26 @@ response = myTestLink.updateTestCase(tc_b_full_ext_id, version=tc_version,
                 steps=steps_tc_b_v1u, importance='high', estimatedexecduration=3)
 print "updateTestCase", response
 
+# create additional steps via createTestCaseSteps - action create
+steps_tc_b_c67 = [
+    {'step_number' : 6, 'actions' : "action 6 createTestCaseSteps.create" , 
+     'expected_results' : "skip - cause step 6 already exist", 'execution_type' : AUTOMATED},
+    {'step_number' : 7, 'actions' : "action 7 createTestCaseSteps.create" , 
+     'expected_results' : "create - cause step 7 not yet exist", 'execution_type' : AUTOMATED}]
+response = myTestLink.createTestCaseSteps('create', steps_tc_b_c67, 
+                        testcaseexternalid=tc_b_full_ext_id, version=tc_version)
+print "createTestCaseSteps.create", response
+# create additional steps via createTestCaseSteps - action update
+steps_tc_b_c38 = [
+    {'step_number' : 3, 'actions' : "action 3 createTestCaseSteps.update" , 
+     'expected_results' : "update - cause step 3 already exist", 'execution_type' : AUTOMATED},
+    {'step_number' : 8, 'actions' : "action 8 createTestCaseSteps.update" , 
+     'expected_results' : "create - cause step 8 not yet exist", 'execution_type' : AUTOMATED}]
+response = myTestLink.createTestCaseSteps('update', steps_tc_b_c38, 
+                        testcaseid=newTestCaseID_B, version=tc_version)
+print "createTestCaseSteps.update", response
+
+
 # In test plan B TC B  should be tested without  platform 
 response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_B, 
                                             tc_b_full_ext_id, tc_version)

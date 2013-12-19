@@ -216,6 +216,14 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(TLResponseError, '5040.*N-4711'):
             self.client.updateTestCase('N-4711', version=1)
         
+    def test_createTestCaseSteps_unknownID(self):
+        steps = [{'actions' : "Step action 6 -b added by updateTestCase" , 
+                  'expected_results' : "Step result 6 - b added", 
+                  'step_number' : 6, 'execution_type' : 1}]
+        with self.assertRaisesRegexp(TLResponseError, '5040.*N-4711'):
+            self.client.createTestCaseSteps('update', steps, 
+                                        testcaseexternalid='N-4711', version=1)
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
