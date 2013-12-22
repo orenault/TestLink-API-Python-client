@@ -752,6 +752,16 @@ class TestlinkAPIGeneric(object):
 #    */
 #   function deleteTestCaseSteps($args)
 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testcaseexternalid', 'steps'], 
+                              ['version'])
+    def deleteTestCaseSteps(self):
+        """ deletes test cases steps
+        
+        steps - each element is a step_number
+        version - optional if not provided LAST ACTIVE version will be used
+        """
+
 #   /**
 #    * Update value of Custom Field with scope='design' for a given Test case
 #    *

@@ -223,6 +223,12 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(TLResponseError, '5040.*N-4711'):
             self.client.createTestCaseSteps('update', steps, 
                                         testcaseexternalid='N-4711', version=1)
+            
+    def test_deleteTestCaseSteps_unknownID(self):
+        steps = [2,8]
+        with self.assertRaisesRegexp(TLResponseError, '5040.*N-4711'):
+            self.client.deleteTestCaseSteps('N-4711', steps, version=1)
+            
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

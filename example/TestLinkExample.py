@@ -268,6 +268,8 @@ myTestLink.appendStep("Step action 2", "Step result 2", MANUAL)
 myTestLink.appendStep("Step action 3", "Step result 3", MANUAL)
 myTestLink.appendStep("Step action 4", "Step result 4", MANUAL)
 myTestLink.appendStep("Step action 5", "Step result 5", MANUAL)
+myTestLink.appendStep("Dummy step for delete tests", 
+                      "should be delete with deleteTestCaseSteps", MANUAL)
      
 # -- Start CHANGE v0.4.5 -- 
 # newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, TestSuiteID_AA, 
@@ -329,6 +331,11 @@ tc_aa_full_ext_id = myTestLink.getTestCase(newTestCaseID_AA)[0]['full_tc_externa
 response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_A, 
                     tc_aa_full_ext_id, tc_version, platformid=newPlatFormID_B)
 print "addTestCaseToTestPlan", response
+# change test case TC_AA - delete step 6 (step 7 does not exist)
+response = myTestLink.deleteTestCaseSteps(tc_aa_full_ext_id, [7,6], 
+                                          version=tc_version)
+print "deleteTestCaseSteps", response
+
 # TC B should be tested with platform 'Small Birds'
 tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_tc_external_id']
 response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_A, 

@@ -210,7 +210,10 @@ steps_tc_aa = [
         {'step_number' : 4, 'actions' : "Step action 4 - aa" , 
          'expected_results' : "Step result 4 - aa", 'execution_type' : MANUAL},
         {'step_number' : 5, 'actions' : "Step action 5 - aa" , 
-         'expected_results' : "Step result 5 - aa", 'execution_type' : MANUAL}
+         'expected_results' : "Step result 5 - aa", 'execution_type' : MANUAL},
+        {'step_number' : 8, 'actions' : "Dummy step for delete tests" , 
+         'expected_results' : "should be delete with deleteTestCaseSteps", 
+         'execution_type' : MANUAL}
                ]  
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, newTestSuiteID_AA, 
           newProjectID, "admin", "This is the summary of the Test Case AA", 
@@ -252,6 +255,11 @@ tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)[0]['full
 response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_A, 
                     tc_aa_full_ext_id, tc_version, platformid=newPlatFormID_B)
 print "addTestCaseToTestPlan", response
+# change test case TC_AA - delete step 8 (step 7 does not exist)
+response = myTestLink.deleteTestCaseSteps(tc_aa_full_ext_id, [7,8], 
+                                          version=tc_version)
+print "deleteTestCaseSteps", response
+
 # TC B should be tested with platform 'Small Bird'
 tc_b_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]['full_tc_external_id']
 response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_A, 
