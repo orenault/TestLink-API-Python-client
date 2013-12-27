@@ -22,6 +22,7 @@
 
 import unittest
 from testlink import TestlinkAPIClient, TestLinkHelper
+from testlink.testlinkerrors import TLArgError
 
 # scenario_a includes response from a testlink 1.9.3 server
 SCENARIO_A = {'getProjects' : [
@@ -94,7 +95,34 @@ SCENARIO_A = {'getProjects' : [
                 'listResult' : [{'parent_id': '25', 'tc_external_id': '1', 
                                  'id': '26', 'tsuite_name': 'AA - Second Level', 
                                  'name': 'TESTCASE_AA'}]},
-
+              'getTestCase' : {
+                '26' : [{'full_tc_external_id': 'NPROAPI-1-26', 'node_order': '0', 'is_open': '1', 'id': '26', 
+                         'author_last_name': 'LkaTlinkD7', 'updater_login': '', 'layout': '1', 'tc_external_id': '1', 
+                         'version': '1', 'estimated_exec_duration': '', 'testsuite_id': '25', 'updater_id': '', 
+                         'status': '1', 'updater_first_name': '', 'testcase_id': '5099', 'author_first_name': 'Tester', 
+                         'importance': '2', 'modification_ts': '', 'execution_type': '1', 'preconditions': '', 
+                         'active': '1', 'creation_ts': '2013-12-26 21:17:43', 'name': 'TC-C', 'summary': 'SumSumSum', 
+                         'updater_last_name': '', 
+                         'steps': [{'step_number': '1', 'actions': 'Step action 1', 'execution_type': '2', 'active': '1', 
+                                    'id': '5101', 'expected_results': 'Step result 1'}], 
+                         'author_id': '3', 'author_login': 'tester'}]
+                               },
+              'getFullPath' : {
+                               
+                26 : {'26' : ['TestPlan_API', 'A - First Level', 'AA - Second Level']},
+                    },
+              'getTestProjectByName' : {
+                'TestPlan_API' : {
+                    'opt': {'requirementsEnabled': 0, 'testPriorityEnabled': 1, 
+                            'automationEnabled': 1, 'inventoryEnabled': 0}, 
+                    'prefix': 'NPROAPI', 'name': 'NEW_PROJECT_API', 'color': '',
+                    'notes': 'This is a Project created with the API', 
+                    'option_priority': '0', 
+                    'options': 'O:8:"stdClass":4:{s:19:"requirementsEnabled";i:0;s:19:"testPriorityEnabled";i:1;s:17:"automationEnabled";i:1;s:16:"inventoryEnabled";i:0;}', 
+                    'tc_counter': '2', 'option_reqs': '0', 'active': '1', 
+                    'is_public': '1', 'id': '21', 'option_automation': '0'},
+                    },
+              'createTestCase' : 'dummy response createTestCase',
               }
 
 SCENARIO_STEPS = {'createTestCase' : ['noRealReponseData - ok for step tests']}
@@ -130,6 +158,12 @@ class DummyAPIClient(TestlinkAPIClient):
             response = data[argsAPI['testsuiteid']]
         elif methodAPI in ['getTestCaseIDByName']:
             response = data[argsAPI['testcasename']]
+        elif methodAPI in ['getTestCase']:
+            response = data[argsAPI['testcaseid']]
+        elif methodAPI in ['getFullPath']:
+            response = data[argsAPI['nodeid']]
+        elif methodAPI in ['getTestProjectByName']:
+            response = data[argsAPI['testprojectname']]
         else:
             response = data
         return response
@@ -222,6 +256,15 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
                                 'summary 4714')
         self.assertEqual(self.example_steps, self.api.callArgs['steps'])
         self.assertEqual([], self.api.stepsList)
+
+    def test_createTestCaseWithConfusingSteps(self):
+        self.api.loadScenario(SCENARIO_STEPS)
+        self.api.initStep("action A", "result A", 0)
+        self.api.appendStep("action B", "result B", 1)
+        self.api.appendStep("action C", "result C", 0)
+        with self.assertRaisesRegexp(TLArgError, 'confusing createTestCase*'):
+            self.api.createTestCase('case 4711', 4712, 4713, 'Big Bird', 
+                                    'summary 4714', steps=[])
         
     def test_getTestCaseIDByName_dictResult(self):
         "test that getTestCaseIDByName converts dictionary result into a list"
@@ -242,6 +285,17 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual('TESTCASE_AA', response[0]['name']) 
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
         
+    def test__copyTC_generate_new(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.api._copyTC('26', 'generate_new', {})
+        self.assertEqual('generate_new',  
+                         self.api.callArgs['actiononduplicatedname'])
+
+    def test__copyTC_create_new_version(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.api._copyTC('26', 'create_new_version', {})
+        self.assertEqual('create_new_version',  
+                         self.api.callArgs['actiononduplicatedname'])
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -1041,6 +1041,22 @@ class TestlinkAPIGeneric(object):
     #  ADDITIONNAL FUNCTIONS
     #                                   
 
+    def _apiMethodArgNames(self, methodNameAPI):
+        """ returns triple with arg name lists for api METHODNAME
+            1. positional api arg names
+            2. optional api arg names
+            3. other (non api) name
+        """
+        # collect arg names 
+        posArgNames = self._positionalArgNames.get(methodNameAPI, [])
+        otherArgs = ([],[])
+        try:
+            otherArgs = getArgsForMethod(methodNameAPI, posArgNames)
+        except testlinkerrors.TLArgError:
+            # no API args registered for methodName 
+            pass
+        return (posArgNames, otherArgs[0], otherArgs[1])
+        
     def whatArgs(self, methodNameAPI):
         """ returns for METHODNAME a description with 
             - positional, optional and other (non api) mandatory args
@@ -1048,16 +1064,8 @@ class TestlinkAPIGeneric(object):
         """
         
         # collect arg names 
-        posArgNames = self._positionalArgNames.get(methodNameAPI, [])
-        otherArgs = ([],[])
-        registeredApiMethod = True
-        try:
-            otherArgs = getArgsForMethod(methodNameAPI, posArgNames)
-        except testlinkerrors.TLArgError:
-            # no API args registered for methodName 
-            registeredApiMethod = False
-        optArgNames=otherArgs[0]
-        manArgNames=otherArgs[1]
+        (posArgNames, optArgNames, manArgNames) = \
+                        self._apiMethodArgNames(methodNameAPI)
             
         # get method doc string
         ownMethod = True

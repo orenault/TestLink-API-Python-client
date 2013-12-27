@@ -4,6 +4,8 @@ Changes in TestLink-API-Python-client Source Distribution
 TestLink-API-Python-client UNDER DEVELOP v0.4.7
 -----------------------------------------------
 
+new service methods - copy test cases #17
+
 implement missing 1.9.8 api methods - TestCase #11
 
 - addTestCaseToTestPlan, updateTestCase 

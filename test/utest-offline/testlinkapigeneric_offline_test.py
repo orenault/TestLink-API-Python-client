@@ -192,17 +192,39 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.api._checkResponse(response, 'DummyMethod', 
                                 {'Uno' : 1, 'due' :2, 'tre' : 3})
         
+    def test__apiMethodArgNames_noArgs(self):
+        response = self.api._apiMethodArgNames('sayHello')
+        self.assertEqual(response, ([], [], []))
+
     def test_whatArgs_noArgs(self):
         response = self.api.whatArgs('sayHello')
         self.assertRegexpMatches(response, 'sayHello().*')
         
+    def test__apiMethodArgNames_onlyOptionalArgs(self):
+        response = self.api._apiMethodArgNames('getTestCaseAttachments')
+        self.assertEqual(response[0], [])
+        self.assertGreater(len(response[1]), 0)
+        self.assertEqual(response[2], [])
+
     def test_whatArgs_onlyOptionalArgs(self):
         response = self.api.whatArgs('getTestCaseAttachments')
         self.assertRegexpMatches(response, 'getTestCaseAttachments\(\[.*=<.*>\].*\).*')
         
+    def test__apiMethodArgNames__OptionalAndPositionalArgs(self):
+        response = self.api._apiMethodArgNames('createBuild')
+        self.assertGreater(len(response[0]), 0)
+        self.assertGreater(len(response[1]), 0)
+        self.assertEqual(response[2], [])
+
     def test_whatArgs_OptionalAndPositionalArgs(self):
         response = self.api.whatArgs('createBuild')
         self.assertRegexpMatches(response, 'createBuild\(<.*>.*\).*')
+
+    def test__apiMethodArgNames__MandatoryArgs(self):
+        response = self.api._apiMethodArgNames('uploadExecutionAttachment')
+        self.assertGreater(len(response[0]), 0)
+        self.assertGreater(len(response[1]), 0)
+        self.assertGreater(len(response[2]), 0)
 
     def test_whatArgs_MandatoryArgs(self):
         response = self.api.whatArgs('uploadExecutionAttachment')

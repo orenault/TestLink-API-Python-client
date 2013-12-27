@@ -20,6 +20,7 @@
 #import xmlrpclib
 
 from testlinkapigeneric import TestlinkAPIGeneric, TestLinkHelper
+from testlinkerrors import TLArgError
 
 
 class TestlinkAPIClient(TestlinkAPIGeneric):
@@ -93,171 +94,8 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
     #  BUILT-IN API CALLS - extented / customised against generic behaviour
     #
     
-#     def checkDevKey(self):
-#         """ checkDevKey :
-#         check if Developer Key exists   
-#         """
-#         argsAPI = {'devKey' : self.devKey}     
-#         return self._callServer('checkDevKey', argsAPI)  
-    
-#     def about(self):
-#         """ about :
-#         Gives basic information about the API    
-#         """
-#         return self._callServer('about')
-  
-#     def ping(self):
-#         """ ping :   
-#         """
-#         return self._callServer('ping')
-
     def echo(self, message):
         return self.repeat(message)
-
-#     def doesUserExist(self, user):
-#         """ doesUserExist :
-#         Checks if a user name exists 
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'user':str(user)}   
-#         return self._callServer('doesUserExist', argsAPI)
-        
-#     def getBuildsForTestPlan(self, testplanid):
-#         """ getBuildsForTestPlan : Gets a list of builds within a test plan 
-#         positional args: testplanid
-#         optional args : --- 
-#         
-#         returns an empty list, if no build is assigned """
-#         
-#         response = None
-#         try:
-#             response = super(TestlinkAPIClient, self).getBuildsForTestPlan(testplanid)
-#         except TLResponseError as tl_err:
-#             if tl_err.code is None:
-#                 # empty result (response == ''), project has no testplans
-#                 response = []
-#             else:
-#                 # seems to be another response failure - we forward it
-#                 raise  
-#         return response
-
-
-#     def getFirstLevelTestSuitesForTestProject(self,testprojectid):
-#         """ getFirstLevelTestSuitesForTestProject :
-#         Get set of test suites AT TOP LEVEL of tree on a Test Project 
-#         """  
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testprojectid':str(testprojectid)}   
-#         return self._callServer('getFirstLevelTestSuitesForTestProject', argsAPI)
-        
-#     def getFullPath(self,nodeid):
-#         """ getFullPath :
-#         Gets full path from the given node till the top using 
-#         nodes_hierarchy_table 
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'nodeid':str(nodeid)}    
-#         return self._callServer('getFullPath', argsAPI)
-
-#     def getLastExecutionResult(self, testplanid, testcaseid):
-#         """ getLastExecutionResult :
-#         Gets the result of LAST EXECUTION for a particular testcase on a 
-#         test plan, but WITHOUT checking for a particular build 
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testplanid' : str(testplanid),
-#                 'testcaseid' : str(testcaseid)}     
-#         return self._callServer('getLastExecutionResult', argsAPI)
-
-#     def getLatestBuildForTestPlan(self, testplanid):
-#         """ getLastExecutionResult :
-#         Gets the latest build by choosing the maximum build id for a 
-#         specific test plan  
-#         """  
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testplanid':str(testplanid)}  
-#         return self._callServer('getLatestBuildForTestPlan', argsAPI)
-
-#     def getProjects(self):
-#         """ getProjects: 
-#         Gets a list of all projects 
-#         """
-#         argsAPI = {'devKey' : self.devKey} 
-#         return self._callServer('getProjects', argsAPI)
-
-#     def getProjectTestPlans(self, testprojectid):
-#         """ getProjectTestPlans: Gets a list of test plans within a project
-#         positional args: testprojectid
-#         optional args : --- 
-#         
-#         returns an empty list, if no testplan is assigned """
-#         response = None
-#         try:
-#             response = super(TestlinkAPIClient, self).getProjectTestPlans(testprojectid)
-#         except TLResponseError as tl_err:
-#             if tl_err.code is None:
-#                 # empty result (repsonse == ''), project has no testplans
-#                 response = []
-#             else:
-#                 # seems to be another response failure - we forward it
-#                 raise  
-#         return response
-#                 
-#     def getTestCase(self, testcaseid):
-#         """ getTestCase :
-#         Gets test case specification using external or internal id  
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testcaseid' : str(testcaseid)}  
-#         return self._callServer('getTestCase', argsAPI)          
-
-#     def getTestCaseAttachments(self, testcaseid):
-#         """ getTestCaseAttachments :
-#         Gets attachments for specified test case  
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testcaseid':str(testcaseid)}  
-# 
-#         return self._callServer('getTestCaseAttachments', argsAPI)
-
-#     def getTestCaseCustomFieldDesignValue(self, testcaseexternalid, version, 
-#                                      testprojectid, customfieldname, details):
-#         """ getTestCaseCustomFieldDesignValue :
-#         Gets value of a Custom Field with scope='design' for a given Test case  
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                    'testcaseexternalid' : str(testcaseexternalid),
-#                    'version' : int(version),
-#                    'testprojectid' : str(testprojectid),
-#                    'customfieldname' : str(customfieldname),
-#                    'details' : str(details)}
-#         return self._callServer('getTestCaseCustomFieldDesignValue', argsAPI)                                                
-
-#     def getTestCaseIDByName(self, testCaseName, testSuiteName=None, testProjectName=None):
-#         """ 
-#         Find a test case by its name
-#         testSuiteName and testProjectName are optionals arguments
-#         This function return a list of tests cases
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testcasename':str(testCaseName)}
-#  
-#         if testSuiteName is not None:
-#             argsAPI.update({'testsuitename':str(testSuiteName)})
-#      
-#         if testProjectName is not None:
-#             argsAPI.update({'testprojectname':str(testProjectName)})
-#  
-#         # Server return can be a list or a dictionnary !
-#         # This function always return a list
-#         ret_srv = self._callServer('getTestCaseIDByName', argsAPI)
-#         if type(ret_srv) == dict:
-#             retval = []
-#             for value in ret_srv.values():
-#                 retval.append(value)
-#             return retval
-#         else:
-#             return ret_srv
 
     def getTestCaseIDByName(self, *argsPositional, **argsOptional):
         """ getTestCaseIDByName : Find a test case by its name 
@@ -280,165 +118,6 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
             response = response.values()
         return response
 
-#     def getTestCasesForTestPlan(self, *args):
-#         """ getTestCasesForTestPlan :
-#         List test cases linked to a test plan    
-#             Mandatory parameters : testplanid
-#             Optional parameters : testcaseid, buildid, keywordid, keywords,
-#                 executed, assignedto, executestatus, executiontype, getstepinfo 
-#         """        
-#         testplanid = args[0]
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testplanid' : str(testplanid)}
-#         if len(args)>1:
-#             params = args[1:] 
-#             for param in params:
-#                 paramlist = param.split("=")
-#                 argsAPI[paramlist[0]] = paramlist[1]  
-#         return self._callServer('getTestCasesForTestPlan', argsAPI)   
-            
-#     def getTestCasesForTestSuite(self, testsuiteid, deep, details):
-#         """ getTestCasesForTestSuite :
-#         List test cases within a test suite    
-#         """        
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testsuiteid' : str(testsuiteid),
-#                 'deep' : str(deep),
-#                 'details' : str(details)}                  
-#         return self._callServer('getTestCasesForTestSuite', argsAPI)
-  
-#     def getTestPlanByName(self, testprojectname, testplanname):
-#         """ getTestPlanByName :
-#         Gets info about target test project   
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testprojectname' : str(testprojectname),
-#                 'testplanname' : str(testplanname)}    
-#         return self._callServer('getTestPlanByName', argsAPI)
-
-#     def getTestPlanPlatforms(self, testplanid):
-#         """ getTestPlanPlatforms :
-#         Returns the list of platforms associated to a given test plan    
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testplanid' : str(testplanid)}    
-#         return self._callServer('getTestPlanPlatforms', argsAPI)  
-
-#     def getTestProjectByName(self, testprojectname):
-#         """ getTestProjectByName :
-#         Gets info about target test project    
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testprojectname' : str(testprojectname)}    
-#         return self._callServer('getTestProjectByName', argsAPI)    
-  
-#     def getTestSuiteByID(self, testsuiteid):
-#         """ getTestSuiteByID :
-#         Return a TestSuite by ID    
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testsuiteid' : str(testsuiteid)}    
-#         return self._callServer('getTestSuiteByID', argsAPI)   
-  
-#     def getTestSuitesForTestPlan(self, testplanid):
-#         """ getTestSuitesForTestPlan :
-#         List test suites within a test plan alphabetically     
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testplanid' : str(testplanid)}    
-#         return self._callServer('getTestSuitesForTestPlan', argsAPI)  
-        
-#     def getTestSuitesForTestSuite(self, testsuiteid):
-#         """ getTestSuitesForTestSuite :
-#         get list of TestSuites which are DIRECT children of a given TestSuite     
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testsuiteid' : str(testsuiteid)}    
-#         return self._callServer('getTestSuitesForTestSuite', argsAPI)        
-        
-#     def getTotalsForTestPlan(self, testplanid):
-#         """ getTotalsForTestPlan :
-#         Gets the summarized results grouped by platform    
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testplanid' : str(testplanid)}    
-#         return self._callServer('getTotalsForTestPlan', argsAPI)  
-
-#     def createTestProject(self, *args):
-#         """ createTestProject :
-#         Create a test project  
-#             Mandatory parameters : testprojectname, testcaseprefix
-#             Optional parameters : notes, options, active, public
-#             Options: map of requirementsEnabled, testPriorityEnabled, 
-#                             automationEnabled, inventoryEnabled 
-#         """        
-#         testprojectname = args[0]
-#         testcaseprefix = args[1]
-#         options={}
-#         argsAPI = {'devKey' : self.devKey,
-#                    'testprojectname' : str(testprojectname), 
-#                    'testcaseprefix' : str(testcaseprefix)}
-#         if len(args)>2:
-#             params = args[2:] 
-#             for param in params:
-#                 paramlist = param.split("=")
-#                 if paramlist[0] == "options":
-#                     optionlist = paramlist[1].split(",")
-#                     for option in optionlist:
-#                         optiontuple = option.split(":")
-#                         options[optiontuple[0]] = optiontuple[1]
-#                     argsAPI[paramlist[0]] = options
-#                 else:
-#                     argsAPI[paramlist[0]] = paramlist[1]  
-#         return self._callServer('createTestProject', argsAPI)
-        
-#     def createBuild(self, testplanid, buildname, buildnotes):
-#         """ createBuild :
-#         Creates a new build for a specific test plan     
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testplanid' : str(testplanid),
-#                 'buildname' : str(buildname),
-#                 'buildnotes' : str(buildnotes)}                  
-#         return self._callServer('createBuild', argsAPI)        
-    
-#     def createTestPlan(self, *args):
-#         """ createTestPlan :
-#         Create a test plan 
-#             Mandatory parameters : testplanname, testprojectname
-#             Optional parameters : notes, active, public   
-#         """        
-#         testplanname = args[0]
-#         testprojectname = args[1]
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testplanname' : str(testplanname),
-#                 'testprojectname' : str(testprojectname)}
-#         if len(args)>2:
-#             params = args[2:] 
-#             for param in params:
-#                 paramlist = param.split("=")
-#                 argsAPI[paramlist[0]] = paramlist[1]  
-#         return self._callServer('createTestPlan', argsAPI)    
- 
-#     def createTestSuite(self, *args):
-#         """ createTestSuite :
-#         Create a test suite  
-#           Mandatory parameters : testprojectid, testsuitename, details
-#           Optional parameters : parentid, order, checkduplicatedname, 
-#                                 actiononduplicatedname   
-#         """        
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testprojectid' : str(args[0]),
-#                 'testsuitename' : str(args[1]),
-#                 'details' : str(args[2])}
-#         if len(args)>3:
-#             params = args[3:] 
-#             for param in params:
-#                 paramlist = param.split("=")
-#                 argsAPI[paramlist[0]] = paramlist[1]  
-#         return self._callServer('createTestSuite', argsAPI)       
-
-
     def createTestCase(self, *argsPositional, **argsOptional):
         """ createTestCase: Create a test case
         positional args: testcasename, testsuiteid, testprojectid, authorlogin,
@@ -446,83 +125,96 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         optional args : preconditions, importance, execution, order, internalid,
                         checkduplicatedname, actiononduplicatedname
                         
-        argument 'steps' will be set with values from .stepsList
-        must be filled before call via .initStep() and .appendStep()
+        argument 'steps' will be set with values from .stepsList, 
+        - when argsOptional does not include a 'steps' item
+        - .stepsList can be filled before call via .initStep() and .appendStep()
         """ 
         
-        # store current stepsList aus arguments 'steps'
-        argsOptional['steps'] = self.stepsList
-        self.stepsList = []
+        # store current stepsList as argument 'steps', when argsOptional defines
+        # no own 'steps' item
+        if self.stepsList:
+            if argsOptional.has_key('steps'):
+                raise TLArgError('confusing createTestCase arguments - ' +
+                                 '.stepsList and method args define steps')
+            argsOptional['steps'] = self.stepsList
+            self.stepsList = []
         return super(TestlinkAPIClient, self).createTestCase(*argsPositional, 
                                                              **argsOptional)
         
-#      def createTestCase(self, *args): :
-#         Create a test case  
-#           Mandatory parameters : testcasename, testsuiteid, testprojectid, 
-#                                  authorlogin, summary, steps 
-#           Optional parameters : preconditions, importance, executiontype, order, 
-#                        internalid, checkduplicatedname, actiononduplicatedname   
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testcasename' : str(args[0]),
-#                 'testsuiteid' : str(args[1]),
-#                 'testprojectid' : str(args[2]),
-#                 'authorlogin' : str(args[3]),
-#                 'summary' : str(args[4]),
-#                 'steps' : self.stepsList}
-#         if len(args)>5:
-#             params = args[5:] 
-#             for param in params:
-#                 paramlist = param.split("=")
-#                 argsAPI[paramlist[0]] = paramlist[1]
-#         ret = self._callServer('createTestCase', argsAPI) 
-#         self.stepsList = []                    
-#         return ret 
+    #
+    #  ADDITIONNAL FUNCTIONS- copy test cases
+    #                                   
 
-#     def reportTCResult(self, testcaseid, testplanid, buildname, status, notes ):
-#         """
-#         Report execution result
-#         testcaseid: internal testlink id of the test case
-#         testplanid: testplan associated with the test case
-#         buildname: build name of the test case
-#         status: test verdict ('p': pass,'f': fail,'b': blocked)
-# 
-#         Return : [{'status': True, 'operation': 'reportTCResult', 'message': 'Success!', 'overwrite': False, 'id': '37'}]
-#         id correspond to the executionID needed to attach files to a test execution
-#         """
-#         argsAPI = {'devKey' : self.devKey,
-#                 'testcaseid' : testcaseid,
-#                 'testplanid' : testplanid,
-#                 'status': status,
-#                 'buildname': buildname,
-#                 'notes': str(notes)
-#                 }
-#         return self._callServer('reportTCResult', argsAPI)
-
-
+    def _copyTC(self, origTestCaseId, duplicateaction, changedArguments):
+        """ creates a copy of test case with id ORIGTESTCASEID
         
-#     def uploadExecutionAttachment(self,attachmentfile,executionid,title,description):
-#         """
-#         Attach a file to a test execution
-#         attachmentfile: python file descriptor pointing to the file
-#         name : name of the file
-#         title : title of the attachment
-#         description : description of the attachment
-#         content type : mimetype of the file
-#         """
-#         import mimetypes
-#         import base64
-#         import os.path
-#         argsAPI={'devKey' : self.devKey,
-#                  'executionid':executionid,
-#                  'title':title,
-#                  'filename':os.path.basename(attachmentfile.name),
-#                  'description':description,
-#                  'filetype':mimetypes.guess_type(attachmentfile.name)[0],
-#                  'content':base64.encodestring(attachmentfile.read())
-#                  }
-#         return self._callServer('uploadExecutionAttachment', argsAPI)
-                        
+            DUPLICATEACTION decides, how the the test case copy (TC-copy) is 
+            inserted
+            'generate_new': a separate new test case is created, even if name 
+              and test suite are equal
+            'create_new_version': if the target test suite includes already a
+              test case with the same name, a new version is created.
+              if the target test suite includes not a test case with the defined
+              name, a new test case with version 1 is created
+              
+            CHANGEDARGUMENTS defines a dictionary with key value pairs, the api 
+                     arguments, expected from createTestCase. 
+                     Only arguments, which differ between the original and the 
+                     copy must be defined here
+            Remarks for some special keys:
+            'testsuiteid': defines, in which test suite the TC-copy is inserted. 
+                     Default is the same test suite as the original test case. 
+            'steps': must be a complete list of all steps, changed and unchanged steps
+                     Maybe its better to change the steps in a separat call using
+                     createTestCaseSteps with action='update'. 
+    
+        """
+
+#         (tcase_id, tcase_ext_id) = newProj(projKey, 'duplicate Test Case')
+        # get orig test case content 
+        origArgItems = self.getTestCase(testcaseid=origTestCaseId)[0]
+        print 'getTestCase', origArgItems
+        # get orig test case path 
+        origPath = self.getFullPath(int(origTestCaseId))[origTestCaseId]
+        print 'getFullPath', origPath
+        # get orig test case project
+        origProject = self.getTestProjectByName(origPath[0])
+        print 'origProject', origProject
+         
+        # extend origItems with some default values
+        # testprojectid, mandatory in createTestCase
+        origArgItems['testprojectid'] = origProject['id']
+        origArgItems['checkduplicatedname'] = 1 
+#         origArgItems['actiononduplicatedname'] = 'create_new_version' 
+        origArgItems['actiononduplicatedname'] = duplicateaction 
+
+        # collect info, which arguments are needed from orig test case
+        (posArgNames, optArgNames, manArgNames) = \
+                            self._apiMethodArgNames('createTestCase')
+        # some argNames not realy needed
+        optArgNames.remove('internalid')
+        optArgNames.remove('devKey')
+                                     
+        externalArgNames = posArgNames[:]
+        externalArgNames.extend(optArgNames)
+        externalTointernalNames = {'testcasename' : 'name', 'testsuiteid' : 'testsuite_id',
+                                   'authorlogin' : 'author_login', 'execution' : 'execution_type',
+                                   'order' : 'node_order'}
+        newArgItems = {}
+        for exArgName in externalArgNames:
+            inArgName = externalTointernalNames.get(exArgName, exArgName) 
+            newArgItems[exArgName] = origArgItems[inArgName]
+         
+        posArgValues = []
+        for argName in posArgNames:
+            posArgValues.append(newArgItems[argName])
+            newArgItems.pop(argName)
+     
+        print 'posArgValues', posArgValues
+        print 'newArgItems', newArgItems
+        response = self.createTestCase(*posArgValues, **newArgItems)
+        print 'createTestCase' , response                
+
     #
     #  ADDITIONNAL FUNCTIONS
     #                                   
