@@ -519,6 +519,15 @@ print "getTestCaseCustomFieldDesignValue", "Sorry currently no testdata"
 # print "getTestCaseAttachments", response
 print "getTestCaseAttachments", "Sorry currently no testdata"
 
+print "create new version of TC B"
+response = myTestLink.copyTCnewVersion(newTestCaseID_B, 
+                summary='new version of TC B', importance='1')
+print 'copyTCnewVersion', response
+print "copy TC B as TC BA into Test suite B"
+response = myTestLink.copyTCnewTestCase(newTestCaseID_B, 
+                testsuiteid=newTestSuiteID_A, testcasename='%sA' % NEWTESTCASE_B)
+print 'copyTCnewTestCase', response
+
 
 print ""
 print "Number of Projects      in TestLink: %s " % myTestLink.countProjects()

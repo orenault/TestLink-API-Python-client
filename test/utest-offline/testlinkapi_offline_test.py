@@ -109,18 +109,18 @@ SCENARIO_A = {'getProjects' : [
                                },
               'getFullPath' : {
                                
-                26 : {'26' : ['TestPlan_API', 'A - First Level', 'AA - Second Level']},
+                26 : {'26' : ['NEW_PROJECT_API', 'A - First Level', 'AA - Second Level']},
+                4711 : {'4711' : ['OLD_PROJECT_API']},
                     },
               'getTestProjectByName' : {
-                'TestPlan_API' : {
-                    'opt': {'requirementsEnabled': 0, 'testPriorityEnabled': 1, 
-                            'automationEnabled': 1, 'inventoryEnabled': 0}, 
+                'NEW_PROJECT_API' : {
                     'prefix': 'NPROAPI', 'name': 'NEW_PROJECT_API', 'color': '',
                     'notes': 'This is a Project created with the API', 
-                    'option_priority': '0', 
-                    'options': 'O:8:"stdClass":4:{s:19:"requirementsEnabled";i:0;s:19:"testPriorityEnabled";i:1;s:17:"automationEnabled";i:1;s:16:"inventoryEnabled";i:0;}', 
-                    'tc_counter': '2', 'option_reqs': '0', 'active': '1', 
                     'is_public': '1', 'id': '21', 'option_automation': '0'},
+                'OLD_PROJECT_API' : {
+                     'prefix': 'OPROAPI', 'name': 'OLD_PROJECT_API', 'color': '',
+                    'notes': 'This is a Project created with the API', 
+                    'is_public': '1', 'id': '2211', 'option_automation': '0'},
                     },
               'createTestCase' : 'dummy response createTestCase',
               }
@@ -285,17 +285,50 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual('TESTCASE_AA', response[0]['name']) 
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
         
+    def test_getProjectIDByNode(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.assertEqual('2211', self.api.getProjectIDByNode('4711'))
+        
     def test__copyTC_generate_new(self):
         self.api.loadScenario(SCENARIO_A)
-        self.api._copyTC('26', 'generate_new', {})
+        self.api._copyTC('26', {}, duplicateaction = 'generate_new')
         self.assertEqual('generate_new',  
                          self.api.callArgs['actiononduplicatedname'])
 
     def test__copyTC_create_new_version(self):
         self.api.loadScenario(SCENARIO_A)
-        self.api._copyTC('26', 'create_new_version', {})
+        self.api._copyTC('26', {}, duplicateaction = 'create_new_version')
         self.assertEqual('create_new_version',  
                          self.api.callArgs['actiononduplicatedname'])
+
+    def test__copyTC_changedArgs(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.api._copyTC('26', {'testsuiteid' :'4711'}, 
+                         duplicateaction = 'generate_new')
+        self.assertEqual('4711', self.api.callArgs['testsuiteid'])
+        self.assertEqual('2211', self.api.callArgs['testprojectid'])
+
+    def test_copyTCnewVersion(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.api.copyTCnewVersion('26', summary = 'The summary has changed', 
+                                    importance = '33')
+        self.assertEqual('create_new_version',  
+                         self.api.callArgs['actiononduplicatedname'])
+        self.assertEqual('The summary has changed', self.api.callArgs['summary'])
+        self.assertEqual('33', self.api.callArgs['importance'])
+        self.assertEqual('TC-C', self.api.callArgs['testcasename'])
+        self.assertEqual('25', self.api.callArgs['testsuiteid'])
+        self.assertEqual('21', self.api.callArgs['testprojectid'])
+
+
+    def test_copyTCnewTestCase(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.api.copyTCnewTestCase('26', testsuiteid = '4711')
+        self.assertEqual('generate_new',  
+                         self.api.callArgs['actiononduplicatedname'])
+        self.assertEqual('4711', self.api.callArgs['testsuiteid'])
+        self.assertEqual('2211', self.api.callArgs['testprojectid'])
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

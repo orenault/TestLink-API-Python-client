@@ -145,75 +145,132 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
     #  ADDITIONNAL FUNCTIONS- copy test cases
     #                                   
 
-    def _copyTC(self, origTestCaseId, duplicateaction, changedArguments):
+    def getProjectIDByNode(self, a_nodeid):
+        """ returns project id , the nodeid belongs to."""
+        
+        # get node path 
+        node_path = self.getFullPath(int(a_nodeid))[a_nodeid]
+        # get project and id
+        a_project = self.getTestProjectByName(node_path[0])
+        return a_project['id']
+
+    def copyTCnewVersion(self, origTestCaseId, **changedAttributes):
+        """ creates a new version for test case with ID ORIGTESTCASEID
+        
+        if the new version should differ from the original test case, changed 
+        api arguments could be defined as key value pairs. 
+        Example for changed summary and importance:
+        -  copyTCnewVersion('4711', summary = 'The summary has changed', 
+                                    importance = '1')
+        """
+        
+        return self._copyTC(origTestCaseId, changedAttributes, 
+                            duplicateaction = 'create_new_version')
+        
+    def copyTCnewTestCase(self, origTestCaseId, **changedAttributes):
+        """ creates a test case with values from test case with ID ORIGTESTCASEID
+        
+        if the new test case should differ from the original test case, changed 
+        api arguments could be defined as key value pairs. 
+        Example for changed test suite and importance:
+        -  copyTCnewTestCaseVersion('4711', testsuiteid = '1007', 
+                                            importance = '1')
+        """
+        
+        return self._copyTC(origTestCaseId, changedAttributes, 
+                            duplicateaction = 'generate_new')
+        
+    
+    def _copyTC(self, origTestCaseId, changedArgs, **options):
         """ creates a copy of test case with id ORIGTESTCASEID
         
-            DUPLICATEACTION decides, how the the test case copy (TC-copy) is 
-            inserted
-            'generate_new': a separate new test case is created, even if name 
-              and test suite are equal
-            'create_new_version': if the target test suite includes already a
-              test case with the same name, a new version is created.
-              if the target test suite includes not a test case with the defined
-              name, a new test case with version 1 is created
-              
-            CHANGEDARGUMENTS defines a dictionary with key value pairs, the api 
-                     arguments, expected from createTestCase. 
-                     Only arguments, which differ between the original and the 
-                     copy must be defined here
-            Remarks for some special keys:
-            'testsuiteid': defines, in which test suite the TC-copy is inserted. 
-                     Default is the same test suite as the original test case. 
-            'steps': must be a complete list of all steps, changed and unchanged steps
-                     Maybe its better to change the steps in a separat call using
-                     createTestCaseSteps with action='update'. 
+        returns createTestCase response for the copy
+        
+        CHANGEDARGUMENTS defines a dictionary with api arguments, expected from 
+                 createTestCase. Only arguments, which differ between TC-orig 
+                 and TC-copy must be defined
+        Remarks for some special keys:
+        'testsuiteid': defines, in which test suite the TC-copy is inserted. 
+                 Default is the same test suite as the original test case. 
+        'steps': must be a complete list of all steps, changed and unchanged steps
+                 Maybe its better to change the steps in a separat call using
+                 createTestCaseSteps with action='update'. 
+
+        OPTIONS are optional key value pairs to influence the copy process
+        - details see comments _copyTCbuildArgs()
     
         """
 
-#         (tcase_id, tcase_ext_id) = newProj(projKey, 'duplicate Test Case')
         # get orig test case content 
         origArgItems = self.getTestCase(testcaseid=origTestCaseId)[0]
-        print 'getTestCase', origArgItems
-        # get orig test case path 
-        origPath = self.getFullPath(int(origTestCaseId))[origTestCaseId]
-        print 'getFullPath', origPath
-        # get orig test case project
-        origProject = self.getTestProjectByName(origPath[0])
-        print 'origProject', origProject
+        # get orig test case project id 
+        origArgItems['testprojectid'] = self.getProjectIDByNode(origTestCaseId)
          
-        # extend origItems with some default values
-        # testprojectid, mandatory in createTestCase
-        origArgItems['testprojectid'] = origProject['id']
-        origArgItems['checkduplicatedname'] = 1 
-#         origArgItems['actiononduplicatedname'] = 'create_new_version' 
-        origArgItems['actiononduplicatedname'] = duplicateaction 
+        # build args for the TC-copy
+        (posArgValues, newArgItems) = self._copyTCbuildArgs(origArgItems, 
+                                                        changedArgs, options)
+        # create the TC-Copy
+        response = self.createTestCase(*posArgValues, **newArgItems)
+        return response
+        
+    def _copyTCbuildArgs(self, origArgItems, changedArgs, options):
+        """  build Args to create a new test case . 
+        ORIGARGITEMS is a dictionary with getTestCase response of an existing 
+                     test case
+        CHANGEDARGS is a dictionary with api argument for createTestCase, which 
+                     should differ from these
+        OPTIONS is a dictionary with settings for the copy process 
 
-        # collect info, which arguments are needed from orig test case
+        'duplicateaction': decides, how the TC-copy is inserted
+           - 'generate_new' (default): a separate new test case is created, even
+                 if name and test suite are equal
+           - 'create_new_version': if the target test suite includes already a
+                 test case with the same name, a new version is created.
+                 if the target test suite includes not a test case with the 
+                 defined name, a new test case with version 1 is created
+        """
+
+        # collect info, which arguments createTestCase expects
         (posArgNames, optArgNames, manArgNames) = \
                             self._apiMethodArgNames('createTestCase')
         # some argNames not realy needed
         optArgNames.remove('internalid')
         optArgNames.remove('devKey')
                                      
+        # mapping between getTestCase response and createTestCase arg names                                      
         externalArgNames = posArgNames[:]
         externalArgNames.extend(optArgNames)
-        externalTointernalNames = {'testcasename' : 'name', 'testsuiteid' : 'testsuite_id',
-                                   'authorlogin' : 'author_login', 'execution' : 'execution_type',
-                                   'order' : 'node_order'}
+        externalTointernalNames = {'testcasename' : 'name', 
+                'testsuiteid' : 'testsuite_id', 'authorlogin' : 'author_login', 
+                'execution' : 'execution_type', 'order' : 'node_order'}
+        
+        # extend origItems with some values needed in createTestCase 
+        origArgItems['checkduplicatedname'] = 1 
+        origArgItems['actiononduplicatedname'] = options.get('duplicateaction', 
+                                                             'generate_new')  
+        # build arg dictionary for TC-copy with orig values
         newArgItems = {}
         for exArgName in externalArgNames:
             inArgName = externalTointernalNames.get(exArgName, exArgName) 
             newArgItems[exArgName] = origArgItems[inArgName]
+            
+        # if changed values defines a different test suite, add the correct 
+        # project id
+        if changedArgs.has_key('testsuiteid'):
+            changedProjID = self.getProjectIDByNode(changedArgs['testsuiteid'])
+            changedArgs['testprojectid'] = changedProjID
          
+        # change orig values for TC-copy 
+        for (argName, argValue) in changedArgs.items():
+            newArgItems[argName] = argValue
+        
+        # separate positional and optional createTestCase arguments          
         posArgValues = []
         for argName in posArgNames:
             posArgValues.append(newArgItems[argName])
             newArgItems.pop(argName)
-     
-        print 'posArgValues', posArgValues
-        print 'newArgItems', newArgItems
-        response = self.createTestCase(*posArgValues, **newArgItems)
-        print 'createTestCase' , response                
+            
+        return (posArgValues, newArgItems)
 
     #
     #  ADDITIONNAL FUNCTIONS

@@ -6,6 +6,13 @@ TestLink-API-Python-client UNDER DEVELOP v0.4.7
 
 new service methods - copy test cases #17
 
+ TestlinkAPIClient delivers new method to copy test cases between test suites or
+ to create a new test case version.
+
+- copyTCnewVersion(origTestCaseId, **changedAttributes)
+- copyTCnewTestCase(origTestCaseId, **changedAttributes)
+- getProjectIDByNode(a_nodeid)
+
 implement missing 1.9.8 api methods - TestCase #11
 
 - addTestCaseToTestPlan, updateTestCase 
