@@ -478,11 +478,11 @@ print "getTestCasesForTestPlan", response
 response = myTestLink.getTestSuiteByID(newTestSuiteID_B)
 print "getTestSuiteByID", response
 response = myTestLink.getTestSuitesForTestSuite(newTestSuiteID_A)
-print "getTestSuitesForTestSuite", response
+print "getTestSuitesForTestSuite A", response
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A, True, 'full')
-print "getTestCasesForTestSuite", response
+print "getTestCasesForTestSuite A", response
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 'only_id')
-print "getTestCasesForTestSuite", response
+print "getTestCasesForTestSuite B", response
 
 # get informationen - TestCase
 # -- Start CHANGE v0.4.5 -- 
@@ -527,6 +527,10 @@ print "copy TC B as TC BA into Test suite B"
 response = myTestLink.copyTCnewTestCase(newTestCaseID_B, 
                 testsuiteid=newTestSuiteID_A, testcasename='%sA' % NEWTESTCASE_B)
 print 'copyTCnewTestCase', response
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 'simple')
+print 'getTestCasesForTestSuite B', response
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A, True, 'simple')
+print 'getTestCasesForTestSuite A', response
 
 
 print ""

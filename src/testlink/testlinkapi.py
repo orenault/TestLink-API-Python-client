@@ -154,34 +154,52 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         a_project = self.getTestProjectByName(node_path[0])
         return a_project['id']
 
-    def copyTCnewVersion(self, origTestCaseId, **changedAttributes):
-        """ creates a new version for test case with ID ORIGTESTCASEID
+    def copyTCnewVersion(self, origTestCaseId, origVersion=None, **changedAttributes):
+        """ creates a new version for test case ORIGTESTCASEID
         
+        ORIGVERSION specifies the test case version, which should be copied,
+                    default is the max version number
+
         if the new version should differ from the original test case, changed 
         api arguments could be defined as key value pairs. 
         Example for changed summary and importance:
         -  copyTCnewVersion('4711', summary = 'The summary has changed', 
                                     importance = '1')
+        Remarks for some special keys:
+        'steps': must be a complete list of all steps, changed and unchanged steps
+                 Maybe its better to change the steps in a separat call using
+                 createTestCaseSteps with action='update'. 
         """
         
-        return self._copyTC(origTestCaseId, changedAttributes, 
+        return self._copyTC(origTestCaseId, changedAttributes, origVersion, 
                             duplicateaction = 'create_new_version')
         
-    def copyTCnewTestCase(self, origTestCaseId, **changedAttributes):
-        """ creates a test case with values from test case with ID ORIGTESTCASEID
+    def copyTCnewTestCase(self, origTestCaseId, origVersion=None, **changedAttributes):
+        """ creates a test case with values from test case ORIGTESTCASEID
+        
+        ORIGVERSION specifies the test case version, which should be copied,
+                    default is the max version number
         
         if the new test case should differ from the original test case, changed 
         api arguments could be defined as key value pairs. 
         Example for changed test suite and importance:
         -  copyTCnewTestCaseVersion('4711', testsuiteid = '1007', 
                                             importance = '1')
+                                            
+        Remarks for some special keys:
+        'testsuiteid': defines, in which test suite the TC-copy is inserted. 
+                 Default is the same test suite as the original test case. 
+        'steps': must be a complete list of all steps, changed and unchanged steps
+                 Maybe its better to change the steps in a separat call using
+                 createTestCaseSteps with action='update'. 
+                 
         """
         
-        return self._copyTC(origTestCaseId, changedAttributes, 
+        return self._copyTC(origTestCaseId, changedAttributes, origVersion,
                             duplicateaction = 'generate_new')
         
     
-    def _copyTC(self, origTestCaseId, changedArgs, **options):
+    def _copyTC(self, origTestCaseId, changedArgs, origVersion=None, **options):
         """ creates a copy of test case with id ORIGTESTCASEID
         
         returns createTestCase response for the copy
@@ -195,6 +213,9 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         'steps': must be a complete list of all steps, changed and unchanged steps
                  Maybe its better to change the steps in a separat call using
                  createTestCaseSteps with action='update'. 
+        
+        ORIGVERSION specifies the test case version, which should be copied,
+                    default is the max version number
 
         OPTIONS are optional key value pairs to influence the copy process
         - details see comments _copyTCbuildArgs()
@@ -202,7 +223,7 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         """
 
         # get orig test case content 
-        origArgItems = self.getTestCase(testcaseid=origTestCaseId)[0]
+        origArgItems = self.getTestCase(origTestCaseId, version=origVersion)[0]
         # get orig test case project id 
         origArgItems['testprojectid'] = self.getProjectIDByNode(origTestCaseId)
          

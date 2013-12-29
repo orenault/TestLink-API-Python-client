@@ -96,16 +96,37 @@ SCENARIO_A = {'getProjects' : [
                                  'id': '26', 'tsuite_name': 'AA - Second Level', 
                                  'name': 'TESTCASE_AA'}]},
               'getTestCase' : {
-                '26' : [{'full_tc_external_id': 'NPROAPI-1-26', 'node_order': '0', 'is_open': '1', 'id': '26', 
+                '26-1' : [{'full_tc_external_id': 'NPROAPI-1', 'node_order': '0', 'is_open': '1', 'id': '27', 
                          'author_last_name': 'LkaTlinkD7', 'updater_login': '', 'layout': '1', 'tc_external_id': '1', 
                          'version': '1', 'estimated_exec_duration': '', 'testsuite_id': '25', 'updater_id': '', 
-                         'status': '1', 'updater_first_name': '', 'testcase_id': '5099', 'author_first_name': 'Tester', 
-                         'importance': '2', 'modification_ts': '', 'execution_type': '1', 'preconditions': '', 
+                         'status': '1', 'updater_first_name': '', 'testcase_id': '26', 'author_first_name': 'Tester', 
+                         'importance': '2', 'modification_ts': '', 'execution_type': '1', 'preconditions': 'V1', 
                          'active': '1', 'creation_ts': '2013-12-26 21:17:43', 'name': 'TC-C', 'summary': 'SumSumSum', 
                          'updater_last_name': '', 
                          'steps': [{'step_number': '1', 'actions': 'Step action 1', 'execution_type': '2', 'active': '1', 
                                     'id': '5101', 'expected_results': 'Step result 1'}], 
+                         'author_id': '3', 'author_login': 'tester'}],
+                '26-2' : [{'full_tc_external_id': 'NPROAPI-1', 'node_order': '0', 'is_open': '1', 'id': '127', 
+                         'author_last_name': 'LkaTlinkD7', 'updater_login': '', 'layout': '1', 'tc_external_id': '1', 
+                         'version': '2', 'estimated_exec_duration': '', 'testsuite_id': '25', 'updater_id': '', 
+                         'status': '1', 'updater_first_name': '', 'testcase_id': '26', 'author_first_name': 'Tester', 
+                         'importance': '2', 'modification_ts': '', 'execution_type': '1', 'preconditions': 'V2', 
+                         'active': '1', 'creation_ts': '2013-12-26 22:17:43', 'name': 'TC-C', 'summary': 'SumSumSum', 
+                         'updater_last_name': '', 
+                         'steps': [{'step_number': '1', 'actions': 'Step action 1', 'execution_type': '2', 'active': '1', 
+                                    'id': '5101', 'expected_results': 'Step result 1'}], 
+                         'author_id': '3', 'author_login': 'tester'}],
+                '26-None' : [{'full_tc_external_id': 'NPROAPI-1', 'node_order': '0', 'is_open': '1', 'id': '127', 
+                         'author_last_name': 'LkaTlinkD7', 'updater_login': '', 'layout': '1', 'tc_external_id': '1', 
+                         'version': '2', 'estimated_exec_duration': '', 'testsuite_id': '25', 'updater_id': '', 
+                         'status': '1', 'updater_first_name': '', 'testcase_id': '26', 'author_first_name': 'Tester', 
+                         'importance': '2', 'modification_ts': '', 'execution_type': '1', 'preconditions': 'V2 None', 
+                         'active': '1', 'creation_ts': '2013-12-26 22:17:43', 'name': 'TC-C', 'summary': 'SumSumSum', 
+                         'updater_last_name': '', 
+                         'steps': [{'step_number': '1', 'actions': 'Step action 1', 'execution_type': '2', 'active': '1', 
+                                    'id': '5101', 'expected_results': 'Step result 1'}], 
                          'author_id': '3', 'author_login': 'tester'}]
+                               
                                },
               'getFullPath' : {
                                
@@ -159,7 +180,7 @@ class DummyAPIClient(TestlinkAPIClient):
         elif methodAPI in ['getTestCaseIDByName']:
             response = data[argsAPI['testcasename']]
         elif methodAPI in ['getTestCase']:
-            response = data[argsAPI['testcaseid']]
+            response = data['%(testcaseid)s-%(version)s' % argsAPI]
         elif methodAPI in ['getFullPath']:
             response = data[argsAPI['nodeid']]
         elif methodAPI in ['getTestProjectByName']:
@@ -300,6 +321,7 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.api._copyTC('26', {}, duplicateaction = 'create_new_version')
         self.assertEqual('create_new_version',  
                          self.api.callArgs['actiononduplicatedname'])
+        self.assertEqual('V2 None', self.api.callArgs['preconditions'])
 
     def test__copyTC_changedArgs(self):
         self.api.loadScenario(SCENARIO_A)
@@ -308,24 +330,56 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual('4711', self.api.callArgs['testsuiteid'])
         self.assertEqual('2211', self.api.callArgs['testprojectid'])
 
+    def test__copyTC_changedArgs_version(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.api._copyTC('26', {'testsuiteid' :'4711'}, 1,
+                         duplicateaction = 'generate_new')
+        self.assertEqual('4711', self.api.callArgs['testsuiteid'])
+        self.assertEqual('2211', self.api.callArgs['testprojectid'])
+        self.assertEqual('V1', self.api.callArgs['preconditions'])
+        
+
     def test_copyTCnewVersion(self):
         self.api.loadScenario(SCENARIO_A)
         self.api.copyTCnewVersion('26', summary = 'The summary has changed', 
                                     importance = '33')
         self.assertEqual('create_new_version',  
                          self.api.callArgs['actiononduplicatedname'])
+        self.assertEqual('V2 None', self.api.callArgs['preconditions'])
         self.assertEqual('The summary has changed', self.api.callArgs['summary'])
         self.assertEqual('33', self.api.callArgs['importance'])
         self.assertEqual('TC-C', self.api.callArgs['testcasename'])
         self.assertEqual('25', self.api.callArgs['testsuiteid'])
         self.assertEqual('21', self.api.callArgs['testprojectid'])
 
+    def test_copyTCnewVersion_version(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.api.copyTCnewVersion('26', 1, summary = 'The summary has changed', 
+                                    importance = '33')
+        self.assertEqual('create_new_version',  
+                         self.api.callArgs['actiononduplicatedname'])
+        self.assertEqual('V1', self.api.callArgs['preconditions'])
+        self.assertEqual('The summary has changed', self.api.callArgs['summary'])
+        self.assertEqual('33', self.api.callArgs['importance'])
+        self.assertEqual('TC-C', self.api.callArgs['testcasename'])
+        self.assertEqual('25', self.api.callArgs['testsuiteid'])
+        self.assertEqual('21', self.api.callArgs['testprojectid'])
 
     def test_copyTCnewTestCase(self):
         self.api.loadScenario(SCENARIO_A)
         self.api.copyTCnewTestCase('26', testsuiteid = '4711')
         self.assertEqual('generate_new',  
                          self.api.callArgs['actiononduplicatedname'])
+        self.assertEqual('V2 None', self.api.callArgs['preconditions'])
+        self.assertEqual('4711', self.api.callArgs['testsuiteid'])
+        self.assertEqual('2211', self.api.callArgs['testprojectid'])
+
+    def test_copyTCnewTestCase_version(self):
+        self.api.loadScenario(SCENARIO_A)
+        self.api.copyTCnewTestCase('26', 1, testsuiteid = '4711')
+        self.assertEqual('generate_new',  
+                         self.api.callArgs['actiononduplicatedname'])
+        self.assertEqual('V1', self.api.callArgs['preconditions'])
         self.assertEqual('4711', self.api.callArgs['testsuiteid'])
         self.assertEqual('2211', self.api.callArgs['testprojectid'])
 
