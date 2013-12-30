@@ -5,28 +5,47 @@ TestLink-API-Python-client UNDER DEVELOP v0.4.7
 -----------------------------------------------
 
 new service methods - copy test cases #17
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+new TestlinkAPIClient service methods to copy test cases between test suites or
+to create a new test case version.
 
- TestlinkAPIClient delivers new method to copy test cases between test suites or
- to create a new test case version.
-
-- copyTCnewVersion(origTestCaseId, **changedAttributes)
-- copyTCnewTestCase(origTestCaseId, **changedAttributes)
+- copyTCnewVersion(origTestCaseId, \*\*changedAttributes)
+- copyTCnewTestCase(origTestCaseId, \*\*changedAttributes)
 - getProjectIDByNode(a_nodeid)
 
-implement missing 1.9.8 api methods - TestCase #11
+Example::
 
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tc_info = tls.getTestCase(None, testcaseexternalid='NPROAPI3-2')
+ [{'full_tc_external_id': 'NPROAPI3-2', ..., 'id': '5440',  'version': '2',  
+   'testsuite_id': '5415', 'tc_external_id': '2','testcase_id': '5425', ...}]
+ >>> tls.copyTCnewTestCase(tc_info[0]['testcase_id'], testsuiteid=newSuiteID, 
+                                          testcasename='a new test case name')
+                                          
+Known limitations:
+- estimatedexecduration settings are not copied                                          
+
+implement missing 1.9.8 api methods - TestCase #11
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - addTestCaseToTestPlan, updateTestCase 
 - createTestCaseSteps, deleteTestCaseSteps
+
+implement missing 1.9.8 api methods - Attachments #13
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+- uploadRequirementSpecificationAttachment, uploadRequirementAttachment
+- uploadTestProjectAttachment, uplodTestSuiteAttachment
+- uploadTestCaseAttachment
 
 TestLink-API-Python-client release notes v0.4.6 (Dec. 2013)
 -----------------------------------------------------------
 
 TestLink-API-Python-client is now installable via PyPI #15
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     pip install TestLink-API-Python-client
 
 new api methods for Platforms implemented #10
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 - createPlatform, getProjectPlatforms
 - addPlatformToTestPlan, removePlatformFromTestPlan
 

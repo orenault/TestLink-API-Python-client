@@ -429,6 +429,24 @@ class TestlinkAPIGeneric(object):
 #  * returns the error map.
 #  */
 # public function uploadRequirementSpecificationAttachment($args)
+
+    @decoApiCallAddAttachment            
+    @decoMakerApiCallWithArgs(['reqspecid'], 
+                    ['title', 'description', 'filename', 'filetype', 'content'])
+    def uploadRequirementSpecificationAttachment(self):
+        """ Uploads an attachment for a Requirement Specification.
+        
+        reqspecid - The Requirement Specification ID
+        
+        mandatory non api args: attachmentfile
+        - python file descriptor pointing to the file
+        - !Attention - on WINDOWS use binary mode for none text file
+          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        
+        default values for filename, filetype, content are determine from 
+        ATTACHMENTFILE, but user could overwrite it, if user want to store the
+        attachment with a different name 
+        """
         
 # /**
 #  * Uploads an attachment for a Requirement.
@@ -451,6 +469,25 @@ class TestlinkAPIGeneric(object):
 #  */
 # public function uploadRequirementAttachment($args)        
 
+    @decoApiCallAddAttachment            
+    @decoMakerApiCallWithArgs(['requirementid'], 
+                    ['title', 'description', 'filename', 'filetype', 'content'])
+    def uploadRequirementAttachment(self):
+        """ Uploads an attachment for a Requirement.
+        
+        requirementid - The Requirement ID
+        
+        mandatory non api args: attachmentfile
+        - python file descriptor pointing to the file
+        - !Attention - on WINDOWS use binary mode for none text file
+          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        
+        default values for filename, filetype, content are determine from 
+        ATTACHMENTFILE, but user could overwrite it, if user want to store the
+        attachment with a different name 
+        """
+        
+
 # /**
 #  * Uploads an attachment for a Test Project.
 #  * 
@@ -472,6 +509,24 @@ class TestlinkAPIGeneric(object):
 #  */
 # public function uploadTestProjectAttachment($args)
 
+    @decoApiCallAddAttachment            
+    @decoMakerApiCallWithArgs(['testprojectid'], 
+                    ['title', 'description', 'filename', 'filetype', 'content'])
+    def uploadTestProjectAttachment(self):
+        """ Uploads an attachment for a Test Project.
+        
+        testprojectid - The Test Project ID
+        
+        mandatory non api args: attachmentfile
+        - python file descriptor pointing to the file
+        - !Attention - on WINDOWS use binary mode for none text file
+          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        
+        default values for filename, filetype, content are determine from 
+        ATTACHMENTFILE, but user could overwrite it, if user want to store the
+        attachment with a different name 
+        """
+        
 # /**
 #  * Uploads an attachment for a Test Suite.
 #  * 
@@ -492,6 +547,24 @@ class TestlinkAPIGeneric(object):
 #  * returns the erros map.
 #  */
 # public function uploadTestSuiteAttachment($args)
+
+    @decoApiCallAddAttachment            
+    @decoMakerApiCallWithArgs(['testsuiteid'], 
+                    ['title', 'description', 'filename', 'filetype', 'content'])
+    def uploadTestSuiteAttachment(self):
+        """ Uploads an attachment for a Test Suite.
+        
+        testsuiteid - The Test Suite ID
+        
+        mandatory non api args: attachmentfile
+        - python file descriptor pointing to the file
+        - !Attention - on WINDOWS use binary mode for none text file
+          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        
+        default values for filename, filetype, content are determine from 
+        ATTACHMENTFILE, but user could overwrite it, if user want to store the
+        attachment with a different name 
+        """
 
 # /**
 #  * Uploads an attachment for a Test Case.
@@ -514,20 +587,39 @@ class TestlinkAPIGeneric(object):
 #  */
 # public function uploadTestCaseAttachment($args)
 
+    @decoApiCallAddAttachment            
+    @decoMakerApiCallWithArgs(['testcaseid'], 
+                    ['title', 'description', 'filename', 'filetype', 'content'])
+    def uploadTestCaseAttachment(self):
+        """ Uploads an attachment for a Test Case.
+        
+        testcaseid - Test Case INTERNAL ID
+        
+        mandatory non api args: attachmentfile
+        - python file descriptor pointing to the file
+        - !Attention - on WINDOWS use binary mode for none text file
+          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        
+        default values for filename, filetype, content are determine from 
+        ATTACHMENTFILE, but user could overwrite it, if user want to store the
+        attachment with a different name 
+        """
 
     @decoApiCallAddAttachment            
     @decoMakerApiCallWithArgs(['executionid'], 
                     ['title', 'description', 'filename', 'filetype', 'content'])
     def uploadExecutionAttachment(self):
         """ Uploads an attachment for an execution
-        mandatory non api args: attachmentfile
         
-        attachmentfile: python file descriptor pointing to the file
-        !Attention - on WINDOWS use binary mode for none text file
-        see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        executionid - execution ID
+        
+        mandatory non api args: attachmentfile
+        - python file descriptor pointing to the file
+        - !Attention - on WINDOWS use binary mode for none text file
+          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
         
         default values for filename, filetype, content are determine from 
-        ATTACHMENTFILE, but user could overwrite it, if they want to store the
+        ATTACHMENTFILE, but user could overwrite it, if user want to store the
         attachment with a different name 
         """
 
@@ -555,6 +647,25 @@ class TestlinkAPIGeneric(object):
 #  * returns the erros map.
 #  */
 # public function uploadAttachment($args, $messagePrefix='', $setArgs=true)
+
+    @decoApiCallAddAttachment            
+    @decoMakerApiCallWithArgs(['fkid', 'fktable'], 
+                    ['title', 'description', 'filename', 'filetype', 'content'])
+    def uploadAttachment(self):
+        """ Uploads an attachment for an execution
+        
+        fkid    - The Attachment Foreign Key ID
+        fktable - The Attachment Foreign Key Table
+
+        mandatory non api args: attachmentfile
+        - python file descriptor pointing to the file
+        - !Attention - on WINDOWS use binary mode for none text file
+          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        
+        default values for filename, filetype, content are determine from 
+        ATTACHMENTFILE, but user could overwrite it, if user want to store the
+        attachment with a different name 
+        """
 
 #     /**
 #      * Gets value of a Custom Field for a entity in a given scope (e.g.: a custom

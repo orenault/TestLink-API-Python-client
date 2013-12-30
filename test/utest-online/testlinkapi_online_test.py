@@ -215,6 +215,43 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         steps = [2,8]
         with self.assertRaisesRegexp(TLResponseError, '5040.*N-4711'):
             self.client.deleteTestCaseSteps('N-4711', steps, version=1)
+
+    def test_uploadRequirementSpecificationAttachment_unknownID(self):
+        attachemantFile = open(os.path.realpath(__file__), 'r')
+        with self.assertRaisesRegexp(TLResponseError, '6004.*4712'):
+            self.client.uploadRequirementSpecificationAttachment(attachemantFile, 4712, 
+                        title='title 4713', description='descr. 4714')
+ 
+    def test_uploadRequirementAttachment_unknownID(self):
+        attachemantFile = open(os.path.realpath(__file__), 'r')
+        with self.assertRaisesRegexp(TLResponseError, '6004.*4712'):
+            self.client.uploadRequirementAttachment(attachemantFile, 4712, 
+                        title='title 4713', description='descr. 4714')
+ 
+    def test_uploadTestProjectAttachment_unknownID(self):
+        attachemantFile = open(os.path.realpath(__file__), 'r')
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4712'):
+            self.client.uploadTestProjectAttachment(attachemantFile, 4712, 
+                        title='title 4713', description='descr. 4714')
+ 
+    def test_uploadTestSuiteAttachment_unknownID(self):
+        attachemantFile = open(os.path.realpath(__file__), 'r')
+        with self.assertRaisesRegexp(TLResponseError, '8000.*4712'):
+            self.client.uploadTestSuiteAttachment(attachemantFile, 4712, 
+                        title='title 4713', description='descr. 4714')
+ 
+    def test_uploadTestCaseAttachment_unknownID(self):
+        attachemantFile = open(os.path.realpath(__file__), 'r')
+        with self.assertRaisesRegexp(TLResponseError, '5000.*testcaseid'):
+            self.client.uploadTestCaseAttachment(attachemantFile, 4712, 
+                        title='title 4713', description='descr. 4714')
+ 
+    def test_uploadAttachment_unknownID(self):
+        attachemantFile = open(os.path.realpath(__file__), 'r')
+        with self.assertRaisesRegexp(TLResponseError, '6004.*4712'):
+            self.client.uploadAttachment(attachemantFile, 4712, 'nodes_hierarchy',
+                        title='title 4713', description='descr. 4714')
+
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

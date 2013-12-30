@@ -418,7 +418,7 @@ newResultID_B = newResult[0]['id']
 # different filename 'MyPyExampleApiClient.py'
 a_file=open(NEWATTACHMENT_PY)
 newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_B, 
-            'Textfile Example', 'Text Attachment Example for a TestCase',
+            'Textfile Example', 'Text Attachment Example for a TestCase Execution',
             filename='MyPyExampleApiClient.py')
 print "uploadExecutionAttachment", newAttachment
 # add png file as Attachemnt to last execution of TC_AA
@@ -426,7 +426,7 @@ print "uploadExecutionAttachment", newAttachment
 # see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
 a_file=open(NEWATTACHMENT_PNG, mode='rb')
 newAttachment = myTestLink.uploadExecutionAttachment(a_file, newResultID_AA, 
-            'PNG Example', 'PNG Attachment Example for a TestCase')
+            'PNG Example', 'PNG Attachment Example for a TestCase Execution')
 print "uploadExecutionAttachment", newAttachment
 
 # -- Create Build for TestPlan B (uses no platforms)
@@ -507,18 +507,29 @@ print "getFullPath", response
 response = myTestLink.getFullPath([int(newTestCaseID_AA), int(newTestCaseID_B)])
 print "getFullPath", response
 
-# no test data
-# response = myTestLink.getTestCaseCustomFieldDesignValue(
-#             tc_aa_full_ext_id, 1, newProjectID, 'cfieldname', 'simple')
-# print "getTestCaseCustomFieldDesignValue", response
-print "getTestCaseCustomFieldDesignValue", "Sorry currently no testdata"
-
-# response = myTestLink.getTestCaseAttachments(None, testcaseexternalid=tc_aa_full_ext_id)
+# attachments
+# add png file as Attachment to test project 
+a_file=open(NEWATTACHMENT_PNG, mode='rb')
+newAttachment = myTestLink.uploadTestProjectAttachment(a_file, newProjectID, 
+            title='PNG Example', description='PNG Attachment Example for a TestProject')
+print "uploadTestProjectAttachment", newAttachment
+# add png file as Attachnent to test suite A 
+a_file=open(NEWATTACHMENT_PNG, mode='rb')
+newAttachment = myTestLink.uploadTestSuiteAttachment(a_file, newTestSuiteID_A, 
+            title='PNG Example', description='PNG Attachment Example for a TestSuite')
+print "uploadTestSuiteAttachment", newAttachment
+# add png file as Attachment to test case B 
+a_file=open(NEWATTACHMENT_PNG, mode='rb')
+newAttachment = myTestLink.uploadTestCaseAttachment(a_file, newTestCaseID_B, 
+            title='PNG Example', description='PNG Attachment Example for a TestCase')
+print "uploadTestCaseAttachment", newAttachment
+# get Attachment of test case B 
+# response = myTestLink.getTestCaseAttachments(testcaseexternalid=tc_aa_full_ext_id)
 # print "getTestCaseAttachments", response
-# response = myTestLink.getTestCaseAttachments(newTestCaseID_B)
-# print "getTestCaseAttachments", response
-print "getTestCaseAttachments", "Sorry currently no testdata"
+response = myTestLink.getTestCaseAttachments(testcaseid=newTestCaseID_B)
+print "getTestCaseAttachments", response
 
+# copy test cases
 print "create new version of TC B"
 response = myTestLink.copyTCnewVersion(newTestCaseID_B, 
                 summary='new version of TC B', importance='1')
@@ -531,6 +542,19 @@ response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 'simple'
 print 'getTestCasesForTestSuite B', response
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A, True, 'simple')
 print 'getTestCasesForTestSuite A', response
+
+# no test data
+# response = myTestLink.getTestCaseCustomFieldDesignValue(
+#             tc_aa_full_ext_id, 1, newProjectID, 'cfieldname', 'simple')
+# print "getTestCaseCustomFieldDesignValue", response
+print "getTestCaseCustomFieldDesignValue", "Sorry currently no testdata"
+
+# add png file as Attachemnt to a requirement specification.
+print "uploadRequirementSpecificationAttachment", "Sorry currently no testdata"
+# add png file as Attachemnt to a requirement.
+print "uploadRequirementAttachment", "Sorry currently no testdata"
+
+
 
 
 print ""
