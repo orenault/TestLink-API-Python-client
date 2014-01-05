@@ -23,8 +23,8 @@ Create the user specific devKey inside TestLink, see
 Installing from PyPI
 --------------------
 
-TestLink-API-Python-client will be available in the Python Package Index (PyPI_) 
-with Release v0.4.6. It is recommended that you use `pip`_ to install. 
+TestLink-API-Python-client is available in the Python Package Index (PyPI_) 
+since Release v0.4.6. It is recommended that you use `pip`_ to install. 
 
 Install from PyPI using pip by running::
 

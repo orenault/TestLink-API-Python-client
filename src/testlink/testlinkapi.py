@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2011-2013 Olivier Renault, James Stock, TestLink-API-Python-client developers
+#  Copyright 2011-2013 Luiko Czub, Olivier Renault, James Stock, TestLink-API-Python-client developers
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
     """   
     
     __slots__ = ['stepsList']
-    __author__ = 'Olivier Renault, James Stock, TestLink-API-Python-client developers'
+    __author__ = 'Luiko Czub, Olivier Renault, James Stock, TestLink-API-Python-client developers'
     
     def __init__(self, server_url, devKey):
         """ call super for init generell slots, init sepcial slots for teststeps

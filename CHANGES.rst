@@ -1,8 +1,8 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client UNDER DEVELOP v0.4.7
------------------------------------------------
+TestLink-API-Python-client release notes v0.4.7 (Jan. 2014)
+-----------------------------------------------------------
 
 new service methods - copy test cases #17
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -17,22 +17,34 @@ Example::
 
  >>> import testlink
  >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
- >>> tc_info = tls.getTestCase(None, testcaseexternalid='NPROAPI3-2')
- [{'full_tc_external_id': 'NPROAPI3-2', ..., 'id': '5440',  'version': '2',  
-   'testsuite_id': '5415', 'tc_external_id': '2','testcase_id': '5425', ...}]
+ >>> tc_info = tls.getTestCase(None, testcaseexternalid='NPROAPI-3')
+ [{'full_tc_external_id': 'NPROAPI-3', ..., 'id': '5440',  'version': '2',  
+   'testsuite_id': '5415', 'tc_external_id': '3','testcase_id': '5425', ...}]
  >>> tls.copyTCnewTestCase(tc_info[0]['testcase_id'], testsuiteid=newSuiteID, 
                                           testcasename='a new test case name')
                                           
 Known limitations:
+
 - estimatedexecduration settings are not copied                                          
 
 implement missing 1.9.8 api methods - TestCase #11
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+new TestlinkAPIGeneric and TestlinkAPIClient api methods to modify test cases
+
 - addTestCaseToTestPlan, updateTestCase 
 - createTestCaseSteps, deleteTestCaseSteps
 
+Known TL 1.9.9 limitations:
+
+- 6109 createTestCaseSteps with action 'update' does not change existing steps
+- 6108 createTestCaseSteps creates steps without test case references
+- 6102 updateTestCase returns debug informations 
+- 6101 updateTestCase does not set modification timestamp
+
 implement missing 1.9.8 api methods - Attachments #13
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+new TestlinkAPIGeneric and TestlinkAPIClient api methods to upload attachments
+
 - uploadRequirementSpecificationAttachment, uploadRequirementAttachment
 - uploadTestProjectAttachment, uplodTestSuiteAttachment
 - uploadTestCaseAttachment
@@ -46,8 +58,14 @@ TestLink-API-Python-client is now installable via PyPI #15
 
 new api methods for Platforms implemented #10
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+new TestlinkAPIGeneric and TestlinkAPIClient api methods to handle platforms
+
 - createPlatform, getProjectPlatforms
 - addPlatformToTestPlan, removePlatformFromTestPlan
+
+Known TL 1.9.9 limitations:
+
+- 6076 addPlatformToTestPlan creates invalid platform links
 
 TestLink-API-Python-client release notes v0.4.5 (Nov. 2013)
 -----------------------------------------------------------

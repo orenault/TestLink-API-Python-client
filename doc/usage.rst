@@ -23,7 +23,8 @@ Ask the TestLink API Client, what arguments a API method expects: ::
  tlh = testlink.TestLinkHelper()
  tls = tlh.connect(testlink.TestlinkAPIClient)
  print tls.whatArgs('createTestPlan')
- > createTestPlan(<testplanname>, <testprojectname>, [note=<note>], [active=<active>], [public=<public>], [devKey=<devKey>])
+ > createTestPlan(<testplanname>, <testprojectname>, [note=<note>], [active=<active>], 
+                  [public=<public>], [devKey=<devKey>])
  >  create a test plan 
 
 or generate a description of all implemented API method: ::
@@ -34,8 +35,40 @@ or generate a description of all implemented API method: ::
  for m in testlink.testlinkargs._apiMethodsArgs.keys():
  	print tls.whatArgs(m), '\n'
 
+Copy test cases
+---------------
 
-Run Examples
+Copy an existing test case into another test suite with changed name::
+
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tc_info = tls.getTestCase(None, testcaseexternalid='NPROAPI-3')
+ [{'full_tc_external_id': 'NPROAPI-3', ..., 'id': '5440',  'version': '2',  
+   'testsuite_id': '5415', 'tc_external_id': '3','testcase_id': '5425', ...}]
+ >>> tls.copyTCnewTestCase(tc_info[0]['testcase_id'], testsuiteid=newSuiteID, 
+                                          testcasename='a new test case name')
+                                          
+Create a new test case version with changed summary and importance::
+                                          
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tc_info = tls.getTestCase(None, testcaseexternalid='NPROAPI-3')
+ [{'full_tc_external_id': 'NPROAPI-3', ..., 'id': '5440',  'version': '2',  
+   'testsuite_id': '5415', 'tc_external_id': '3','testcase_id': '5425', ...}]
+ >>> tls.copyTCnewVersion(tc_info[0]['testcase_id'], summary='new summary', 
+                                                     importance='1')
+                                                      
+Default is, that the last version of a test case is used for the copy. 
+If a different version should be used, specify the required version as second 
+argument. Examples::
+
+ >>> tls.copyTCnewTestCase(tc_info[0]['testcase_id'], 1, testsuiteid=newSuiteID, 
+                                          testcasename='a new test case name')
+ >>> tls.copyTCnewVersion(tc_info[0]['testcase_id'], 1, summary='new summary', 
+                                                        importance='1')
+                                                       
+
+Run examples
 ------------
 
 Running example, how to use the class TestlinkAPIClient, with connection 

@@ -448,27 +448,6 @@ class TestlinkAPIGeneric(object):
         attachment with a different name 
         """
         
-# /**
-#  * Uploads an attachment for a Requirement.
-#  * 
-#  * The attachment content must be Base64 encoded by the client before sending it.
-#  * 
-#  * @param struct $args
-#  * @param string $args["devKey"] Developer key
-#  * @param int $args["requirementid"] The Requirement ID
-#  * @param string $args["title"] (Optional) The title of the Attachment 
-#  * @param string $args["description"] (Optional) The description of the Attachment
-#  * @param string $args["filename"] The file name of the Attachment (e.g.:notes.txt)
-#  * @param string $args["filetype"] The file type of the Attachment (e.g.: text/plain)
-#  * @param string $args["content"] The content (Base64 encoded) of the Attachment
-#  * 
-#  * @since 1.9beta6
-#  * @return mixed $resultInfo an array containing the fk_id, fk_table, title, 
-#  * description, file_name, file_size and file_type. If any errors occur it 
-#  * returns the erros map.
-#  */
-# public function uploadRequirementAttachment($args)        
-
     @decoApiCallAddAttachment            
     @decoMakerApiCallWithArgs(['requirementid'], 
                     ['title', 'description', 'filename', 'filetype', 'content'])
@@ -487,28 +466,6 @@ class TestlinkAPIGeneric(object):
         attachment with a different name 
         """
         
-
-# /**
-#  * Uploads an attachment for a Test Project.
-#  * 
-#  * The attachment content must be Base64 encoded by the client before sending it.
-#  * 
-#  * @param struct $args
-#  * @param string $args["devKey"] Developer key
-#  * @param int $args["testprojectid"] The Test Project ID
-#  * @param string $args["title"] (Optional) The title of the Attachment 
-#  * @param string $args["description"] (Optional) The description of the Attachment
-#  * @param string $args["filename"] The file name of the Attachment (e.g.:notes.txt)
-#  * @param string $args["filetype"] The file type of the Attachment (e.g.: text/plain)
-#  * @param string $args["content"] The content (Base64 encoded) of the Attachment
-#  * 
-#  * @since 1.9beta6
-#  * @return mixed $resultInfo an array containing the fk_id, fk_table, title, 
-#  * description, file_name, file_size and file_type. If any errors occur it 
-#  * returns the erros map.
-#  */
-# public function uploadTestProjectAttachment($args)
-
     @decoApiCallAddAttachment            
     @decoMakerApiCallWithArgs(['testprojectid'], 
                     ['title', 'description', 'filename', 'filetype', 'content'])
@@ -527,27 +484,6 @@ class TestlinkAPIGeneric(object):
         attachment with a different name 
         """
         
-# /**
-#  * Uploads an attachment for a Test Suite.
-#  * 
-#  * The attachment content must be Base64 encoded by the client before sending it.
-#  * 
-#  * @param struct $args
-#  * @param string $args["devKey"] Developer key
-#  * @param int $args["testsuiteid"] The Test Suite ID
-#  * @param string $args["title"] (Optional) The title of the Attachment 
-#  * @param string $args["description"] (Optional) The description of the Attachment
-#  * @param string $args["filename"] The file name of the Attachment (e.g.:notes.txt)
-#  * @param string $args["filetype"] The file type of the Attachment (e.g.: text/plain)
-#  * @param string $args["content"] The content (Base64 encoded) of the Attachment
-#  * 
-#  * @since 1.9beta6
-#  * @return mixed $resultInfo an array containing the fk_id, fk_table, title, 
-#  * description, file_name, file_size and file_type. If any errors occur it 
-#  * returns the erros map.
-#  */
-# public function uploadTestSuiteAttachment($args)
-
     @decoApiCallAddAttachment            
     @decoMakerApiCallWithArgs(['testsuiteid'], 
                     ['title', 'description', 'filename', 'filetype', 'content'])
@@ -565,27 +501,6 @@ class TestlinkAPIGeneric(object):
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
         attachment with a different name 
         """
-
-# /**
-#  * Uploads an attachment for a Test Case.
-#  * 
-#  * The attachment content must be Base64 encoded by the client before sending it.
-#  * 
-#  * @param struct $args
-#  * @param string $args["devKey"] Developer key
-#  * @param int $args["testcaseid"] Test Case INTERNAL ID
-#  * @param string $args["title"] (Optional) The title of the Attachment 
-#  * @param string $args["description"] (Optional) The description of the Attachment
-#  * @param string $args["filename"] The file name of the Attachment (e.g.:notes.txt)
-#  * @param string $args["filetype"] The file type of the Attachment (e.g.: text/plain)
-#  * @param string $args["content"] The content (Base64 encoded) of the Attachment
-#  * 
-#  * @since 1.9beta6
-#  * @return mixed $resultInfo an array containing the fk_id, fk_table, title, 
-#  * description, file_name, file_size and file_type. If any errors occur it 
-#  * returns the erros map.
-#  */
-# public function uploadTestCaseAttachment($args)
 
     @decoApiCallAddAttachment            
     @decoMakerApiCallWithArgs(['testcaseid'], 
@@ -623,30 +538,6 @@ class TestlinkAPIGeneric(object):
         attachment with a different name 
         """
 
-
-# /**
-#  * Uploads an attachment for specified table. You must specify the table that 
-#  * the attachment is connected (nodes_hierarchy, builds, etc) and the foreign 
-#  * key id in this table.
-#  * 
-#  * The attachment content must be Base64 encoded by the client before sending it.
-#  * 
-#  * @param struct $args
-#  * @param string $args["devKey"] Developer key
-#  * @param int $args["fkid"] The Attachment Foreign Key ID
-#  * @param string $args["fktable"] The Attachment Foreign Key Table
-#  * @param string $args["title"] (Optional) The title of the Attachment 
-#  * @param string $args["description"] (Optional) The description of the Attachment
-#  * @param string $args["filename"] The file name of the Attachment (e.g.:notes.txt)
-#  * @param string $args["filetype"] The file type of the Attachment (e.g.: text/plain)
-#  * @param string $args["content"] The content (Base64 encoded) of the Attachment
-#  * 
-#  * @since 1.9beta6
-#  * @return mixed $resultInfo an array containing the fk_id, fk_table, title, 
-#  * description, file_name, file_size and file_type. If any errors occur it 
-#  * returns the erros map.
-#  */
-# public function uploadAttachment($args, $messagePrefix='', $setArgs=true)
 
     @decoApiCallAddAttachment            
     @decoMakerApiCallWithArgs(['fkid', 'fktable'], 
@@ -798,36 +689,6 @@ class TestlinkAPIGeneric(object):
 #      */
 #     public function getRequirementCustomFieldDesignValue($args)
 
-#   /**
-#    * createTestCaseSteps - can be used also for upgrade (see action)
-#    * 
-#    *
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param string $args["testcaseexternalid"] optional if you provide $args["testcaseid"]
-#    * @param string $args["testcaseid"] optional if you provide $args["testcaseexternalid"]
-#    * @param string $args["version"] - optional if not provided LAST ACTIVE version will be used
-#    *                                  if all versions are INACTIVE, then latest version will be used.   
-#    * @param string $args["action"]
-#    *               possible values
-#    *               'create','update','push'
-#    *               create: if step exist NOTHING WILL BE DONE
-#    *               update: if step DOES NOT EXIST will be created
-#    *                       else will be updated.
-#    *               push: shift down all steps with step number >= step number provided
-#    *                     and use provided data to create step number requested.
-#    *                     NOT IMPLEMENTED YET  
-#    * @param array  $args["steps"]:
-#    *                each element is a hash with following keys
-#    *                step_number,actions,expected_results,execution_type
-#    * 
-#    * @return mixed $resultInfo
-#    *
-#    * @internal revisions
-#    * 20111018 - franciscom - TICKET 4774: New methods to manage test case steps
-#    */
-#   function createTestCaseSteps($args)
-
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['action', 'steps'], 
                               ['testcaseexternalid', 'testcaseid', 'version'])
@@ -846,22 +707,6 @@ class TestlinkAPIGeneric(object):
         version - optional if not provided LAST ACTIVE version will be used
                   if all versions are INACTIVE, then latest version will be used. 
         """
-
-
-#   /**
-#    * deleteTestCaseSteps
-#    * @param struct $args
-#    * @param string $args["devKey"]
-#    * @param string $args["testcaseexternalid"]
-#    * @param string $args["version"] - optional if not provided LAST ACTIVE version will be used
-#    * @param array  $args["steps"]: each element is a step_number
-#    * 
-#    * @return mixed $resultInfo
-#    *
-#    * @internal revisions
-#    * 20111018 - franciscom - TICKET 4774: New methods to manage test case steps
-#    */
-#   function deleteTestCaseSteps($args)
 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testcaseexternalid', 'steps'], 
@@ -998,31 +843,6 @@ class TestlinkAPIGeneric(object):
 #    */
 #   public function getUserByID($args)
 
-#    /**
-#     * Update an existing test case
-#     * Not all test case attributes will be able to be updated using this method
-#     * See details below
-#     * 
-#     * @param struct $args
-#     * @param string $args["devKey"]
-#     * @param string $args["testcaseexternalid"] format PREFIX-NUMBER
-#     * @param int    $args["version"] optional version NUMBER (human readable) 
-#     * @param string $args["testcasename"] - optional
-#     * @param string $args["summary"] - optional
-#     * @param string $args["preconditions"] - optional
-#     * @param array  $args["steps"] - optional
-#     *               each element is a hash with following keys
-#     *               step_number,actions,expected_results,execution_type
-#     *
-#     * @param int    $args["importance"] - optional - see const.inc.php for domain
-#     * @param int    $args["executiontype"] - optional - see ... for domain
-#     * @param int    $args["status'] - optional
-#     * @param int    $args["estimatedexecduration'] - optional
-#     * @param string $args["user'] - login name used as updater - optional
-#     *                               if not provided will be set to user that request update
-#     */
-#    public function updateTestCase($args)
-
     @decoApiCallAddDevKey
     @decoMakerApiCallWithArgs(['testcaseexternalid'], 
             ['version', 'testcasename','summary', 'preconditions', 'steps', 
@@ -1031,11 +851,12 @@ class TestlinkAPIGeneric(object):
     def updateTestCase(self):
         """ Update an existing test case
         
-        Not all test case attributes will be able to be updated using this method
         steps     array - each element is a hash with following keys
                   step_number,actions,expected_results,execution_type
         user      login name used as updater - optional
                   if not provided will be set to user that request update
+
+        Not all test case attributes will be able to be updated using this method
  """
 
     
