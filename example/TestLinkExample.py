@@ -50,8 +50,10 @@ Update Oct. 2013, L. Czub
 Integrates v0.4.5 changes for  optional arguments and response error handling
 The v0.4.0 method calls are still visible as comments (look for CHANGE v0.4.5)
 So this file helps to understand where existing own code needs adjustment.
--  
-used as behaviour is still                                             
+
+Update Dec. 2013, L. Czub - examples for v0.4.6 api extensions added 
+Update Jan. 2014, L. Czub - examples for v0.4.7 api and service extensions added 
+                                    
 """                                       
 from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
