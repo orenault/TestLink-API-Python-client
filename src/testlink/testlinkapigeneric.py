@@ -859,6 +859,17 @@ class TestlinkAPIGeneric(object):
         Not all test case attributes will be able to be updated using this method
  """
 
+    def testLinkVersion(self):
+        """ Returns the TestLink Version
+        usable with TL>= 1.9.9 , returns '<= 1.9.8' for older versions """
+        
+        tl_version = '<= 1.9.8'
+        try:
+            tl_version = self.callServerWithPosArgs('testLinkVersion')
+        except testlinkerrors.TLAPIError:
+            # TL does not know this api method, version must be < 1.9.9
+            pass
+        return tl_version
     
     #
     #  public methods for general server calls
@@ -1040,18 +1051,36 @@ class TestlinkAPIGeneric(object):
             methDescr += "\n%s" % docString 
                         
         return methDescr
+    
+    def connectionInfo(self):
+        """ print current SERVER URL and DEVKEY settings and servers VERSION """
 
+        tl_version = ''
+        tl_about = ''
+        try:
+            tl_version = self.testLinkVersion()
+            tl_about   = self.about()
+        except testlinkerrors.TLConnectionError, msg:
+            tl_version = msg
+            
+        message = """
+Current connection settings
+ Server URL: %s
+ DevKey    : %s
+Server informations
+ Version   : %s
+%s 
+""" 
+        return message % (self._server_url, self.devKey, tl_version, tl_about)
+    
     def __str__(self):
         message = """
 TestLink API - class %s - version %s
 @authors: %s
-
-Current connection settings
- Server URL: %s
- DevKey    : %s
+%s
 """
         return message % (self.__class__.__name__, self.__version__, 
-                          self.__author__, self._server_url, self.devKey)
+                          self.__author__, self.connectionInfo())
 
     
 if __name__ == "__main__":
@@ -1059,7 +1088,7 @@ if __name__ == "__main__":
     tl_helper.setParamsFromArgs()
     myTestLink = tl_helper.connect(TestlinkAPIGeneric)
     print myTestLink
-    print myTestLink.about()
+
 
 
 

@@ -382,7 +382,7 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual('V1', self.api.callArgs['preconditions'])
         self.assertEqual('4711', self.api.callArgs['testsuiteid'])
         self.assertEqual('2211', self.api.callArgs['testprojectid'])
-
+        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

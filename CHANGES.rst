@@ -1,6 +1,19 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+TestLink-API-Python-client UNDER DEVELOP v0.4.8
+-----------------------------------------------
+
+implement missing 1.9.9 api method - testLinkVersion #16
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+new TestlinkAPIGeneric and TestlinkAPIClient api method to return the TL version
+
+- testLinkVersion()
+
+new TestlinkAPIGeneric and TestlinkAPIClient service method to return connection informations
+
+- connectionInfo()
+
 TestLink-API-Python-client release notes v0.4.7 (Jan. 2014)
 -----------------------------------------------------------
 

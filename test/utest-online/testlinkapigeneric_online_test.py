@@ -260,6 +260,16 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(TLResponseError, '6004.*4712'):
             self.client.uploadAttachment(attachemantFile, 4712, 'nodes_hierarchy',
                         title='title 4713', description='descr. 4714')
+            
+    def test_checkDevKey_unknownKey(self):
+        with self.assertRaisesRegexp(TLResponseError, '2000.*invalid'):
+            self.client.checkDevKey(devKey='unknownKey')
+        
+    def test_testLinkVersion(self):
+        response = self.client.testLinkVersion()
+        self.assertRegexpMatches(response, '\d*\.\d*\.\d*')
+
+            
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -22,7 +22,7 @@
 
 import unittest
 from testlink import TestlinkAPIGeneric, TestLinkHelper
-from testlink.testlinkerrors import TLArgError, TLResponseError
+from testlink.testlinkerrors import TLArgError, TLResponseError, TLAPIError
 
 #from testlink.testlinkapigeneric import positionalArgNamesDefault
 # scenario_a includes response from a testlink 1.9.8 server
@@ -65,6 +65,14 @@ SCENARIO_A = {'repeat' : 'You said: One World',
                     }
               }
 
+# scenario_tl198 used by test with older responses, changed in TL 1.9.9
+SCENARIO_TL198 = {'testLinkVersion' : 'unknown',
+                  'about' : 'Testlink API Version: 1.0 ...'}
+
+# scenario_tl199 used by test with newer responses, changed in TL 1.9.9
+SCENARIO_TL199 = {'testLinkVersion' : '1.9.9',
+                  'about' : 'Testlink API Version: 1.0 ...'}
+
 class DummyAPIGeneric(TestlinkAPIGeneric):
     """ Dummy for Simulation TestLinkAPIGeneric. 
     Overrides 
@@ -104,6 +112,10 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
                 response = data[argsAPI['testsuiteid']]
             elif methodAPI in ['getTestCaseIDByName']:
                 response = data[argsAPI['testcasename']]
+            elif methodAPI in ['testLinkVersion']:
+                response = data
+                if data == 'unknown':
+                    raise TLAPIError('problems calling the API method testLinkVersion1')
             else:
                 response = data
         return response
@@ -343,6 +355,21 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertEqual(list, type(response))
         self.assertEqual('TESTCASE_AA', response[0]['name']) 
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+
+    def test_testLinkVersion_beforeTL199(self):
+        self.api.loadScenario(SCENARIO_TL198)
+        response = self.api.testLinkVersion()
+        self.assertEqual('<= 1.9.8', response)
+        
+    def test_testLinkVersion_withTL199(self):
+        self.api.loadScenario(SCENARIO_TL199)
+        response = self.api.testLinkVersion()
+        self.assertEqual('1.9.9', response)
+        
+    def test_connectionInfo_beforeTL199(self):
+        self.api.loadScenario(SCENARIO_TL198)
+        response = self.api.connectionInfo()
+        self.assertRegexpMatches(response, '\d*\.\d*\.\d*')
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

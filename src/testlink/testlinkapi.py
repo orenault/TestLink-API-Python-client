@@ -433,7 +433,6 @@ if __name__ == "__main__":
     tl_helper.setParamsFromArgs()
     myTestLink = tl_helper.connect(TestlinkAPIClient)
     print myTestLink
-    print myTestLink.about()
 
 
 
