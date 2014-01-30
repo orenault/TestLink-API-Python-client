@@ -91,6 +91,13 @@ NEWATTACHMENT_PY= os.path.realpath(__file__)
 this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
 NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
+# Servers TestLink Version
+myTLVersion = myTestLink.testLinkVersion()
+
+# used connection settings
+print myTestLink.connectionInfo()
+print ""
+
 # example asking the api client about methods arguments
 print myTestLink.whatArgs('createTestCase')
 
@@ -114,10 +121,11 @@ for project in myTestLink.getProjects():
     print "Name: %(name)s ID: %(id)s " % project
 print ""
 
-# # Creates the project
+# Creates the project
+projInfo = 'Example created with Python API class %s in TL %s' % \
+            ( myApiVersion, myTLVersion )
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX, 
-    notes='Example created with Python API class %s' % myApiVersion, 
-    active=1, public=1,
+    notes=projInfo, active=1, public=1,
     options={'requirementsEnabled' : 1, 'testPriorityEnabled' : 1, 
              'automationEnabled' : 1,  'inventoryEnabled' : 1})
 print "createTestProject", newProject

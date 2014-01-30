@@ -102,6 +102,13 @@ NEWATTACHMENT_PY= os.path.realpath(__file__)
 this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
 NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
+# Servers TestLink Version
+myTLVersion = myTestLink.testLinkVersion()
+
+# used connection settings
+print myTestLink.connectionInfo()
+print ""
+
 # example asking the api client about methods arguments
 print myTestLink.whatArgs('createTestCase')
 
@@ -126,7 +133,7 @@ except TLResponseError as tl_err:
 # -- END CHANGE v0.4.5 -- 
             
 
-print "Number of Projects in TestLink: %s " % (myTestLink.countProjects(),)
+print "Number of Projects in TestLink: %s " % (myTestLink.countProjects())
 print ""
 myTestLink.listProjects()
 print ""
@@ -144,9 +151,10 @@ print ""
 # else:
 #   print "Error creating the project '%s': %s " % (NEWPROJECT,isOk)
 #   sys.exit(-1)
+projInfo = 'Example created with Python API class %s in TL %s' % \
+            ( myApiVersion, myTLVersion )
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX,
-    notes='Example created with Python API class %s' % myApiVersion, 
-    active=1, public=1,
+    notes=projInfo, active=1, public=1,
     options={'requirementsEnabled' : 0, 'testPriorityEnabled' : 1,
              'automationEnabled' : 1, 'inventoryEnabled' : 0})
 print "createTestProject", newProject
