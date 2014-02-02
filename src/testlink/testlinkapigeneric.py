@@ -228,8 +228,23 @@ class TestlinkAPIGeneric(object):
 #    * @param struct $args
 #    * @return boolean
 #    * @access protected
-#    */  
+#    */  testmode
 #   public function setTestMode($args)
+
+
+    #FIXME: LC 20140202 makes setTestMode sense in python client?
+    # xmlrpc calls are isolated transactions. 
+    # the second call works with another TL api instance than the frist one
+    # so the second call works with default TestMode settings (false), even if
+    # the first call has active the TestMode.
+    # So using setTestMode make only sense, if the php api instance is directly
+    # used
+#     @decoMakerApiCallWithArgs(['testmode'])
+#     def setTestMode(self):
+#         """ turn on/off testMode 
+#         This method is meant primarily for testing and debugging during development
+#         """
+
 
     @decoMakerApiCallReplaceTLResponseError()          
     @decoApiCallAddDevKey               
@@ -1000,7 +1015,7 @@ class TestlinkAPIGeneric(object):
                     raise testlinkerrors.TLResponseError(
                                     methodNameAPI, argsOptional,
                                     response[0]['message'], response[0]['code'])
-            except (TypeError, KeyError), msg:
+            except (TypeError, KeyError):
                 # if the reponse has not a [{..}] structure, the check
                 #    'code' in response[0]
                 # raise an error. Following causes are ok

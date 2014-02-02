@@ -259,6 +259,13 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_getUserByLogin_unknownKey(self):
         with self.assertRaisesRegexp(TLResponseError, '10000.*User Login'):
             self.client.getUserByLogin(user='unknownUser')
+            
+#     def test_setTestMode(self):
+#         response = self.client.setTestMode(True)
+#         self.assertTrue(response)
+#         response = self.client.setTestMode(False)
+#         self.assertTrue(response)
+            
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

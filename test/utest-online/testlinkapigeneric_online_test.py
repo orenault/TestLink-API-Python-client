@@ -277,6 +277,11 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
          with self.assertRaisesRegexp(TLResponseError, 'NO_USER_BY_ID_LOGIN.*User with DB ID'):
             self.client.getUserByID(4711)
             
+#     def test_setTestMode(self):
+#         response = self.client.setTestMode(True)
+#         self.assertTrue(response)
+#         response = self.client.setTestMode(False)
+#         self.assertTrue(response)
             
 
 if __name__ == "__main__":
