@@ -98,6 +98,15 @@ myTLVersion = myTestLink.testLinkVersion()
 print myTestLink.connectionInfo()
 print ""
 
+# CHANGE this name into a valid account, known in your TL application
+myTestUserName="admin"
+# get user information
+response = myTestLink.getUserByLogin(myTestUserName)
+print "getUserByLogin", response
+myTestUserID=response[0]['dbID']
+response = myTestLink.getUserByID(myTestUserID)
+print "getUserByID   ", response
+
 # example asking the api client about methods arguments
 print myTestLink.whatArgs('createTestCase')
 
@@ -224,7 +233,7 @@ steps_tc_aa = [
          'execution_type' : MANUAL}
                ]  
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, newTestSuiteID_AA, 
-          newProjectID, "admin", "This is the summary of the Test Case AA", 
+          newProjectID, myTestUserName, "This is the summary of the Test Case AA", 
           steps_tc_aa, preconditions='these are the preconditions')                 
 print "createTestCase", newTestCase
 newTestCaseID_AA = newTestCase[0]['id'] 
@@ -244,7 +253,7 @@ steps_tc_b = [
          'expected_results' : "Step result 5 - b", 'execution_type' : AUTOMATED}]
       
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, newTestSuiteID_B, 
-          newProjectID, "admin", "This is the summary of the Test Case B", 
+          newProjectID, myTestUserName, "This is the summary of the Test Case B", 
           steps_tc_b, preconditions='these are the preconditions', 
           executiontype=AUTOMATED)               
 print "createTestCase", newTestCase

@@ -50,7 +50,7 @@ class TLResponseError(TestLinkError):
         self.code          = code
         msg = '%s\n%s(%s)' % (message, methodNameAPI, argsOptional)
         if code:
-            msg = '%i: %s' % (code, msg)
+            msg = '%s: %s' % (code, msg)
         return super(TLResponseError, self).__init__(msg)
         
            

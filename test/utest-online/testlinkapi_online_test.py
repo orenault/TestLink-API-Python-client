@@ -255,6 +255,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_testLinkVersion(self):
         response = self.client.testLinkVersion()
         self.assertRegexpMatches(response, '\d*\.\d*\.\d*')
+
+    def test_getUserByLogin_unknownKey(self):
+        with self.assertRaisesRegexp(TLResponseError, '10000.*User Login'):
+            self.client.getUserByLogin(user='unknownUser')
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

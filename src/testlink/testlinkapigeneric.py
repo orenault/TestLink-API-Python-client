@@ -819,6 +819,24 @@ class TestlinkAPIGeneric(object):
 #    */
 #   public function getUserByLogin($args)
 
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['user'])
+    def getUserByLogin(self):
+        """  returns user data for account with login name USER
+         
+        if everything ok returns an array on just one element with following user data
+    *
+    * firstName,lastName,emailAddress,locale,isActive,defaultTestprojectID,
+    * globalRoleID 
+    * globalRole    array with role info
+    * tprojectRoles array  
+    * tplanRoles    array
+    * login 
+    * dbID
+    * loginRegExp
+    *
+    * ATTENTION: userApiKey will be set to NULL, because is worst that access to user password """
+
 
 #   /**
 #    * if everything ok returns an array on just one element with following user data
@@ -842,6 +860,25 @@ class TestlinkAPIGeneric(object):
 #    * 
 #    */
 #   public function getUserByID($args)
+
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['userid'])
+    def getUserByID(self):
+        """  returns user data for account with USERID in users table, column ID
+        
+    * if everything ok returns an array on just one element with following user data
+    *
+    * firstName,lastName,emailAddress,locale,isActive,defaultTestprojectID,
+    * globalRoleID 
+    * globalRole    array with role info
+    * tprojectRoles array  
+    * tplanRoles    array
+    * login 
+    * dbID
+    * loginRegExp
+    *
+    * ATTENTION: userApiKey will be set to NULL, because is worst that access to user password
+    """
 
     @decoApiCallAddDevKey
     @decoMakerApiCallWithArgs(['testcaseexternalid'], 
@@ -963,7 +1000,7 @@ class TestlinkAPIGeneric(object):
                     raise testlinkerrors.TLResponseError(
                                     methodNameAPI, argsOptional,
                                     response[0]['message'], response[0]['code'])
-            except (TypeError, KeyError):
+            except (TypeError, KeyError), msg:
                 # if the reponse has not a [{..}] structure, the check
                 #    'code' in response[0]
                 # raise an error. Following causes are ok

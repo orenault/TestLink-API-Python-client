@@ -109,6 +109,16 @@ myTLVersion = myTestLink.testLinkVersion()
 print myTestLink.connectionInfo()
 print ""
 
+# CHANGE this name into a valid account, known in your TL application
+myTestUserName="admin"
+# get user information
+response = myTestLink.getUserByLogin(myTestUserName)
+print "getUserByLogin", response
+myTestUserID=response[0]['dbID']
+response = myTestLink.getUserByID(myTestUserID)
+print "getUserByID   ", response
+
+
 # example asking the api client about methods arguments
 print myTestLink.whatArgs('createTestCase')
 
@@ -293,7 +303,7 @@ myTestLink.appendStep("Dummy step for delete tests",
 #   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_AA, isOk)
 #   sys.exit(-1)
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, newTestSuiteID_AA, 
-          newProjectID, "admin", "This is the summary of the Test Case AA", 
+          newProjectID, myTestUserName, "This is the summary of the Test Case AA", 
           preconditions='these are the preconditions')
 print "createTestCase", newTestCase
 newTestCaseID_AA = newTestCase[0]['id']
@@ -320,7 +330,7 @@ myTestLink.appendStep("Step action 5", "Step result 5", AUTOMATED)
 #   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_B, isOk)
 #   sys.exit(-1)
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, newTestSuiteID_B, 
-          newProjectID, "admin", "This is the summary of the Test Case B", 
+          newProjectID, myTestUserName, "This is the summary of the Test Case B", 
           preconditions='these are the preconditions', executiontype=AUTOMATED)
 print "createTestCase", newTestCase
 newTestCaseID_B = newTestCase[0]['id']
@@ -408,7 +418,7 @@ print "New Build '%s' - id: %s" % (NEWBUILD_A, newBuildID_A)
 # TC_AA failed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(None, newTestPlanID_A, None, 'f', '', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id,
-                                      platformname=NEWPLATFORM_A)
+                                      platformname=NEWPLATFORM_A)#, devKey='361451a1670cb31d127611262ed1a46d')
 print "reportTCResult", newResult
 newResultID_AA = newResult[0]['id']
 # report Test Case Results for platform 'Small Bird'

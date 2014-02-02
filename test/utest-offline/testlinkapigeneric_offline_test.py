@@ -204,6 +204,16 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.api._checkResponse(response, 'DummyMethod', 
                                 {'Uno' : 1, 'due' :2, 'tre' : 3})
         
+    def test_checkResponse_errorResponse_sringCode(self):
+        client = self.api
+        
+        responseA = [{'message': '(getUserByID) - Cannot Find User with DB ID (4711).', 
+                      'code': 'NO_USER_BY_ID_LOGIN'}]
+        def a_func(a_api, response): 
+            a_api._checkResponse(response, 'getUserByID',  
+                                 {'userid' : 4711})
+        self.assertRaises(TLResponseError, a_func, client, responseA)
+
     def test__apiMethodArgNames_noArgs(self):
         response = self.api._apiMethodArgNames('sayHello')
         self.assertEqual(response, ([], [], []))
@@ -370,6 +380,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.api.loadScenario(SCENARIO_TL198)
         response = self.api.connectionInfo()
         self.assertRegexpMatches(response, '\d*\.\d*\.\d*')
+        
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
