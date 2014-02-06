@@ -385,6 +385,15 @@ class TestlinkAPIGeneric(object):
 #    */  
 #    public function deleteExecution($args)
 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['executionid'])
+    def deleteExecution(self):
+        """ delete an execution 
+        
+        Default TL server configuration does not allow deletion of exections
+        see Installation & Configuration Manual Version 1.9
+            chap. 5.8. Test execution settings 
+            $tlCfg->exec_cfg->can_delete_execution """
 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testsuiteid'])

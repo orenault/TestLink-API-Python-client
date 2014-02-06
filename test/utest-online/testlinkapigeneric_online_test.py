@@ -282,6 +282,18 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 #         self.assertTrue(response)
 #         response = self.client.setTestMode(False)
 #         self.assertTrue(response)
+
+    def test_deleteExecution_unknownKey(self):
+        try:
+            response = self.client.deleteExecution(4711)
+            # case: TL configuration allows deletion of executions
+            # response returns Success, even if executionID is unkown
+            self.assertEqual([{'status': True, 'message': 'Success!', 'id': 4711, 
+                               'operation': 'deleteExecution'}], response)
+        except TLResponseError as tl_err:
+            # case: TL configuration does not allow deletion of executions
+            # Expects: 232: Configuration does not allow delete executions
+            self.assertEqual(232, tl_err.code)
             
 
 if __name__ == "__main__":

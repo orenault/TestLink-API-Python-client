@@ -20,6 +20,7 @@ implement missing 1.9.8 api method - miscellaneous #14
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
 - getUserByLogin(), getUserByID()
+- deleteExecution()
 
 TestLink-API-Python-client release notes v0.4.7 (Jan. 2014)
 -----------------------------------------------------------

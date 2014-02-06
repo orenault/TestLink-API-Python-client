@@ -466,6 +466,25 @@ newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_B, NEWBUILD
 print "reportTCResult", newResult
 newResultID_B_b = newResult[0]['id']
 
+# now we make a mistake and commit the same result a second time
+# and try to delete this mistake 
+newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_B, NEWBUILD_B,
+                                      'b', "mistake, commit same result a second time")
+print "reportTCResult", newResult
+newResultID_B_b2 = int(newResult[0]['id'])
+try:
+    # if TL configuration allows deletion of executions, no error will occur
+    response = myTestLink.deleteExecution(newResultID_B_b2)
+    print "deleteExecution", response
+except TLResponseError as tl_err:
+    if tl_err.code == 232:
+        # TL configuration does not allow deletion of executions
+        pass
+    else:
+        # sh..: another problem occurs
+        raise
+
+
 # get information - TestProject
 response = myTestLink.getTestProjectByName(NEWPROJECT)
 print "getTestProjectByName", response
