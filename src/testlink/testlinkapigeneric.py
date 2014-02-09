@@ -790,6 +790,15 @@ class TestlinkAPIGeneric(object):
 #    */    
 #   public function setTestCaseExecutionType($args)
 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testcaseexternalid', 'version', 'testprojectid',
+                               'executiontype'])
+    def setTestCaseExecutionType(self):
+        """ Update execution type for a test case version 
+        
+        possible executiontype values
+        1 = TESTCASE_EXECUTION_TYPE_MANUAL, 2 = TESTCASE_EXECUTION_TYPE_AUTO """
+
 #   /**
 #    *
 #    */

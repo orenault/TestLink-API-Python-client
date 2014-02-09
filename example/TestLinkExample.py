@@ -484,6 +484,14 @@ except TLResponseError as tl_err:
         # sh..: another problem occurs
         raise
 
+# now we try to change the execution types of the test cases
+# - AA from manual -> auto  and B from auto -> manual 
+newResult = myTestLink.setTestCaseExecutionType(tc_aa_full_ext_id, tc_version, 
+                                                newProjectID, AUTOMATED)
+print "setTestCaseExecutionType", response
+newResult = myTestLink.setTestCaseExecutionType(tc_b_full_ext_id, tc_version, 
+                                                newProjectID, MANUAL)
+print "setTestCaseExecutionType", response
 
 # get information - TestProject
 response = myTestLink.getTestProjectByName(NEWPROJECT)

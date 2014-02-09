@@ -294,6 +294,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             # case: TL configuration does not allow deletion of executions
             # Expects: 232: Configuration does not allow delete executions
             self.assertEqual(232, tl_err.code)
+
+    def test_setTestCaseExecutionType_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4712'):
+            self.client.setTestCaseExecutionType('N-4711', 1, 4712, 1)
             
 
 if __name__ == "__main__":

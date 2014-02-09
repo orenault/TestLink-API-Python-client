@@ -21,6 +21,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
 - getUserByLogin(), getUserByID()
 - deleteExecution()
+- setTestCaseExecutionType()
 
 TestLink-API-Python-client release notes v0.4.7 (Jan. 2014)
 -----------------------------------------------------------
