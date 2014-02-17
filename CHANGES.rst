@@ -22,6 +22,13 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 - getUserByLogin(), getUserByID()
 - deleteExecution()
 - setTestCaseExecutionType()
+- assignRequirements()
+
+Known TL 1.9.9 limitations:
+
+- 6202 assignRequirements() calls assign_to_tcase() without author_id
+- 6197 MSSQL - 1.9.8 Upgrade - req_coverage table
+- 6193 POSTGRESQL - 1.9.8 Upgrade - req_coverage table
 
 TestLink-API-Python-client release notes v0.4.7 (Jan. 2014)
 -----------------------------------------------------------

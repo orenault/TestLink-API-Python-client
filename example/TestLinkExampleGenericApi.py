@@ -512,6 +512,12 @@ print "uploadRequirementSpecificationAttachment", "Sorry currently no testdata"
 # add png file as Attachemnt to a requirement.
 print "uploadRequirementAttachment", "Sorry currently no testdata"
 
+# add requirements to testcase AA
+# response = myTestLink.assignRequirements(tc_aa_full_ext_id, newProjectID, 
+#                         [{'req_spec' : 6729, 'requirements' : [6731]},
+#                          {'req_spec' : 6733, 'requirements' : [6735, 6737]}])
+print "assignRequirements", "Sorry currently no testdata"
+
 print ""
 print "Number of Projects in TestLink: %i " % len(myTestLink.getProjects())
 print ""

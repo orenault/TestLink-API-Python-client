@@ -281,6 +281,13 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_setTestCaseExecutionType_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '7000.*4712'):
             self.client.setTestCaseExecutionType('N-4711', 1, 4712, 1)
+
+    def test_assignRequirements_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4712'):
+            self.client.assignRequirements('N-4711', 4712, 
+                        [{'req_spec' : 4713, 'requirements' : [4714, 4717]}, 
+                         {'req_spec' : 4723, 'requirements' : [4725]}])
+            
             
         
 if __name__ == "__main__":

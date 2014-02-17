@@ -322,6 +322,23 @@ class TestlinkAPIGeneric(object):
 #    public function assignRequirements($args)
 
     @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testcaseexternalid', 'testprojectid', 
+                               'requirements'])
+    def assignRequirements(self):
+        """ Assign Requirements to a test case 
+        It is possible to assign multiple requirements, belonging to different 
+        requirement specifications. (the internal IDs must be known!)
+        
+        Argument REQUIREMENTS expects an array of dictionaries, example:
+        .assignRequirements('GPROAPI4-2', 6652, 
+                           [{'req_spec' : 6729, 'requirements' : [6731]},
+                            {'req_spec' : 6733, 'requirements' : [6735, 6737]}])
+        This would assign to testcase 'GPROAPI4-2' (in testproject with id 6652)
+        a) requirement with ID 6731 of requirement spec 6729 AND
+        b) requirements with ID 6735 and 6737 of requirement spec 6733
+        """
+
+    @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs([], ['testcaseid', 'testcaseexternalid'])
     def getTestCaseAttachments(self):
         """ Gets attachments for specified test case.
