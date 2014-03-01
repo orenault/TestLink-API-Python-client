@@ -546,6 +546,10 @@ response = myTestLink.getLastExecutionResult(newTestPlanID_A, None,
 print "getLastExecutionResult", response
 response = myTestLink.getLastExecutionResult(newTestPlanID_A, newTestCaseID_B)
 print "getLastExecutionResult", response
+response = myTestLink.getExecCountersByBuild(newTestPlanID_A)
+print "getExecCountersByBuild", response
+response = myTestLink.getExecCountersByBuild(newTestPlanID_B)
+print "getExecCountersByBuild", response
 
 
 # get information - general 

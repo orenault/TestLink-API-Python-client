@@ -23,6 +23,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 - deleteExecution()
 - setTestCaseExecutionType()
 - assignRequirements()
+- getExecCountersByBuild()
 
 Known TL 1.9.9 limitations:
 

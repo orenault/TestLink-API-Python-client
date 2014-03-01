@@ -288,7 +288,11 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                         [{'req_spec' : 4713, 'requirements' : [4714, 4717]}, 
                          {'req_spec' : 4723, 'requirements' : [4725]}])
             
+    def test_getExecCountersByBuild_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getExecCountersByBuild(4711)
             
+           
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

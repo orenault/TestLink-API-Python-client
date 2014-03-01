@@ -816,10 +816,10 @@ class TestlinkAPIGeneric(object):
         possible executiontype values
         1 = TESTCASE_EXECUTION_TYPE_MANUAL, 2 = TESTCASE_EXECUTION_TYPE_AUTO """
 
-#   /**
-#    *
-#    */
-#   public function getExecCountersByBuild($args)
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testplanid'])
+    def getExecCountersByBuild(self):
+        """ Gets execution metrics information for a testplan """
 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testprojectname', 'platformname'], 
