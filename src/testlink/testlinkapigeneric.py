@@ -98,10 +98,17 @@ class TestlinkAPIGeneric(object):
     
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid'], 
-                              ['testcaseid', 'testcaseexternalid'])
+                              ['testcaseid', 'testcaseexternalid',
+                               'platformid', 'platformname', 
+                               'buildid', 'buildname'])
     def getLastExecutionResult(self):
-        """ Gets the result of LAST EXECUTION for a particular testcase on a test plan, 
- but WITHOUT checking for a particular build """
+        """ Gets the result of LAST EXECUTION for a particular testcase on a test plan.
+If there are no filter criteria regarding platform and build,
+result will be get WITHOUT checking for a particular platform and build. 
+
+following optional arguments could only be used with TL version >= 1.9.9 
+- platformid, platformname, buildid, buildname
+"""
 
     @decoApiCallWithoutArgs
     def sayHello(self):

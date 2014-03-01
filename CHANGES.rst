@@ -4,6 +4,13 @@ Changes in TestLink-API-Python-client Source Distribution
 TestLink-API-Python-client UNDER DEVELOP v0.4.8
 -----------------------------------------------
 
+implement 1.9.9 api changes - getLastExecutionResult #16
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+TestlinkAPIGeneric and TestlinkAPIClient api method getLastExecutionResult() 
+accepts now following additional optional arguments (usable with TL >= 1.9.9) 
+ 
+- platformid, platformname, buildid, buildname
+
 implement missing 1.9.9 api method - testLinkVersion #16
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 new TestlinkAPIGeneric and TestlinkAPIClient api method to return the TL version

@@ -546,6 +546,13 @@ response = myTestLink.getLastExecutionResult(newTestPlanID_A, None,
 print "getLastExecutionResult", response
 response = myTestLink.getLastExecutionResult(newTestPlanID_A, newTestCaseID_B)
 print "getLastExecutionResult", response
+if not myTLVersion == '<= 1.9.8':
+    # new optional arguments platformid , buildid with TL 1.9.9
+    response = myTestLink.getLastExecutionResult(
+                            newTestPlanID_A, newTestCaseID_AA,
+                            platformid=newPlatFormID_A)
+    print "getLastExecutionResult", response
+    
 response = myTestLink.getExecCountersByBuild(newTestPlanID_A)
 print "getExecCountersByBuild", response
 response = myTestLink.getExecCountersByBuild(newTestPlanID_B)
