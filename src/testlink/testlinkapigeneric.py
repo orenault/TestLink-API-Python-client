@@ -1033,7 +1033,12 @@ following optional arguments could only be used with TL version >= 1.9.9
             (methodName, length_NameList, length_ValueList)
             new_msg = '%s\n expected args: %s' % (new_msg, ', '.join(nameList))
             raise testlinkerrors.TLArgError(new_msg)
-        return {nameList[x] : valueList[x] for x in range(len(nameList)) }
+
+        ret = {}
+        for x in range(len(nameList)):
+            ret.update({nameList[x] : valueList[x] })
+
+        return ret
     
     def _getAttachmentArgs(self, attachmentfile):
         """ returns dictionary with key/value pairs needed, to transfer 
