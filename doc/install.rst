@@ -4,9 +4,14 @@ TestLink-API-Python-client Installation
 Preconditions
 -------------
 
-Currently only the combination Python 2.7 and TestLink 1.9.8/1.9.9 is tested.
+Currently only the combinations Python 2.6.6/2.7.5 and TestLink 1.9.8/1.9.9 are tested.
 
 - Other combination might work - feedback is welcome :-) 
+
+To use TestLink-API-Python-client under Py26, the module 'argparse' must be 
+installed additionally (Py27 already includes this)::
+
+    pip install argparse
 
 TestLink configuration
 ----------------------
@@ -40,7 +45,7 @@ The source code can be retrieved as source distribution either
 
 Install the archives using pip by running::
 
- pip install TestLink-API-Python-client-0.4.6.zip
+ pip install TestLink-API-Python-client-0.4.7.zip
     
 Installing from source
 ----------------------    

@@ -82,7 +82,7 @@ how existing code can be adapted
 TestLink-API-Python-client developers
 -------------------------------------
 *   `James Stock`_, `Olivier Renault`_, `lczub`_
-*   `g4l4drim`_, `pade`_, `anton-matosov`_, `citizen-stig`_
+*   `g4l4drim`_, `pade`_, `anton-matosov`_, `citizen-stig`_, `charz`_
 *   anyone forgotten?
 
 .. _Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0
@@ -102,3 +102,4 @@ TestLink-API-Python-client developers
 .. _lczub: https://github.com/lczub/TestLink-API-Python-client
 .. _anton-matosov: https://github.com/anton-matosov/TestLink-API-Python-client
 .. _citizen-stig: https://github.com/citizen-stig/TestLink-API-Python-client
+.. _charz: https://github.com/charz/TestLink-API-Python-client.git

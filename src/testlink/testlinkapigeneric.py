@@ -1034,11 +1034,10 @@ following optional arguments could only be used with TL version >= 1.9.9
             new_msg = '%s\n expected args: %s' % (new_msg, ', '.join(nameList))
             raise testlinkerrors.TLArgError(new_msg)
 
-        ret = {}
-        for x in range(len(nameList)):
-            ret.update({nameList[x] : valueList[x] })
-
-        return ret
+        # issue #20: Following line works with Py27, but not with Py26
+        # return {nameList[x] : valueList[x] for x in range(len(nameList)) }
+        # this line works with Py26 and Py27 (and is also nice)
+        return dict(zip(nameList, valueList))
     
     def _getAttachmentArgs(self, attachmentfile):
         """ returns dictionary with key/value pairs needed, to transfer 

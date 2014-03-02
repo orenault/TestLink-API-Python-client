@@ -4,6 +4,22 @@ Changes in TestLink-API-Python-client Source Distribution
 TestLink-API-Python-client UNDER DEVELOP v0.4.8
 -----------------------------------------------
 
+add Python 2.6 support #21
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Installation failed under Python 2.6 with on error, cause TestlinkAPIGeneric
+used in '_convertPostionalArgs()' a
+`Py31 feature, back ported to Py27 <http://docs.python.org/2/whatsnew/2.7.html#python-3-1-features>`_
+
+- Dictionary and set comprehensions ({i: i*2 for i in range(3)}).
+
+TestLink-API-Python-client is now installable under Py26 and Py27.
+To use it under Py26, the module 'argparse' must be installed additionally::
+
+    pip install argparse
+    pip install TestLink-API-Python-client
+    
+
 implement 1.9.9 api changes - getLastExecutionResult #16
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 TestlinkAPIGeneric and TestlinkAPIClient api method getLastExecutionResult() 

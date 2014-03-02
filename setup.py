@@ -15,7 +15,8 @@ CLASSIFIERS = [
   'Development Status :: 4 - Beta',
   'License :: OSI Approved :: Apache Software License',
   'Operating System :: OS Independent',
-  'Programming Language :: Python',
+  'Programming Language :: Python :: 2.6',
+  'Programming Language :: Python :: 2.7',
   'Topic :: Software Development :: Testing',
   'Topic :: Software Development :: Libraries :: Python Modules'
 ]
