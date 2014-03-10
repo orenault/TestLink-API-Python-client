@@ -1,20 +1,20 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client UNDER DEVELOP v0.4.8
------------------------------------------------
+TestLink-API-Python-client release notes v0.4.8 (Mar. 2014)
+-----------------------------------------------------------
 
 add Python 2.6 support #21
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Installation failed under Python 2.6 with on error, cause TestlinkAPIGeneric
-used in '_convertPostionalArgs()' a
+used in *_convertPostionalArgs()* a
 `Py31 feature, back ported to Py27 <http://docs.python.org/2/whatsnew/2.7.html#python-3-1-features>`_
 
 - Dictionary and set comprehensions ({i: i*2 for i in range(3)}).
 
 TestLink-API-Python-client is now installable under Py26 and Py27.
-To use it under Py26, the module 'argparse' must be installed additionally::
+To use it under Py26, the module *argparse* must be installed additionally::
 
     pip install argparse
     pip install TestLink-API-Python-client
@@ -89,7 +89,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods to modify test cases
 
 Known TL 1.9.9 limitations:
 
-- 6109 createTestCaseSteps with action 'update' does not change existing steps
+- 6109 createTestCaseSteps with action *update* does not change existing steps
 - 6108 createTestCaseSteps creates steps without test case references
 - 6102 updateTestCase returns debug informations 
 - 6101 updateTestCase does not set modification timestamp
