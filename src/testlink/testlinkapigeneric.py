@@ -649,6 +649,14 @@ following optional arguments could only be used with TL version >= 1.9.9
 #    * @access public
 #      */
 #   public function getTestCaseCustomFieldExecutionValue($args)
+
+    @decoMakerApiCallReplaceTLResponseError(replaceValue=None) 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['customfieldname', 'testprojectid', 'version', 
+                               'executionid', 'testplanid'])
+    def getTestCaseCustomFieldExecutionValue(self):
+        """ Gets a Custom Field of a Test Case in Execution Scope.   """
+
      
 #   /**
 #     * Gets a Custom Field of a Test Case in Test Plan Design Scope.

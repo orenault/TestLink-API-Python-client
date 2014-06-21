@@ -1,6 +1,16 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+TestLink-API-Python-client UNDER DEVELOP v0.4.9 
+-----------------------------------------------------------
+
+implement missing 1.9.8 api method - CustomField #12
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api methods
+
+- getTestCaseCustomFieldExecutionValue
+
 TestLink-API-Python-client release notes v0.4.8 (Mar. 2014)
 -----------------------------------------------------------
 

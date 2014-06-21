@@ -309,6 +309,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
             self.client.getExecCountersByBuild(4711)
             
+    def test_getTestCaseCustomFieldExecutionValue_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.getTestCaseCustomFieldExecutionValue(
+                            'cf_full', '4711', 1, '4715', '4713')
             
 
 if __name__ == "__main__":

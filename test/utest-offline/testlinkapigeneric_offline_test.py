@@ -62,7 +62,7 @@ SCENARIO_A = {'repeat' : 'You said: One World',
                    'twoPlatforms' : {'dutch' : {'id': '1', 'name': 'dutch'}, 
                                      'platt' : {'id': '2', 'name': 'platt'}},
                     'noPlatform'  : {}   
-                    }
+                    }              
               }
 
 # scenario_tl198 used by test with older responses, changed in TL 1.9.9
@@ -73,6 +73,31 @@ SCENARIO_TL198 = {'testLinkVersion' : 'unknown',
 SCENARIO_TL199 = {'testLinkVersion' : '1.9.9',
                   'about' : 'Testlink API Version: 1.0 ...'}
 
+# scenario_custom_fields defines response for custom field request
+# {'default_value': '', 'enable_on_execution': '1', 'name': 'cf_tc_ex_string', 'location': '1', 'enable_on_design': '0', 'valid_regexp': '', 'length_min': '0', 'possible_values': '', 'value': 'a custom string', 'label': 'CF Exec String', 'show_on_testplan_design': '0', 'display_order': '1', 'length_max': '0', 'show_on_design': '0', 'required': '0', 'show_on_execution': '1', 'type': '0', 'id': '24', 'node_id': '7691', 'enable_on_testplan_design': '0'}
+SCENARIO_CUSTOM_FIELDS = {
+            'getTestCaseCustomFieldDesignValue' : {
+                'cf_notAssigned' : [{'message': '(getTestCaseCustomFieldDesignValue) - Custom Field (name:cf_tc_sd_string), is not assigned to Test Project(name=PROJECT_API_GENERIC-8 / id=7760)', 
+                                  'code': 9003}],
+                'cf_full' : {'default_value': '', 'enable_on_execution': '0', 'name': 'cf_tc_sd_string', 
+                          'location': '1', 'enable_on_design': '1', 'valid_regexp': '', 'length_min': '0', 'possible_values': '', 
+                          'value': 'a custom spec design string', 'label': 'CF SpecDesign String', 'show_on_testplan_design': '0', 
+                          'display_order': '1', 'length_max': '0', 'show_on_design': '1', 'required': '0', 'show_on_execution': '1', 
+                          'type': '0', 'id': '22', 'node_id': '7691', 'enable_on_testplan_design': '0'},
+                'cf_value'  : 'a custom spec design string',
+                'cf_simple' : {'type': '0', 'name': 'cf_tc_sd_string', 
+                            'value': 'a custom spec design string', 'label': 'CF SpecDesign String'}
+                                                     },
+            'getTestCaseCustomFieldExecutionValue' : {
+                'cf_notAssigned' : '',
+                'cf_full' : {'default_value': '', 'enable_on_execution': '1', 'name': 'cf_tc_ex_string', 
+                             'location': '1', 'enable_on_design': '0', 'valid_regexp': '', 'length_min': '0', 'possible_values': '', 
+                             'value': 'a custom exec string', 'label': 'CF Exec String', 'show_on_testplan_design': '0', 
+                             'display_order': '1', 'length_max': '0', 'show_on_design': '0', 'required': '0', 'show_on_execution': '1', 
+                             'type': '0', 'id': '24', 'node_id': '7691', 'enable_on_testplan_design': '0'}
+                                                      }
+                          }
+              
 class DummyAPIGeneric(TestlinkAPIGeneric):
     """ Dummy for Simulation TestLinkAPIGeneric. 
     Overrides 
@@ -116,6 +141,8 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
                 response = data
                 if data == 'unknown':
                     raise TLAPIError('problems calling the API method testLinkVersion1')
+            elif 'CustomField' in methodAPI:
+                response = data[argsAPI['customfieldname']]
             else:
                 response = data
         return response
@@ -381,7 +408,47 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         response = self.api.connectionInfo()
         self.assertRegexpMatches(response, '\d*\.\d*\.\d*')
         
-        
+    def test_getTestCaseCustomFieldDesignValue_notAssigned(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        with self.assertRaisesRegexp(TLResponseError, '9003.*Custom Field.*not assigned'):
+            response = self.api.getTestCaseCustomFieldDesignValue('GPROAPI8-2', 
+                            1, '7760', 'cf_notAssigned', details='full')
+            
+    def test_getTestCaseCustomFieldDesignValue_full(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestCaseCustomFieldDesignValue('GPROAPI8-2', 
+                            1, '7760', 'cf_full', details='full') 
+        self.assertEqual('a custom spec design string', response['value'])           
+        self.assertEqual('1', response['enable_on_design'])           
+        self.assertEqual('0', response['enable_on_execution'])           
+
+    def test_getTestCaseCustomFieldDesignValue_value(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestCaseCustomFieldDesignValue('GPROAPI8-2', 
+                            1, '7760', 'cf_value', details='value') 
+        self.assertEqual('a custom spec design string', response)           
+
+    def test_getTestCaseCustomFieldDesignValue_simple(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestCaseCustomFieldDesignValue('GPROAPI8-2', 
+                            1, '7760', 'cf_simple', details='simple') 
+        self.assertEqual('a custom spec design string', response['value'])           
+
+    def test_getTestCaseCustomFieldExecutionValue_notAssigned(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestCaseCustomFieldExecutionValue(
+                                    'cf_notAssigned', '7760', 1, '792', '7677') 
+        self.assertEqual(None, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+
+    def test_getTestCaseCustomFieldExecutionValue_full(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestCaseCustomFieldExecutionValue(
+                                        'cf_full', '7760', 1, '792', '7677') 
+        self.assertEqual('a custom exec string', response['value'])           
+        self.assertEqual('0', response['enable_on_design'])           
+        self.assertEqual('1', response['enable_on_execution'])           
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
