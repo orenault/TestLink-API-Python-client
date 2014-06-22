@@ -96,7 +96,16 @@ SCENARIO_CUSTOM_FIELDS = {
                              'value': 'a custom exec string', 'label': 'CF Exec String', 'show_on_testplan_design': '0', 
                              'display_order': '1', 'length_max': '0', 'show_on_design': '0', 'required': '0', 'show_on_execution': '1', 
                              'type': '0', 'id': '24', 'node_id': '7691', 'enable_on_testplan_design': '0'}
-                                                      }
+                                                      },
+                          
+            'getTestCaseCustomFieldTestPlanDesignValue' : {
+                'cf_notAssigned' : '',
+                'cf_full' : {'default_value': '', 'enable_on_execution': '0', 'name': 'cf_tc_pd_string', 
+                             'enable_on_design': '0', 'valid_regexp': '', 'length_min': '0', 'possible_values': '', 
+                             'value': 'a custom PlanDesign string', 'label': 'CF PlanDesign String', 'show_on_testplan_design': '1', 
+                             'display_order': '1', 'length_max': '0', 'show_on_design': '0', 'required': '0', 'show_on_execution': '1', 
+                             'type': '0', 'id': '28', 'node_id': '779', 'enable_on_testplan_design': '1'}
+                                                           }
                           }
               
 class DummyAPIGeneric(TestlinkAPIGeneric):
@@ -421,6 +430,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
                             1, '7760', 'cf_full', details='full') 
         self.assertEqual('a custom spec design string', response['value'])           
         self.assertEqual('1', response['enable_on_design'])           
+        self.assertEqual('0', response['enable_on_testplan_design']) 
         self.assertEqual('0', response['enable_on_execution'])           
 
     def test_getTestCaseCustomFieldDesignValue_value(self):
@@ -444,17 +454,34 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     def test_getTestCaseCustomFieldExecutionValue_notAssigned(self):
         self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
         response = self.api.getTestCaseCustomFieldExecutionValue(
-                                    'cf_notAssigned', '7760', 1, '792', '7677') 
+                                    'cf_notAssigned', '7760', 1, '792', '7761') 
         self.assertEqual(None, response)
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
 
     def test_getTestCaseCustomFieldExecutionValue_full(self):
         self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
         response = self.api.getTestCaseCustomFieldExecutionValue(
-                                        'cf_full', '7760', 1, '792', '7677') 
+                                        'cf_full', '7760', 1, '792', '7761') 
         self.assertEqual('a custom exec string', response['value'])           
-        self.assertEqual('0', response['enable_on_design'])           
+        self.assertEqual('0', response['enable_on_design']) 
+        self.assertEqual('0', response['enable_on_testplan_design']) 
         self.assertEqual('1', response['enable_on_execution'])           
+
+    def test_getTestCaseCustomFieldTestPlanDesignValue_notAssigned(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestCaseCustomFieldTestPlanDesignValue(
+                                    'cf_notAssigned', '7760', 1, '7761', '779') 
+        self.assertEqual(None, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+
+    def test_getTestCaseCustomFieldTestPlanDesignValue_full(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestCaseCustomFieldTestPlanDesignValue(
+                                        'cf_full', '7760', 1, '7761', '779') 
+        self.assertEqual('a custom PlanDesign string', response['value'])           
+        self.assertEqual('0', response['enable_on_design']) 
+        self.assertEqual('1', response['enable_on_testplan_design']) 
+        self.assertEqual('0', response['enable_on_execution'])           
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

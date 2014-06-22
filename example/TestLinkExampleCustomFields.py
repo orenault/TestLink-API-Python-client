@@ -103,6 +103,8 @@ newTestPlan = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN_A)
 print "getTestPlanByName", newTestPlan
 newTestPlanID_A = newTestPlan[0]['id'] 
 print "Test Plan '%s' - id: %s" % (NEWTESTPLAN_A,newTestPlanID_A)
+response = myTestLink.getTotalsForTestPlan(newTestPlanID_A)
+print "getTotalsForTestPlan", response
 
 # get information - TestSuite
 response = myTestLink.getTestSuitesForTestPlan(newTestPlanID_A)
@@ -173,7 +175,15 @@ response = myTestLink.getTestCaseCustomFieldDesignValue(
                             details = 'simple')
 print "getTestCaseCustomFieldDesignValue simple", response
 
-
+# get CustomField Value - TestCase Testplan Design
+response = myTestLink._callServer('getTestCaseCustomFieldTestPlanDesignValue', 
+                                  {'devKey' : myTestLink.devKey,
+                                   'customfieldname' : 'cf_tc_pd_string',
+                                   'testprojectid' : newProjectID,
+                                   'version' : lastResult['tcversion_id'],
+                                   'testplanid': lastResult['testplan_id'],
+                                   'linkid' : 779})
+print "getTestCaseCustomFieldTestPlanDesignValue", response
 
 
 
