@@ -85,6 +85,7 @@ SCENARIO_CUSTOM_FIELDS = {
                           'display_order': '1', 'length_max': '0', 'show_on_design': '1', 'required': '0', 'show_on_execution': '1', 
                           'type': '0', 'id': '22', 'node_id': '7691', 'enable_on_testplan_design': '0'},
                 'cf_value'  : 'a custom spec design string',
+                'cf_valueEmpty'  : '',
                 'cf_simple' : {'type': '0', 'name': 'cf_tc_sd_string', 
                             'value': 'a custom spec design string', 'label': 'CF SpecDesign String'}
                                                      },
@@ -428,6 +429,12 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
                             1, '7760', 'cf_value', details='value') 
         self.assertEqual('a custom spec design string', response)           
 
+    def test_getTestCaseCustomFieldDesignValue_valueEmpty(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestCaseCustomFieldDesignValue('GPROAPI8-2', 
+                            1, '7760', 'cf_valueEmpty', details='value') 
+        self.assertEqual('', response)   
+                
     def test_getTestCaseCustomFieldDesignValue_simple(self):
         self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
         response = self.api.getTestCaseCustomFieldDesignValue('GPROAPI8-2', 

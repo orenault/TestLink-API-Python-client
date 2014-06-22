@@ -266,6 +266,7 @@ following optional arguments could only be used with TL version >= 1.9.9
         
         returns an empty list, if no build is assigned """
 
+    @decoMakerApiCallReplaceTLResponseError(replaceValue='') 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testcaseexternalid', 'version', 'testprojectid', 
                                'customfieldname'], ['details'])
