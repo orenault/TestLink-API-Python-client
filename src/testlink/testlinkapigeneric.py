@@ -812,6 +812,17 @@ following optional arguments could only be used with TL version >= 1.9.9
 #    */    
 #   public function updateTestCaseCustomFieldDesignValue($args)
 
+    @decoMakerApiCallReplaceTLResponseError(replaceValue='') 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testcaseexternalid', 'version', 'testprojectid', 
+                               'customfields'])
+    def updateTestCaseCustomFieldDesignValue(self):
+        """ Update value of Custom Field with scope='design' for a given Test case
+        
+       customfields : dictionary with customfields names + values
+            VERY IMPORTANT: value must be formatted in the way it's written to db  """
+
+
 #   /**
 #    * Update execution type for a test case version
 #    *

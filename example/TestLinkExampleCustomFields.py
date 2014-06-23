@@ -105,7 +105,9 @@ newTestPlanID_A = newTestPlan[0]['id']
 print "Test Plan '%s' - id: %s" % (NEWTESTPLAN_A,newTestPlanID_A)
 response = myTestLink.getTotalsForTestPlan(newTestPlanID_A)
 print "getTotalsForTestPlan", response
-
+response = myTestLink.getBuildsForTestPlan(newTestPlanID_A)
+print "getBuildsForTestPlan", response
+newBuildID_A = response[0]['id']
 # get information - TestSuite
 response = myTestLink.getTestSuitesForTestPlan(newTestPlanID_A)
 print "getTestSuitesForTestPlan", response
@@ -127,11 +129,20 @@ print "Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
 newTestCase_B = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]
 print "getTestCase", newTestCase_B
 
+
+# new execution result with custom field data
+# TC_B passed, explicit build and some notes , TC identified with internal id
+newResult = myTestLink.reportTCResult(newTestPlanID_A, 'p', 
+                buildid=newBuildID_A, testcaseid=newTestCaseID_B, 
+                platformname=NEWPLATFORM_B, notes="custom try",
+                customfields={'cf_tc_ex_string' : 'a custom exec value set via api',
+                              'cf_tc_sd_listen' : 'ernie'})
+print "reportTCResult", newResult
+
 # get execution results
 lastResult = myTestLink.getLastExecutionResult(
                         newTestPlanID_A, testcaseid=newTestCaseID_B)[0]
 print "getLastExecutionResult", lastResult
-
 
 # get CustomField Value - TestCase Execution
 # response = myTestLink._callServer('getTestCaseCustomFieldExecutionValue', 
@@ -145,33 +156,46 @@ print "getLastExecutionResult", lastResult
 response = myTestLink.getTestCaseCustomFieldExecutionValue(
                     'cf_tc_ex_string', newProjectID, lastResult['tcversion_id'],
                      lastResult['id'] , lastResult['testplan_id'] )
-
 print "getTestCaseCustomFieldExecutionValue", response
+
+# update CustomField Value - TestCase SpecDesign
+# response = myTestLink._callServer('updateTestCaseCustomFieldDesignValue', 
+#                  {'devKey' : myTestLink.devKey,
+#                   'testcaseexternalid' : newTestCase_B['full_tc_external_id'],
+#                   'version' : int(newTestCase_B['version']),
+#                   'testprojectid' : newProjectID,
+#                  'customfields' : 
+#                  {'cf_tc_sd_string' : 'A custom SpecDesign value set via api',
+#                   'cf_tc_sd_list' : 'bibo'}})
+response = myTestLink.updateTestCaseCustomFieldDesignValue( 
+                 newTestCase_B['full_tc_external_id'],
+                 int(newTestCase_B['version']), newProjectID,
+                 {'cf_tc_sd_string' : 'A custom SpecDesign value set via api',
+                  'cf_tc_sd_list' : 'bibo'})
+print "updateTestCaseCustomFieldDesignValue", response
 
 # get CustomField Value - TestCase SpecDesign
 args =  {'devKey' : myTestLink.devKey,
-                     'customfieldname' : 'cf_tc_sd_string',
                      'testprojectid' : newProjectID,
                      'testcaseexternalid' : newTestCase_B['full_tc_external_id'],
-                     'version' : int(newTestCase_B['version']),
-                     'details' : 'full'
+                     'version' : int(newTestCase_B['version'])
                      }
 #response = myTestLink._callServer('getTestCaseCustomFieldDesignValue', args)
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                             args['testcaseexternalid'], args['version'],
-                            args['testprojectid'], args['customfieldname'], 
+                            args['testprojectid'], 'cf_tc_sd_string', 
                             details = 'full')
 print "getTestCaseCustomFieldDesignValue full", response
 
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                             args['testcaseexternalid'], args['version'],
-                            args['testprojectid'], args['customfieldname'], 
+                            args['testprojectid'], 'cf_tc_sd_string', 
                             details = 'value')
 print "getTestCaseCustomFieldDesignValue value", response
 
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                             args['testcaseexternalid'], args['version'],
-                            args['testprojectid'], args['customfieldname'], 
+                            args['testprojectid'], 'cf_tc_sd_list', 
                             details = 'simple')
 print "getTestCaseCustomFieldDesignValue simple", response
 

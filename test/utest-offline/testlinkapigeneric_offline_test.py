@@ -89,6 +89,11 @@ SCENARIO_CUSTOM_FIELDS = {
                 'cf_simple' : {'type': '0', 'name': 'cf_tc_sd_string', 
                             'value': 'a custom spec design string', 'label': 'CF SpecDesign String'}
                                                      },
+            'updateTestCaseCustomFieldDesignValue' : {
+                'cf_notAssigned' : '',
+                'a_string' : ''
+                },
+                          
             'getTestCaseCustomFieldExecutionValue' : {
                 'cf_notAssigned' : '',
                 'cf_full' : {'default_value': '', 'enable_on_execution': '1', 'name': 'cf_tc_ex_string', 
@@ -97,7 +102,7 @@ SCENARIO_CUSTOM_FIELDS = {
                              'display_order': '1', 'length_max': '0', 'show_on_design': '0', 'required': '0', 'show_on_execution': '1', 
                              'type': '0', 'id': '24', 'node_id': '7691', 'enable_on_testplan_design': '0'}
                                                       },
-                          
+
             'getTestCaseCustomFieldTestPlanDesignValue' : {
                 'cf_notAssigned' : '',
                 'cf_full' : {'default_value': '', 'enable_on_execution': '0', 'name': 'cf_tc_pd_string', 
@@ -151,6 +156,8 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
                 response = data
                 if data == 'unknown':
                     raise TLAPIError('problems calling the API method testLinkVersion1')
+            elif methodAPI == 'updateTestCaseCustomFieldDesignValue':
+                response = data[argsAPI['customfields']['cf_field1']]               
             elif 'CustomField' in methodAPI:
                 response = data[argsAPI['customfieldname']]
             else:
@@ -451,6 +458,12 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
                             1, '7760', 'cf_simple', details='simple') 
         self.assertEqual('a custom spec design string', response['value'])           
 
+    def test_updateTestCaseCustomFieldDesignValue_simple(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.updateTestCaseCustomFieldDesignValue('GPROAPI8-2', 
+                            1, '7760', {'cf_field1'  : 'a_string'}) 
+        self.assertEqual('', response)
+
     def test_getTestCaseCustomFieldExecutionValue_notAssigned(self):
         self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
         response = self.api.getTestCaseCustomFieldExecutionValue(
@@ -482,6 +495,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertEqual('0', response['enable_on_design']) 
         self.assertEqual('1', response['enable_on_testplan_design']) 
         self.assertEqual('0', response['enable_on_execution'])           
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

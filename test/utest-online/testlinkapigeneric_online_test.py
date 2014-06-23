@@ -134,7 +134,7 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_getTestCaseCustomFieldDesignValue_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
             self.client.getTestCaseCustomFieldDesignValue(
-                   'TC-4712', 1, 4711, 'a_field', details='a_detail')
+                   'TC-4712', 1, 4711, 'a_field', details='full')
          
     def test_getTestCaseIDByName_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '5030.*Cannot find'):
@@ -318,7 +318,13 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
             self.client.getTestCaseCustomFieldTestPlanDesignValue(
                             'cf_full', '4711', 1, '4713', '615')
-
+            
+    def test_updateTestCaseCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.updateTestCaseCustomFieldDesignValue(
+                            'TC-4712', 1, 4711, {'cf_field1' : 'value1',
+                                                 'cf_field2' : 'value2'})
+            
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
