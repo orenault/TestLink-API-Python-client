@@ -127,9 +127,27 @@ SCENARIO_CUSTOM_FIELDS = {
                              'value': 'a custom TPlan string', 'label': 'CF TPlan String', 'show_on_testplan_design': '0',
                              'display_order': '1', 'length_max': '0', 'show_on_design': '1', 'required': '0', 'show_on_execution': '1', 
                              'type': '0', 'id': '31', 'node_id': '', 'enable_on_testplan_design': '0'}
-                                                   }
+                                                   },
+                          
+            'getReqSpecCustomFieldDesignValue' :  {
+                'cf_notAssigned' : '',
+                'cf_full' : {'default_value': '', 'enable_on_execution': '0', 'name': 'cf_req_sd_string', 'location': '1', 
+                             'enable_on_design': '1', 'valid_regexp': '', 'length_min': '0', 'possible_values': '', 
+                             'value': 'a custom ReqSpec string', 'label': 'CF ReqSpec String', 'show_on_testplan_design': '0', 
+                             'display_order': '1', 'length_max': '0', 'show_on_design': '1', 'required': '0', 'show_on_execution': '0', 
+                             'type': '0', 'id': '32', 'node_id': '', 'enable_on_testplan_design': '0'}
+                                                   },
+            'getRequirementCustomFieldDesignValue' : {
+                'cf_notAssigned' : '',
+                'cf_full' : {'default_value': '', 'enable_on_execution': '0', 'name': 'cf_req_string', 'location': '1', 
+                             'enable_on_design': '1', 'valid_regexp': '', 'length_min': '0', 'possible_values': '', 
+                             'value': 'a custom Req string', 'label': 'CF Req String', 'show_on_testplan_design': '0', 
+                             'display_order': '1', 'length_max': '0', 'show_on_design': '1', 'required': '0', 'show_on_execution': '0', 
+                             'type': '0', 'id': '33', 'node_id': '', 'enable_on_testplan_design': '0'}
+                                                      }
+
                           }
-              
+                          
 class DummyAPIGeneric(TestlinkAPIGeneric):
     """ Dummy for Simulation TestLinkAPIGeneric. 
     Overrides 
@@ -541,6 +559,38 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         response = self.api.getTestPlanCustomFieldDesignValue(
                                                     'cf_full', '7760', '7761') 
         self.assertEqual('a custom TPlan string', response['value'])           
+        self.assertEqual('1', response['enable_on_design']) 
+        self.assertEqual('0', response['enable_on_testplan_design']) 
+        self.assertEqual('0', response['enable_on_execution'])           
+
+    def test_getReqSpecCustomFieldDesignValue_notAssigned(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getReqSpecCustomFieldDesignValue(
+                                            'cf_notAssigned', '7760', '7789') 
+        self.assertEqual(None, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+
+    def test_getReqSpecCustomFieldDesignValue_full(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getReqSpecCustomFieldDesignValue(
+                                                    'cf_full', '7760', '7789') 
+        self.assertEqual('a custom ReqSpec string', response['value'])           
+        self.assertEqual('1', response['enable_on_design']) 
+        self.assertEqual('0', response['enable_on_testplan_design']) 
+        self.assertEqual('0', response['enable_on_execution'])           
+
+    def test_getRequirementCustomFieldDesignValue_notAssigned(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getRequirementCustomFieldDesignValue(
+                                            'cf_notAssigned', '7760', '7791') 
+        self.assertEqual(None, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+
+    def test_getRequirementCustomFieldDesignValue_full(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getRequirementCustomFieldDesignValue(
+                                                    'cf_full', '7760', '7791') 
+        self.assertEqual('a custom Req string', response['value'])           
         self.assertEqual('1', response['enable_on_design']) 
         self.assertEqual('0', response['enable_on_testplan_design']) 
         self.assertEqual('0', response['enable_on_execution'])           

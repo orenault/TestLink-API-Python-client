@@ -225,3 +225,19 @@ response = myTestLink._callServer('getTestPlanCustomFieldDesignValue',
                                    'testplanid': lastResult['testplan_id']})
 print "getTestPlanCustomFieldDesignValue", response
 
+# get CustomField Value - Requirement Specification
+response = myTestLink._callServer('getReqSpecCustomFieldDesignValue', 
+                                  {'devKey' : myTestLink.devKey,
+                                   'customfieldname' : 'cf_req_sd_string',
+                                   'testprojectid' : newProjectID,
+                                   'reqspecid': 7789})
+print "getReqSpecCustomFieldDesignValue", response
+
+
+# get CustomField Value - Requirement Specification
+response = myTestLink._callServer('getRequirementCustomFieldDesignValue', 
+                                  {'devKey' : myTestLink.devKey,
+                                   'customfieldname' : 'cf_req_string',
+                                   'testprojectid' : newProjectID,
+                                   'requirementid': 7791})
+print "getRequirementCustomFieldDesignValue", response

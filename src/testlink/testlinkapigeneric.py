@@ -750,6 +750,13 @@ following optional arguments could only be used with TL version >= 1.9.9
 #      * @access public
 #      */
 #     public function getReqSpecCustomFieldDesignValue($args)
+
+    @decoMakerApiCallReplaceTLResponseError(replaceValue=None) 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['customfieldname', 'testprojectid', 
+                               'reqspecid'])
+    def getReqSpecCustomFieldDesignValue(self):
+        """ Gets a Custom Field of a Requirement Specification in Design Scope. """
                
 #     /**
 #      * Gets a Custom Field of a Requirement in Design Scope.
@@ -767,6 +774,13 @@ following optional arguments could only be used with TL version >= 1.9.9
 #      * @access public
 #      */
 #     public function getRequirementCustomFieldDesignValue($args)
+
+    @decoMakerApiCallReplaceTLResponseError(replaceValue=None) 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['customfieldname', 'testprojectid', 
+                               'requirementid'])
+    def getRequirementCustomFieldDesignValue(self):
+        """ Gets a Custom Field of a Requirement Specification in Design Scope. """
 
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['action', 'steps'], 

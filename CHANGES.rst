@@ -9,8 +9,11 @@ implement missing 1.9.8 api method - CustomField #12
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
-- getTestCaseCustomFieldExecutionValue
-- getTestCaseCustomFieldTestPlanDesignValue
+- updateTestCaseCustomFieldDesignValue, getTestCaseCustomFieldExecutionValue  
+  getTestCaseCustomFieldTestPlanDesignValue
+- getTestSuiteCustomFieldDesignValue, getTestPlanCustomFieldDesignValue
+- getReqSpecCustomFieldDesignValue , getRequirementCustomFieldDesignValue
+
 
 TestLink-API-Python-client release notes v0.4.8 (Mar. 2014)
 -----------------------------------------------------------
