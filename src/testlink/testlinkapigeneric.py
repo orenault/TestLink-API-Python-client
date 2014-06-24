@@ -702,6 +702,13 @@ following optional arguments could only be used with TL version >= 1.9.9
 #    * @access public
 #    */
 #   public function getTestSuiteCustomFieldDesignValue($args)
+
+    @decoMakerApiCallReplaceTLResponseError(replaceValue=None) 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['customfieldname', 'testprojectid', 
+                               'testsuiteid'])
+    def getTestSuiteCustomFieldDesignValue(self):
+        """ Gets a Custom Field of a Test Suite in Design Scope."""
                
 #   /**
 #    * Gets a Custom Field of a Test Plan in Design Scope.
@@ -719,6 +726,13 @@ following optional arguments could only be used with TL version >= 1.9.9
 #    * @access public
 #    */
 #   public function getTestPlanCustomFieldDesignValue($args)
+
+    @decoMakerApiCallReplaceTLResponseError(replaceValue=None) 
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['customfieldname', 'testprojectid', 
+                               'testplanid'])
+    def getTestPlanCustomFieldDesignValue(self):
+        """ Gets a Custom Field of a Test Plan in Design Scope. """
 
 #     /**
 #      * Gets a Custom Field of a Requirement Specification in Design Scope.

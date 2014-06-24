@@ -324,7 +324,16 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.updateTestCaseCustomFieldDesignValue(
                             'TC-4712', 1, 4711, {'cf_field1' : 'value1',
                                                  'cf_field2' : 'value2'})
+
+    def test_getTestSuiteCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.getTestSuiteCustomFieldDesignValue(
+                                                    'cf_full', 4711, 4713) 
             
+    def test_getTestPlanCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '7000.*4711'):
+            self.client.getTestPlanCustomFieldDesignValue(
+                                                    'cf_full', 4711, 4712)             
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

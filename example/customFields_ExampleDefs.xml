@@ -68,4 +68,38 @@
 		<enable_on_testplan_design><![CDATA[1]]></enable_on_testplan_design>
 		<node_type_id><![CDATA[3]]></node_type_id>
 	</custom_field>
+	<custom_field>
+		<name><![CDATA[cf_ts_string]]></name>
+		<label><![CDATA[CF TestSuite String]]></label>
+		<type><![CDATA[0]]></type>
+		<possible_values><![CDATA[]]></possible_values>
+		<default_value><![CDATA[default value TSuite]]></default_value>
+		<valid_regexp><![CDATA[]]></valid_regexp>
+		<length_min><![CDATA[0]]></length_min>
+		<length_max><![CDATA[0]]></length_max>
+		<show_on_design><![CDATA[1]]></show_on_design>
+		<enable_on_design><![CDATA[1]]></enable_on_design>
+		<show_on_execution><![CDATA[1]]></show_on_execution>
+		<enable_on_execution><![CDATA[0]]></enable_on_execution>
+		<show_on_testplan_design><![CDATA[0]]></show_on_testplan_design>
+		<enable_on_testplan_design><![CDATA[0]]></enable_on_testplan_design>
+		<node_type_id><![CDATA[2]]></node_type_id>
+	</custom_field>
+	<custom_field>
+		<name><![CDATA[cf_tp_string]]></name>
+		<label><![CDATA[CF TPlan String]]></label>
+		<type><![CDATA[0]]></type>
+		<possible_values><![CDATA[]]></possible_values>
+		<default_value><![CDATA[default value TPlan]]></default_value>
+		<valid_regexp><![CDATA[]]></valid_regexp>
+		<length_min><![CDATA[0]]></length_min>
+		<length_max><![CDATA[0]]></length_max>
+		<show_on_design><![CDATA[1]]></show_on_design>
+		<enable_on_design><![CDATA[1]]></enable_on_design>
+		<show_on_execution><![CDATA[1]]></show_on_execution>
+		<enable_on_execution><![CDATA[0]]></enable_on_execution>
+		<show_on_testplan_design><![CDATA[0]]></show_on_testplan_design>
+		<enable_on_testplan_design><![CDATA[0]]></enable_on_testplan_design>
+		<node_type_id><![CDATA[5]]></node_type_id>
+	</custom_field>
 </custom_fields>

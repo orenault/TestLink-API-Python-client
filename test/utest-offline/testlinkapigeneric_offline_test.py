@@ -110,7 +110,24 @@ SCENARIO_CUSTOM_FIELDS = {
                              'value': 'a custom PlanDesign string', 'label': 'CF PlanDesign String', 'show_on_testplan_design': '1', 
                              'display_order': '1', 'length_max': '0', 'show_on_design': '0', 'required': '0', 'show_on_execution': '1', 
                              'type': '0', 'id': '28', 'node_id': '779', 'enable_on_testplan_design': '1'}
-                                                           }
+                                                           },
+            'getTestSuiteCustomFieldDesignValue' : {
+                'cf_notAssigned' : '',
+                'cf_full' : {'default_value': '', 'enable_on_execution': '0', 'name': 'cf_ts_string', 'location': '1', 
+                             'enable_on_design': '1', 'valid_regexp': '', 'length_min': '0', 'possible_values': '', 
+                             'value': 'a custom TSuite string', 'label': 'CF TestSuite String', 'show_on_testplan_design': '0', 
+                             'display_order': '1', 'length_max': '0', 'show_on_design': '1', 'required': '0', 'show_on_execution': '1', 
+                             'type': '0', 'id': '30', 'node_id': '', 'enable_on_testplan_design': '0'}
+                                                    },
+
+            'getTestPlanCustomFieldDesignValue' : {
+                'cf_notAssigned' : '',
+                'cf_full' : {'default_value': '', 'enable_on_execution': '0', 'name': 'cf_tp_string', 'location': '1', 
+                             'enable_on_design': '1', 'valid_regexp': '', 'length_min': '0', 'possible_values': '', 
+                             'value': 'a custom TPlan string', 'label': 'CF TPlan String', 'show_on_testplan_design': '0',
+                             'display_order': '1', 'length_max': '0', 'show_on_design': '1', 'required': '0', 'show_on_execution': '1', 
+                             'type': '0', 'id': '31', 'node_id': '', 'enable_on_testplan_design': '0'}
+                                                   }
                           }
               
 class DummyAPIGeneric(TestlinkAPIGeneric):
@@ -496,6 +513,37 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertEqual('1', response['enable_on_testplan_design']) 
         self.assertEqual('0', response['enable_on_execution'])           
 
+    def test_getTestSuiteCustomFieldDesignValue_notAssigned(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestSuiteCustomFieldDesignValue(
+                                            'cf_notAssigned', '7760', '7762') 
+        self.assertEqual(None, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+
+    def test_getTestSuiteCustomFieldDesignValue_full(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestSuiteCustomFieldDesignValue(
+                                                    'cf_full', '7760', '7762') 
+        self.assertEqual('a custom TSuite string', response['value'])           
+        self.assertEqual('1', response['enable_on_design']) 
+        self.assertEqual('0', response['enable_on_testplan_design']) 
+        self.assertEqual('0', response['enable_on_execution'])           
+
+    def test_getTestPlanCustomFieldDesignValue_notAssigned(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestPlanCustomFieldDesignValue(
+                                            'cf_notAssigned', '7760', '7761') 
+        self.assertEqual(None, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+
+    def test_getTestPlanCustomFieldDesignValue_full(self):
+        self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
+        response = self.api.getTestPlanCustomFieldDesignValue(
+                                                    'cf_full', '7760', '7761') 
+        self.assertEqual('a custom TPlan string', response['value'])           
+        self.assertEqual('1', response['enable_on_design']) 
+        self.assertEqual('0', response['enable_on_testplan_design']) 
+        self.assertEqual('0', response['enable_on_execution'])           
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
