@@ -67,7 +67,39 @@ argument. Examples::
  >>> tls.copyTCnewVersion(tc_info[0]['testcase_id'], 1, summary='new summary', 
                                                         importance='1')
                                                        
+Report test results
+-------------------
 
+Using the TestLink API Client - failed test case with none default reporter 
+(argument 'users' usable with TL >= 1.9.10):
+
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> import testlink
+ >>> tls.reportTCResult(a_TestCaseID, a_TestPlanID, 'a build name', 'f', 
+                        'some notes', 
+                        user='a user login name', platformid=a_platformID) 
+                        
+Using the TestLink Generic API Client - passed test case with none default 
+reporter:
+
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIGeneric)
+ >>> import testlink
+ >>> tls.reportTCResult(a_TestPlanID, 'p', testcaseid=a_TestCaseID, 
+                        buildname='a build name', notes='some notes',
+                        user='a login name', platformid=a_platformID) 
+                        
+Using the TestLink Generic API Client - blocked test case with
+alternative optional args, default reporter (user for devKey)
+
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIGeneric)
+ >>> exTCID = tls.getTestCase(testcaseid=a_TestCaseID)[0]['full_tc_external_id']
+ >>> tls.reportTCResult(a_TestPlanID, 'b', testcaseexternalid=exTCID, 
+                        buildid='a build name', platformname='a platform name') 
+                        
+                        
 Run examples
 ------------
 

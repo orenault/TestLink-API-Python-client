@@ -264,7 +264,9 @@ print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
 # for every test case version 1 is used
 tc_version=1
 # TC AA should be tested with platforms 'Big Bird'+'Small Bird'
-tc_aa_full_ext_id = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)[0]['full_tc_external_id']
+response = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)
+print "getTestCase", response
+tc_aa_full_ext_id = response[0]['full_tc_external_id']
 response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_A, 
                     tc_aa_full_ext_id, tc_version, platformid=newPlatFormID_A)
 print "addTestCaseToTestPlan", response
@@ -380,15 +382,15 @@ newBuildID_B = newBuild[0]['id']
 print "New Build '%s' - id: %s" % (NEWBUILD_B, newBuildID_B)
   
 # TC_B in test plan b (without platform)
-# first try failed, second blocked
+# first try failed, second blocked - all by user myTestUserName
 newResult = myTestLink.reportTCResult(newTestPlanID_B, 'f', 
                 buildid=newBuildID_B, testcaseid=newTestCaseID_B, 
-                notes="no birds are singing")
+                notes="no birds are singing", user=myTestUserName)
 print "reportTCResult", newResult
 newResultID_B_f = newResult[0]['id']
 newResult = myTestLink.reportTCResult(newTestPlanID_B, 'b', 
                 buildid=newBuildID_B, testcaseid=newTestCaseID_B, 
-                notes="hungry birds blocks the execution")
+                notes="hungry birds blocks the execution", user=myTestUserName)
 print "reportTCResult", newResult
 newResultID_B_b = newResult[0]['id']
 

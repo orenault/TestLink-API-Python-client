@@ -216,7 +216,7 @@ following optional arguments could only be used with TL version >= 1.9.9
     @decoMakerApiCallWithArgs(['testplanid', 'status'], 
                 ['testcaseid', 'testcaseexternalid', 'buildid', 'buildname', 
                  'platformid', 'platformname', 'notes', 'guess', 'bugid', 
-                 'customfields', 'overwrite'])
+                 'customfields', 'overwrite', 'user'])
     def reportTCResult(self):
         """ Reports a result for a single test case
 
@@ -226,7 +226,11 @@ following optional arguments could only be used with TL version >= 1.9.9
         
         customfields : dictionary with customfields names + values
             VERY IMPORTANT: value must be formatted in the way it's written to db
-             """
+        overwrite    : if present and true, then last execution for 
+                       (testcase,testplan,build,platform) will be overwritten. 
+        user : if present and user is a valid login (no other check will be done) 
+               it will be used when writting execution.
+        """
 
 #   /**
 #    * turn on/off testMode

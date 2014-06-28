@@ -144,6 +144,9 @@ SCENARIO_A = {'getProjects' : [
                     'is_public': '1', 'id': '2211', 'option_automation': '0'},
                     },
               'createTestCase' : 'dummy response createTestCase',
+              'reportTCResult' :  [{'status': True, 'operation': 'reportTCResult', 
+                                    'message': 'Success!', 'overwrite': False, 'id': '773'}]              
+
               }
 
 SCENARIO_STEPS = {'createTestCase' : ['noRealReponseData - ok for step tests']}
@@ -382,6 +385,18 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual('V1', self.api.callArgs['preconditions'])
         self.assertEqual('4711', self.api.callArgs['testsuiteid'])
         self.assertEqual('2211', self.api.callArgs['testprojectid'])
+
+    def test_reportTCResult_user(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.reportTCResult(4711, 4712, 'build 4713', 'p', 
+                                           'note 4714', user='a login name') 
+        self.assertEqual('reportTCResult', response[0]['operation']) 
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        self.assertEqual('a login name', self.api.callArgs['user'])
+        
+    def test_whatArgs_reportTCResult(self):
+        argsDescription = self.api.whatArgs('reportTCResult')
+        self.assertIn('user=<user>', argsDescription)
         
 
 if __name__ == "__main__":

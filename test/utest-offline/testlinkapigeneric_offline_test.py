@@ -62,7 +62,9 @@ SCENARIO_A = {'repeat' : 'You said: One World',
                    'twoPlatforms' : {'dutch' : {'id': '1', 'name': 'dutch'}, 
                                      'platt' : {'id': '2', 'name': 'platt'}},
                     'noPlatform'  : {}   
-                    }              
+                    },
+              'reportTCResult' :  [{'status': True, 'operation': 'reportTCResult', 
+                                    'message': 'Success!', 'overwrite': False, 'id': '773'}]              
               }
 
 # scenario_tl198 used by test with older responses, changed in TL 1.9.9
@@ -593,8 +595,23 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertEqual('a custom Req string', response['value'])           
         self.assertEqual('1', response['enable_on_design']) 
         self.assertEqual('0', response['enable_on_testplan_design']) 
-        self.assertEqual('0', response['enable_on_execution'])           
-
+        self.assertEqual('0', response['enable_on_execution'])   
+        
+    def test_reportTCResult_user(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.reportTCResult(4712, 'p', testcaseid=4711, 
+                                    buildname='build 4713', notes='note 4714',
+                                    user='a login name') 
+        self.assertEqual('reportTCResult', response[0]['operation']) 
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        self.assertEqual('a login name', self.api.callArgs['user'])
+        
+    def test_whatArgs_reportTCResult(self):
+        argsDescription = self.api.whatArgs('reportTCResult')
+        self.assertIn('user=<user>', argsDescription)
+        
+        
+                
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

@@ -4,6 +4,15 @@ Changes in TestLink-API-Python-client Source Distribution
 TestLink-API-Python-client UNDER DEVELOP v0.4.9 
 -----------------------------------------------------------
 
+implement 1.9.10 api change - reportTCResult #24
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TestlinkAPIGeneric and TestlinkAPIClient api method reportTCResult() 
+accepts now following additional optional arguments (usable with TL >= 1.9.10) 
+ 
+- user
+
+
 implement missing 1.9.8 api method - CustomField #12
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

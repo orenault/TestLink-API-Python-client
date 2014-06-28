@@ -456,13 +456,16 @@ print "createBuild", newBuild
 newBuildID_B = newBuild[0]['id'] 
 print "New Build '%s' - id: %s" % (NEWBUILD_B, newBuildID_B)
 
-# TC_B blocked (without platform), explicit build and some notes , TC identified with internal id
+# TC_B blocked (without platform), explicit build and some notes , 
+# TC identified with internal id, report by myTestUserName
 newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_B, NEWBUILD_B,
-                                      'f', "no birds are singing")
+                                      'f', "no birds are singing", 
+                                      user=myTestUserName)
 print "reportTCResult", newResult
 newResultID_B_f = newResult[0]['id']
 newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_B, NEWBUILD_B,
-                                      'b', "hungry birds blocks the execution")
+                                      'b', "hungry birds blocks the execution", 
+                                      user=myTestUserName)
 print "reportTCResult", newResult
 newResultID_B_b = newResult[0]['id']
 
