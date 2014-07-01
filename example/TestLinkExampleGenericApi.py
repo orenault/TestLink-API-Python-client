@@ -453,10 +453,10 @@ print "getTestSuiteByID", response
 response = myTestLink.getTestSuitesForTestSuite(newTestSuiteID_A)
 print "getTestSuitesForTestSuite", response
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A,
-                                               deep=True, detail='full')
+                                               deep=True, details='full')
 print "getTestCasesForTestSuite", response
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B,
-                                               deep=False, detail='only_id')
+                                               deep=False, details='only_id')
 print "getTestCasesForTestSuite", response
 
 # get informationen - TestCase_B

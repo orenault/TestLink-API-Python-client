@@ -133,7 +133,7 @@ newTestSuite = myTestLink.getTestSuiteByID(newTestSuiteID_B)
 print "getTestSuiteByID", newTestSuite
 
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B,
-                                               deep=True, detail='full')
+                                    deep=True, details='full', getkeywords=True)
 print "getTestCasesForTestSuite", response
 
 # get informationen - TestCase_B

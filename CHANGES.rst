@@ -4,6 +4,11 @@ Changes in TestLink-API-Python-client Source Distribution
 TestLink-API-Python-client UNDER DEVELOP v0.4.9 
 -----------------------------------------------------------
 
+implement 1.9.10 api change - getTestCasesForTestSuite #23 - under construction
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- parameter keywords
+
 implement 1.9.10 api change - reportTCResult #24
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
