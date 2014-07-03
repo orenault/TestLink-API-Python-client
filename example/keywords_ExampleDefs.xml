@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<keywords>
+	<keyword name="KeyWord01">
+		<notes><![CDATA[a key word]]></notes>
+	</keyword>
+	<keyword name="KeyWord02">
+		<notes><![CDATA[another key word]]></notes>
+	</keyword>
+	<keyword name="KeyWord03">
+		<notes><![CDATA[a third key word]]></notes>
+	</keyword>
+</keywords>

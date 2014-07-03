@@ -151,6 +151,68 @@ SCENARIO_A = {'getProjects' : [
 
 SCENARIO_STEPS = {'createTestCase' : ['noRealReponseData - ok for step tests']}
 
+# scenario_keywords defines response with keywords
+SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
+                    'noTestCase' : [] ,
+                    
+                     'deepTrue1' : [{'node_order': '0', 'is_open': '1', 
+                        'keywords': {'3': {'keyword_id': '3', 'notes': 'a third key word', 'testcase_id': '8136', 'keyword': 'KeyWord03'}}, 
+                        'id': '8136', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '1', 'parent_id': '8135', 'version': '1', 
+                        'estimated_exec_duration': '', 'updater_id': '2', 'status': '1', 'tsuite_name': 'AA - Second Level', 
+                        'importance': '2', 'modification_ts': '2014-07-01 21:21:59', 'execution_type': '2', 
+                        'preconditions': '<p>\n\tthese are the preconditions</p>\n', 'active': '1', 'creation_ts': '2014-06-28 22:06:17', 
+                        'node_table': 'testcases', 'tcversion_id': '8137', 'name': 'TESTCASE_AA', 
+                        'summary': '<p>\n\tThis is the summary of the Test Case AA</p>\n', 
+                        'steps': [{'step_number': '1', 'actions': 'Step action 1 - aa', 'execution_type': '1', 'active': '1', 'id': '8138', 'expected_results': 'Step result 1 - aa'}, 
+                                  {'step_number': '2', 'actions': 'Step action 2 - aa', 'execution_type': '1', 'active': '1', 'id': '8139', 'expected_results': 'Step result 2 - aa'}, 
+                                  {'step_number': '3', 'actions': 'Step action 3 - aa', 'execution_type': '1', 'active': '1', 'id': '8140', 'expected_results': 'Step result 3 - aa'}, 
+                                  {'step_number': '4', 'actions': 'Step action 4 - aa', 'execution_type': '1', 'active': '1', 'id': '8141', 'expected_results': 'Step result 4 - aa'}, 
+                                  {'step_number': '5', 'actions': 'Step action 5 - aa', 'execution_type': '1', 'active': '1', 'id': '8142', 'expected_results': 'Step result 5 - aa'}], 
+                        'author_id': '1', 'external_id': 'GPROAPI10-1'}],
+                    
+                    'deepFalse3' :  [{'node_order': '0', 'is_open': '1', 
+                        'keywords': {'1': {'keyword_id': '1', 'notes': 'a key word', 'testcase_id': '8144', 'keyword': 'KeyWord01'}, 
+                                     '3': {'keyword_id': '3', 'notes': 'a third key word', 'testcase_id': '8144', 'keyword': 'KeyWord03'}}, 
+                        'id': '8144', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '2', 'parent_id': '8134', 'version': '1', 
+                        'details': '<p>\n\tDetails of the Test Suite B</p>\n', 'estimated_exec_duration': '3.00', 'updater_id': '2', 'status': '1', 
+                        'importance': '3', 'modification_ts': '2014-06-30 20:45:40', 'execution_type': '1', 
+                        'preconditions': '<p>\n\tthese are the preconditions</p>\n', 'active': '1', 'creation_ts': '2014-06-28 22:06:17', 
+                        'node_table': 'testcases', 'tcversion_id': '8145', 'name': 'TESTCASE_B', 
+                        'summary': '<p>\n\tThis is the summary of the Test Case B</p>\n', 
+                        'steps': [{'step_number': '1', 'actions': 'Step action 1 -b ', 'execution_type': '2', 'active': '1', 'id': '8151', 'expected_results': 'Step result 1 - b'}, 
+                                  {'step_number': '2', 'actions': 'Step action 2 -b ', 'execution_type': '2', 'active': '1', 'id': '8152', 'expected_results': 'Step result 2 - b'}, 
+                                  {'step_number': '3', 'actions': 'action 3 createTestCaseSteps.update', 'execution_type': '2', 'active': '1', 'id': '8153', 'expected_results': 'update - cause step 3 already exist'}, 
+                                  {'step_number': '4', 'actions': 'Step action 4 -b ', 'execution_type': '2', 'active': '1', 'id': '8154', 'expected_results': 'Step result 4 - b'}, 
+                                  {'step_number': '5', 'actions': 'Step action 5 -b changed by updateTestCase', 'execution_type': '2', 'active': '1', 'id': '8155', 'expected_results': 'Step result 5 - b changed'}, 
+                                  {'step_number': '6', 'actions': 'Step action 6 -b added by updateTestCase', 'execution_type': '2', 'active': '1', 'id': '8156', 'expected_results': 'Step result 6 - b added'}, 
+                                  {'step_number': '7', 'actions': 'action 7 createTestCaseSteps.create', 'execution_type': '2', 'active': '1', 'id': '8157', 'expected_results': 'create - cause step 7 not yet exist'}, 
+                                  {'step_number': '8', 'actions': 'action 8 createTestCaseSteps.update', 'execution_type': '2', 'active': '1', 'id': '8158', 'expected_results': 'create - cause step 8 not yet exist'}], 
+                        'author_id': '1'}, 
+                    {'node_order': '1', 'is_open': '1', 
+                        'keywords': {'2': {'keyword_id': '2', 'notes': 'another key word', 'testcase_id': '8159', 'keyword': 'KeyWord02'}}, 
+                        'id': '8159', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '3', 'parent_id': '8134', 'version': '1', 
+                        'details': '<p>\n\tDetails of the Test Suite B</p>\n', 'estimated_exec_duration': '3.00', 'updater_id': '2', 'status': '1', 
+                        'importance': '3', 'modification_ts': '2014-07-02 21:03:02', 'execution_type': '1', 
+                        'preconditions': '<p>\n\tthese are the preconditions</p>\n', 'active': '1', 'creation_ts': '2014-07-02 20:53:45', 
+                        'node_table': 'testcases', 'tcversion_id': '8160', 'name': 'TESTCASE_B2', 
+                        'summary': '<p>\n\tThis is the summary of the Test Case B2</p>\n', 
+                        'steps': [{'step_number': '1', 'actions': '<p>\n\tStep action 1 -b2</p>\n', 'execution_type': '2', 'active': '1', 'id': '8161', 'expected_results': '<p>\n\tStep result 1 - b2</p>\n'}, 
+                                  {'step_number': '2', 'actions': '<p>\n\tStep action 2 -b2</p>\n', 'execution_type': '2', 'active': '1', 'id': '8162', 'expected_results': '<p>\n\tStep result 2 - b2</p>\n'}], 
+                        'author_id': '2'}, 
+                    {'node_order': '2', 'is_open': '1', 
+                     'id': '8169', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '4', 'parent_id': '8134', 'version': '1', 
+                     'details': '<p>\n\tDetails of the Test Suite B</p>\n', 'estimated_exec_duration': '3.00', 'updater_id': '2', 'status': '1', 
+                     'importance': '3', 'modification_ts': '2014-07-02 21:02:23', 'execution_type': '1', 
+                     'preconditions': '<p>\n\tthese are the preconditions</p>\n', 'active': '1', 'creation_ts': '2014-07-02 20:55:46', 
+                     'node_table': 'testcases', 'tcversion_id': '8170', 'name': 'TESTCASE_B3', 
+                     'summary': '<p>\n\tThis is the summary of the Test Case B3</p>\n', 
+                     'steps': [{'step_number': '1', 'actions': '<p>\n\tStep action 1 -b3</p>\n', 'execution_type': '2', 'active': '1', 'id': '8171', 'expected_results': '<p>\n\tStep result 1 - b3</p>\n'}, 
+                               {'step_number': '2', 'actions': '<p>\n\tStep action 2 -b3</p>\n', 'execution_type': '2', 'active': '1', 'id': '8172', 'expected_results': '<p>\n\tStep result 2 - b3</p>\n'}], 
+                     'author_id': '2'}]
+                                            } 
+                     }
+
+
 class DummyAPIClient(TestlinkAPIClient):
     """ Dummy for Simulation TestLinkAPICLient. 
     Overrides _callServer() Method to return test scenarios
@@ -397,6 +459,19 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
     def test_whatArgs_reportTCResult(self):
         argsDescription = self.api.whatArgs('reportTCResult')
         self.assertIn('user=<user>', argsDescription)
+
+    def test_getTestCasesForTestSuite_keyWords(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.getTestCasesForTestSuite('deepFalse3', False, 
+                                                     'full', getkeywords=True)
+        self.assertIn('keywords', response[0])
+        self.assertNotIn('keywords', response[2])
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+           
+    def test_whatArgs_getTestCasesForTestSuite(self):
+        argsDescription = self.api.whatArgs('getTestCasesForTestSuite')
+        self.assertIn('getkeywords=<getkeywords>', argsDescription)
+        
         
 
 if __name__ == "__main__":

@@ -174,13 +174,22 @@ following optional arguments could only be used with TL version >= 1.9.9
         
     @decoMakerApiCallReplaceTLResponseError()          
     @decoApiCallAddDevKey               
-    @decoMakerApiCallWithArgs(['testsuiteid'], ['deep', 'details'])
+    @decoMakerApiCallWithArgs(['testsuiteid'], ['deep', 'details', 
+                                                'getkeywords'])
     def getTestCasesForTestSuite(self):
         """ List test suites within a test plan alphabetically
         
         details - default is 'simple', 
                   use 'full' if you want to get summary,steps & expected_results
                   or 'only_id', if you just need an ID list
+                  
+        deep - True/False - default is True
+               if True, return also test case of child suites
+               
+        getkeywords - True/False - default is False
+               if True AND details='full', dictionary includes for each test
+               case, which as assigned keywords, an additional key value pair 
+               'keywords'
         
         returns an empty list, if no build is assigned """
 
