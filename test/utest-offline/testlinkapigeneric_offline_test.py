@@ -149,6 +149,31 @@ SCENARIO_CUSTOM_FIELDS = {
                                                       }
 
                           }
+
+# scenario_keywords defines response with keywords
+SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
+                    'noTestCase' : [] ,
+                    'keyWords'  : [{'node_order': '0', 'is_open': '1', 
+                        'keywords': {'1': {'keyword_id': '1', 'notes': 'a key word', 'testcase_id': '8144', 'keyword': 'KeyWord01'}, 
+                                     '3': {'keyword_id': '3', 'notes': 'a third key word', 'testcase_id': '8144', 'keyword': 'KeyWord03'}}, 
+                        'id': '8144', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '2', 'parent_id': '8134', 
+                        'version': '1', 'estimated_exec_duration': '3.00', 'updater_id': '2', 'status': '1', 
+                        'tsuite_name': 'B - First Level', 'importance': '3', 'modification_ts': '2014-06-30 20:45:40', 
+                        'execution_type': '1', 'preconditions': '<p>\n\tthese are the preconditions</p>\n', 'active': '1', 
+                        'creation_ts': '2014-06-28 22:06:17', 'node_table': 'testcases', 'tcversion_id': '8145', 
+                        'name': 'TESTCASE_B', 'summary': '<p>\n\tThis is the summary of the Test Case B</p>\n', 
+                        'steps': [{'step_number': '1', 'actions': 'Step action 1 -b ', 'execution_type': '2', 'active': '1', 'id': '8151', 'expected_results': 'Step result 1 - b'}, 
+                                  {'step_number': '2', 'actions': 'Step action 2 -b ', 'execution_type': '2', 'active': '1', 'id': '8152', 'expected_results': 'Step result 2 - b'}, 
+                                  {'step_number': '3', 'actions': 'action 3 createTestCaseSteps.update', 'execution_type': '2', 'active': '1', 'id': '8153', 'expected_results': 'update - cause step 3 already exist'}, 
+                                  {'step_number': '4', 'actions': 'Step action 4 -b ', 'execution_type': '2', 'active': '1', 'id': '8154', 'expected_results': 'Step result 4 - b'}, 
+                                  {'step_number': '5', 'actions': 'Step action 5 -b changed by updateTestCase', 'execution_type': '2', 'active': '1', 'id': '8155', 'expected_results': 'Step result 5 - b changed'}, 
+                                  {'step_number': '6', 'actions': 'Step action 6 -b added by updateTestCase', 'execution_type': '2', 'active': '1', 'id': '8156', 'expected_results': 'Step result 6 - b added'}, 
+                                  {'step_number': '7', 'actions': 'action 7 createTestCaseSteps.create', 'execution_type': '2', 'active': '1', 'id': '8157', 'expected_results': 'create - cause step 7 not yet exist'}, 
+                                  {'step_number': '8', 'actions': 'action 8 createTestCaseSteps.update', 'execution_type': '2', 'active': '1', 'id': '8158', 'expected_results': 'create - cause step 8 not yet exist'}], 
+                                    'author_id': '1', 'external_id': 'GPROAPI10-2'}]
+                                            } 
+                     }
+
                           
 class DummyAPIGeneric(TestlinkAPIGeneric):
     """ Dummy for Simulation TestLinkAPIGeneric. 
@@ -425,7 +450,18 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         response = self.api.getTestCasesForTestSuite('noTestCase')
         self.assertEqual([], response)
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+
+    def test_getTestCasesForTestSuite_keyWords(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.getTestCasesForTestSuite('keyWords', details='full', 
+                                                     getkeywords=True)
+        self.assertIn('keywords', response[0])
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
            
+    def test_whatArgs_getTestCasesForTestSuite(self):
+        argsDescription = self.api.whatArgs('getTestCasesForTestSuite')
+        self.assertIn('getkeywords=<getkeywords>', argsDescription)
+
     def test_getTestCasesForTestPlan_noTestCase(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.getTestCasesForTestPlan('noTestCase')

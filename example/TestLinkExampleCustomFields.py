@@ -24,18 +24,20 @@ Shows how to use the TestLinkAPI for custom fields
 This example requires a special existing project with special custom fields 
 assigned
 
-a) run example TestLinkExampleGenericApi.py
-   - this creates a project like PROJECT_API_GENERIC-7
+a) run example TestLinkExample.py
+   - this creates a project like NEW_PROJECT_API-7
    if some additional project are created since running that example, adapt 
    variable projNr in this script your are reading currently 
 b) load custom field definitions customFields_ExampleDefs.xml
    TL - Desktop - System - Define Custom Fields - Import
-c) assign custom fields to project PROJECT_API_GENERIC-7
-   TL - Test Project - Assign Custom Fields
+c) assign custom fields to project NEW_PROJECT_API-7
+   TL - Desktop - Test Project - Assign Custom Fields
+d) load keyword definitions keywords_ExampleDefs.xml
+   TL - Desktop - Test Project - Keyword Management
    
 Script works with:
 
-TestProject PROJECT_API_GENERIC-7
+TestProject NEW_PROJECT_API-7
 - TestSuite B - First Level
   - TestCase TESTCASE_B
 - TestPlan TestPlan_API_GENERIC A (Platform Small Bird)
@@ -51,9 +53,12 @@ Cause of missing knowledge, how ids of kind
 - requirement and requirement specifications
 - testplan - testcase link
 could be requested via api, these example does not work currently. 
+
+Script returns keywords from test case TESTCASE_B, if the user has assigned 
+manually some values.
    
 """                                       
-from testlink import TestlinkAPIGeneric, TestLinkHelper
+from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 import sys, os.path
 
@@ -74,27 +79,27 @@ import sys, os.path
 #               (new) http://YOURSERVER/testlink/lib/api/xmlrpc/v1/xmlrpc.php
 tl_helper = TestLinkHelper()
 tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI for CustomFields.
-=> requires an existing project PROJECT_API_GENERIC-*''')
-myTestLink = tl_helper.connect(TestlinkAPIGeneric) 
+=> requires an existing project NEW_PROJECT_API-*''')
+myTestLink = tl_helper.connect(TestlinkAPIClient) 
 
 #projNr=len(myTestLink.getProjects())+1
 projNr=len(myTestLink.getProjects())
 
-NEWPROJECT="PROJECT_API_GENERIC-%i" % projNr
-NEWPREFIX="GPROAPI%i" % projNr
-NEWTESTPLAN_A="TestPlan_API_GENERIC A"
-NEWTESTPLAN_B="TestPlan_API_GENERIC B"
-NEWPLATFORM_A='Big Bird %i' % projNr
-NEWPLATFORM_B='Small Bird'
-NEWPLATFORM_C='Ugly Bird'
+NEWPROJECT="NEW_PROJECT_API-%i" % projNr
+NEWPREFIX="NPROAPI%i" % projNr
+NEWTESTPLAN_A="TestPlan_API A"
+# NEWTESTPLAN_B="TestPlan_API B"
+# NEWPLATFORM_A='Big Bird %i' % projNr
+NEWPLATFORM_B='Small Birds'
+# NEWPLATFORM_C='Ugly Bird'
 NEWTESTSUITE_A="A - First Level"
 NEWTESTSUITE_B="B - First Level"
 NEWTESTSUITE_AA="AA - Second Level"
-NEWTESTCASE_AA="TESTCASE_AA"
+# NEWTESTCASE_AA="TESTCASE_AA"
 NEWTESTCASE_B="TESTCASE_B"
-myApiVersion='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
-NEWBUILD_A='%s' % myApiVersion
-NEWBUILD_B='%s' % myApiVersion
+# myApiVersion='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
+# NEWBUILD_A='%s' % myApiVersion
+# NEWBUILD_B='%s' % myApiVersion
 
 NEWATTACHMENT_PY= os.path.realpath(__file__)
 this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
@@ -123,6 +128,7 @@ print "getTotalsForTestPlan", response
 response = myTestLink.getBuildsForTestPlan(newTestPlanID_A)
 print "getBuildsForTestPlan", response
 newBuildID_A = response[0]['id']
+newBuildName_A = response[0]['name']
 # get information - TestSuite
 response = myTestLink.getTestSuitesForTestPlan(newTestPlanID_A)
 print "getTestSuitesForTestPlan", response
@@ -132,8 +138,9 @@ newTestSuiteID_B=response[2]['id']
 newTestSuite = myTestLink.getTestSuiteByID(newTestSuiteID_B)
 print "getTestSuiteByID", newTestSuite
 
-response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B,
-                                    deep=True, details='full', getkeywords=True)
+# list test cases with assigned keywords
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, True, 
+                                               'full', getkeywords=True)
 print "getTestCasesForTestSuite", response
 
 # get informationen - TestCase_B
@@ -147,16 +154,14 @@ print "getTestCase", newTestCase_B
 
 # new execution result with custom field data
 # TC_B passed, explicit build and some notes , TC identified with internal id
-newResult = myTestLink.reportTCResult(newTestPlanID_A, 'p', 
-                buildid=newBuildID_A, testcaseid=newTestCaseID_B, 
-                platformname=NEWPLATFORM_B, notes="custom try",
+newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_A, 
+                newBuildName_A, 'p', "custom try", platformname=NEWPLATFORM_B, 
                 customfields={'cf_tc_ex_string' : 'a custom exec value set via api',
                               'cf_tc_sd_listen' : 'ernie'})
 print "reportTCResult", newResult
 
 # get execution results
-lastResult = myTestLink.getLastExecutionResult(
-                        newTestPlanID_A, testcaseid=newTestCaseID_B)[0]
+lastResult = myTestLink.getLastExecutionResult(newTestPlanID_A, newTestCaseID_B)[0]
 print "getLastExecutionResult", lastResult
 
 # map of used ids
@@ -190,17 +195,17 @@ print "updateTestCaseCustomFieldDesignValue", response
 #response = myTestLink._callServer('getTestCaseCustomFieldDesignValue', args)
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                 args['testcaseexternalid'], args['version'],
-                args['testprojectid'], 'cf_tc_sd_string', details = 'full')
+                args['testprojectid'], 'cf_tc_sd_string', 'full')
 print "getTestCaseCustomFieldDesignValue full", response
 
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                 args['testcaseexternalid'], args['version'],
-                args['testprojectid'], 'cf_tc_sd_string', details = 'value')
+                args['testprojectid'], 'cf_tc_sd_string', 'value')
 print "getTestCaseCustomFieldDesignValue value", response
 
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                 args['testcaseexternalid'], args['version'], 
-                args['testprojectid'], 'cf_tc_sd_list', details = 'simple')
+                args['testprojectid'], 'cf_tc_sd_list', 'simple')
 print "getTestCaseCustomFieldDesignValue simple", response
 
 # get CustomField Value - TestCase Testplan Design
