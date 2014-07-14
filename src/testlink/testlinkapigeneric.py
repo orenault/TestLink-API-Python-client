@@ -1043,8 +1043,10 @@ following optional arguments could only be used with TL version >= 1.9.9
         user                 login name => tester
         testcaseexternalid   format PREFIX-NUMBER
         
-        args variations:     buildid - buildname
+        args variations:     buildid - buildname 
                              platformid - platformname
+        build information is general mandatory
+        platform information is required, when test plan has assigned platforms
         """
     
     #

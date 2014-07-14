@@ -111,6 +111,7 @@ print ""
 
 # CHANGE this name into a valid account, known in your TL application
 myTestUserName="admin"
+myTestUserName2="admin"
 # get user information
 response = myTestLink.getUserByLogin(myTestUserName)
 print "getUserByLogin", response
@@ -120,7 +121,7 @@ print "getUserByID   ", response
 
 
 # example asking the api client about methods arguments
-print myTestLink.whatArgs('createTestCase')
+print myTestLink.whatArgs('assignTestCaseExecutionTask')
 
 
 # -- Start CHANGE v0.4.5 -- 
@@ -413,6 +414,20 @@ newBuild = myTestLink.createBuild(newTestPlanID_A, NEWBUILD_A, 'Notes for the Bu
 print "createBuild", newBuild
 newBuildID_A = newBuild[0]['id'] 
 print "New Build '%s' - id: %s" % (NEWBUILD_A, newBuildID_A)
+
+# assign user to test case execution tasks - test plan with platforms
+response = myTestLink.assignTestCaseExecutionTask( myTestUserName, 
+                        newTestPlanID_A, tc_aa_full_ext_id,
+                        buildid=newBuildID_A, platformname=NEWPLATFORM_A)
+print "assignTestCaseExecutionTask", response
+response = myTestLink.assignTestCaseExecutionTask( myTestUserName2, 
+                        newTestPlanID_A, tc_aa_full_ext_id,
+                        buildname=NEWBUILD_A, platformid=newPlatFormID_B)  
+print "assignTestCaseExecutionTask", response
+response = myTestLink.assignTestCaseExecutionTask( myTestUserName, 
+                        newTestPlanID_A, tc_b_full_ext_id,
+                        buildname=NEWBUILD_A, platformname=NEWPLATFORM_B)  
+print "assignTestCaseExecutionTask", response
   
 # report Test Case Results for platform 'Big Bird'
 # TC_AA failed, build should be guessed, TC identified with external id
@@ -455,6 +470,12 @@ newBuild = myTestLink.createBuild(newTestPlanID_B, NEWBUILD_B,
 print "createBuild", newBuild
 newBuildID_B = newBuild[0]['id'] 
 print "New Build '%s' - id: %s" % (NEWBUILD_B, newBuildID_B)
+
+# assign user to test case execution tasks - test plans without platforms
+response = myTestLink.assignTestCaseExecutionTask( myTestUserName, 
+                        newTestPlanID_B, tc_b_full_ext_id, buildname=NEWBUILD_B)  
+print "assignTestCaseExecutionTask", response
+
 
 # TC_B blocked (without platform), explicit build and some notes , 
 # TC identified with internal id, report by myTestUserName

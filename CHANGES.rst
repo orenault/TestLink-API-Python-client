@@ -10,15 +10,15 @@ implement 1.9.11 new api method - assignTestCaseExecutionTask #26
 
 new TestlinkAPIGeneric and TestlinkAPIClient api method
 
-- assignTestCaseExecutionTask
+- assignTestCaseExecutionTask(<user>, <testplanid>, <testcaseexternalid>, 
+  [buildid=<buildid>], [buildname=<buildname>], [platformid=<platformid>], 
+  [platformname=<platformname>], [devKey=<devKey>])
 
-known TL Dev 1.9.11 problems
+known TL DEV1.9.11 problems
 
-- [TestLink 0006433](http://mantis.testlink.org/view.php?id=6433): 
+- `TestLink 0006433 <http://mantis.testlink.org/view.php?id=6433>`_: 
   Add test case to test plan with assigning user raise PHP Fatal error
-- [TestLink 0006434](http://mantis.testlink.org/view.php?id=6434): 
-  assignTestCaseExecutionTask does not work for test plans, which has no platforms
-- [TestLink 0006440](http://mantis.testlink.org/view.php?id=6440): 
+- `TestLink 0006440 <http://mantis.testlink.org/view.php?id=6440>`_: 
   assignTestCaseExecutionTask does not assign user
 
 
