@@ -1033,6 +1033,19 @@ following optional arguments could only be used with TL version >= 1.9.9
             # TL does not know this api method, version must be < 1.9.9
             pass
         return tl_version
+ 
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['user', 'testplanid', 'testcaseexternalid'],
+                        ['buildid', 'buildname', 'platformid', 'platformname'])
+    def assignTestCaseExecutionTask(self):
+        """ assigns a user to a test case execution task
+        
+        user                 login name => tester
+        testcaseexternalid   format PREFIX-NUMBER
+        
+        args variations:     buildid - buildname
+                             platformid - platformname
+        """
     
     #
     #  public methods for general server calls

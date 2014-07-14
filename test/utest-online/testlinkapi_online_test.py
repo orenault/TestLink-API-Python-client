@@ -291,6 +291,12 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_getExecCountersByBuild_unknownID(self):
         with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
             self.client.getExecCountersByBuild(4711)
+
+    def test_assignTestCaseExecutionTask_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.assignTestCaseExecutionTask('username', 4711, 'TC-4712', 
+                                            buildname='build 4713', 
+                                            platformname='platform 4714')                         
             
            
         

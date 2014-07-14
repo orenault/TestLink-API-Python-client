@@ -1,6 +1,27 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+TestLink-API-Python-client UNDER DEVELOP v0.5.1 
+-----------------------------------------------------------
+support for future TL 1.9.11 release
+
+implement 1.9.11 new api method - assignTestCaseExecutionTask #26
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api method
+
+- assignTestCaseExecutionTask
+
+known TL Dev 1.9.11 problems
+
+- [TestLink 0006433](http://mantis.testlink.org/view.php?id=6433): 
+  Add test case to test plan with assigning user raise PHP Fatal error
+- [TestLink 0006434](http://mantis.testlink.org/view.php?id=6434): 
+  assignTestCaseExecutionTask does not work for test plans, which has no platforms
+- [TestLink 0006440](http://mantis.testlink.org/view.php?id=6440): 
+  assignTestCaseExecutionTask does not assign user
+
+
 TestLink-API-Python-client UNDER DEVELOP v0.4.9 
 -----------------------------------------------------------
 
