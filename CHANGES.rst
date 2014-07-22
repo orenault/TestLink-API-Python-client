@@ -1,8 +1,38 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client UNDER DEVELOP v0.4.9 
+TestLink-API-Python-client UNDER DEVELOP v0.5.0 
 -----------------------------------------------------------
+
+new service methods - list keywords #25 UNDER DEVELOP
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIClient service methods, which returns a keyword list without 
+internal details (like getTestCasesForTestSuite() does)
+
+- listKeywordsForTC(internal_or_external_tc_id) 
+- listKeywordsForTC(ts_id) !!NOT YET IMPLEMENTET!!
+
+Example::
+
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tls.getTestCase(None, testcaseexternalid='NPROAPI-3')
+ >>> tc_kw = tls.listKeywordsForTC('NPROAPI-3')
+  ['KeyWord01', 'KeyWord03']
+ >>> tc_kw = tls.listKeywordsForTC(5440)
+  ['KeyWord01', 'KeyWord03']
+ >>> tc_kw = tls.listKeywordsForTC('5440')
+  ['KeyWord01', 'KeyWord03']
+ >>> ts_kw = tls.listKeywordsForTS('5415')
+  {'NPROAPI-3' : ['KeyWord01', 'KeyWord03'], 'NPROAPI-1' : ['KeyWord03'],
+   'NPROAPI-2' : []}
+  
+                                        
+Known limitations:
+
+- it is not possible to ask for a special test case version, cause TL links 
+  keywords against a test case and not a test case version
 
 implement 1.9.10 api change - getTestCasesForTestSuite #23
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

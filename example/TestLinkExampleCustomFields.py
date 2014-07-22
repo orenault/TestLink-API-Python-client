@@ -151,6 +151,10 @@ print "Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
 newTestCase_B = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]
 print "getTestCase", newTestCase_B
 
+# return keyword list for TestCase_B
+response =  myTestLink.listKeywordsForTC(newTestCaseID_B)
+print "listKeywordsForTC", response
+
 
 # new execution result with custom field data
 # TC_B passed, explicit build and some notes , TC identified with internal id

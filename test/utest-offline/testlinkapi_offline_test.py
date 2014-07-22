@@ -188,7 +188,7 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                                   {'step_number': '7', 'actions': 'action 7 createTestCaseSteps.create', 'execution_type': '2', 'active': '1', 'id': '8157', 'expected_results': 'create - cause step 7 not yet exist'}, 
                                   {'step_number': '8', 'actions': 'action 8 createTestCaseSteps.update', 'execution_type': '2', 'active': '1', 'id': '8158', 'expected_results': 'create - cause step 8 not yet exist'}], 
                         'author_id': '1'}, 
-                    {'node_order': '1', 'is_open': '1', 
+                                     {'node_order': '1', 'is_open': '1', 
                         'keywords': {'2': {'keyword_id': '2', 'notes': 'another key word', 'testcase_id': '8159', 'keyword': 'KeyWord02'}}, 
                         'id': '8159', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '3', 'parent_id': '8134', 'version': '1', 
                         'details': '<p>\n\tDetails of the Test Suite B</p>\n', 'estimated_exec_duration': '3.00', 'updater_id': '2', 'status': '1', 
@@ -199,7 +199,7 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                         'steps': [{'step_number': '1', 'actions': '<p>\n\tStep action 1 -b2</p>\n', 'execution_type': '2', 'active': '1', 'id': '8161', 'expected_results': '<p>\n\tStep result 1 - b2</p>\n'}, 
                                   {'step_number': '2', 'actions': '<p>\n\tStep action 2 -b2</p>\n', 'execution_type': '2', 'active': '1', 'id': '8162', 'expected_results': '<p>\n\tStep result 2 - b2</p>\n'}], 
                         'author_id': '2'}, 
-                    {'node_order': '2', 'is_open': '1', 
+                                     {'node_order': '2', 'is_open': '1', 
                      'id': '8169', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '4', 'parent_id': '8134', 'version': '1', 
                      'details': '<p>\n\tDetails of the Test Suite B</p>\n', 'estimated_exec_duration': '3.00', 'updater_id': '2', 'status': '1', 
                      'importance': '3', 'modification_ts': '2014-07-02 21:02:23', 'execution_type': '1', 
@@ -209,7 +209,20 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                      'steps': [{'step_number': '1', 'actions': '<p>\n\tStep action 1 -b3</p>\n', 'execution_type': '2', 'active': '1', 'id': '8171', 'expected_results': '<p>\n\tStep result 1 - b3</p>\n'}, 
                                {'step_number': '2', 'actions': '<p>\n\tStep action 2 -b3</p>\n', 'execution_type': '2', 'active': '1', 'id': '8172', 'expected_results': '<p>\n\tStep result 2 - b3</p>\n'}], 
                      'author_id': '2'}]
-                                            } 
+                                            },
+                     'getTestCase' : {
+                                    '8144' : [{'full_tc_external_id': 'NPROAPI-2', 'id': '8145', 'tc_external_id': '2', 'version': '1', 
+                                                    'testsuite_id': 'deepFalse3', 'testcase_id': '8144', 'name': 'TESTCASE_B'}],
+                                    'NPROAPI-2' : [{'full_tc_external_id': 'NPROAPI-2', 'id': '8145', 'tc_external_id': '2', 'version': '1', 
+                                                    'testsuite_id': 'deepFalse3', 'testcase_id': '8144', 'name': 'TESTCASE_B'}],
+                                    '8159' : [{'full_tc_external_id': 'NPROAPI-3', 'id': '8160', 'tc_external_id': '3', 'version': '1', 
+                                                    'testsuite_id': 'deepFalse3', 'testcase_id': '8159', 'name': 'TESTCASE_B2'}],
+                                    'NPROAPI-3' : [{'full_tc_external_id': 'NPROAPI-3', 'id': '8160', 'tc_external_id': '3', 'version': '1', 
+                                                    'testsuite_id': 'deepFalse3', 'testcase_id': '8159', 'name': 'TESTCASE_B2'}],
+                                    '8169' : [{'full_tc_external_id': 'NPROAPI-4', 'id': '8170', 'tc_external_id': '3', 'version': '1', 
+                                                    'testsuite_id': 'deepFalse3', 'testcase_id': '8169', 'name': 'TESTCASE_B3'}],
+                                    'NPROAPI-4' : [{'full_tc_external_id': 'NPROAPI-4', 'id': '8170', 'tc_external_id': '3', 'version': '1', 
+                                                    'testsuite_id': 'deepFalse3', 'testcase_id': '8169', 'name': 'TESTCASE_B3'}] }
                      }
 
 
@@ -245,7 +258,14 @@ class DummyAPIClient(TestlinkAPIClient):
         elif methodAPI in ['getTestCaseIDByName']:
             response = data[argsAPI['testcasename']]
         elif methodAPI in ['getTestCase']:
-            response = data['%(testcaseid)s-%(version)s' % argsAPI]
+            datakey = argsAPI.get('testcaseid')
+            if datakey:
+                datakey = str(datakey)
+            else:
+                datakey = argsAPI.get('testcaseexternalid', '')
+            if argsAPI.has_key('version'):
+                datakey += '-%(version)s' % argsAPI
+            response = data[datakey]
         elif methodAPI in ['getFullPath']:
             response = data[argsAPI['nodeid']]
         elif methodAPI in ['getTestProjectByName']:
@@ -471,6 +491,33 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
     def test_whatArgs_getTestCasesForTestSuite(self):
         argsDescription = self.api.whatArgs('getTestCasesForTestSuite')
         self.assertIn('getkeywords=<getkeywords>', argsDescription)
+        
+    def test_listKeywordsForTC_FullExternalId(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTC('NPROAPI-2')
+        self.assertEqual(['KeyWord01', 'KeyWord03'], response)
+        
+    def test_listKeywordsForTC_InternalId_Int(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTC(8144)
+        self.assertEqual(['KeyWord01', 'KeyWord03'], response)
+        
+    def test_listKeywordsForTC_InternalId_String(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTC('8144')
+        self.assertEqual(['KeyWord01', 'KeyWord03'], response)
+        
+    def test_listKeywordsForTC_One(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTC('NPROAPI-3')
+        self.assertEqual(['KeyWord02'], response)
+
+    def test_listKeywordsForTC_None(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTC('NPROAPI-4')
+        self.assertEqual([], response)
+        
+        
         
         
 
