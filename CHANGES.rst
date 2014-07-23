@@ -4,14 +4,14 @@ Changes in TestLink-API-Python-client Source Distribution
 TestLink-API-Python-client UNDER DEVELOP v0.5.0 
 -----------------------------------------------------------
 
-new service methods - list keywords #25 UNDER DEVELOP
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+new service methods - list keywords #25
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-new TestlinkAPIClient service methods, which returns a keyword list without 
+new TestlinkAPIClient service methods, which returns keyword lists without 
 internal details (like getTestCasesForTestSuite() does)
 
 - listKeywordsForTC(internal_or_external_tc_id) 
-- listKeywordsForTC(ts_id) !!NOT YET IMPLEMENTET!!
+- listKeywordsForTC(internal_ts_id)
 
 Example::
 
@@ -25,8 +25,7 @@ Example::
  >>> tc_kw = tls.listKeywordsForTC('5440')
   ['KeyWord01', 'KeyWord03']
  >>> ts_kw = tls.listKeywordsForTS('5415')
-  {'NPROAPI-3' : ['KeyWord01', 'KeyWord03'], 'NPROAPI-1' : ['KeyWord03'],
-   'NPROAPI-2' : []}
+  {'5440' : ['KeyWord01', 'KeyWord03'], '5445' : ['KeyWord03'], '5450' : []}
   
                                         
 Known limitations:

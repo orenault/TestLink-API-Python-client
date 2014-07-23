@@ -208,7 +208,30 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                      'summary': '<p>\n\tThis is the summary of the Test Case B3</p>\n', 
                      'steps': [{'step_number': '1', 'actions': '<p>\n\tStep action 1 -b3</p>\n', 'execution_type': '2', 'active': '1', 'id': '8171', 'expected_results': '<p>\n\tStep result 1 - b3</p>\n'}, 
                                {'step_number': '2', 'actions': '<p>\n\tStep action 2 -b3</p>\n', 'execution_type': '2', 'active': '1', 'id': '8172', 'expected_results': '<p>\n\tStep result 2 - b3</p>\n'}], 
-                     'author_id': '2'}]
+                     'author_id': '2'}],
+                                                   
+                '4711' :  [{'node_order': '0', 'is_open': '1', 
+                        'keywords': {'1': {'keyword_id': '1', 'notes': 'a key word', 'testcase_id': '8144', 'keyword': 'KeyWord01'}, 
+                                     '3': {'keyword_id': '3', 'notes': 'a third key word', 'testcase_id': '8144', 'keyword': 'KeyWord03'}}, 
+                        'id': '8144', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '2', 'parent_id': '8134', 'version': '1', 
+                        'details': '<p>\n\tDetails of the Test Suite B</p>\n', 'estimated_exec_duration': '3.00', 'updater_id': '2', 'status': '1', 
+                        'importance': '3', 'modification_ts': '2014-06-30 20:45:40', 'execution_type': '1', 
+                        'preconditions': '<p>\n\tthese are the preconditions</p>\n', 'active': '1', 'creation_ts': '2014-06-28 22:06:17', 
+                        'node_table': 'testcases', 'tcversion_id': '8145', 'name': 'TESTCASE_B', 
+                        'summary': '<p>\n\tThis is the summary of the Test Case B</p>\n', 
+                        'steps': [{'step_number': '1', 'actions': 'Step action 1 -b ', 'execution_type': '2', 'active': '1', 'id': '8151', 'expected_results': 'Step result 1 - b'}], 
+                        'author_id': '1'} ],
+
+                'noKeywords' :  [{'node_order': '0', 'is_open': '1', 
+                        'id': '8144', 'node_type_id': '3', 'layout': '1', 'tc_external_id': '2', 'parent_id': '8134', 'version': '1', 
+                        'details': '<p>\n\tDetails of the Test Suite B</p>\n', 'estimated_exec_duration': '3.00', 'updater_id': '2', 'status': '1', 
+                        'importance': '3', 'modification_ts': '2014-06-30 20:45:40', 'execution_type': '1', 
+                        'preconditions': '<p>\n\tthese are the preconditions</p>\n', 'active': '1', 'creation_ts': '2014-06-28 22:06:17', 
+                        'node_table': 'testcases', 'tcversion_id': '8145', 'name': 'TESTCASE_B', 
+                        'summary': '<p>\n\tThis is the summary of the Test Case B</p>\n', 
+                        'steps': [{'step_number': '1', 'actions': 'Step action 1 -b ', 'execution_type': '2', 'active': '1', 'id': '8151', 'expected_results': 'Step result 1 - b'}], 
+                        'author_id': '1'} ]
+
                                             },
                      'getTestCase' : {
                                     '8144' : [{'full_tc_external_id': 'NPROAPI-2', 'id': '8145', 'tc_external_id': '2', 'version': '1', 
@@ -517,7 +540,31 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         response = self.api.listKeywordsForTC('NPROAPI-4')
         self.assertEqual([], response)
         
+    def test_listKeywordsForTS_NoneTC(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTS('noTestCase')
+        self.assertEqual({}, response)
+
+    def test_listKeywordsForTS_NoneKW(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTS('noKeywords')
+        self.assertEqual({'8144' : []}, response)
         
+    def test_listKeywordsForTS_Id_Int(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTS(4711)
+        self.assertEqual({'8144' : ['KeyWord01', 'KeyWord03']}, response)
+        
+    def test_listKeywordsForTS_Id_String(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTS('4711')
+        self.assertEqual({'8144' : ['KeyWord01', 'KeyWord03']}, response)
+       
+    def test_listKeywordsForTS_Multi(self):
+        self.api.loadScenario(SCENARIO_KEYWORDS)
+        response = self.api.listKeywordsForTS('deepFalse3')
+        self.assertEqual({'8144' : ['KeyWord01', 'KeyWord03'],
+                          '8159' : ['KeyWord02'], '8169' : []}, response)
         
         
 

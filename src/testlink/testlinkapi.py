@@ -336,6 +336,23 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         keywords = map((lambda x: x['keyword']), keyword_details.values())            
         return keywords
 
+    def listKeywordsForTS(self, internal_ts_id):
+        """ Returns dictionary with keyword lists for all test cases of 
+            test suite with id == INTERNAL_TS_ID
+        """
+        
+        a_ts_id = str(internal_ts_id) 
+        all_tc_for_ts = self.getTestCasesForTestSuite(a_ts_id, False, 
+                                                     'full', getkeywords=True)
+        response = {}
+        for a_ts_tc in all_tc_for_ts:
+            tc_id = a_ts_tc['id']
+            keyword_details =  a_ts_tc.get('keywords', {})
+            keywords = map((lambda x: x['keyword']), keyword_details.values())
+            response[tc_id] = keywords
+        
+        return response
+    
     #
     #  ADDITIONNAL FUNCTIONS
     #                                   
