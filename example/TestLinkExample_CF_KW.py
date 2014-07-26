@@ -141,7 +141,10 @@ print "getTestSuiteByID", newTestSuite
 # list test cases with assigned keywords
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, True, 
                                                'full', getkeywords=True)
-print "getTestCasesForTestSuite", response
+print "getTestCasesForTestSuite (deep=True)", response
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 
+                                               'full', getkeywords=True)
+print "getTestCasesForTestSuite (deep=False)", response
 
 # get informationen - TestCase_B
 response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
@@ -151,6 +154,12 @@ print "Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
 newTestCase_B = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]
 print "getTestCase", newTestCase_B
 
+# return keyword list for TestCase_B
+response =  myTestLink.listKeywordsForTC(newTestCaseID_B)
+print "listKeywordsForTC", response
+# return keyword lists for all test cases of test newTestSuite_B
+response =  myTestLink.listKeywordsForTS(newTestSuiteID_B)
+print "listKeywordsForTS", response
 
 # new execution result with custom field data
 # TC_B passed, explicit build and some notes , TC identified with internal id

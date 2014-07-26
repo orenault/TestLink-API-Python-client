@@ -4,7 +4,7 @@ TestLink-API-Python-client Installation
 Preconditions
 -------------
 
-Currently the combinations Python 2.6.6/2.7.5 and TestLink 1.9.8/1.9.9 are tested.
+Currently the combinations Python 2.6.6/2.7.5 and TestLink 1.9.10 are tested.
 
 - Other combination might work - feedback is welcome :-) 
 

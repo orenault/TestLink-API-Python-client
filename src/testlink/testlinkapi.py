@@ -294,6 +294,66 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         return (posArgValues, newArgItems)
 
     #
+    #  ADDITIONNAL FUNCTIONS- keywords
+    #                                   
+
+    def listKeywordsForTC(self, internal_or_external_tc_id):
+        """ Returns list with keyword for a test case
+        INTERNAL_OR_EXTERNAL_TC_ID defines 
+        - either the internal test case ID (8111 or '8111')
+        - or the full external test case ID ('NPROAPI-2')
+        
+        Attention: 
+        - the tcversion_id is not supported
+        - it is not possible to ask for a special test case version, cause TL
+          links keywords against a test case and not a test case version 
+        """
+        
+        a_tc_id = str(internal_or_external_tc_id)
+        argsPositional = [a_tc_id]
+        argsOptional   = {}
+        if '-' in a_tc_id:
+            # full external ID like 'NPROAPI-2'
+            argsPositional = [None]
+            argsOptional = {'testcaseexternalid' : a_tc_id}
+        a_tc = self.getTestCase(*argsPositional, **argsOptional)[0]
+        a_ts_id = a_tc['testsuite_id']
+        # attention!
+        # don't use 'id', that is the tcversion_id 
+        # - table tcversions, field id
+        # use testcase_id, that is id test case id without a version info
+        # - table nodes_hierarchy, fied id (condition node_type_id == 3)
+        a_tc_id = a_tc['testcase_id']
+        all_tc_for_ts = self.getTestCasesForTestSuite(a_ts_id, False, 
+                                                     'full', getkeywords=True)
+        
+        keyword_details = {}
+        
+        for a_ts_tc in all_tc_for_ts:
+            if a_ts_tc['id'] == a_tc_id:
+                keyword_details =  a_ts_tc.get('keywords', {})
+            
+        keywords = map((lambda x: x['keyword']), keyword_details.values())            
+        return keywords
+
+    def listKeywordsForTS(self, internal_ts_id):
+        """ Returns dictionary with keyword lists for all test cases of 
+            test suite with id == INTERNAL_TS_ID
+        """
+        
+        a_ts_id = str(internal_ts_id) 
+        all_tc_for_ts = self.getTestCasesForTestSuite(a_ts_id, False, 
+                                                     'full', getkeywords=True)
+        response = {}
+        for a_ts_tc in all_tc_for_ts:
+            tc_id = a_ts_tc['id']
+            keyword_details =  a_ts_tc.get('keywords', {})
+            keywords = map((lambda x: x['keyword']), keyword_details.values())
+            response[tc_id] = keywords
+        
+        return response
+    
+    #
     #  ADDITIONNAL FUNCTIONS
     #                                   
 

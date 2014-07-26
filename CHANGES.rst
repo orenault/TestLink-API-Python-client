@@ -22,8 +22,37 @@ known TL DEV1.9.11 problems
   assignTestCaseExecutionTask does not assign user
 
 
-TestLink-API-Python-client UNDER DEVELOP v0.4.9 
------------------------------------------------------------
+TestLink-API-Python-client  release notes v0.5.0 (Jul. 2014) 
+------------------------------------------------------------
+support for TestLink release 1.9.10
+
+new service methods - list keywords #25
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIClient service methods, which returns keyword lists without 
+internal details (like getTestCasesForTestSuite() does)
+
+- listKeywordsForTC(internal_or_external_tc_id) 
+- listKeywordsForTC(internal_ts_id)
+
+Example::
+
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tc_kw = tls.listKeywordsForTC('NPROAPI-3')
+  ['KeyWord01', 'KeyWord03']
+ >>> tc_kw = tls.listKeywordsForTC(5440)
+  ['KeyWord01', 'KeyWord03']
+ >>> tc_kw = tls.listKeywordsForTC('5440')
+  ['KeyWord01', 'KeyWord03']
+ >>> ts_kw = tls.listKeywordsForTS('5415')
+  {'5440' : ['KeyWord01', 'KeyWord03'], '5445' : ['KeyWord03'], '5450' : []}
+  
+                                        
+Known limitations:
+
+- it is not possible to ask for a special test case version, cause TL links 
+  keywords against a test case and not a test case version
 
 implement 1.9.10 api change - getTestCasesForTestSuite #23
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
