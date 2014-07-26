@@ -632,7 +632,6 @@ print "Number of TestSuites               : %s " % myTestLink.countTestSuites()
 print "Number of TestCases (in TestSuites): %s " % myTestLink.countTestCasesTS()
 print "Number of TestCases (in TestPlans) : %s " % myTestLink.countTestCasesTP()
 print ""
-myTestLink.listProjects()
 
 print 
 print ""

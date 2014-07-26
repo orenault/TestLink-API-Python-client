@@ -70,7 +70,7 @@ More information about this library can be found on the Wiki_
 
 setup(name='TestLink-API-Python-client',
       version=VERSION,
-      description='Python XML-RPC client for TestLink',
+      description='Python XML-RPC client for TestLink %s' % TL_RELEASE,
       long_description = DESCRIPTION,
       author='James Stock, Olivier Renault, Luiko Czub, TestLink-API-Python-client developers',
       author_email='orenault@gmail.com, Luiko.Czub@Liegkat-Archiv.de',

@@ -1,8 +1,9 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client UNDER DEVELOP v0.5.0 
------------------------------------------------------------
+TestLink-API-Python-client v0.5.0 
+-----------------------------------
+support for TestLink release 1.9.10
 
 new service methods - list keywords #25
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -17,7 +18,6 @@ Example::
 
  >>> import testlink
  >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
- >>> tls.getTestCase(None, testcaseexternalid='NPROAPI-3')
  >>> tc_kw = tls.listKeywordsForTC('NPROAPI-3')
   ['KeyWord01', 'KeyWord03']
  >>> tc_kw = tls.listKeywordsForTC(5440)
