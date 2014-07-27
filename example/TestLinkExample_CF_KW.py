@@ -164,13 +164,15 @@ print "listKeywordsForTS", response
 # new execution result with custom field data
 # TC_B passed, explicit build and some notes , TC identified with internal id
 newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_A, 
-                newBuildName_A, 'p', "custom try", platformname=NEWPLATFORM_B, 
+                newBuildName_A, 'p', "bugid 4711 is assigned", 
+                platformname=NEWPLATFORM_B, bugid='4711',
                 customfields={'cf_tc_ex_string' : 'a custom exec value set via api',
                               'cf_tc_sd_listen' : 'ernie'})
 print "reportTCResult", newResult
 
 # get execution results
-lastResult = myTestLink.getLastExecutionResult(newTestPlanID_A, newTestCaseID_B)[0]
+lastResult = myTestLink.getLastExecutionResult(newTestPlanID_A, newTestCaseID_B, 
+                                               options={'getBugs' : True})[0]
 print "getLastExecutionResult", lastResult
 
 # map of used ids

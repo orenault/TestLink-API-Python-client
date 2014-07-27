@@ -566,6 +566,10 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual({'8144' : ['KeyWord01', 'KeyWord03'],
                           '8159' : ['KeyWord02'], '8169' : []}, response)
         
+    def test_whatArgs_getLastExecutionResult(self):
+        argsDescription = self.api.whatArgs('getLastExecutionResult')
+        self.assertIn('options=<options>', argsDescription)
+        self.assertIn('getBugs', argsDescription)
         
 
 if __name__ == "__main__":

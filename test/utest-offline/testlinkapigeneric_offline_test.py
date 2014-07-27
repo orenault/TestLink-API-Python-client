@@ -646,6 +646,10 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         argsDescription = self.api.whatArgs('reportTCResult')
         self.assertIn('user=<user>', argsDescription)
         
+    def test_whatArgs_getLastExecutionResult(self):
+        argsDescription = self.api.whatArgs('getLastExecutionResult')
+        self.assertIn('options=<options>', argsDescription)
+        self.assertIn('getBugs', argsDescription)
         
                 
 if __name__ == "__main__":

@@ -3,7 +3,21 @@ Changes in TestLink-API-Python-client Source Distribution
 
 TestLink-API-Python-client UNDER DEVELOP v0.5.1 
 -----------------------------------------------------------
-support for future TL 1.9.11 release
+support for future TL 1.9.11 release 
+
+implement 1.9.11 api changes - getLastExecutionResult #27
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TestlinkAPIGeneric and TestlinkAPIClient api method getLastExecutionResult() 
+accepts now following additional optional arguments (usable with TL >= 1.9.10) 
+
+- options = {'getBugs' : True / False}
+
+example:
+
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tls.getLastExecutionResult(aTPlanID, aTCaseID, options={'getBugs' : True})
+  [{ ... , 'tcversion_id': '8929', ... , 'bugs': [{'bug_id': '4711'}], ... }]
 
 implement 1.9.11 new api method - assignTestCaseExecutionTask #26
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
