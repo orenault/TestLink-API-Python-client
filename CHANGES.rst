@@ -28,7 +28,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api method
   [buildid=<buildid>], [buildname=<buildname>], [platformid=<platformid>], 
   [platformname=<platformname>], [devKey=<devKey>])
   
-examples see `<example\TestLinkExample.py>`_  
+examples see `<example/TestLinkExample.py>`_  
 
 
 TestLink-API-Python-client release notes v0.5.0 (Jul. 2014) 
