@@ -12,7 +12,7 @@ from distutils.core import setup
 execfile(join(dirname(__file__), 'src', 'testlink', 'version.py'))
 
 CLASSIFIERS = [
-  'Development Status :: 4 - Beta',
+  'Development Status :: 5 - Production/Stable',
   'License :: OSI Approved :: Apache Software License',
   'Operating System :: OS Independent',
   'Programming Language :: Python :: 2.6',
