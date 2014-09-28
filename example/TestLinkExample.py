@@ -429,6 +429,11 @@ response = myTestLink.assignTestCaseExecutionTask( myTestUserName,
                         buildname=NEWBUILD_A, platformname=NEWPLATFORM_B)  
 print "assignTestCaseExecutionTask", response
   
+# get bugs for test case TC_AA in test plan A - state TC not executed
+response = myTestLink.getTestCaseBugs(newTestPlanID_A, 
+                                      testcaseexternalid=tc_aa_full_ext_id)
+print "getTestCaseBugs TC_AA in TP_A (TC is not executed)", response
+
 # report Test Case Results for platform 'Big Bird'
 # TC_AA failed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(None, newTestPlanID_A, None, 'f', '', guess=True,
@@ -436,6 +441,12 @@ newResult = myTestLink.reportTCResult(None, newTestPlanID_A, None, 'f', '', gues
                                       platformname=NEWPLATFORM_A)#, devKey='361451a1670cb31d127611262ed1a46d')
 print "reportTCResult", newResult
 newResultID_AA = newResult[0]['id']
+
+# get bugs for test case TC_AA in test plan A - state TC is executed
+response = myTestLink.getTestCaseBugs(newTestPlanID_A, 
+                                      testcaseexternalid=tc_aa_full_ext_id)
+print "getTestCaseBugs TC_AA in TP_A (TC is executed, no bug)", response
+
 # report Test Case Results for platform 'Small Bird'
 # TC_AA passed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(None, newTestPlanID_A, None, 'p', '', guess=True,
@@ -480,15 +491,19 @@ print "assignTestCaseExecutionTask", response
 # TC_B blocked (without platform), explicit build and some notes , 
 # TC identified with internal id, report by myTestUserName
 newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_B, NEWBUILD_B,
-                                      'f', "no birds are singing", 
+                                      'f', "no birds are singing", bugid='007',
                                       user=myTestUserName)
 print "reportTCResult", newResult
 newResultID_B_f = newResult[0]['id']
 newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_B, NEWBUILD_B,
                                       'b', "hungry birds blocks the execution", 
-                                      user=myTestUserName)
+                                      bugid='008', user=myTestUserName)
 print "reportTCResult", newResult
 newResultID_B_b = newResult[0]['id']
+# get bugs for test case TC_B in test plan B - state TC is executed with bug
+response = myTestLink.getTestCaseBugs(newTestPlanID_B, 
+                                      testcaseid=newTestCaseID_B)
+print "getTestCaseBugs TC_B in TP_B (TC is executed with 2 bugs)", response
 
 # now we make a mistake and commit the same result a second time
 # and try to delete this mistake 

@@ -349,7 +349,14 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
             self.client.assignTestCaseExecutionTask('username', 4711, 'TC-4712', 
                                             buildname='build 4713', 
-                                            platformname='platform 4714')                         
+                                            platformname='platform 4714') 
+              
+    def test_getTestCaseBugs_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getTestCaseBugs(4711, testcaseexternalid='TC-4712', 
+                                        buildname='build 4713',
+                                        platformname='platform 4714')                         
+                                  
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

@@ -1054,6 +1054,62 @@ TL version >= 1.9.11
         platform information is required, when test plan has assigned platforms
         """
     
+#  /**
+#   * Returns all bugs linked to a particular testcase on a test plan.
+#   * If there are no filter criteria regarding platform and build,
+#   * result will be get WITHOUT checking for a particular platform and build.
+#   *
+#   * @param struct $args
+#   * @param string $args["devKey"]
+#   * @param int $args["tplanid"]
+#   * @param int $args["testcaseid"]: Pseudo optional.
+#   *                                 if does not is present then testcaseexternalid MUST BE present
+#   *
+#   * @param int $args["testcaseexternalid"]: Pseudo optional.
+#   *                                         if does not is present then testcaseid MUST BE present
+#   *
+#   * @param string $args["platformid"]: optional. 
+#   *                                    ONLY if not present, then $args["platformname"] 
+#   *                                    will be analized (if exists)
+#   *
+#   * @param string $args["platformname"]: optional (see $args["platformid"])
+#   *
+#   * @param int $args["buildid"]: optional
+#   *                              ONLY if not present, then $args["buildname"] will be analized (if exists)
+#   * 
+#   * @param int $args["buildname"] - optional (see $args["buildid"])
+#   *
+#   *
+#   * @return mixed $resultInfo
+#   *               if execution found
+#   *               array that contains a map with these keys:
+#   *               bugs
+#   *
+#   *               if test case has not been execute,
+#   *               array('id' => -1)
+#   *
+#   * @access public
+#   */
+#    public function getTestCaseBugs($args)
+
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testplanid' ], 
+                        ['testcaseid', 'testcaseexternalid', 
+                         'buildid', 'buildname', 'platformid', 'platformname'])
+    def getTestCaseBugs(self):
+        """ Returns all bugs linked to a particular testcase on a test plan.
+        If there are no filter criteria regarding platform and build, 
+        result will be get WITHOUT checking for a particular platform and build.
+        
+        
+        testplanid       test plan id
+        
+        args variations: testcaseid - testcaseexternalid  (mandatoy!)
+                         buildid - buildname
+                         platformid - platformname
+        test case information is general mandatory
+        """
+
     #
     #  public methods for general server calls
     #                                   
