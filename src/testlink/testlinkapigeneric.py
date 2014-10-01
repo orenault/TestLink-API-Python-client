@@ -1046,6 +1046,7 @@ TL version >= 1.9.11
         """ assigns a user to a test case execution task
         
         user                 login name => tester
+        testplanid           test plan id
         testcaseexternalid   format PREFIX-NUMBER
         
         args variations:     buildid - buildname 
@@ -1108,6 +1109,46 @@ TL version >= 1.9.11
                          buildid - buildname
                          platformid - platformname
         test case information is general mandatory
+        """
+
+#   /**
+#    * Gets the result of LAST EXECUTION for a particular testcase on a test plan.
+#    * If there are no filter criteria regarding platform and build,
+#    * result will be get WITHOUT checking for a particular platform and build.
+#    *
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["tplanid"]
+#    * @param string $args["testcaseexternalid"] format PREFIX-NUMBER
+#    * @param int $args["buildid"] Mandatory => you can provide buildname as alternative
+#    * @param int $args["buildname"] Mandatory => you can provide buildid (DB ID) as alternative
+#    * @param int $args["platformid"] optional - BECOMES MANDATORY if Test plan has platforms
+#    *                                           you can provide platformname as alternative  
+#    *  
+#    * @param int $args["platformname"] optional - BECOMES MANDATORY if Test plan has platforms
+#    *                                           you can provide platformid as alternative  
+#    *
+#    *
+#    * @return mixed $resultInfo
+#    *
+#    * @access public
+#    */
+#   public function getTestCaseAssignedTester($args)
+
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testplanid', 'testcaseexternalid'],
+                        ['buildid', 'buildname', 'platformid', 'platformname'])
+    def getTestCaseAssignedTester(self):
+        """ Gets the result of LAST EXECUTION for a particular testcase on a 
+        test plan.
+        
+        testplanid           test plan id
+        testcaseexternalid   format PREFIX-NUMBER
+        
+        args variations:     buildid - buildname 
+                             platformid - platformname
+        build information is general mandatory
+        platform information is required, when test plan has assigned platforms
         """
 
     #

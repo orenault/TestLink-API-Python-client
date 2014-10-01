@@ -304,7 +304,12 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                                         buildname='build 4713',
                                         platformname='platform 4714')                         
                                   
-           
+    def test_getTestCaseAssignedTester_unknownID(self):
+        with self.assertRaisesRegexp(TLResponseError, '3000.*4711'):
+            self.client.getTestCaseAssignedTester(4711, 'TC-4712', 
+                                            buildname='build 4713', 
+                                            platformname='platform 4714') 
+          
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

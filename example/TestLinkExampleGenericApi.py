@@ -353,6 +353,20 @@ response = myTestLink.assignTestCaseExecutionTask( myTestUserName,
                         buildname=NEWBUILD_A, platformname=NEWPLATFORM_B)  
 print "assignTestCaseExecutionTask", response
 
+# get test case assigned tester
+response = myTestLink.getTestCaseAssignedTester(  
+                        newTestPlanID_A, tc_aa_full_ext_id,
+                        buildid=newBuildID_A, platformname=NEWPLATFORM_A)
+print "getTestCaseAssignedTester TC_AA TP_A Platform A", response
+response = myTestLink.getTestCaseAssignedTester( 
+                        newTestPlanID_A, tc_aa_full_ext_id,
+                        buildname=NEWBUILD_A, platformid=newPlatFormID_B)  
+print "getTestCaseAssignedTester TC_AA TP_A Platform B", response
+response = myTestLink.getTestCaseAssignedTester(
+                        newTestPlanID_A, tc_b_full_ext_id,
+                        buildname=NEWBUILD_A, platformname=NEWPLATFORM_B)  
+print "getTestCaseAssignedTester TC_B TP_A Platform B", response
+
 # get bugs for test case TC_AA in test plan A - state TC not executed
 response = myTestLink.getTestCaseBugs(newTestPlanID_A, 
                                       testcaseexternalid=tc_aa_full_ext_id)
@@ -411,6 +425,11 @@ print "New Build '%s' - id: %s" % (NEWBUILD_B, newBuildID_B)
 response = myTestLink.assignTestCaseExecutionTask( myTestUserName, 
                         newTestPlanID_B, tc_b_full_ext_id, buildname=NEWBUILD_B)  
 print "assignTestCaseExecutionTask", response
+
+# get test case assigned tester
+response = myTestLink.getTestCaseAssignedTester(  
+                        newTestPlanID_B, tc_b_full_ext_id, buildname=NEWBUILD_B)
+print "getTestCaseAssignedTester TC_B TP_B no Platform", response
 
 # TC_B in test plan b (without platform)
 # first try failed (with bug), second blocked - all by user myTestUserName

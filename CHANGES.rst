@@ -5,7 +5,18 @@ TestLink-API-Python-client UNDER DEVELOP v0.5.2
 -----------------------------------------------------------
 support for future TL 1.9.12 release
 
-implement 1.9.12 new api - getTestCaseBugs #30
+implement 1.9.12 new api method - getTestCaseAssignedTester #29
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api method
+
+- getTestCaseAssignedTester(<testplanid>, <testcaseexternalid>,
+  [buildid=<buildid>], [buildname=<buildname>], [platformid=<platformid>], 
+  [platformname=<platformname>], [devKey=<devKey>])
+
+examples see `<example/TestLinkExample.py>`_  
+
+implement 1.9.12 new api method - getTestCaseBugs #30
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api method
@@ -14,10 +25,9 @@ new TestlinkAPIGeneric and TestlinkAPIClient api method
   [testcaseid]=<testcaseid>], [testcaseexternalid=<testcaseexternalid>], 
   [buildid=<buildid>], [buildname=<buildname>], [platformid=<platformid>], 
   [platformname=<platformname>], [devKey=<devKey>])
-  
+
 examples see `<example/TestLinkExample.py>`_  
-
-
+  
 TestLink-API-Python-client release notes v0.5.1 (Aug. 2014) 
 ------------------------------------------------------------
 
