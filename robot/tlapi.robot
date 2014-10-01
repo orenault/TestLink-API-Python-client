@@ -1,4 +1,6 @@
 *** Settings ***
+Force Tags        api
+Default Tags      general
 Library           TestlinkAPILibrary
 Library           Collections
 
@@ -26,6 +28,7 @@ Test Call Api Method repeat
     Should Be Equal As Strings    ${response}    You said: Hugo
 
 Test Call Api Method getTestCaseIDByName
+    [Tags]    devexample
     @{response1}=    Call Api Method    getTestCaseIDByName    TESTCASE_B
     Should Not Be Empty    ${response1}
     @{response2}=    Call Api Method    getTestCaseIDByName    TESTCASE_B    testprojectname=PROJECT_API_GENERIC-10
