@@ -17,7 +17,11 @@
 #
 # ------------------------------------------------------------------------
 
-import xmlrpc.client
+import sys
+if sys.version_info[0] < 3:
+    import xmlrpclib
+else:
+    import xmlrpc.client as xmlrpclib
 from . import testlinkerrors
 from .testlinkhelper import TestLinkHelper, VERSION
 from .testlinkargs import getMethodsWithPositionalArgs, getArgsForMethod
@@ -49,7 +53,7 @@ class TestlinkAPIGeneric(object):
         encoding=args.get('encoding')
         verbose=args.get('verbose',0)
         allow_none=args.get('allow_none',0)
-        self.server = xmlrpc.client.Server(server_url, transport, encoding, 
+        self.server = xmlrpclib.Server(server_url, transport, encoding,
                                        verbose, allow_none)
         self.devKey = devKey
         self._server_url = server_url
