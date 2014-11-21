@@ -44,7 +44,7 @@ class TestLinkHelperTestCase(unittest.TestCase):
         """ manipulates os.environ - stores os.environ[envname] = envvalue """
         if envvalue is None:
             # UNSET environment variable
-            if os.environ.has_key(envname):
+            if envname in os.environ:
                 os.environ.pop(envname)
         else:
             os.environ[envname] = envvalue
