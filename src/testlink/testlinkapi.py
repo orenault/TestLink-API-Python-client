@@ -22,6 +22,7 @@
 from __future__ import print_function
 from .testlinkapigeneric import TestlinkAPIGeneric, TestLinkHelper
 from .testlinkerrors import TLArgError
+import sys
 
 
 class TestlinkAPIClient(TestlinkAPIGeneric):
@@ -334,7 +335,10 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
             if a_ts_tc['id'] == a_tc_id:
                 keyword_details =  a_ts_tc.get('keywords', {})
             
-        keywords = list(map((lambda x: x['keyword']), list(keyword_details.values())))            
+        if sys.version_info[0] < 3:
+            keywords = map((lambda x: x['keyword']), keyword_details.values())
+        else:
+            keywords = list(map((lambda x: x['keyword']), list(keyword_details.values())))
         return keywords
 
     def listKeywordsForTS(self, internal_ts_id):
@@ -349,7 +353,10 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         for a_ts_tc in all_tc_for_ts:
             tc_id = a_ts_tc['id']
             keyword_details =  a_ts_tc.get('keywords', {})
-            keywords = list(map((lambda x: x['keyword']), list(keyword_details.values())))
+            if sys.version_info[0] < 3:
+                keywords = map((lambda x: x['keyword']), keyword_details.values())
+            else:
+                keywords = list(map((lambda x: x['keyword']), list(keyword_details.values())))
             response[tc_id] = keywords
         
         return response

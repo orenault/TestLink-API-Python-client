@@ -1190,11 +1190,11 @@ TL version >= 1.9.11
                 response = getattr(self.server.tl, methodNameAPI)()
             else:
                 response = getattr(self.server.tl, methodNameAPI)(argsAPI)
-        except (IOError, xmlrpc.client.ProtocolError) as msg:
+        except (IOError, xmlrpclib.ProtocolError) as msg:
             new_msg = 'problems connecting the TestLink Server %s\n%s' %\
             (self._server_url, msg) 
             raise testlinkerrors.TLConnectionError(new_msg)
-        except xmlrpc.client.Fault as msg:
+        except xmlrpclib.Fault as msg:
             new_msg = 'problems calling the API method %s\n%s' %\
             (methodNameAPI, msg) 
             raise testlinkerrors.TLAPIError(new_msg)
