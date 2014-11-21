@@ -23,6 +23,10 @@
 import unittest
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLArgError, TLResponseError, TLAPIError
+import sys
+if sys.version_info[0] < 3:
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+
 
 #from testlink.testlinkapigeneric import positionalArgNamesDefault
 # scenario_a includes response from a testlink 1.9.8 server

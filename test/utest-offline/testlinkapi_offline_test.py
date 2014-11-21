@@ -24,6 +24,10 @@ import unittest
 from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLArgError
 
+import sys
+if sys.version_info[0] < 3:
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+
 # scenario_a includes response from a testlink 1.9.3 server
 SCENARIO_A = {'getProjects' : [
                {'opt': {'requirementsEnabled': 0, 'testPriorityEnabled': 1, 

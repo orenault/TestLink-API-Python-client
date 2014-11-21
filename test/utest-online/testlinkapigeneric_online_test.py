@@ -32,6 +32,11 @@ import unittest, os.path
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 
+import sys
+if sys.version_info[0] < 3:
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+
+
 
 class TestLinkAPIOnlineTestCase(unittest.TestCase):
     """ TestCases for TestlinkAPIClient - interacts with a TestLink Server.
