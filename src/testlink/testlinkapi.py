@@ -338,7 +338,7 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         if sys.version_info[0] < 3:
             keywords = map((lambda x: x['keyword']), keyword_details.values())
         else:
-            keywords = list(map((lambda x: x['keyword']), list(keyword_details.values())))
+            keywords = [kw['keyword'] for kw in keyword_details.values()]
         return keywords
 
     def listKeywordsForTS(self, internal_ts_id):
@@ -356,7 +356,7 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
             if sys.version_info[0] < 3:
                 keywords = map((lambda x: x['keyword']), keyword_details.values())
             else:
-                keywords = list(map((lambda x: x['keyword']), list(keyword_details.values())))
+                keywords = [kw['keyword'] for kw in keyword_details.values()]
             response[tc_id] = keywords
         
         return response

@@ -26,6 +26,8 @@ from testlink.testlinkerrors import TLArgError
 
 import sys
 if sys.version_info[0] < 3:
+    if sys.version_info[1] < 7:
+        import unittest2 as unittest
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
 # scenario_a includes response from a testlink 1.9.3 server
