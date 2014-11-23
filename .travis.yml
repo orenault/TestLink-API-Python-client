@@ -7,7 +7,7 @@ python:
 
   # command to install dependencies
 install:
-  - "pip install pytest"
+  - "pip install tox"
   - "pip install . "
 
 # command to run tests
