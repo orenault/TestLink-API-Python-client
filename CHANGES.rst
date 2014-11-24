@@ -1,6 +1,15 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+
+TestLink-API-Python-client UNDER DEVELOP v0.5.3 
+-----------------------------------------------------------
+support for future TL 1.9.13 release
+
+implement 1.9.13 new api - unassignTestCaseExecutionTask # 32
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+under develop
+
 TestLink-API-Python-client release notes v0.5.2 (Oct. 2014) 
 -----------------------------------------------------------
 support for TestLink release 1.9.12
