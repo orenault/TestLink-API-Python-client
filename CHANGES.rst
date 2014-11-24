@@ -1,8 +1,8 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client release notes v0.6 (Nov. 2014)
----------------------------------------------------------
+TestLink-API-Python-client release notes v0.6.0 - under develop
+---------------------------------------------------------------
 support for python 3 (3.3 and 3.4)
 added tox, pytest and travis for tests and ci
 
