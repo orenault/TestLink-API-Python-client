@@ -27,8 +27,7 @@ from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLArgError
 
 if sys.version_info[0] < 3:
-    if sys.version_info[1] < 7:
-        import unittest2 as unittest
+    import unittest2 as unittest
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
 # scenario_a includes response from a testlink 1.9.3 server
@@ -524,17 +523,17 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
     def test_listKeywordsForTC_FullExternalId(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTC('NPROAPI-2')
-        self.assertEqual({'KeyWord01', 'KeyWord03'}, set(response))
+        self.assertEqual(set(['KeyWord01', 'KeyWord03']), set(response))
 
     def test_listKeywordsForTC_InternalId_Int(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTC(8144)
-        self.assertEqual({'KeyWord01', 'KeyWord03'}, set(response))
+        self.assertEqual(set(['KeyWord01', 'KeyWord03']), set(response))
 
     def test_listKeywordsForTC_InternalId_String(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTC('8144')
-        self.assertEqual({'KeyWord01', 'KeyWord03'}, set(response))
+        self.assertEqual(set(['KeyWord01', 'KeyWord03']), set(response))
 
     def test_listKeywordsForTC_One(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
@@ -562,7 +561,7 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         set_response = response
         for item in set_response:
             set_response[item] = set(response[item])
-        self.assertEqual({'8144': {'KeyWord01', 'KeyWord03'}}, set_response)
+        self.assertEqual({'8144': set(['KeyWord01', 'KeyWord03'])}, set_response)
 
     def test_listKeywordsForTS_Id_String(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
@@ -570,7 +569,7 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         set_response = response
         for item in set_response:
             set_response[item] = set(response[item])
-        self.assertEqual({'8144': {'KeyWord01', 'KeyWord03'}}, set_response)
+        self.assertEqual({'8144': set(['KeyWord01', 'KeyWord03'])}, set_response)
 
     def test_listKeywordsForTS_Multi(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
@@ -578,8 +577,8 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         set_response = response
         for item in set_response:
             set_response[item] = set(response[item])
-        self.assertEqual({'8144': {'KeyWord01', 'KeyWord03'},
-                          '8159': {'KeyWord02'}, '8169': set()}, set_response)
+        self.assertEqual({'8144': set(['KeyWord01', 'KeyWord03']),
+                          '8159': set(['KeyWord02']), '8169': set()}, set_response)
 
     def test_whatArgs_getLastExecutionResult(self):
         argsDescription = self.api.whatArgs('getLastExecutionResult')

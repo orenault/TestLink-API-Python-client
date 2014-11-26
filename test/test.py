@@ -30,6 +30,7 @@
 '''
 Fichier de test pour le module "TestLinkAPI.py"
 '''
+raise NotImplementedError("these tests are deprecated, please use unit test from test/utest")
 
 import re
 from testlink import TestLink, TestLinkError, TestLinkHelper

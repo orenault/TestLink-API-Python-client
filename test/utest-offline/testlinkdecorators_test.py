@@ -30,8 +30,7 @@ decoApiCallAddDevKey, decoApiCallWithoutArgs, \
 decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs
 
 if sys.version_info[0] < 3:
-    if sys.version_info[1] < 7:
-        import unittest2 as unittest
+    import unittest2 as unittest
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
 

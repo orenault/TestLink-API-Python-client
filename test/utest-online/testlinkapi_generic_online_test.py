@@ -36,8 +36,7 @@ from testlink.testlinkerrors import TLResponseError
 binary_read_mode = 'rb'
 if sys.version_info[0] < 3:
     binary_read_mode = 'r'
-    if sys.version_info[1] < 7:
-        import unittest2 as unittest
+    import unittest2 as unittest
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
 
