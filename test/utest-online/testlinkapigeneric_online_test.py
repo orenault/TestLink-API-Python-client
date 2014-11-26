@@ -28,14 +28,17 @@
 #                   ok to check every implemented server call one time but not
 #                   to cover all possible responses or argument combinations
 
+import sys
 import unittest, os.path
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 
-import sys
+binary_read_mode = 'rb'
 if sys.version_info[0] < 3:
+    binary_read_mode = 'r'
+    if sys.version_info[1] < 7:
+        import unittest2 as unittest
     unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
-
 
 
 class TestLinkAPIOnlineTestCase(unittest.TestCase):
@@ -191,7 +194,7 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                                        buildname='build 4713', notes='note 4714' )
  
     def test_uploadExecutionAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(os.path.realpath(__file__), binary_read_mode)
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadExecutionAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
@@ -231,45 +234,45 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.deleteTestCaseSteps('N-4711', steps, version=1)
             
     def test_uploadRequirementSpecificationAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(os.path.realpath(__file__), binary_read_mode)
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadRequirementSpecificationAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadRequirementAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(os.path.realpath(__file__), binary_read_mode)
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadRequirementAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestProjectAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(os.path.realpath(__file__), binary_read_mode)
         with self.assertRaisesRegex(TLResponseError, '7000.*4712'):
             self.client.uploadTestProjectAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestSuiteAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(os.path.realpath(__file__), binary_read_mode)
         with self.assertRaisesRegex(TLResponseError, '8000.*4712'):
             self.client.uploadTestSuiteAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestCaseAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(os.path.realpath(__file__), binary_read_mode)
         with self.assertRaisesRegex(TLResponseError, '5000.*testcaseid'):
             self.client.uploadTestCaseAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(os.path.realpath(__file__), binary_read_mode)
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadAttachment(attachemantFile, 4712, 'nodes_hierarchy',
                         title='title 4713', description='descr. 4714')
-            
+
     def test_checkDevKey_unknownKey(self):
         with self.assertRaisesRegex(TLResponseError, '2000.*invalid'):
             self.client.checkDevKey(devKey='unknownKey')
-        
+
     def test_testLinkVersion(self):
         response = self.client.testLinkVersion()
         self.assertRegex(response, '\d*\.\d*\.\d*')
