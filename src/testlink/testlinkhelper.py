@@ -79,10 +79,10 @@ class TestLinkHelper(object):
         
         If environment variables are not defined, defaults values are set.
         """
-        if self._server_url == None:
+        if self._server_url is None:
             self._server_url = os.getenv(self.ENVNAME_SERVER_URL, 
                                          self.DEFAULT_SERVER_URL)
-        if self._devkey == None:
+        if self._devkey is None:
             self._devkey = os.getenv(self.ENVNAME_DEVKEY, self.DEFAULT_DEVKEY)
 
     def _createArgparser(self, usage):
@@ -109,9 +109,7 @@ class TestLinkHelper(object):
         args     = a_parser.parse_args(args)
         self._server_url = args.server_url
         self._devkey     = args.devKey
-        
-    
+
     def connect(self, tl_api_class):
         """ returns a new instance of TL_API_CLASS """
         return tl_api_class(self._server_url, self._devkey)
-        
