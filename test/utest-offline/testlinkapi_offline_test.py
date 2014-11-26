@@ -21,10 +21,11 @@
 # no calls are send to a TestLink Server
 
 import unittest
+import sys
+
 from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLArgError
 
-import sys
 if sys.version_info[0] < 3:
     if sys.version_info[1] < 7:
         import unittest2 as unittest
@@ -261,7 +262,7 @@ class DummyAPIClient(TestlinkAPIClient):
     """
 
     __slots__ = ['scenario_data', 'callArgs']
-    
+
     def __init__(self, server_url, devKey):
         super(DummyAPIClient, self).__init__(server_url, devKey)
         self.scenario_data = {}
@@ -302,8 +303,8 @@ class DummyAPIClient(TestlinkAPIClient):
         else:
             response = data
         return response
-    
-    
+
+
 class TestLinkAPIOfflineTestCase(unittest.TestCase):
     """ TestCases for TestlinkAPIClient - does not interacts with a TestLink Server.
     works with DummyAPIClientm which returns special test data
@@ -315,33 +316,33 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
                 'expected_results' : "result B", 'execution_type' : "1"},
                  {'step_number' : '3', 'actions' : "action C" , 
                 'expected_results' : "result C", 'execution_type' : "0"}]
+
     def setUp(self):
         self.api = TestLinkHelper().connect(DummyAPIClient)
 
 #    def tearDown(self):
 #        pass
 
-
     def test_countProjects(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countProjects()
         self.assertEqual(2, response)
-        
+
     def test_countTestPlans(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countTestPlans()
         self.assertEqual(2, response)
-        
+
     def test_countTestSuites(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countTestSuites()
         self.assertEqual(0, response)
-        
+
     def test_countTestCasesTP(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countTestCasesTP()
         self.assertEqual(0, response)
-        
+
     def test_countTestCasesTS(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countTestCasesTS()
@@ -351,7 +352,7 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countPlatforms()
         self.assertEqual(2, response)
-        
+
     def test_countBuilds(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countBuilds()
@@ -362,19 +363,19 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
 #        self.api.listProjects()
 #         no assert check cause method returns nothing
 #         'just' prints to stdout
-        
+
     def test_getProjectIDByName(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.getProjectIDByName('NEW_PROJECT_API')
         self.assertEqual('21', response)
         response = self.api.getProjectIDByName('UNKNOWN_PROJECT')
         self.assertEqual(-1, response)
-        
+
     def test_initStep(self):
         self.api.initStep("action A", "result A", 0)
         steps = self.example_steps[:1]
         self.assertEqual(steps, self.api.stepsList)
-        
+
     def test_appendStep(self):
         steps = self.example_steps
         self.api.stepsList = steps[:1] 
@@ -400,7 +401,7 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLArgError, 'confusing createTestCase*'):
             self.api.createTestCase('case 4711', 4712, 4713, 'Big Bird', 
                                     'summary 4714', steps=[])
-        
+
     def test_getTestCaseIDByName_dictResult(self):
         "test that getTestCaseIDByName converts dictionary result into a list"
         self.api.loadScenario(SCENARIO_A)
@@ -412,18 +413,18 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual(list, type(response))
         self.assertEqual('TESTCASE_B', response[0]['name']) 
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
-        
+
     def test_getTestCaseIDByName_listResult(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.getTestCaseIDByName('listResult')
         self.assertEqual(list, type(response))
         self.assertEqual('TESTCASE_AA', response[0]['name']) 
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
-        
+
     def test_getProjectIDByNode(self):
         self.api.loadScenario(SCENARIO_A)
         self.assertEqual('2211', self.api.getProjectIDByNode('4711'))
-        
+
     def test__copyTC_generate_new(self):
         self.api.loadScenario(SCENARIO_A)
         self.api._copyTC('26', {}, duplicateaction = 'generate_new')
@@ -451,7 +452,6 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual('4711', self.api.callArgs['testsuiteid'])
         self.assertEqual('2211', self.api.callArgs['testprojectid'])
         self.assertEqual('V1', self.api.callArgs['preconditions'])
-        
 
     def test_copyTCnewVersion(self):
         self.api.loadScenario(SCENARIO_A)
@@ -516,26 +516,26 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertIn('keywords', response[0])
         self.assertNotIn('keywords', response[2])
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
-           
+
     def test_whatArgs_getTestCasesForTestSuite(self):
         argsDescription = self.api.whatArgs('getTestCasesForTestSuite')
         self.assertIn('getkeywords=<getkeywords>', argsDescription)
-        
+
     def test_listKeywordsForTC_FullExternalId(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTC('NPROAPI-2')
-        self.assertEqual(['KeyWord01', 'KeyWord03'], response)
-        
+        self.assertEqual({'KeyWord01', 'KeyWord03'}, set(response))
+
     def test_listKeywordsForTC_InternalId_Int(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTC(8144)
-        self.assertEqual(['KeyWord01', 'KeyWord03'], response)
-        
+        self.assertEqual({'KeyWord01', 'KeyWord03'}, set(response))
+
     def test_listKeywordsForTC_InternalId_String(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTC('8144')
-        self.assertEqual(['KeyWord01', 'KeyWord03'], response)
-        
+        self.assertEqual({'KeyWord01', 'KeyWord03'}, set(response))
+
     def test_listKeywordsForTC_One(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTC('NPROAPI-3')
@@ -545,7 +545,7 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTC('NPROAPI-4')
         self.assertEqual([], response)
-        
+
     def test_listKeywordsForTS_NoneTC(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTS('noTestCase')
@@ -554,29 +554,38 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
     def test_listKeywordsForTS_NoneKW(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTS('noKeywords')
-        self.assertEqual({'8144' : []}, response)
+        self.assertEqual({'8144': []}, response)
         
     def test_listKeywordsForTS_Id_Int(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTS(4711)
-        self.assertEqual({'8144' : ['KeyWord01', 'KeyWord03']}, response)
-        
+        set_response = response
+        for item in set_response:
+            set_response[item] = set(response[item])
+        self.assertEqual({'8144': {'KeyWord01', 'KeyWord03'}}, set_response)
+
     def test_listKeywordsForTS_Id_String(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTS('4711')
-        self.assertEqual({'8144' : ['KeyWord01', 'KeyWord03']}, response)
-       
+        set_response = response
+        for item in set_response:
+            set_response[item] = set(response[item])
+        self.assertEqual({'8144': {'KeyWord01', 'KeyWord03'}}, set_response)
+
     def test_listKeywordsForTS_Multi(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
         response = self.api.listKeywordsForTS('deepFalse3')
-        self.assertEqual({'8144' : ['KeyWord01', 'KeyWord03'],
-                          '8159' : ['KeyWord02'], '8169' : []}, response)
-        
+        set_response = response
+        for item in set_response:
+            set_response[item] = set(response[item])
+        self.assertEqual({'8144': {'KeyWord01', 'KeyWord03'},
+                          '8159': {'KeyWord02'}, '8169': set()}, set_response)
+
     def test_whatArgs_getLastExecutionResult(self):
         argsDescription = self.api.whatArgs('getLastExecutionResult')
         self.assertIn('options=<options>', argsDescription)
         self.assertIn('getBugs', argsDescription)
-        
+
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
