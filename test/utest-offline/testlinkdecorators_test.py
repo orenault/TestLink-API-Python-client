@@ -63,7 +63,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname1', orig_funcname1.__name__)
         self.assertEqual('orig doc string', orig_funcname1.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname1.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname1.__module__)
 
     def test_decoApiCallWithArgs(self):
         " decorator test: positional and optional arguments should be registered "
@@ -87,7 +87,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname2', orig_funcname2.__name__)
         self.assertEqual('orig doc string', orig_funcname2.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname2.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname2.__module__)
 
     def test_decoApiCallAddDevKey(self):
         " decorator test: argsOptional should be extended with devKey"
@@ -115,7 +115,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname3', orig_funcname3.__name__)
         self.assertEqual('orig doc string', orig_funcname3.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname3.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname3.__module__)
         
     def test_decoApiCallReplaceTLResponseError_NoCodeError(self):
         " decorator test: TLResponseError (code=None) should be handled "
@@ -181,7 +181,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname4', orig_funcname4.__name__)
         self.assertEqual('orig doc string', orig_funcname4.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname4.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname4.__module__)
         
     def test_decoApiCallAddAttachment(self):
         " decorator test: argsOptional should be extended attachment file infos"
@@ -211,7 +211,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname5', orig_funcname5.__name__)
         self.assertEqual('orig doc string', orig_funcname5.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname5.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname5.__module__)
 
 
 if __name__ == "__main__":
