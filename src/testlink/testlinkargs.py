@@ -34,10 +34,12 @@ supported TestLink API methods and there (positional and optional) arguments """
 #  mandatory Args
 _apiMethodsArgs = {}
 
+
 def _resetRegister():
-    " clears all entries in _apiMethodsArgs"
+    """ clears all entries in _apiMethodsArgs"""
     _apiMethodsArgs.clear()
-    
+
+
 def _getMethodsArgDefinition(methodName):
     """ returns argument definition for api methodName """
     
@@ -45,9 +47,9 @@ def _getMethodsArgDefinition(methodName):
         return _apiMethodsArgs[methodName]
     except KeyError:
         raise TLArgError('apiMethod %s not registered!' % methodName)
-    
-    
-def registerMethod(methodName, apiArgsPositional=[], apiArgsOptional=[], 
+
+
+def registerMethod(methodName, apiArgsPositional=[], apiArgsOptional=[],
                         otherArgsMandatory=[]):
     """ extend _apiMethodsArgs with a new definition structure for METHODNAME
 
@@ -66,21 +68,23 @@ def registerMethod(methodName, apiArgsPositional=[], apiArgsOptional=[],
             allArgs.append(argName)
     _apiMethodsArgs[methodName] = (apiArgsPositional[:], allArgs, 
                                    otherArgsMandatory[:])
-    
+
+
 def registerArgOptional(methodName, argName):
     """ Update _apiMethodsArgs[methodName] with additional optional argument """ 
        
     allArgs = _getMethodsArgDefinition(methodName)[1]
     if not argName in allArgs:
         allArgs.append(argName)
-    
+
+
 def registerArgNonApi(methodName, argName):
     """ Update _apiMethodsArgs[methodName] with additional non api argument """ 
        
     nonApiArgs = _getMethodsArgDefinition(methodName)[2]
     if not argName in nonApiArgs:
         nonApiArgs.append(argName)
-    
+
 
 def getMethodsWithPositionalArgs():
     """ returns a dictionary with method names and there positional args """
@@ -94,6 +98,7 @@ def getMethodsWithPositionalArgs():
 # def getApiArgsForMethod(methodName):
 #     """ returns list with all api argument name for METHODNAME """
 #     return _getMethodsArgDefinition(methodName)[1][:]
+
 
 def getArgsForMethod(methodName, knownArgNames=[]):
     """ returns for METHODNAME additional arg names as a tuple with two lists 
@@ -113,4 +118,3 @@ def getArgsForMethod(methodName, knownArgNames=[]):
     manArgs = argDef[2][:]
     
     return (apiArgs, manArgs)
-    
