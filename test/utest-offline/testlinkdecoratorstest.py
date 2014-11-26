@@ -21,13 +21,14 @@
 # no calls are send to a TestLink Server
 
 import unittest
+import sys
+
 from testlink.testlinkerrors import TLResponseError
 from testlink.testlinkargs import registerMethod, getArgsForMethod
 from testlink.testlinkdecorators import decoApiCallAddAttachment,\
 decoApiCallAddDevKey, decoApiCallWithoutArgs, \
-decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs 
+decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs
 
-import sys
 if sys.version_info[0] < 3:
     if sys.version_info[1] < 7:
         import unittest2 as unittest

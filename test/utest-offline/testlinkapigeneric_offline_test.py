@@ -21,9 +21,11 @@
 # no calls are send to a TestLink Server
 
 import unittest
+import sys
+
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLArgError, TLResponseError, TLAPIError
-import sys
+
 if sys.version_info[0] < 3:
     if sys.version_info[1] < 7:
         import unittest2 as unittest
