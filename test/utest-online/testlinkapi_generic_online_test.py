@@ -268,10 +268,6 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.uploadAttachment(attachemantFile, 4712, 'nodes_hierarchy',
                         title='title 4713', description='descr. 4714')
 
-    def test_checkDevKey_unknownKey(self):
-        with self.assertRaisesRegex(TLResponseError, '2000.*invalid'):
-            self.client.checkDevKey(devKey='unknownKey')
-
     def test_testLinkVersion(self):
         response = self.client.testLinkVersion()
         self.assertRegex(response, '\d*\.\d*\.\d*')
