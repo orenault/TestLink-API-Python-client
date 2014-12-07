@@ -1,6 +1,13 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+PreRelease TestLink-API-Python-client with proxy support
+--------------------------------------------------------
+
+Pull Request - Proxy configuration support in TestLinkHelper #36 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 
+
 TestLink-API-Python-client release notes v0.5.2 (Oct. 2014) 
 -----------------------------------------------------------
 support for TestLink release 1.9.12
