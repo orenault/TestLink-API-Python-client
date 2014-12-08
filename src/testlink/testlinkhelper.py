@@ -18,84 +18,8 @@
 # ------------------------------------------------------------------------
 
 import os
-import xmlrpclib, httplib
 from argparse import ArgumentParser
 from version import VERSION
-try:
-    import gzip
-except ImportError:
-    gzip = None #python can be built without zlib/gzip support
-
-
-class ProxiedTransport(xmlrpclib.Transport):
-    def __init__(self):
-        xmlrpclib.Transport.__init__(self)
-        self.realhost = None
-        self.proxy = None
-
-    def set_proxy(self, proxy):
-        """Define HTTP proxy (with optional basic auth)
-
-        :param str proxy: Proxy string
-        """
-        cproxy, auth, x509 = self.get_host_info(proxy)
-        self.proxy = cproxy
-        if auth:
-            auth = [ ('Proxy-Authorization', auth[0][1]) ]
-            if self._extra_headers:
-                self._extra_headers.extend(auth)
-            else:
-                self._extra_headers = auth
-
-    def make_connection(self, host):
-        """return an existing connection if possible.  This allows HTTP/1.1 keep-alive.
-
-        :param str|(str, {}) host: Host descriptor (URL or (URL, x509 info) tuple)
-        :return httplib.HTTPConnection:
-        """
-        if self._connection and host == self._connection[0]:
-            return self._connection[1]
-
-        # create a HTTP connection object from a host descriptor
-        chost, auth, x509 = self.get_host_info(host)
-        if auth:
-            if self._extra_headers:
-                self._extra_headers.extend(auth)
-            else:
-                self._extra_headers = auth
-        self.realhost = host
-        self._connection = host, httplib.HTTPConnection(self.proxy)
-        return self._connection[1]
-
-    def send_request(self, connection, handler, request_body):
-        """Send request header
-
-        :param httplib.HTTPConnection connection: Connection handle
-        :param str handler: Target RPC handler
-        :param str request_body:XML-RPC body
-        """
-        if self.accept_gzip_encoding and gzip:
-            connection.putrequest("POST", 'http://%s%s' % (self.realhost, handler), skip_accept_encoding=True)
-            connection.putheader("Accept-Encoding", "gzip")
-        else:
-            connection.putrequest("POST", 'http://%s%s' % (self.realhost, handler))
-
-    def send_host(self, connection, host):
-        """Send host name
-
-        Note: This function doesn't actually add the "Host"
-        header anymore, it is done as part of the connection.putrequest() in
-        send_request() above.
-
-        :param httplib.HTTPConnection connection: Connection handle
-        :param str host: Host name
-        """
-        extra_headers = self._extra_headers
-        if extra_headers:
-            if isinstance(extra_headers, dict()):
-                extra_headers = extra_headers.items()
-            for key, value in extra_headers:
-                connection.putheader(key, value)
 
 
 class TestLinkHelper(object):
@@ -130,10 +54,12 @@ class TestLinkHelper(object):
 
     __slots__ = ['_server_url', '_devkey', '_proxy']
 
-    ENVNAME_SERVER_URL = 'TESTLINK_API_PYTHON_SERVER_URL'
-    ENVNAME_DEVKEY = 'TESTLINK_API_PYTHON_DEVKEY'
-    DEFAULT_SERVER_URL = 'http://localhost/testlink/lib/api/xmlrpc.php'
-    DEFAULT_DEVKEY = '42'
+    ENVNAME_SERVER_URL  = 'TESTLINK_API_PYTHON_SERVER_URL'
+    ENVNAME_DEVKEY      = 'TESTLINK_API_PYTHON_DEVKEY'
+    ENVNAME_PROXY       = 'httpy_proxy'
+    DEFAULT_SERVER_URL  = 'http://localhost/testlink/lib/api/xmlrpc.php'
+    DEFAULT_DEVKEY      = '42'
+    DEFAULT_PROXY       = ''
     DEFAULT_DESCRIPTION = 'Python XML-RPC client for the TestLink API v%s' \
                             % VERSION
 
@@ -145,14 +71,15 @@ class TestLinkHelper(object):
         3. default values
         """
         self._server_url = server_url
-        self._devkey = devkey
-        self._proxy = proxy
+        self._devkey     = devkey
+        self._proxy      = proxy
         self._setParamsFromEnv()
         
     def _setParamsFromEnv(self):
         """ fill empty slots _server_url and _devkey from environment variables
         _server_url <- TESTLINK_API_PYTHON_SERVER_URL
         _devkey     <- TESTLINK_API_PYTHON_DEVKEY
+        _proxy      <- http_proxy
         
         If environment variables are not defined, defaults values are set.
         """
@@ -163,7 +90,7 @@ class TestLinkHelper(object):
             self._devkey = os.getenv(self.ENVNAME_DEVKEY, self.DEFAULT_DEVKEY)
 
         if not self._proxy:
-            self._proxy =  os.getenv('http_proxy')
+            self._proxy =  os.getenv(self.ENVNAME_PROXY, self.DEFAULT_PROXY)
 
     def _createArgparser(self, usage):
         """ returns a parser for command line arguments """
@@ -188,16 +115,17 @@ class TestLinkHelper(object):
 
         uses current values of these slots as default values 
         """
-        if not args:
-            a_parser = self._createArgparser(usage)
-            args     = a_parser.parse_args()
+        a_parser = self._createArgparser(usage)
+        args     = a_parser.parse_args(args)
         self._server_url = args.server_url
         self._devkey = args.devKey
         self._proxy = args.proxy
 
     def connect(self, tl_api_class, **kwargs):
         """ returns a new instance of TL_API_CLASS """
+        
         if self._proxy:
+            from .proxiedtransport import ProxiedTransport
             p = ProxiedTransport()
             p.set_proxy(self._proxy)
             kwargs['transport'] = p
