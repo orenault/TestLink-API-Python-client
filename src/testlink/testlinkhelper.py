@@ -118,15 +118,17 @@ class TestLinkHelper(object):
         a_parser = self._createArgparser(usage)
         args     = a_parser.parse_args(args)
         self._server_url = args.server_url
-        self._devkey = args.devKey
-        self._proxy = args.proxy
+        self._devkey     = args.devKey
+        self._proxy      = args.proxy
 
-    def connect(self, tl_api_class, **kwargs):
+    def connect(self, tl_api_class):
         """ returns a new instance of TL_API_CLASS """
         
+        kwargs = {}
         if self._proxy:
             from .proxiedtransport import ProxiedTransport
-            p = ProxiedTransport()
-            p.set_proxy(self._proxy)
-            kwargs['transport'] = p
+            a_pt = ProxiedTransport()
+            a_pt.set_proxy(self._proxy)
+            kwargs['transport'] = a_pt
+            
         return tl_api_class(self._server_url, self._devkey, **kwargs)
