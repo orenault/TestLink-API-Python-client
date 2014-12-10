@@ -7,6 +7,11 @@ PreRelease TestLink-API-Python-client with proxy support
 Pull Request - Proxy configuration support in TestLinkHelper #36 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
+Pull Request from Maberi allows proxy configuration using TestLinkHelper.
+
+Adds a new --proxy option in command line.
+Recognizes "http_proxy" environment variable.
+ 
 
 TestLink-API-Python-client release notes v0.5.2 (Oct. 2014) 
 -----------------------------------------------------------
