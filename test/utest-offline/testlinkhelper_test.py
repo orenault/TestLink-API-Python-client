@@ -24,11 +24,8 @@ import unittest
 import os
 import sys
 
-from testlink import TestLinkHelper
 
-if sys.version_info[0] < 3:
-    import unittest2 as unittest
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+from testlink import TestLinkHelper
 
 
 class DummyTestLinkAPI(object):

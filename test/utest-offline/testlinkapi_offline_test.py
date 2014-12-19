@@ -20,15 +20,20 @@
 # this test works WITHOUT an online TestLink Server
 # no calls are send to a TestLink Server
 
-import unittest
 import sys
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    # py26 needs backport unittest2
+    import unittest2 as unittest
+else:
+    import unittest
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 7:
+    # py27 and py31 assertRaisesRegexp was renamed in py32 to assertRaisesRegex
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
 from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLArgError
-
-if sys.version_info[0] < 3:
-    import unittest2 as unittest
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
 # scenario_a includes response from a testlink 1.9.3 server
 SCENARIO_A = {'getProjects' : [

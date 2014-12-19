@@ -20,15 +20,23 @@
 # this test works WITHOUT an online TestLink Server
 # no calls are send to a TestLink Server
 
-import unittest
 import sys
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    # py26 needs backport unittest2
+    import unittest2 as unittest
+else:
+    import unittest
+    
+if sys.version_info[0] == 2 and sys.version_info[1] == 7:
+    # py27 and py31 assertRaisesRegexp was renamed in py32 to assertRaisesRegex
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+    # py27 and py31 assertRegexpMatches was renamed in py32 to assertRegex
+    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
+    
 
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLArgError, TLResponseError, TLAPIError
-
-if sys.version_info[0] < 3:
-    import unittest2 as unittest
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
 
 #from testlink.testlinkapigeneric import positionalArgNamesDefault
@@ -333,7 +341,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_whatArgs_noArgs(self):
         response = self.api.whatArgs('sayHello')
-        self.assertRegexpMatches(response, 'sayHello().*')
+        self.assertRegex(response, 'sayHello().*')
         
     def test__apiMethodArgNames_onlyOptionalArgs(self):
         response = self.api._apiMethodArgNames('getTestCaseAttachments')
@@ -343,7 +351,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_whatArgs_onlyOptionalArgs(self):
         response = self.api.whatArgs('getTestCaseAttachments')
-        self.assertRegexpMatches(response, 'getTestCaseAttachments\(\[.*=<.*>\].*\).*')
+        self.assertRegex(response, 'getTestCaseAttachments\(\[.*=<.*>\].*\).*')
         
     def test__apiMethodArgNames__OptionalAndPositionalArgs(self):
         response = self.api._apiMethodArgNames('createBuild')
@@ -353,7 +361,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_whatArgs_OptionalAndPositionalArgs(self):
         response = self.api.whatArgs('createBuild')
-        self.assertRegexpMatches(response, 'createBuild\(<.*>.*\).*')
+        self.assertRegex(response, 'createBuild\(<.*>.*\).*')
 
     def test__apiMethodArgNames__MandatoryArgs(self):
         response = self.api._apiMethodArgNames('uploadExecutionAttachment')
@@ -363,12 +371,12 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_whatArgs_MandatoryArgs(self):
         response = self.api.whatArgs('uploadExecutionAttachment')
-        self.assertRegexpMatches(response, 
+        self.assertRegex(response, 
                     'uploadExecutionAttachment\(<attachmentfile>, <.*>.*\).*')
 
     def test_whatArgs_unknownMethods(self):
         response = self.api.whatArgs('apiUnknown')
-        self.assertRegexpMatches(response, 
+        self.assertRegex(response, 
                 "callServerWithPosArgs\('apiUnknown', \[apiArg=<apiArg>\]\)")
         
     def test_noWrapperName_apiMethods(self):
@@ -503,11 +511,11 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     def test_connectionInfo_beforeTL199(self):
         self.api.loadScenario(SCENARIO_TL198)
         response = self.api.connectionInfo()
-        self.assertRegexpMatches(response, '\d*\.\d*\.\d*')
+        self.assertRegex(response, '\d*\.\d*\.\d*')
         
     def test_getTestCaseCustomFieldDesignValue_notAssigned(self):
         self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
-        with self.assertRaisesRegexp(TLResponseError, '9003.*Custom Field.*not assigned'):
+        with self.assertRaisesRegex(TLResponseError, '9003.*Custom Field.*not assigned'):
             response = self.api.getTestCaseCustomFieldDesignValue('GPROAPI8-2', 
                             1, '7760', 'cf_notAssigned', details='full')
             

@@ -20,8 +20,17 @@
 # this test works WITHOUT an online TestLink Server
 # no calls are send to a TestLink Server
 
-import unittest
 import sys
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    # py26 needs backport unittest2
+    import unittest2 as unittest
+else:
+    import unittest
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 7:
+    # py27 and py31 assertRaisesRegexp was renamed in py32 to assertRaisesRegex
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
 
 from testlink.testlinkerrors import TLResponseError
 from testlink.testlinkargs import registerMethod, getArgsForMethod
@@ -29,9 +38,7 @@ from testlink.testlinkdecorators import decoApiCallAddAttachment,\
 decoApiCallAddDevKey, decoApiCallWithoutArgs, \
 decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs
 
-if sys.version_info[0] < 3:
-    import unittest2 as unittest
-    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+
 
 
 class testlinkdecoratorsTestCase(unittest.TestCase):
@@ -135,7 +142,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
             raise TLResponseError('DummyMethod', 
                                 argsOptional, 'Empty Response! ', 777)
 
-        with self.assertRaisesRegexp(TLResponseError, '777.*Empty'):
+        with self.assertRaisesRegex(TLResponseError, '777.*Empty'):
             a_func(self.api)
         
     def test_decoApiCallReplaceTLResponseError_CodeErrorOk(self):
