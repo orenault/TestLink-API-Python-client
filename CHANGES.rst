@@ -3,11 +3,16 @@ Changes in TestLink-API-Python-client Source Distribution
 
 TestLink-API-Python-client release notes v0.6.0 - under develop
 ---------------------------------------------------------------
-support for python 3 (3.3 and 3.4)
-added tox, pytest and travis for tests and ci
 
-**Note: tests are still unreliable as order of keywords is not maintained. Need to implement ordered dict to ensure all tests pass consistently**
+support for TestLink release 1.9.12 and py26, py27, py33 and py34
 
+Integrates `manojklm <https://github.com/manojklm/TestLink-API-Python-client>`_ 
+pull request #33 and #37
+
+- add source and unittest support for py33 and py34  
+- extend py26 support for unittest2
+- add *.travis.yml* configuration for `Travis CI <https://travis-ci.org/manojklm/TestLink-API-Python-client>`_ 
+- add *tox.ini* configuration for `Tox <http://tox.readthedocs.org>`_  
 
 TestLink-API-Python-client release notes v0.5.2 (Oct. 2014)
 -----------------------------------------------------------
