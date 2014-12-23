@@ -20,7 +20,7 @@
 # this test works WITHOUT an online TestLink Server
 # no calls are send to a TestLink Server
 
-import sys
+import sys, os.path
 
 if sys.version_info[0] == 2 and sys.version_info[1] == 6:
     # py26 needs backport unittest2
@@ -665,8 +665,24 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         argsDescription = self.api.whatArgs('getLastExecutionResult')
         self.assertIn('options=<options>', argsDescription)
         self.assertIn('getBugs', argsDescription)
+
+    def test__getAttachmentArgs_textfile(self):
+        "py3 issue #39 TypeError: expected bytes-like object, not str"
+        NEWATTACHMENT_PY= os.path.realpath(__file__)
+        # under py2, on windows text files should be open with 'r' mode and 
+        # binary files with 'rb' 
+        # see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        # under py3, text files open with 'r' on windows makes problem
+        # see https://github.com/lczub/TestLink-API-Python-client/issues/39
+        a_file=open(NEWATTACHMENT_PY)
+        args = self.api._getAttachmentArgs(a_file)
+        self.assertEqual('testlinkapigeneric_offline_test.py', args['filename'])
+        self.assertEqual('text/plain', args['filetype'])
+        self.assertIsNotNone(args['content'])
+       
+
         
-                
+               
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
