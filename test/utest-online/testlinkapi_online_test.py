@@ -30,11 +30,6 @@
 import sys
 import os.path
 
-if sys.version_info[0] == 3:
-    BINARY_READ_MODE = 'rb'
-else:
-    BINARY_READ_MODE = 'r'
-    
 if sys.version_info[0] == 2 and sys.version_info[1] == 6:
     # py26 needs backport unittest2
     import unittest2 as unittest
@@ -200,7 +195,7 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                                               'note 4714')
 
     def test_uploadExecutionAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), BINARY_READ_MODE)
+        attachemantFile = open(os.path.realpath(__file__), 'r')
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadExecutionAttachment(attachemantFile, 4712, 
                         'title 4713', 'descr. 4714')
@@ -236,37 +231,37 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.deleteTestCaseSteps('N-4711', steps, version=1)
 
     def test_uploadRequirementSpecificationAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), BINARY_READ_MODE)
+        attachemantFile = open(os.path.realpath(__file__), 'r')
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadRequirementSpecificationAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadRequirementAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), BINARY_READ_MODE)
+        attachemantFile = open(os.path.realpath(__file__), 'r')
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadRequirementAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestProjectAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), BINARY_READ_MODE)
+        attachemantFile = open(os.path.realpath(__file__), 'r')
         with self.assertRaisesRegex(TLResponseError, '7000.*4712'):
             self.client.uploadTestProjectAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestSuiteAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), BINARY_READ_MODE)
+        attachemantFile = open(os.path.realpath(__file__), 'r')
         with self.assertRaisesRegex(TLResponseError, '8000.*4712'):
             self.client.uploadTestSuiteAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestCaseAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), BINARY_READ_MODE)
+        attachemantFile = open(os.path.realpath(__file__), 'r')
         with self.assertRaisesRegex(TLResponseError, '5000.*testcaseid'):
             self.client.uploadTestCaseAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), BINARY_READ_MODE)
+        attachemantFile = open(os.path.realpath(__file__), 'r')
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadAttachment(attachemantFile, 4712, 'nodes_hierarchy',
                         title='title 4713', description='descr. 4714')

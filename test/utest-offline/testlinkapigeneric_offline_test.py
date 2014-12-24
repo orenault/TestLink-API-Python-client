@@ -677,7 +677,8 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         a_file=open(NEWATTACHMENT_PY)
         args = self.api._getAttachmentArgs(a_file)
         self.assertEqual('testlinkapigeneric_offline_test.py', args['filename'])
-        self.assertEqual('text/plain', args['filetype'])
+        # filetype is also os depended, either 'text/plain' or  'text/x-pyth0n' 
+        self.assertIn('text/', args['filetype'])
         self.assertIsNotNone(args['content'])
        
 
