@@ -48,6 +48,7 @@ from __future__ import print_function
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 import sys, os.path
+from platform import python_version  
 
 # precondition a)
 # SERVER_URL and KEY are defined in environment
@@ -88,8 +89,8 @@ myApiVersion='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
 NEWBUILD_A='%s' % myApiVersion
 NEWBUILD_B='%s' % myApiVersion
 
-NEWATTACHMENT_PY= os.path.realpath(__file__)
-this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
+this_file_dirname=os.path.dirname(__file__)
+NEWATTACHMENT_PY= os.path.join(this_file_dirname, 'TestLinkExampleGenericApi.py')
 NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
 # Servers TestLink Version
@@ -133,8 +134,8 @@ for project in myTestLink.getProjects():
 print("")
 
 # Creates the project
-projInfo = 'Example created with Python API class %s in TL %s' % \
-            ( myApiVersion, myTLVersion )
+projInfo = 'Example created with Python API class %s (PY %s) in TL %s' % \
+            ( myApiVersion, python_version(), myTLVersion )
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX, 
     notes=projInfo, active=1, public=1,
     options={'requirementsEnabled' : 1, 'testPriorityEnabled' : 1, 

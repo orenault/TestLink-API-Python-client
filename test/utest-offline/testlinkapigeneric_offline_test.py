@@ -189,6 +189,13 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                                             } 
                      }
 
+# example text file attachment = this python file
+# why not using os.path.realpath(__file__)
+# -> cause __file__ could be compiled python file *.pyc, if the test run is 
+#    repeated without changing the test code
+ATTACHMENT_EXAMPLE_TEXT= os.path.join(os.path.dirname(__file__), 
+                                      'testlinkapigeneric_offline_test.py')
+
                           
 class DummyAPIGeneric(TestlinkAPIGeneric):
     """ Dummy for Simulation TestLinkAPIGeneric. 
@@ -668,21 +675,33 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test__getAttachmentArgs_textfile(self):
         "py3 issue #39 TypeError: expected bytes-like object, not str"
-        NEWATTACHMENT_PY= os.path.realpath(__file__)
         # under py2, on windows text files should be open with 'r' mode and 
         # binary files with 'rb' 
         # see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
         # under py3, text files open with 'r' on windows makes problem
         # see https://github.com/lczub/TestLink-API-Python-client/issues/39
-        a_file=open(NEWATTACHMENT_PY)
+        a_file=open(ATTACHMENT_EXAMPLE_TEXT)
         args = self.api._getAttachmentArgs(a_file)
+        # repeating this test failed in second run, cause filename is then 
+        # 'testlinkapigeneric_offline_test.pyc'
         self.assertEqual('testlinkapigeneric_offline_test.py', args['filename'])
-        # filetype is also os depended, either 'text/plain' or  'text/x-pyth0n' 
+        # filetype is also OS depended, either 'text/plain' or  'text/x-python' 
         self.assertIn('text/', args['filetype'])
         self.assertIsNotNone(args['content'])
        
+#     def test__getAttachmentArgs_filepath(self):
+#         "enhancement #40 handle file patch instead file object"
+#         args = self.api._getAttachmentArgs(ATTACHMENT_EXAMPLE_TEXT)
+#         self.assertEqual('testlinkapigeneric_offline_test.py', args['filename'])
+#         # filetype is also OS depended, either 'text/plain' or  'text/x-python' 
+#         self.assertIn('text/', args['filetype'])
+#         self.assertIsNotNone(args['content'])
 
-        
+    def test___str__pyversion(self):
+        self.api.loadScenario(SCENARIO_TL199)
+        api_info = self.api.__str__()
+        py_info = '(PY %i.' % sys.version_info[0]
+        self.assertIn(py_info, api_info)        
                
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

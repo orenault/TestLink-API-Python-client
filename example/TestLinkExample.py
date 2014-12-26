@@ -59,6 +59,7 @@ from __future__ import print_function
 from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 import sys, os.path
+from platform import python_version  
 
 # precondition a)
 # SERVER_URL and KEY are defined in environment
@@ -99,8 +100,8 @@ myApiVersion='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
 NEWBUILD_A='%s' % myApiVersion
 NEWBUILD_B='%s' % myApiVersion
 
-NEWATTACHMENT_PY= os.path.realpath(__file__)
-this_file_dirname=os.path.dirname(NEWATTACHMENT_PY)
+this_file_dirname=os.path.dirname(__file__)
+NEWATTACHMENT_PY= os.path.join(this_file_dirname, 'TestLinkExample.py')
 NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
 # Servers TestLink Version
@@ -163,8 +164,8 @@ print("")
 # else:
 #   print "Error creating the project '%s': %s " % (NEWPROJECT,isOk)
 #   sys.exit(-1)
-projInfo = 'Example created with Python API class %s in TL %s' % \
-            ( myApiVersion, myTLVersion )
+projInfo = 'Example created with Python API class %s (PY %s) in TL %s' % \
+            ( myApiVersion, python_version(), myTLVersion )
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX,
     notes=projInfo, active=1, public=1,
     options={'requirementsEnabled' : 0, 'testPriorityEnabled' : 1,

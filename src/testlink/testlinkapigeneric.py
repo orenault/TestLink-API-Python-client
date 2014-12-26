@@ -18,10 +18,13 @@
 # ------------------------------------------------------------------------
 
 import sys
-if sys.version_info[0] < 3:
+IS_PY3 = sys.version_info[0] < 3
+if IS_PY3:
     import xmlrpclib
 else:
     import xmlrpc.client as xmlrpclib
+from platform import python_version    
+    
 from . import testlinkerrors
 from .testlinkhelper import TestLinkHelper, VERSION
 from .testlinkargs import getMethodsWithPositionalArgs, getArgsForMethod
@@ -1363,11 +1366,12 @@ Server informations
     
     def __str__(self):
         message = """
-TestLink API - class %s - version %s
+TestLink API - class %s - version %s (PY %s)
 @authors: %s
 %s
 """
-        return message % (self.__class__.__name__, self.__version__, 
+        return message % (self.__class__.__name__, self.__version__,
+                          python_version(), 
                           self.__author__, self.connectionInfo())
 
     

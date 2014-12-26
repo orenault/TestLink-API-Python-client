@@ -47,6 +47,12 @@ if sys.version_info[0] == 2 and sys.version_info[1] == 7:
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 
+# example text file attachment = this python file
+# why not using os.path.realpath(__file__)
+# -> cause __file__ could be compiled python file *.pyc, if the test run is 
+#    repeated without changing the test code
+ATTACHMENT_EXAMPLE_TEXT= os.path.join(os.path.dirname(__file__), 
+                                      'testlinkapi_generic_online_test.py')
 
 class TestLinkAPIOnlineTestCase(unittest.TestCase):
     """ TestCases for TestlinkAPIClient - interacts with a TestLink Server.
@@ -241,37 +247,37 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.deleteTestCaseSteps('N-4711', steps, version=1)
             
     def test_uploadRequirementSpecificationAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadRequirementSpecificationAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadRequirementAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadRequirementAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestProjectAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
         with self.assertRaisesRegex(TLResponseError, '7000.*4712'):
             self.client.uploadTestProjectAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestSuiteAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
         with self.assertRaisesRegex(TLResponseError, '8000.*4712'):
             self.client.uploadTestSuiteAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadTestCaseAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
         with self.assertRaisesRegex(TLResponseError, '5000.*testcaseid'):
             self.client.uploadTestCaseAttachment(attachemantFile, 4712, 
                         title='title 4713', description='descr. 4714')
  
     def test_uploadAttachment_unknownID(self):
-        attachemantFile = open(os.path.realpath(__file__), 'r')
+        attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
         with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
             self.client.uploadAttachment(attachemantFile, 4712, 'nodes_hierarchy',
                         title='title 4713', description='descr. 4714')
