@@ -17,13 +17,21 @@
 #
 # ------------------------------------------------------------------------
 
-import sys
+import sys, os.path
 IS_PY3 = sys.version_info[0] < 3
 if IS_PY3:
     import xmlrpclib
+    # in py 3 encodestring is deprecated and an alias for encodebytes
+    # see issue #39 and compare py2 py3 doc 
+    # https://docs.python.org/2/library/base64.html#base64.encodestring
+    # https://docs.python.org/3/library/base64.html#base64.encodebytes
+    from base64 import encodestring as encodebytes
 else:
     import xmlrpc.client as xmlrpclib
+    from base64 import encodebytes
+    
 from platform import python_version    
+from mimetypes import guess_type
     
 from . import testlinkerrors
 from .testlinkhelper import TestLinkHelper, VERSION
@@ -1235,16 +1243,42 @@ TL version >= 1.9.11
     def _getAttachmentArgs(self, attachmentfile):
         """ returns dictionary with key/value pairs needed, to transfer 
             ATTACHMENTFILE via the api to into TL
-            ATTACHMENTFILE: python file descriptor pointing to the file """
-        import mimetypes
-        import base64
-        import os.path
-        return {'filename':os.path.basename(attachmentfile.name),
-                'filetype':mimetypes.guess_type(attachmentfile.name)[0],
-                'content':base64.encodestring(attachmentfile.read())
+            
+            ATTACHMENTFILE could be: 
+            a) a python file descriptor pointing to the file (class file)
+            b) a valid file path"""
+            
+        a_file_obj = None
+        is_file_obj = isinstance(attachmentfile, file)
+        if not is_file_obj:
+            # handling a file path
+            a_file_path = attachmentfile
+            a_file_obj  = self._openAttachmentForRead(a_file_path)
+        else:
+            # handling a file object
+            a_file_path = attachmentfile.name
+            a_file_obj = attachmentfile
+            
+        return {'filename':os.path.basename(a_file_path),
+                'filetype':guess_type(a_file_path)[0],
+                'content':encodebytes(a_file_obj.read())
                 }
-
+        
+    def _openAttachmentForRead(self, a_file_path):
+        """ opens the A_FILE_PATH for reading and returns the file descriptor. 
+            Read mode will be set depending from py version and mimetype 
+            PY2: text file = 'r', others = 'rb'  PY3: general 'rb' """
+        a_read_mode = 'rb'
+        is_text_file = 'text/' in guess_type(a_file_path)
+        if not IS_PY3 and is_text_file:
+            # under py2 text file shpuld be open as 'r' and not 'rb'
+            # for details compare py2 and py docs
+            # https://docs.python.org/2/library/base64.html#base64.encodestring
+            # https://docs.python.org/3/library/base64.html#base64.encodebytes
+            a_read_mode = 'r'
+        return open(a_file_path, a_read_mode)     
     
+
     def _checkResponse(self, response, methodNameAPI, argsOptional):
         """ Checks if RESPONSE is empty or includes Error Messages
             Will raise TLRepsonseError in this case """

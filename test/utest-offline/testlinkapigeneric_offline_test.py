@@ -689,13 +689,13 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertIn('text/', args['filetype'])
         self.assertIsNotNone(args['content'])
        
-#     def test__getAttachmentArgs_filepath(self):
-#         "enhancement #40 handle file patch instead file object"
-#         args = self.api._getAttachmentArgs(ATTACHMENT_EXAMPLE_TEXT)
-#         self.assertEqual('testlinkapigeneric_offline_test.py', args['filename'])
-#         # filetype is also OS depended, either 'text/plain' or  'text/x-python' 
-#         self.assertIn('text/', args['filetype'])
-#         self.assertIsNotNone(args['content'])
+    def test__getAttachmentArgs_filepath(self):
+        "enhancement #40 handle file patch instead file object"
+        args = self.api._getAttachmentArgs(ATTACHMENT_EXAMPLE_TEXT)
+        self.assertEqual('testlinkapigeneric_offline_test.py', args['filename'])
+        # filetype is also OS depended, either 'text/plain' or  'text/x-python' 
+        self.assertIn('text/', args['filetype'])
+        self.assertIsNotNone(args['content'])
 
     def test___str__pyversion(self):
         self.api.loadScenario(SCENARIO_TL199)

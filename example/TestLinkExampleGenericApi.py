@@ -134,8 +134,8 @@ for project in myTestLink.getProjects():
 print("")
 
 # Creates the project
-projInfo = 'Example created with Python API class %s (PY %s) in TL %s' % \
-            ( myApiVersion, python_version(), myTLVersion )
+projInfo = 'Example created with Python %s API class %s in TL %s' % \
+            ( python_version(), myApiVersion, myTLVersion )
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX, 
     notes=projInfo, active=1, public=1,
     options={'requirementsEnabled' : 1, 'testPriorityEnabled' : 1, 
@@ -555,9 +555,8 @@ a_file=open(NEWATTACHMENT_PNG, mode='rb')
 newAttachment = myTestLink.uploadTestProjectAttachment(a_file, newProjectID, 
             title='PNG Example', description='PNG Attachment Example for a TestProject')
 print("uploadTestProjectAttachment", newAttachment)
-# add png file as Attachnent to test suite A 
-a_file=open(NEWATTACHMENT_PNG, mode='rb')
-newAttachment = myTestLink.uploadTestSuiteAttachment(a_file, newTestSuiteID_A, 
+# add png file as Attachnent to test suite A - uploadXyzAttachmemt also file path
+newAttachment = myTestLink.uploadTestSuiteAttachment(NEWATTACHMENT_PNG, newTestSuiteID_A, 
             title='PNG Example', description='PNG Attachment Example for a TestSuite')
 print("uploadTestSuiteAttachment", newAttachment)
 # add png file as Attachment to test case B 
