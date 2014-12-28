@@ -1248,26 +1248,49 @@ TL version >= 1.9.11
             a) a python file descriptor pointing to the file (class file)
             b) a valid file path"""
             
-        a_file_obj = None
-        is_file_obj = isinstance(attachmentfile, file)
-        if not is_file_obj:
-            # handling a file path
+        try:
+            # try to handle ATTACHMENTFILE as a file path
             a_file_path = attachmentfile
             a_file_obj  = self._openAttachmentForRead(a_file_path)
-        else:
-            # handling a file object
+            already_file_obj = False
+        except TypeError:
+            # ATTACHMENTFILE seams to be a file object
             a_file_path = attachmentfile.name
             a_file_obj = attachmentfile
+            already_file_obj = True
+
+        try:
+            encoded_data = encodebytes(a_file_obj.read())
+        except TypeError:
+            # a_file_obj seams to have a wrong read mode
+            # try to reopen it, if ATTACHMENTFILE already was a file obj
+            if already_file_obj:
+                encoded_data = self._getAttachmentArgs(attachmentfile.name)
+            else:
+                raise testlinkerrors.TLArgError(
+                                'invalid attachment file: %s' % attachmentfile)
+                
             
         return {'filename':os.path.basename(a_file_path),
                 'filetype':guess_type(a_file_path)[0],
-                'content':encodebytes(a_file_obj.read())
+                'content':encoded_data
                 }
         
     def _openAttachmentForRead(self, a_file_path):
-        """ opens the A_FILE_PATH for reading and returns the file descriptor. 
+        """ open A_FILE_PATH for reading and returns the file descriptor. 
             Read mode will be set depending from py version and mimetype 
-            PY2: text file = 'r', others = 'rb'  PY3: general 'rb' """
+            PY2: text file = 'r', others = 'rb'  PY3: general 'rb'
+            
+            Raise TLArgError, if A_FILE_PATH is not valid
+            
+            site effect: raise TypeError, if A_FILE_PATH is not a string 
+        """
+        
+        if not os.path.exists(a_file_path):
+            # file path does not exists
+            raise testlinkerrors.TLArgError(
+                                'invalid attachment path: %s' % a_file_path)
+            
         a_read_mode = 'rb'
         is_text_file = 'text/' in guess_type(a_file_path)
         if not IS_PY3 and is_text_file:
