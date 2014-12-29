@@ -6,6 +6,12 @@ James Stock, Olivier Renault, Luiko Czub, TestLink-API-Python-client developers
 
 License `Apache License 2.0`_
 
+.. image:: https://travis-ci.org/lczub/TestLink-API-Python-client.svg?branch=master
+    :target: https://travis-ci.org/lczub/TestLink-API-Python-client
+    
+.. contents::
+   :local:    
+
 Introduction
 ------------
 
@@ -69,6 +75,10 @@ examples/
  
 tests/
     Unit Tests for TestLink API Python Client
+    
+`tox.ini`_
+    Configuration for multi Python version testing via `Tox`_
+    
 
 Help
 ----
@@ -94,6 +104,8 @@ TestLink-API-Python-client developers
 .. _Usage: doc/usage.rst
 .. _TestlinkAPIGeneric: example/TestLinkExampleGenericApi.py
 .. _TestlinkAPIClient: example/TestLinkExample.py
+.. _tox.ini: tox.ini
+.. _Tox: http://tox.readthedocs.org/en/latest/
 .. _Issues: https://github.com/lczub/TestLink-API-Python-client/issues
 .. _Olivier Renault: https://github.com/orenault/TestLink-API-Python-client
 .. _pade: https://github.com/pade/TestLink-API-Python-client
