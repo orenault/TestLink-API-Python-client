@@ -1,18 +1,45 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client release notes v0.6.0 - under develop
----------------------------------------------------------------
+TestLink-API-Python-client release notes v0.6.0 (Dec. 2014) 
+------------------------------------------------------------
 
 support for TestLink release 1.9.12 and py26, py27, py33 and py34
 
+python 3 suppport - pull requests #33 #37
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 Integrates `manojklm <https://github.com/manojklm/TestLink-API-Python-client>`_ 
-pull request #33 and #37
+pull requests 
+`#33 <https://github.com/lczub/TestLink-API-Python-client/pull/33>`_ 
+and `#37 <https://github.com/lczub/TestLink-API-Python-client/pull/37>`_
 
 - add source and unittest support for py33 and py34  
 - extend py26 support for unittest2
-- add *.travis.yml* configuration for `Travis CI <https://travis-ci.org/manojklm/TestLink-API-Python-client>`_ 
+- add *.travis.yml* configuration for `Travis CI <http://docs.travis-ci.com/>`_ 
 - add *tox.ini* configuration for `Tox <http://tox.readthedocs.org>`_  
+
+Track now TestLink-API-Python-client build results on Travis CI - see
+https://travis-ci.org/lczub/TestLink-API-Python-client 
+
+extend upload attachments - handling file path #40
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+uploading attachments excepts now also a file path as parameter. 
+
+
+still supported 0.5.2 behavior - file descriptor::
+
+ a_file_obj=open(A_VALID_FILE_PATH)
+ newAttachment = myTestLink.uploadExecutionAttachment(a_file_obj, A_Result_ID, 
+                                  'Attachment Title', 'Attachment Description')
+
+new supported 0.6.0 behaviour - file path::
+
+ a_file_path=A_VALID_FILE_PATH
+ newAttachment = myTestLink.uploadExecutionAttachment(a_file_path, A_Result_ID, 
+                                   'Attachment Title', 'Attachment Description')
+
 
 TestLink-API-Python-client release notes v0.5.2 (Oct. 2014)
 -----------------------------------------------------------

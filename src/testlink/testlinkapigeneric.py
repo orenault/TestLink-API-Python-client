@@ -522,8 +522,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -540,8 +539,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -558,8 +556,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -576,8 +573,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -594,8 +590,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -612,8 +607,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -632,8 +626,7 @@ TL version >= 1.9.11
 
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -1245,7 +1238,7 @@ TL version >= 1.9.11
             ATTACHMENTFILE via the api to into TL
             
             ATTACHMENTFILE could be: 
-            a) a python file descriptor pointing to the file (class file)
+            a) a python file descriptor pointing to the file
             b) a valid file path"""
             
         try:
