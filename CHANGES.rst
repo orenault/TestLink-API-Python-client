@@ -27,7 +27,6 @@ extend upload attachments - handling file path #40
 
 uploading attachments excepts now also a file path as parameter. 
 
-
 still supported 0.5.2 behavior - file descriptor::
 
  a_file_obj=open(A_VALID_FILE_PATH)
@@ -39,7 +38,6 @@ new supported 0.6.0 behaviour - file path::
  a_file_path=A_VALID_FILE_PATH
  newAttachment = myTestLink.uploadExecutionAttachment(a_file_path, A_Result_ID, 
                                    'Attachment Title', 'Attachment Description')
-
 
 TestLink-API-Python-client release notes v0.5.2 (Oct. 2014)
 -----------------------------------------------------------
