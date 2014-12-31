@@ -19,7 +19,7 @@
 
 import os
 from argparse import ArgumentParser
-from version import VERSION
+from .version import VERSION
 
 
 class TestLinkHelper(object):
@@ -87,10 +87,10 @@ class TestLinkHelper(object):
         
         If environment variables are not defined, defaults values are set.
         """
-        if not self._server_url:
+        if self._server_url is None:
             self._server_url = os.getenv(self.ENVNAME_SERVER_URL, 
                                          self.DEFAULT_SERVER_URL)
-        if not self._devkey:
+        if self._devkey is None:
             self._devkey = os.getenv(self.ENVNAME_DEVKEY, self.DEFAULT_DEVKEY)
 
         if not self._proxy:

@@ -20,8 +20,18 @@
 # this test works WITHOUT an online TestLink Server
 # no calls are send to a TestLink Server
 
+import sys
 
-import unittest
+if sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    # py26 needs backport unittest2
+    import unittest2 as unittest
+else:
+    import unittest
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 7:
+    # py27 and py31 assertRaisesRegexp was renamed in py32 to assertRaisesRegex
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+
 # from testlink.testlinkapigeneric import testlinkargs
 from testlink import testlinkargs
 
@@ -84,7 +94,7 @@ class testlinkargsTestCase(unittest.TestCase):
     def test_registerMethod_ErrorAlreadyDefined(self):
         self.mut.registerMethod('DummyMethod', ['Uno', 'due', 'tre'],  
                                 ['quad','tre'], ['cinque'])
-        with self.assertRaisesRegexp(testlinkargs.TLArgError, 
+        with self.assertRaisesRegex(testlinkargs.TLArgError, 
                                      'DummyMethod already registered'):
             self.mut.registerMethod('DummyMethod')
             
@@ -98,7 +108,7 @@ class testlinkargsTestCase(unittest.TestCase):
                           ['cinque']), a_def )
 
     def test_registerArgOptional_ErrorUnknownMethod(self):
-        with self.assertRaisesRegexp(testlinkargs.TLArgError, 
+        with self.assertRaisesRegex(testlinkargs.TLArgError, 
                                      'DummyMethod not registered'):
             self.mut.registerArgOptional('DummyMethod', 'sei')
 
@@ -131,7 +141,7 @@ class testlinkargsTestCase(unittest.TestCase):
         self.assertEqual(response,  (['quad'], ['cinque']) )
 
     def test_getArgsForMethod_unknownMethods(self):
-        with self.assertRaisesRegexp(testlinkargs.TLArgError, 
+        with self.assertRaisesRegex(testlinkargs.TLArgError, 
                                      'unknownMethod not registered'):
             self.mut.getArgsForMethod('unknownMethod')
         

@@ -17,8 +17,23 @@
 #
 # ------------------------------------------------------------------------
 
-import xmlrpclib
-import testlinkerrors
+import sys, os.path
+IS_PY3 = sys.version_info[0] < 3
+if IS_PY3:
+    import xmlrpclib
+    # in py 3 encodestring is deprecated and an alias for encodebytes
+    # see issue #39 and compare py2 py3 doc 
+    # https://docs.python.org/2/library/base64.html#base64.encodestring
+    # https://docs.python.org/3/library/base64.html#base64.encodebytes
+    from base64 import encodestring as encodebytes
+else:
+    import xmlrpc.client as xmlrpclib
+    from base64 import encodebytes
+    
+from platform import python_version    
+from mimetypes import guess_type
+    
+from . import testlinkerrors
 from .testlinkhelper import TestLinkHelper, VERSION
 from .testlinkargs import getMethodsWithPositionalArgs, getArgsForMethod
 from .testlinkdecorators import decoApiCallAddAttachment,\
@@ -49,7 +64,7 @@ class TestlinkAPIGeneric(object):
         encoding=args.get('encoding')
         verbose=args.get('verbose',0)
         allow_none=args.get('allow_none',0)
-        self.server = xmlrpclib.Server(server_url, transport, encoding, 
+        self.server = xmlrpclib.Server(server_url, transport, encoding,
                                        verbose, allow_none)
         self.devKey = devKey
         self._server_url = server_url
@@ -507,8 +522,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -525,8 +539,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -543,8 +556,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -561,8 +573,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -579,8 +590,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -597,8 +607,7 @@ TL version >= 1.9.11
         
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -617,8 +626,7 @@ TL version >= 1.9.11
 
         mandatory non api args: attachmentfile
         - python file descriptor pointing to the file
-        - !Attention - on WINDOWS use binary mode for none text file
-          see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        - or a valid file path
         
         default values for filename, filetype, content are determine from 
         ATTACHMENTFILE, but user could overwrite it, if user want to store the
@@ -1186,11 +1194,11 @@ TL version >= 1.9.11
                 response = getattr(self.server.tl, methodNameAPI)()
             else:
                 response = getattr(self.server.tl, methodNameAPI)(argsAPI)
-        except (IOError, xmlrpclib.ProtocolError), msg:
+        except (IOError, xmlrpclib.ProtocolError) as msg:
             new_msg = 'problems connecting the TestLink Server %s\n%s' %\
             (self._server_url, msg) 
             raise testlinkerrors.TLConnectionError(new_msg)
-        except xmlrpclib.Fault, msg:
+        except xmlrpclib.Fault as msg:
             new_msg = 'problems calling the API method %s\n%s' %\
             (methodNameAPI, msg) 
             raise testlinkerrors.TLAPIError(new_msg)
@@ -1223,21 +1231,70 @@ TL version >= 1.9.11
         # issue #20: Following line works with Py27, but not with Py26
         # return {nameList[x] : valueList[x] for x in range(len(nameList)) }
         # this line works with Py26 and Py27 (and is also nice)
-        return dict(zip(nameList, valueList))
+        return dict(list(zip(nameList, valueList)))
     
     def _getAttachmentArgs(self, attachmentfile):
         """ returns dictionary with key/value pairs needed, to transfer 
             ATTACHMENTFILE via the api to into TL
-            ATTACHMENTFILE: python file descriptor pointing to the file """
-        import mimetypes
-        import base64
-        import os.path
-        return {'filename':os.path.basename(attachmentfile.name),
-                'filetype':mimetypes.guess_type(attachmentfile.name)[0],
-                'content':base64.encodestring(attachmentfile.read())
-                }
+            
+            ATTACHMENTFILE could be: 
+            a) a python file descriptor pointing to the file
+            b) a valid file path"""
+            
+        try:
+            # try to handle ATTACHMENTFILE as a file path
+            a_file_path = attachmentfile
+            a_file_obj  = self._openAttachmentForRead(a_file_path)
+            already_file_obj = False
+        except TypeError:
+            # ATTACHMENTFILE seams to be a file object
+            a_file_path = attachmentfile.name
+            a_file_obj = attachmentfile
+            already_file_obj = True
 
+        try:
+            encoded_data = encodebytes(a_file_obj.read())
+        except TypeError:
+            # a_file_obj seams to have a wrong read mode
+            # try to reopen it, if ATTACHMENTFILE already was a file obj
+            if already_file_obj:
+                encoded_data = self._getAttachmentArgs(attachmentfile.name)
+            else:
+                raise testlinkerrors.TLArgError(
+                                'invalid attachment file: %s' % attachmentfile)
+                
+            
+        return {'filename':os.path.basename(a_file_path),
+                'filetype':guess_type(a_file_path)[0],
+                'content':encoded_data
+                }
+        
+    def _openAttachmentForRead(self, a_file_path):
+        """ open A_FILE_PATH for reading and returns the file descriptor. 
+            Read mode will be set depending from py version and mimetype 
+            PY2: text file = 'r', others = 'rb'  PY3: general 'rb'
+            
+            Raise TLArgError, if A_FILE_PATH is not valid
+            
+            site effect: raise TypeError, if A_FILE_PATH is not a string 
+        """
+        
+        if not os.path.exists(a_file_path):
+            # file path does not exists
+            raise testlinkerrors.TLArgError(
+                                'invalid attachment path: %s' % a_file_path)
+            
+        a_read_mode = 'rb'
+        is_text_file = 'text/' in guess_type(a_file_path)
+        if not IS_PY3 and is_text_file:
+            # under py2 text file shpuld be open as 'r' and not 'rb'
+            # for details compare py2 and py docs
+            # https://docs.python.org/2/library/base64.html#base64.encodestring
+            # https://docs.python.org/3/library/base64.html#base64.encodebytes
+            a_read_mode = 'r'
+        return open(a_file_path, a_read_mode)     
     
+
     def _checkResponse(self, response, methodNameAPI, argsOptional):
         """ Checks if RESPONSE is empty or includes Error Messages
             Will raise TLRepsonseError in this case """
@@ -1344,7 +1401,7 @@ TL version >= 1.9.11
         try:
             tl_version = self.testLinkVersion()
             tl_about   = self.about()
-        except testlinkerrors.TLConnectionError, msg:
+        except testlinkerrors.TLConnectionError as msg:
             tl_version = msg
             
         message = """
@@ -1359,11 +1416,12 @@ Server informations
     
     def __str__(self):
         message = """
-TestLink API - class %s - version %s
+TestLink API - class %s - version %s (PY %s)
 @authors: %s
 %s
 """
-        return message % (self.__class__.__name__, self.__version__, 
+        return message % (self.__class__.__name__, self.__version__,
+                          python_version(), 
                           self.__author__, self.connectionInfo())
 
     
@@ -1371,7 +1429,7 @@ if __name__ == "__main__":
     tl_helper = TestLinkHelper()
     tl_helper.setParamsFromArgs()
     myTestLink = tl_helper.connect(TestlinkAPIGeneric)
-    print myTestLink
+    print(myTestLink)
 
 
 

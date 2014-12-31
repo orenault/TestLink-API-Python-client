@@ -20,12 +20,26 @@
 # this test works WITHOUT an online TestLink Server
 # no calls are send to a TestLink Server
 
-import unittest
+import sys
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    # py26 needs backport unittest2
+    import unittest2 as unittest
+else:
+    import unittest
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 7:
+    # py27 and py31 assertRaisesRegexp was renamed in py32 to assertRaisesRegex
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+
 from testlink.testlinkerrors import TLResponseError
 from testlink.testlinkargs import registerMethod, getArgsForMethod
 from testlink.testlinkdecorators import decoApiCallAddAttachment,\
 decoApiCallAddDevKey, decoApiCallWithoutArgs, \
-decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs 
+decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs
+
+
+
 
 class testlinkdecoratorsTestCase(unittest.TestCase):
     """ TestCases for decorators, used by TestlinkAPIGeneric for build 
@@ -55,7 +69,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname1', orig_funcname1.__name__)
         self.assertEqual('orig doc string', orig_funcname1.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname1.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname1.__module__)
 
     def test_decoApiCallWithArgs(self):
         " decorator test: positional and optional arguments should be registered "
@@ -79,7 +93,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname2', orig_funcname2.__name__)
         self.assertEqual('orig doc string', orig_funcname2.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname2.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname2.__module__)
 
     def test_decoApiCallAddDevKey(self):
         " decorator test: argsOptional should be extended with devKey"
@@ -107,7 +121,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname3', orig_funcname3.__name__)
         self.assertEqual('orig doc string', orig_funcname3.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname3.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname3.__module__)
         
     def test_decoApiCallReplaceTLResponseError_NoCodeError(self):
         " decorator test: TLResponseError (code=None) should be handled "
@@ -128,7 +142,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
             raise TLResponseError('DummyMethod', 
                                 argsOptional, 'Empty Response! ', 777)
 
-        with self.assertRaisesRegexp(TLResponseError, '777.*Empty'):
+        with self.assertRaisesRegex(TLResponseError, '777.*Empty'):
             a_func(self.api)
         
     def test_decoApiCallReplaceTLResponseError_CodeErrorOk(self):
@@ -173,7 +187,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname4', orig_funcname4.__name__)
         self.assertEqual('orig doc string', orig_funcname4.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname4.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname4.__module__)
         
     def test_decoApiCallAddAttachment(self):
         " decorator test: argsOptional should be extended attachment file infos"
@@ -203,7 +217,7 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         self.assertEqual('orig_funcname5', orig_funcname5.__name__)
         self.assertEqual('orig doc string', orig_funcname5.__doc__)
-        self.assertEqual('testlinkdecoratorstest', orig_funcname5.__module__)
+        self.assertEqual('testlinkdecorators_test', orig_funcname5.__module__)
 
 
 if __name__ == "__main__":

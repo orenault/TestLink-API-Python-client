@@ -1,19 +1,59 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-PreRelease TestLink-API-Python-client with proxy support
---------------------------------------------------------
+TestLink-API-Python-client v0.6.1 - Under Develop 
+------------------------------------------------------------
 
-Pull Request - Proxy configuration support in TestLinkHelper #36 
+Proxy configuration support in TestLinkHelper - pull request #36 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
-Pull Request from Maberi allows proxy configuration using TestLinkHelper.
+Integrates `Maberi <https://github.com/Maberi/TestLink-API-Python-client>`_ 
+pull request `#36 <https://github.com/lczub/TestLink-API-Python-client/pull/36>`_ 
 
-Adds a new --proxy option in command line.
-Recognizes "http_proxy" environment variable.
+- allows easy proxy configuration using TestLinkHelper
+- Adds a new --proxy option in command line.
+- Recognizes "http_proxy" environment variable.
  
 
-TestLink-API-Python-client release notes v0.5.2 (Oct. 2014) 
+TestLink-API-Python-client release notes v0.6.0 (Dec. 2014) 
+------------------------------------------------------------
+
+support for TestLink release 1.9.12 and py26, py27, py33 and py34
+
+python 3 support - pull requests #33 #37
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Integrates `manojklm <https://github.com/manojklm/TestLink-API-Python-client>`_ 
+pull requests 
+`#33 <https://github.com/lczub/TestLink-API-Python-client/pull/33>`_ 
+and `#37 <https://github.com/lczub/TestLink-API-Python-client/pull/37>`_
+
+- add source and unittest support for py33 and py34  
+- extend py26 support for unittest2
+- add *.travis.yml* configuration for `Travis CI <http://docs.travis-ci.com/>`_ 
+- add *tox.ini* configuration for `Tox <http://tox.readthedocs.org>`_  
+
+Track now TestLink-API-Python-client build results on Travis CI - see
+https://travis-ci.org/lczub/TestLink-API-Python-client 
+
+extend upload attachments - handling file path #40
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+uploading attachments excepts now also a file path as parameter. 
+
+still supported 0.5.2 behavior - file descriptor::
+
+ a_file_obj=open(A_VALID_FILE_PATH)
+ newAttachment = myTestLink.uploadExecutionAttachment(a_file_obj, A_Result_ID, 
+                                  'Attachment Title', 'Attachment Description')
+
+new supported 0.6.0 behaviour - file path::
+
+ a_file_path=A_VALID_FILE_PATH
+ newAttachment = myTestLink.uploadExecutionAttachment(a_file_path, A_Result_ID, 
+                                   'Attachment Title', 'Attachment Description')
+
+TestLink-API-Python-client release notes v0.5.2 (Oct. 2014)
 -----------------------------------------------------------
 support for TestLink release 1.9.12
 
@@ -29,7 +69,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api method
 examples see `<example/TestLinkExample.py>`_  
 
 implement 1.9.12 new api method - getTestCaseBugs #30
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api method
 
@@ -41,11 +81,11 @@ new TestlinkAPIGeneric and TestlinkAPIClient api method
 examples see `<example/TestLinkExample.py>`_  
   
 TestLink-API-Python-client release notes v0.5.1 (Aug. 2014) 
-------------------------------------------------------------
+-----------------------------------------------------------
 support for TestLink release 1.9.11
 
 implement 1.9.11 api change - getLastExecutionResult #27
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TestlinkAPIGeneric and TestlinkAPIClient api method getLastExecutionResult() 
 accepts now following additional optional arguments
@@ -59,7 +99,7 @@ example:
   [{ ... , 'tcversion_id': '8929', ... , 'bugs': [{'bug_id': '4711'}], ... }]
 
 implement 1.9.11 new api method - assignTestCaseExecutionTask #26
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api method
 
@@ -71,7 +111,7 @@ examples see `<example/TestLinkExample.py>`_
 
 
 TestLink-API-Python-client release notes v0.5.0 (Jul. 2014) 
-------------------------------------------------------------
+-----------------------------------------------------------
 support for TestLink release 1.9.10
 
 new service methods - list keywords #25
@@ -111,7 +151,7 @@ accepts now following additional optional arguments (usable with TL >= 1.9.10)
 - parameter getkeywords
 
 implement 1.9.10 api change - reportTCResult #24
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TestlinkAPIGeneric and TestlinkAPIClient api method reportTCResult() 
 accepts now following additional optional arguments (usable with TL >= 1.9.10) 
@@ -120,7 +160,7 @@ accepts now following additional optional arguments (usable with TL >= 1.9.10)
 
 
 implement missing 1.9.8 api method - CustomField #12
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
@@ -167,7 +207,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient service method to return connection
 - connectionInfo()
 
 implement missing 1.9.8 api method - miscellaneous #14
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
