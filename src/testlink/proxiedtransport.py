@@ -17,16 +17,27 @@
 #
 # ------------------------------------------------------------------------
 
-import xmlrpclib, httplib
+import sys
+IS_PY3 = sys.version_info[0] > 2
+if IS_PY3:
+    from xmlrpc.client import Transport
+    from http.client import HTTPConnection
+else:
+    from xmlrpclib import Transport
+    from httplib import HTTPConnection
+    
 try:
     import gzip
 except ImportError:
     gzip = None #python can be built without zlib/gzip support
 
 
-class ProxiedTransport(xmlrpclib.Transport):
+class ProxiedTransport(Transport):
     def __init__(self):
-        xmlrpclib.Transport.__init__(self)
+        if IS_PY3:
+            super(ProxiedTransport, self).__init__()
+        else:  
+            Transport.__init__(self)
         self.realhost = None
         self.proxy = None
 
@@ -61,7 +72,7 @@ class ProxiedTransport(xmlrpclib.Transport):
             else:
                 self._extra_headers = auth
         self.realhost = host
-        self._connection = host, httplib.HTTPConnection(self.proxy)
+        self._connection = host, HTTPConnection(self.proxy)
         return self._connection[1]
 
     def send_request(self, connection, handler, request_body):
