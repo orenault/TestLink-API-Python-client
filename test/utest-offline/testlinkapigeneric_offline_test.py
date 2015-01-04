@@ -20,9 +20,24 @@
 # this test works WITHOUT an online TestLink Server
 # no calls are send to a TestLink Server
 
-import unittest
+import sys, os.path
+
+if sys.version_info[0] == 2 and sys.version_info[1] == 6:
+    # py26 needs backport unittest2
+    import unittest2 as unittest
+else:
+    import unittest
+    
+if sys.version_info[0] == 2 and sys.version_info[1] == 7:
+    # py27 and py31 assertRaisesRegexp was renamed in py32 to assertRaisesRegex
+    unittest.TestCase.assertRaisesRegex = unittest.TestCase.assertRaisesRegexp
+    # py27 and py31 assertRegexpMatches was renamed in py32 to assertRegex
+    unittest.TestCase.assertRegex = unittest.TestCase.assertRegexpMatches
+    
+
 from testlink import TestlinkAPIGeneric, TestLinkHelper
 from testlink.testlinkerrors import TLArgError, TLResponseError, TLAPIError
+
 
 #from testlink.testlinkapigeneric import positionalArgNamesDefault
 # scenario_a includes response from a testlink 1.9.8 server
@@ -173,6 +188,13 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                                     'author_id': '1', 'external_id': 'GPROAPI10-2'}]
                                             } 
                      }
+
+# example text file attachment = this python file
+# why not using os.path.realpath(__file__)
+# -> cause __file__ could be compiled python file *.pyc, if the test run is 
+#    repeated without changing the test code
+ATTACHMENT_EXAMPLE_TEXT= os.path.join(os.path.dirname(__file__), 
+                                      'testlinkapigeneric_offline_test.py')
 
                           
 class DummyAPIGeneric(TestlinkAPIGeneric):
@@ -326,7 +348,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_whatArgs_noArgs(self):
         response = self.api.whatArgs('sayHello')
-        self.assertRegexpMatches(response, 'sayHello().*')
+        self.assertRegex(response, 'sayHello().*')
         
     def test__apiMethodArgNames_onlyOptionalArgs(self):
         response = self.api._apiMethodArgNames('getTestCaseAttachments')
@@ -336,7 +358,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_whatArgs_onlyOptionalArgs(self):
         response = self.api.whatArgs('getTestCaseAttachments')
-        self.assertRegexpMatches(response, 'getTestCaseAttachments\(\[.*=<.*>\].*\).*')
+        self.assertRegex(response, 'getTestCaseAttachments\(\[.*=<.*>\].*\).*')
         
     def test__apiMethodArgNames__OptionalAndPositionalArgs(self):
         response = self.api._apiMethodArgNames('createBuild')
@@ -346,7 +368,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_whatArgs_OptionalAndPositionalArgs(self):
         response = self.api.whatArgs('createBuild')
-        self.assertRegexpMatches(response, 'createBuild\(<.*>.*\).*')
+        self.assertRegex(response, 'createBuild\(<.*>.*\).*')
 
     def test__apiMethodArgNames__MandatoryArgs(self):
         response = self.api._apiMethodArgNames('uploadExecutionAttachment')
@@ -356,12 +378,12 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
 
     def test_whatArgs_MandatoryArgs(self):
         response = self.api.whatArgs('uploadExecutionAttachment')
-        self.assertRegexpMatches(response, 
+        self.assertRegex(response, 
                     'uploadExecutionAttachment\(<attachmentfile>, <.*>.*\).*')
 
     def test_whatArgs_unknownMethods(self):
         response = self.api.whatArgs('apiUnknown')
-        self.assertRegexpMatches(response, 
+        self.assertRegex(response, 
                 "callServerWithPosArgs\('apiUnknown', \[apiArg=<apiArg>\]\)")
         
     def test_noWrapperName_apiMethods(self):
@@ -496,11 +518,11 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     def test_connectionInfo_beforeTL199(self):
         self.api.loadScenario(SCENARIO_TL198)
         response = self.api.connectionInfo()
-        self.assertRegexpMatches(response, '\d*\.\d*\.\d*')
+        self.assertRegex(response, '\d*\.\d*\.\d*')
         
     def test_getTestCaseCustomFieldDesignValue_notAssigned(self):
         self.api.loadScenario(SCENARIO_CUSTOM_FIELDS)
-        with self.assertRaisesRegexp(TLResponseError, '9003.*Custom Field.*not assigned'):
+        with self.assertRaisesRegex(TLResponseError, '9003.*Custom Field.*not assigned'):
             response = self.api.getTestCaseCustomFieldDesignValue('GPROAPI8-2', 
                             1, '7760', 'cf_notAssigned', details='full')
             
@@ -650,8 +672,37 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         argsDescription = self.api.whatArgs('getLastExecutionResult')
         self.assertIn('options=<options>', argsDescription)
         self.assertIn('getBugs', argsDescription)
-        
-                
+
+    def test__getAttachmentArgs_textfile(self):
+        "py3 issue #39 TypeError: expected bytes-like object, not str"
+        # under py2, on windows text files should be open with 'r' mode and 
+        # binary files with 'rb' 
+        # see http://docs.python.org/2/tutorial/inputoutput.html#reading-and-writing-files
+        # under py3, text files open with 'r' on windows makes problem
+        # see https://github.com/lczub/TestLink-API-Python-client/issues/39
+        a_file=open(ATTACHMENT_EXAMPLE_TEXT)
+        args = self.api._getAttachmentArgs(a_file)
+        # repeating this test failed in second run, cause filename is then 
+        # 'testlinkapigeneric_offline_test.pyc'
+        self.assertEqual('testlinkapigeneric_offline_test.py', args['filename'])
+        # filetype is also OS depended, either 'text/plain' or  'text/x-python' 
+        self.assertIn('text/', args['filetype'])
+        self.assertIsNotNone(args['content'])
+       
+    def test__getAttachmentArgs_filepath(self):
+        "enhancement #40 handle file patch instead file object"
+        args = self.api._getAttachmentArgs(ATTACHMENT_EXAMPLE_TEXT)
+        self.assertEqual('testlinkapigeneric_offline_test.py', args['filename'])
+        # filetype is also OS depended, either 'text/plain' or  'text/x-python' 
+        self.assertIn('text/', args['filetype'])
+        self.assertIsNotNone(args['content'])
+
+    def test___str__pyversion(self):
+        self.api.loadScenario(SCENARIO_TL199)
+        api_info = self.api.__str__()
+        py_info = '(PY %i.' % sys.version_info[0]
+        self.assertIn(py_info, api_info)        
+               
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

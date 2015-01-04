@@ -6,6 +6,12 @@ James Stock, Olivier Renault, Luiko Czub, TestLink-API-Python-client developers
 
 License `Apache License 2.0`_
 
+.. image:: https://travis-ci.org/lczub/TestLink-API-Python-client.svg?branch=tl-future
+    :target: https://travis-ci.org/lczub/TestLink-API-Python-client
+    
+.. contents::
+   :local:    
+
 Introduction
 ------------
 
@@ -69,6 +75,10 @@ examples/
  
 tests/
     Unit Tests for TestLink API Python Client
+    
+`tox.ini`_
+    Configuration for multi Python version testing via `Tox`_
+    
 
 Help
 ----
@@ -81,8 +91,8 @@ how existing code can be adapted
 
 TestLink-API-Python-client developers
 -------------------------------------
-*   `James Stock`_, `Olivier Renault`_, `lczub`_
-*   `g4l4drim`_, `pade`_, `anton-matosov`_, `citizen-stig`_, `charz`_
+*   `James Stock`_, `Olivier Renault`_, `lczub`_, `manojklm`_ (PY3)
+*   `g4l4drim`_, `pade`_, `anton-matosov`_, `citizen-stig`_, `charz`_, `Maberi`_
 *   anyone forgotten?
 
 .. _Apache License 2.0: http://www.apache.org/licenses/LICENSE-2.0
@@ -94,6 +104,8 @@ TestLink-API-Python-client developers
 .. _Usage: doc/usage.rst
 .. _TestlinkAPIGeneric: example/TestLinkExampleGenericApi.py
 .. _TestlinkAPIClient: example/TestLinkExample.py
+.. _tox.ini: tox.ini
+.. _Tox: http://tox.readthedocs.org/en/latest/
 .. _Issues: https://github.com/lczub/TestLink-API-Python-client/issues
 .. _Olivier Renault: https://github.com/orenault/TestLink-API-Python-client
 .. _pade: https://github.com/pade/TestLink-API-Python-client
@@ -103,3 +115,5 @@ TestLink-API-Python-client developers
 .. _anton-matosov: https://github.com/anton-matosov/TestLink-API-Python-client
 .. _citizen-stig: https://github.com/citizen-stig/TestLink-API-Python-client
 .. _charz: https://github.com/charz/TestLink-API-Python-client.git
+.. _manojklm: https://github.com/manojklm/TestLink-API-Python-client
+.. _Maberi: https://github.com/Maberi/TestLink-API-Python-client.git

@@ -1,4 +1,4 @@
-include MANIFEST.in LICENSE-2.0.txt README.rst CHANGES.rst
+include MANIFEST.in LICENSE-2.0.txt README.rst CHANGES.rst tox.ini
 recursive-include src *.py
 recursive-include example *.py
 recursive-include example *.png
