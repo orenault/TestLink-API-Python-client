@@ -12,4 +12,10 @@ install:
   - pip install .
 
 # command to run tests
-script: py.test test/utest-offline
+# online tests uses TL connection, defined in 
+#  TESTLINK_API_PYTHON_DEVKEY and TESTLINK_API_PYTHON_SERVER_URL
+#  see https://travis-ci.org/USER/TestLink-API-Python-client/settings/env_vars
+# suggestion: use TL demo project
+script: 
+  - py.test test/utest-offline
+  - if [[ $TESTLINK_API_PYTHON_SERVER_URL ]]; then py.test test/utest-online; fi
