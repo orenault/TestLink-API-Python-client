@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2012-2014 TestLink-API-Python-client developers
+#  Copyright 2012-2015 TestLink-API-Python-client developers
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -21,5 +21,4 @@
 from .testlinkerrors import TestLinkError
 from .testlinkapigeneric import TestlinkAPIGeneric
 from .testlinkapi import TestlinkAPIClient
-#from .testlink import TestLink
 from .testlinkhelper import TestLinkHelper
