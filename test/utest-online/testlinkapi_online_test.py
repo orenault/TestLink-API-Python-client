@@ -268,8 +268,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
  
     def test_uploadAttachment_unknownID(self):
         attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
-        with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
-            self.client.uploadAttachment(attachemantFile, 4712, 'nodes_hierarchy',
+        with self.assertRaisesRegex(TLResponseError, '6004.*Invalid Foreign Key ID'):
+            self.client.uploadAttachment(attachemantFile, '0000', 'nodes_hierarchy',
                         title='title 4713', description='descr. 4714')
 
     def test_testLinkVersion(self):
