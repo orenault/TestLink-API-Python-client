@@ -18,5 +18,5 @@
 # ------------------------------------------------------------------------
 
 VERSION = '0.6.1-dev32'
-TL_RELEASE = 'DEV 1.9.13 (gitorious 78d4f7f)'
+TL_RELEASE = 'DEV 1.9.13 (gitorious 0be4cb9)'
 

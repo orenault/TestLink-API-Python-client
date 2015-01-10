@@ -15,9 +15,17 @@ pull request `#36 <https://github.com/lczub/TestLink-API-Python-client/pull/36>`
 - Adds a new --proxy option in command line.
 - Recognizes "http_proxy" environment variable.
  
-implement 1.9.13 new api - unassignTestCaseExecutionTask # 32
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-under develop
+implement 1.9.13 new api - unassignTestCaseExecutionTask #32
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api method
+
+- unassignTestCaseExecutionTask(<testplanid>, <testcaseexternalid>, 
+  [buildid=<buildid>], [buildname=<buildname>], [platformid=<platformid>], 
+  [platformname=<platformname>], [user=<loginname>], 
+  [action='unassignAll'|'unassignOne'], [devKey=<devKey>])
+  
+examples see `<example/TestLinkExample.py>`_  
 
 TestLink-API-Python-client release notes v0.6.0 (Dec. 2014) 
 ------------------------------------------------------------

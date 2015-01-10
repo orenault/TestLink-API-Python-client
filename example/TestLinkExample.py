@@ -112,7 +112,7 @@ print(myTestLink.connectionInfo())
 print("")
 
 # CHANGE this name into a valid account, known in your TL application
-myTestUserName="admin"
+myTestUserName="pyTLapi"
 myTestUserName2="admin"
 # get user information
 response = myTestLink.getUserByLogin(myTestUserName)
@@ -507,6 +507,33 @@ print("assignTestCaseExecutionTask", response)
 response = myTestLink.getTestCaseAssignedTester(  
                         newTestPlanID_B, tc_b_full_ext_id, buildname=NEWBUILD_B)
 print("getTestCaseAssignedTester TC_B TP_B no Platform", response)
+
+# try to remove not assigned tester 
+response = myTestLink.unassignTestCaseExecutionTask(
+                        newTestPlanID_B, tc_b_full_ext_id, buildname=NEWBUILD_B,
+                        user=myTestUserName2)
+print("unassignTestCaseExecutionTask not assigned user", response)
+response = myTestLink.getTestCaseAssignedTester(  
+                        newTestPlanID_B, tc_b_full_ext_id, buildname=NEWBUILD_B)
+print("getTestCaseAssignedTester TC_B TP_B no Platform", response)
+
+# try to remove all assigned tester 
+response = myTestLink.unassignTestCaseExecutionTask(
+                        newTestPlanID_B, tc_b_full_ext_id, buildid=newBuildID_B,
+                        action='unassignAll')
+print("unassignTestCaseExecutionTask unassignAll", response)
+response = myTestLink.getTestCaseAssignedTester(  
+                        newTestPlanID_B, tc_b_full_ext_id, buildname=NEWBUILD_B)
+print("getTestCaseAssignedTester TC_B TP_B no Platform", response)
+
+# reassign user to test case execution tasks - test plans without platforms
+response = myTestLink.assignTestCaseExecutionTask( myTestUserName, 
+                        newTestPlanID_B, tc_b_full_ext_id, buildid=newBuildID_B)  
+print("assignTestCaseExecutionTask", response)
+response = myTestLink.getTestCaseAssignedTester(  
+                        newTestPlanID_B, tc_b_full_ext_id, buildname=NEWBUILD_B)
+print("getTestCaseAssignedTester TC_B TP_B no Platform", response)
+
 
 # TC_B blocked (without platform), explicit build and some notes , 
 # TC identified with internal id, report by myTestUserName

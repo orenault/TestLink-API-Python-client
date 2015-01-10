@@ -1158,6 +1158,46 @@ TL version >= 1.9.11
         build information is general mandatory
         platform information is required, when test plan has assigned platforms
         """
+#   /**
+#     * @param struct $args
+#     * @param string $args["devKey"]
+#     * @param int $args["testplanid"]
+#     * @param string $args["testcaseexternalid"] format PREFIX-NUMBER
+#     * @param int $args["buildid"] Mandatory => you can provide buildname as alternative
+#     * @param int $args["buildname"] Mandatory => you can provide buildid (DB ID) as alternative
+#     * @param int $args["platformid"] optional - BECOMES MANDATORY if Test plan has platforms
+#     *                                           you can provide platformname as alternative  
+#     *  
+#     * @param int $args["platformname"] optional - BECOMES MANDATORY if Test plan has platforms
+#     *                                           you can provide platformid as alternative  
+#     * @param string $args["user'] - login name => tester 
+#     *                             - NOT NEEDED f $args['action'] = 'unassignAll'
+#     * ¸
+#     *
+#     */
+#   public function unassignTestCaseExecutionTask($args)
+
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testplanid', 'testcaseexternalid'],
+                        ['buildid', 'buildname', 'platformid', 'platformname',
+                         'user', 'action'])
+    def unassignTestCaseExecutionTask(self):
+        """ assigns a user to a test case execution task
+        
+        testplanid           test plan id
+        testcaseexternalid   format PREFIX-NUMBER
+        
+        args variations:     buildid - buildname 
+                             platformid - platformname
+                             user (login name) - action ('unassignAll')
+        build information is general mandatory
+        platform information is required, when test plan has assigned platforms
+        if action=='unassignAll', user information is not needed
+        - otherwise, TL itself will set action to 'unassignOne' and expects a
+          valid user information (login name => tester)
+        
+        """
+
 
     #
     #  public methods for general server calls

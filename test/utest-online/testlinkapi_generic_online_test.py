@@ -380,6 +380,12 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                                             buildname='build 4713', 
                                             platformname='platform 4714') 
               
+    def test_unassignTestCaseExecutionTask_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
+            self.client.unassignTestCaseExecutionTask(4711, 'TC-4712', 
+                                        buildname='build 4713', 
+                                        platformname='platform 4714',
+                                        user='username',action='unassignOne') 
                                   
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
