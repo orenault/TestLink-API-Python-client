@@ -109,57 +109,59 @@ NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 myTLVersion = myTestLink.testLinkVersion()
 
 # used connection settings
-print myTestLink.connectionInfo()
-print ""
+print( myTestLink.connectionInfo() )
+print( "" )
 
 # get information - TestProject
 newProject = myTestLink.getTestProjectByName(NEWPROJECT)
-print "getTestProjectByName", newProject
+print( "getTestProjectByName", newProject )
 newProjectID = newProject['id'] 
-print "Project '%s' - id: %s" % (NEWPROJECT,newProjectID)
+print( "Project '%s' - id: %s" % (NEWPROJECT,newProjectID) )
+response = myTestLink.getProjectKeywords(newProjectID) 
+print("getProjectKeywords", response)
 
 # get information - TestPlan
 newTestPlan = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN_A)
-print "getTestPlanByName", newTestPlan
+print( "getTestPlanByName", newTestPlan )
 newTestPlanID_A = newTestPlan[0]['id'] 
-print "Test Plan '%s' - id: %s" % (NEWTESTPLAN_A,newTestPlanID_A)
+print( "Test Plan '%s' - id: %s" % (NEWTESTPLAN_A,newTestPlanID_A) )
 response = myTestLink.getTotalsForTestPlan(newTestPlanID_A)
-print "getTotalsForTestPlan", response
+print( "getTotalsForTestPlan", response )
 response = myTestLink.getBuildsForTestPlan(newTestPlanID_A)
-print "getBuildsForTestPlan", response
+print( "getBuildsForTestPlan", response )
 newBuildID_A = response[0]['id']
 newBuildName_A = response[0]['name']
 # get information - TestSuite
 response = myTestLink.getTestSuitesForTestPlan(newTestPlanID_A)
-print "getTestSuitesForTestPlan", response
+print( "getTestSuitesForTestPlan", response )
 newTestSuiteID_A=response[0]['id']
 newTestSuiteID_AA=response[1]['id']
 newTestSuiteID_B=response[2]['id']
 newTestSuite = myTestLink.getTestSuiteByID(newTestSuiteID_B)
-print "getTestSuiteByID", newTestSuite
+print( "getTestSuiteByID", newTestSuite )
 
 # list test cases with assigned keywords
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, True, 
                                                'full', getkeywords=True)
-print "getTestCasesForTestSuite (deep=True)", response
+print( "getTestCasesForTestSuite (deep=True)", response )
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 
                                                'full', getkeywords=True)
-print "getTestCasesForTestSuite (deep=False)", response
+print( "getTestCasesForTestSuite (deep=False)", response )
 
 # get informationen - TestCase_B
 response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
-print "getTestCaseIDByName", response
+print( "getTestCaseIDByName", response )
 newTestCaseID_B = response[0]['id'] 
-print "Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
+print( "Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B) )
 newTestCase_B = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]
-print "getTestCase", newTestCase_B
+print( "getTestCase", newTestCase_B )
 
 # return keyword list for TestCase_B
 response =  myTestLink.listKeywordsForTC(newTestCaseID_B)
-print "listKeywordsForTC", response
+print( "listKeywordsForTC", response )
 # return keyword lists for all test cases of test newTestSuite_B
 response =  myTestLink.listKeywordsForTS(newTestSuiteID_B)
-print "listKeywordsForTS", response
+print( "listKeywordsForTS", response )
 
 # new execution result with custom field data
 # TC_B passed, explicit build and some notes , TC identified with internal id
@@ -168,12 +170,12 @@ newResult = myTestLink.reportTCResult(newTestCaseID_B, newTestPlanID_A,
                 platformname=NEWPLATFORM_B, bugid='4711',
                 customfields={'cf_tc_ex_string' : 'a custom exec value set via api',
                               'cf_tc_sd_listen' : 'ernie'})
-print "reportTCResult", newResult
+print( "reportTCResult", newResult )
 
 # get execution results
 lastResult = myTestLink.getLastExecutionResult(newTestPlanID_A, newTestCaseID_B, 
                                                options={'getBugs' : True})[0]
-print "getLastExecutionResult", lastResult
+print( "getLastExecutionResult", lastResult )
 
 # map of used ids
 args =  {'devKey' : myTestLink.devKey,
@@ -192,7 +194,7 @@ args =  {'devKey' : myTestLink.devKey,
 response = myTestLink.getTestCaseCustomFieldExecutionValue(
                 'cf_tc_ex_string', args['testprojectid'], args['tcversion_id'],
                 args['executionid'] , args['testplanid'] )
-print "getTestCaseCustomFieldExecutionValue", response
+print( "getTestCaseCustomFieldExecutionValue", response )
 
 # update CustomField Value - TestCase SpecDesign
 response = myTestLink.updateTestCaseCustomFieldDesignValue( 
@@ -200,48 +202,48 @@ response = myTestLink.updateTestCaseCustomFieldDesignValue(
                  args['testprojectid'],
                  {'cf_tc_sd_string' : 'A custom SpecDesign value set via api',
                   'cf_tc_sd_list' : 'bibo'})
-print "updateTestCaseCustomFieldDesignValue", response
+print( "updateTestCaseCustomFieldDesignValue", response )
 
 # get CustomField Value - TestCase SpecDesign
 #response = myTestLink._callServer('getTestCaseCustomFieldDesignValue', args)
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                 args['testcaseexternalid'], args['version'],
                 args['testprojectid'], 'cf_tc_sd_string', 'full')
-print "getTestCaseCustomFieldDesignValue full", response
+print( "getTestCaseCustomFieldDesignValue full", response )
 
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                 args['testcaseexternalid'], args['version'],
                 args['testprojectid'], 'cf_tc_sd_string', 'value')
-print "getTestCaseCustomFieldDesignValue value", response
+print( "getTestCaseCustomFieldDesignValue value", response )
 
 response = myTestLink.getTestCaseCustomFieldDesignValue( 
                 args['testcaseexternalid'], args['version'], 
                 args['testprojectid'], 'cf_tc_sd_list', 'simple')
-print "getTestCaseCustomFieldDesignValue simple", response
+print( "getTestCaseCustomFieldDesignValue simple", response )
 
 # get CustomField Value - TestCase Testplan Design
 response = myTestLink.getTestCaseCustomFieldTestPlanDesignValue(
                 'cf_tc_pd_string', args['testprojectid'], args['tcversion_id'],
                 args['testplanid'], args['linkid'])
-print "getTestCaseCustomFieldTestPlanDesignValue", response
+print( "getTestCaseCustomFieldTestPlanDesignValue", response )
 
 # get CustomField Value - TestSuite
 response = myTestLink.getTestSuiteCustomFieldDesignValue(
                 'cf_ts_string', args['testprojectid'], args['testsuiteid'])
-print "getTestSuiteCustomFieldDesignValue", response
+print( "getTestSuiteCustomFieldDesignValue", response )
 
 # get CustomField Value - TestPlan
 response = myTestLink.getTestPlanCustomFieldDesignValue(
                 'cf_tp_string', args['testprojectid'], args['testplanid'])
-print "getTestPlanCustomFieldDesignValue", response
+print( "getTestPlanCustomFieldDesignValue", response )
 
 # get CustomField Value - Requirement Specification
 response = myTestLink.getReqSpecCustomFieldDesignValue(
                 'cf_req_sd_string', args['testprojectid'], args['reqspecid'])
-print "getReqSpecCustomFieldDesignValue", response
+print( "getReqSpecCustomFieldDesignValue", response )
 
 
 # get CustomField Value - Requirement Specification
 response = myTestLink.getRequirementCustomFieldDesignValue(
                 'cf_req_string',args['testprojectid'], args['requirementid'])
-print "getRequirementCustomFieldDesignValue", response
+print( "getRequirementCustomFieldDesignValue", response )

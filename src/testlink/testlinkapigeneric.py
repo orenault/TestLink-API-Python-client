@@ -1198,6 +1198,14 @@ TL version >= 1.9.11
         
         """
 
+    @decoMakerApiCallReplaceTLResponseError(replaceValue={})            
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testprojectid'])
+    def getProjectKeywords(self):
+        """ Gets a dictionary of valid keywords for a project   
+        
+        returns an empty dictionary, if no keywords are defined """
+
 
     #
     #  public methods for general server calls

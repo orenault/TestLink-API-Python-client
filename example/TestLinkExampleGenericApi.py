@@ -187,12 +187,6 @@ newPlatFormID_C = newPlatForm['id']
 response = myTestLink.addPlatformToTestPlan(newTestPlanID_A, NEWPLATFORM_C) 
 print("addPlatformToTestPlan", response)
 
-# looking, which platforms exists
-response = myTestLink.getProjectPlatforms(newProjectID) 
-print("getProjectPlatforms", response)
-
-
- 
 #Creates the test Suite A      
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_A,
             "Details of the Test Suite A")  
@@ -512,6 +506,10 @@ response = myTestLink.getProjectTestPlans(newProjectID)
 print("getProjectTestPlans", response)
 response = myTestLink.getFirstLevelTestSuitesForTestProject(newProjectID)
 print("getFirstLevelTestSuitesForTestProject", response)
+response = myTestLink.getProjectPlatforms(newProjectID) 
+print("getProjectPlatforms", response)
+response = myTestLink.getProjectKeywords(newProjectID) 
+print("getProjectKeywords", response)
 
 # get information - TestPlan
 response = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN_A)

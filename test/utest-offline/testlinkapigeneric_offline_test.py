@@ -79,7 +79,11 @@ SCENARIO_A = {'repeat' : 'You said: One World',
                     'noPlatform'  : {}   
                     },
               'reportTCResult' :  [{'status': True, 'operation': 'reportTCResult', 
-                                    'message': 'Success!', 'overwrite': False, 'id': '773'}]              
+                                    'message': 'Success!', 'overwrite': False, 'id': '773'}],              
+              'getProjectKeywords' : {
+                   'twoKeywords' : {'25': 'KeyWord01', '26': 'KeyWord02'},
+                   'noKeyword'   : {}   
+                    }
               }
 
 # scenario_tl198 used by test with older responses, changed in TL 1.9.9
@@ -226,7 +230,8 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
             if methodAPI in ['doesUserExist']:
                 response = data[argsAPI['user']]
             elif methodAPI in ['getProjectTestPlans', 'getProjectPlatforms',
-                               'getFirstLevelTestSuitesForTestProject']:
+                               'getFirstLevelTestSuitesForTestProject', 
+                               'getProjectKeywords']:
                 response = data[argsAPI['testprojectid']]
             elif methodAPI in ['getBuildsForTestPlan', 'getTestPlanPlatforms', 
                         'getTestSuitesForTestPlan', 'getTestCasesForTestPlan']:
@@ -701,7 +706,20 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.api.loadScenario(SCENARIO_TL199)
         api_info = self.api.__str__()
         py_info = '(PY %i.' % sys.version_info[0]
-        self.assertIn(py_info, api_info)        
+        self.assertIn(py_info, api_info) 
+        
+    def test_getProjectKeywords_noKeywords(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getProjectKeywords('noKeyword')
+        self.assertEqual({}, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getProjectKeywords_twoKeywords(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getProjectKeywords('twoKeywords')
+        self.assertEqual('KeyWord01', response['25'])
+        self.assertEqual('KeyWord02', response['26'])
+               
                
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -25,7 +25,16 @@ new TestlinkAPIGeneric and TestlinkAPIClient api method
   [platformname=<platformname>], [user=<loginname>], 
   [action='unassignAll'|'unassignOne'], [devKey=<devKey>])
   
-examples see `<example/TestLinkExample.py>`_  
+examples see `<example/TestLinkExample.py>`_ 
+ 
+implement 1.9.13 new api - getProjectKeywords #41
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api method
+
+- getProjectKeywords(<testprojectid>)
+  
+examples see `<example/TestLinkExample_CF_KW.py>`_  
 
 TestLink-API-Python-client release notes v0.6.0 (Dec. 2014) 
 ------------------------------------------------------------

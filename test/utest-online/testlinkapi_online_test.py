@@ -337,6 +337,9 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                                         platformname='platform 4714',
                                         user='username',action='unassignOne') 
                                   
+    def test_getProjectKeywords_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+            self.client.getProjectKeywords(4711) 
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

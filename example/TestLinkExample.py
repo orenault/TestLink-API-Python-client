@@ -586,6 +586,10 @@ response = myTestLink.getProjectTestPlans(newProjectID)
 print("getProjectTestPlans", response)
 response = myTestLink.getFirstLevelTestSuitesForTestProject(newProjectID)
 print("getFirstLevelTestSuitesForTestProject", response)
+response = myTestLink.getProjectPlatforms(newProjectID) 
+print("getProjectPlatforms", response)
+response = myTestLink.getProjectKeywords(newProjectID) 
+print("getProjectKeywords", response)
 
 # get information - testPlan
 response = myTestLink.getTestPlanByName(NEWPROJECT, NEWTESTPLAN_A)
