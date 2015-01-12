@@ -162,6 +162,8 @@ print( "listKeywordsForTC", response )
 # return keyword lists for all test cases of test newTestSuite_B
 response =  myTestLink.listKeywordsForTS(newTestSuiteID_B)
 print( "listKeywordsForTS", response )
+response = myTestLink.getTestCaseKeywords(testcaseid=newTestCaseID_B)
+print("getTestCaseKeywords", response)
 
 # new execution result with custom field data
 # TC_B passed, explicit build and some notes , TC identified with internal id

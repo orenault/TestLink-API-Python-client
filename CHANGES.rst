@@ -36,6 +36,17 @@ new TestlinkAPIGeneric and TestlinkAPIClient api method
   
 examples see `<example/TestLinkExample_CF_KW.py>`_  
 
+implement 1.9.13 new api - getTestCaseKeywords #42 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api method
+
+- getTestCaseKeywords([testcaseid=<testcaseid>], 
+  [testcaseexternalid=<testcaseexternalid>])
+  
+examples see `<example/TestLinkExample_CF_KW.py>`_  
+
+
 TestLink-API-Python-client release notes v0.6.0 (Dec. 2014) 
 ------------------------------------------------------------
 

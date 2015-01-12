@@ -311,6 +311,11 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
           links keywords against a test case and not a test case version 
         """
         
+        #ToDo LC 12.01.15 - simplify code with TL 1.9.13 api getTestCaseKeywords
+        # - indirect search via test suite and getTestCasesForTestSuite() isn't 
+        #   necessary any more
+        # - see enhancement issue #45
+        
         a_tc_id = str(internal_or_external_tc_id)
         argsPositional = [a_tc_id]
         argsOptional   = {}

@@ -565,7 +565,8 @@ response = myTestLink.getExecCountersByBuild(newTestPlanID_A)
 print("getExecCountersByBuild", response)
 response = myTestLink.getExecCountersByBuild(newTestPlanID_B)
 print("getExecCountersByBuild", response)
-
+response = myTestLink.getTestCaseKeywords(testcaseexternalid=tc_b_full_ext_id)
+print("getTestCaseKeywords noKeyWords", response)
 
 # get information - general 
 response = myTestLink.getFullPath(int(newTestSuiteID_AA))

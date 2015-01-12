@@ -339,7 +339,17 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                                   
     def test_getProjectKeywords_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
-            self.client.getProjectKeywords(4711) 
+            self.client.getProjectKeywords(4711)
+            
+    def test_getTestCaseKeywords_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '5000.*4712'):
+            self.client.getTestCaseKeywords(testcaseid=4712) 
+
+    def test_getTestCaseKeywords_unknownID_external(self):
+        with self.assertRaisesRegex(TLResponseError, '5040.*4712'):
+            self.client.getTestCaseKeywords(testcaseexternalid='TC-4712')
+            
+             
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

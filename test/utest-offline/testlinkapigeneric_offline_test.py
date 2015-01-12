@@ -83,7 +83,11 @@ SCENARIO_A = {'repeat' : 'You said: One World',
               'getProjectKeywords' : {
                    'twoKeywords' : {'25': 'KeyWord01', '26': 'KeyWord02'},
                    'noKeyword'   : {}   
-                    }
+                    },              
+              'getTestCaseKeywords' : {
+                   'twoKeywords' : {'25': 'KeyWord01', '26': 'KeyWord02'},
+                   'noKeyword'   : {}
+                   }   
               }
 
 # scenario_tl198 used by test with older responses, changed in TL 1.9.9
@@ -241,6 +245,8 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
                 response = data[argsAPI['testsuiteid']]
             elif methodAPI in ['getTestCaseIDByName']:
                 response = data[argsAPI['testcasename']]
+            elif methodAPI in ['getTestCaseKeywords']:
+                response = data[argsAPI['testcaseid']]
             elif methodAPI in ['testLinkVersion']:
                 response = data
                 if data == 'unknown':
@@ -717,6 +723,18 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     def test_getProjectKeywords_twoKeywords(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.getProjectKeywords('twoKeywords')
+        self.assertEqual('KeyWord01', response['25'])
+        self.assertEqual('KeyWord02', response['26'])
+               
+    def test_getTestCaseKeywords_noKeywords(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestCaseKeywords(testcaseid='noKeyword')
+        self.assertEqual({}, response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
+    def test_getProjectKeywords_twoKeywords(self):
+        self.api.loadScenario(SCENARIO_A)
+        response = self.api.getTestCaseKeywords(testcaseid='twoKeywords')
         self.assertEqual('KeyWord01', response['25'])
         self.assertEqual('KeyWord02', response['26'])
                

@@ -1207,6 +1207,27 @@ TL version >= 1.9.11
         returns an empty dictionary, if no keywords are defined """
 
 
+# #   /**
+# #    * Gets list of keywords for a given Test case
+# #    *
+# #    * @param $testcaseid
+# #    *
+# #    * @return map indexed by bug_id
+# #    *
+# #    * @access public
+# #    */
+# #   public function getTestCaseKeywords($args)
+# 
+    @decoMakerApiCallReplaceTLResponseError(replaceValue={})            
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs([], ['testcaseid', 'testcaseexternalid'])
+    def getTestCaseKeywords(self):
+        """ Gets a dictionary of keywords for a given Test case 
+        
+        args variations: testcaseid - testcaseexternalid  (mandatoy!)
+         
+        returns an empty dictionary, if no keywords are defined """
+ 
     #
     #  public methods for general server calls
     #                                   
