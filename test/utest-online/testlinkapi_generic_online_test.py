@@ -92,195 +92,195 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_createTestProject_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '7001.*Empty name'):
             self.client.createTestProject(testprojectname='', 
-                                                 testcaseprefix='P4711')
+                                                 testcaseprefix='P40000711')
  
     def test_getProjects(self):
         response = self.client.getProjects()
         self.assertIsNotNone(response)
          
     def test_createTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7011.*4712'):
-            self.client.createTestPlan('plan 4711', 'project 4712')
+        with self.assertRaisesRegex(TLResponseError, '7011.*40000712'):
+            self.client.createTestPlan('plan 40000711', 'project 40000712')
  
     def test_createTestSuite_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
-            self.client.createTestSuite( 4711, 'suite 4712', 'detail 4713')
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.createTestSuite( 40000711, 'suite 40000712', 'detail 40000713')
         
     def test_createTestCase_unknownID(self):
         tc_steps = []
-        with self.assertRaisesRegex(TLResponseError, '7000.*4713'):
-            self.client.createTestCase('case 4711', 4712, 4713, 
-                                        'Big Bird', 'summary 4714', tc_steps)
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000713'):
+            self.client.createTestCase('case 40000711', 40000712, 40000713, 
+                                        'Big Bird', 'summary 40000714', tc_steps)
  
     def test_getBuildsForTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getBuildsForTestPlan(4711)
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getBuildsForTestPlan(40000711)
          
     def test_getFirstLevelTestSuitesForTestProject_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
-            self.client.getFirstLevelTestSuitesForTestProject(4711)
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getFirstLevelTestSuitesForTestProject(40000711)
  
     def test_getFullPath_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, 'getFullPath.*234'):
-            self.client.getFullPath('4711')
+            self.client.getFullPath('40000711')
  
     def test_getLastExecutionResult_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getLastExecutionResult(4711, testcaseid=4712)
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getLastExecutionResult(40000711, testcaseid=40000712)
          
     def test_getLatestBuildForTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getLatestBuildForTestPlan(4711)
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getLatestBuildForTestPlan(40000711)
          
     def test_getProjectTestPlans_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
-            self.client.getProjectTestPlans(4711)
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getProjectTestPlans(40000711)
          
     def test_getProjectPlatforms_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
-            self.client.getProjectPlatforms(4711)
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getProjectPlatforms(40000711)
         
     def test_getTestCase_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '5000.*4711'):
-            self.client.getTestCase(testcaseid=4711)
+        with self.assertRaisesRegex(TLResponseError, '5000.*40000711'):
+            self.client.getTestCase(testcaseid=40000711)
          
     def test_getTestCase_unknownExternalID(self):
-        with self.assertRaisesRegex(TLResponseError, '5040.*GPROAPI-4711'):
-            self.client.getTestCase(testcaseexternalid='GPROAPI-4711')
+        with self.assertRaisesRegex(TLResponseError, '5040.*GPROAPI-40000711'):
+            self.client.getTestCase(testcaseexternalid='GPROAPI-40000711')
          
     def test_getTestCaseAttachments_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '5000.*4711'):
-            self.client.getTestCaseAttachments(testcaseid=4711)
+        with self.assertRaisesRegex(TLResponseError, '5000.*40000711'):
+            self.client.getTestCaseAttachments(testcaseid=40000711)
          
     def test_getTestCaseCustomFieldDesignValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.getTestCaseCustomFieldDesignValue(
-                   'TC-4712', 1, 4711, 'a_field', details='full')
+                   'TC-40000712', 1, 40000711, 'a_field', details='full')
          
     def test_getTestCaseIDByName_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '5030.*Cannot find'):
             self.client.getTestCaseIDByName('Big Bird')
  
     def test_getTestCasesForTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getTestCasesForTestPlan(4711)
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getTestCasesForTestPlan(40000711)
  
     def test_getTestCasesForTestSuite_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '8000.*4711'):
-            self.client.getTestCasesForTestSuite(4711)
+        with self.assertRaisesRegex(TLResponseError, '8000.*40000711'):
+            self.client.getTestCasesForTestSuite(40000711)
  
     def test_getTestPlanByName_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7011.*4711'):
-            self.client.getTestPlanByName('project 4711', 'plan 4712')
+        with self.assertRaisesRegex(TLResponseError, '7011.*40000711'):
+            self.client.getTestPlanByName('project 40000711', 'plan 40000712')
  
     def test_getTestPlanPlatforms_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getTestPlanPlatforms(4711)
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getTestPlanPlatforms(40000711)
  
     def test_getTestProjectByName_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7011.*4711'):
-            self.client.getTestProjectByName('project 4711')
+        with self.assertRaisesRegex(TLResponseError, '7011.*40000711'):
+            self.client.getTestProjectByName('project 40000711')
  
     def test_getTestSuiteByID_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '8000.*4711'):
-            self.client.getTestSuiteByID(4711)
+        with self.assertRaisesRegex(TLResponseError, '8000.*40000711'):
+            self.client.getTestSuiteByID(40000711)
  
     def test_getTestSuitesForTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getTestSuitesForTestPlan(4711)
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getTestSuitesForTestPlan(40000711)
  
     def test_getTestSuitesForTestSuite_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '8000.*4711'):
-            self.client.getTestSuitesForTestSuite(4711)
+        with self.assertRaisesRegex(TLResponseError, '8000.*40000711'):
+            self.client.getTestSuitesForTestSuite(40000711)
  
     def test_getTotalsForTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getTotalsForTestPlan(4711)
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getTotalsForTestPlan(40000711)
  
     def test_createBuild_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.createBuild(4711, 'Build 4712', buildnotes='note 4713')
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.createBuild(40000711, 'Build 40000712', buildnotes='note 40000713')
  
     def test_reportTCResult_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '5000.*4711'):
-            self.client.reportTCResult(4712, 'p', testcaseid=4711, 
-                                       buildname='build 4713', notes='note 4714' )
+        with self.assertRaisesRegex(TLResponseError, '5000.*40000711'):
+            self.client.reportTCResult(40000712, 'p', testcaseid=40000711, 
+                                       buildname='build 40000713', notes='note 40000714' )
  
     def test_uploadExecutionAttachment_unknownID(self):
         attachemantFile = open(os.path.realpath(__file__), 'r')
-        with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
-            self.client.uploadExecutionAttachment(attachemantFile, 4712, 
-                        title='title 4713', description='descr. 4714')
+        with self.assertRaisesRegex(TLResponseError, '6004.*40000712'):
+            self.client.uploadExecutionAttachment(attachemantFile, 40000712, 
+                        title='title 40000713', description='descr. 40000714')
  
     def test_createPlatform_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7011.*4711'):
-            self.client.createPlatform('Project 4711', 'Platform 4712', 
-                                       notes='note 4713')
+        with self.assertRaisesRegex(TLResponseError, '7011.*40000711'):
+            self.client.createPlatform('Project 40000711', 'Platform 40000712', 
+                                       notes='note 40000713')
             
     def test_addPlatformToTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.addPlatformToTestPlan(4711, 'Platform 4712')
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.addPlatformToTestPlan(40000711, 'Platform 40000712')
             
     def test_removePlatformFromTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.removePlatformFromTestPlan(4711, 'Platform 4712')
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.removePlatformFromTestPlan(40000711, 'Platform 40000712')
             
     def test_addTestCaseToTestPlan_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
-            self.client.addTestCaseToTestPlan(4711, 4712, 'N-4713', 1)
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.addTestCaseToTestPlan(40000711, 40000712, 'N-40000713', 1)
             
     def test_updateTestCase_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '5040.*N-4711'):
-            self.client.updateTestCase('N-4711', version=1)
+        with self.assertRaisesRegex(TLResponseError, '5040.*N-40000711'):
+            self.client.updateTestCase('N-40000711', version=1)
         
     def test_createTestCaseSteps_unknownID(self):
         steps = [{'actions' : "Step action 6 -b added by updateTestCase" , 
                   'expected_results' : "Step result 6 - b added", 
                   'step_number' : 6, 'execution_type' : 1}]
-        with self.assertRaisesRegex(TLResponseError, '5040.*N-4711'):
+        with self.assertRaisesRegex(TLResponseError, '5040.*N-40000711'):
             self.client.createTestCaseSteps('update', steps, 
-                                        testcaseexternalid='N-4711', version=1)
+                                        testcaseexternalid='N-40000711', version=1)
             
     def test_deleteTestCaseSteps_unknownID(self):
         steps = [2,8]
-        with self.assertRaisesRegex(TLResponseError, '5040.*N-4711'):
-            self.client.deleteTestCaseSteps('N-4711', steps, version=1)
+        with self.assertRaisesRegex(TLResponseError, '5040.*N-40000711'):
+            self.client.deleteTestCaseSteps('N-40000711', steps, version=1)
             
     def test_uploadRequirementSpecificationAttachment_unknownID(self):
         attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
-        with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
-            self.client.uploadRequirementSpecificationAttachment(attachemantFile, 4712, 
-                        title='title 4713', description='descr. 4714')
+        with self.assertRaisesRegex(TLResponseError, '6004.*40000712'):
+            self.client.uploadRequirementSpecificationAttachment(attachemantFile, 40000712, 
+                        title='title 40000713', description='descr. 40000714')
  
     def test_uploadRequirementAttachment_unknownID(self):
         attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
-        with self.assertRaisesRegex(TLResponseError, '6004.*4712'):
-            self.client.uploadRequirementAttachment(attachemantFile, 4712, 
-                        title='title 4713', description='descr. 4714')
+        with self.assertRaisesRegex(TLResponseError, '6004.*40000712'):
+            self.client.uploadRequirementAttachment(attachemantFile, 40000712, 
+                        title='title 40000713', description='descr. 40000714')
  
     def test_uploadTestProjectAttachment_unknownID(self):
         attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
-        with self.assertRaisesRegex(TLResponseError, '7000.*4712'):
-            self.client.uploadTestProjectAttachment(attachemantFile, 4712, 
-                        title='title 4713', description='descr. 4714')
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000712'):
+            self.client.uploadTestProjectAttachment(attachemantFile, 40000712, 
+                        title='title 40000713', description='descr. 40000714')
  
     def test_uploadTestSuiteAttachment_unknownID(self):
         attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
-        with self.assertRaisesRegex(TLResponseError, '8000.*4712'):
-            self.client.uploadTestSuiteAttachment(attachemantFile, 4712, 
-                        title='title 4713', description='descr. 4714')
+        with self.assertRaisesRegex(TLResponseError, '8000.*40000712'):
+            self.client.uploadTestSuiteAttachment(attachemantFile, 40000712, 
+                        title='title 40000713', description='descr. 40000714')
  
     def test_uploadTestCaseAttachment_unknownID(self):
         attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
         with self.assertRaisesRegex(TLResponseError, '5000.*testcaseid'):
-            self.client.uploadTestCaseAttachment(attachemantFile, 4712, 
-                        title='title 4713', description='descr. 4714')
+            self.client.uploadTestCaseAttachment(attachemantFile, 40000712, 
+                        title='title 40000713', description='descr. 40000714')
  
     def test_uploadAttachment_unknownID(self):
         attachemantFile = open(ATTACHMENT_EXAMPLE_TEXT, 'r')
         with self.assertRaisesRegex(TLResponseError, '6004.*Invalid Foreign Key ID'):
             self.client.uploadAttachment(attachemantFile, '0000', 'nodes_hierarchy',
-                        title='title 4713', description='descr. 4714')
+                        title='title 40000713', description='descr. 40000714')
 
     def test_testLinkVersion(self):
         response = self.client.testLinkVersion()
@@ -292,7 +292,7 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             
     def test_getUserByID_unknownKey(self):
          with self.assertRaisesRegex(TLResponseError, 'NO_USER_BY_ID_LOGIN.*User with DB ID'):
-            self.client.getUserByID(4711)
+            self.client.getUserByID(40000711)
             
 #     def test_setTestMode(self):
 #         response = self.client.setTestMode(True)
@@ -302,10 +302,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 
     def test_deleteExecution_unknownKey(self):
         try:
-            response = self.client.deleteExecution(4711)
+            response = self.client.deleteExecution(40000711)
             # case: TL configuration allows deletion of executions
             # response returns Success, even if executionID is unkown
-            self.assertEqual([{'status': True, 'message': 'Success!', 'id': 4711, 
+            self.assertEqual([{'status': True, 'message': 'Success!', 'id': 40000711, 
                                'operation': 'deleteExecution'}], response)
         except TLResponseError as tl_err:
             # case: TL configuration does not allow deletion of executions
@@ -313,92 +313,96 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.assertEqual(232, tl_err.code)
 
     def test_setTestCaseExecutionType_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4712'):
-            self.client.setTestCaseExecutionType('N-4711', 1, 4712, 1)
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000712'):
+            self.client.setTestCaseExecutionType('N-40000711', 1, 40000712, 1)
             
     def test_assignRequirements_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4712'):
-            self.client.assignRequirements('N-4711', 4712, 
-                        [{'req_spec' : 4713, 'requirements' : [4714, 4717]}, 
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000712'):
+            self.client.assignRequirements('N-40000711', 40000712, 
+                        [{'req_spec' : 40000713, 'requirements' : [40000714, 40000717]}, 
                          {'req_spec' : 4723, 'requirements' : [4725]}])
             
     def test_getExecCountersByBuild_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getExecCountersByBuild(4711)
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getExecCountersByBuild(40000711)
             
     def test_getTestCaseCustomFieldExecutionValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.getTestCaseCustomFieldExecutionValue(
-                            'cf_full', '4711', 1, '715', '4713')
+                            'cf_full', '40000711', 1, '715', '40000713')
             
     def test_getTestCaseCustomFieldTestPlanDesignValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.getTestCaseCustomFieldTestPlanDesignValue(
-                            'cf_full', '4711', 1, '4713', '615')
+                            'cf_full', '40000711', 1, '40000713', '615')
             
     def test_updateTestCaseCustomFieldDesignValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.updateTestCaseCustomFieldDesignValue(
-                            'TC-4712', 1, 4711, {'cf_field1' : 'value1',
+                            'TC-40000712', 1, 40000711, {'cf_field1' : 'value1',
                                                  'cf_field2' : 'value2'})
 
     def test_getTestSuiteCustomFieldDesignValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.getTestSuiteCustomFieldDesignValue(
-                                                    'cf_full', 4711, 4713) 
+                                                    'cf_full', 40000711, 40000713) 
             
     def test_getTestPlanCustomFieldDesignValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.getTestPlanCustomFieldDesignValue(
-                                                    'cf_full', 4711, 4712)             
+                                                    'cf_full', 40000711, 40000712)             
 
     def test_getReqSpecCustomFieldDesignValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.getReqSpecCustomFieldDesignValue(
-                                                    'cf_full', 4711, 4732)             
+                                                    'cf_full', 40000711, 4732)             
 
     def test_getRequirementCustomFieldDesignValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.getRequirementCustomFieldDesignValue(
-                                                    'cf_full', 4711, 4734)  
+                                                    'cf_full', 40000711, 4734)  
             
     def test_assignTestCaseExecutionTask_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.assignTestCaseExecutionTask('username', 4711, 'TC-4712', 
-                                            buildname='build 4713', 
-                                            platformname='platform 4714') 
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.assignTestCaseExecutionTask('username', 40000711, 'TC-40000712', 
+                                            buildname='build 40000713', 
+                                            platformname='platform 40000714') 
               
     def test_getTestCaseBugs_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getTestCaseBugs(4711, testcaseexternalid='TC-4712', 
-                                        buildname='build 4713',
-                                        platformname='platform 4714')                         
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getTestCaseBugs(40000711, testcaseexternalid='TC-40000712', 
+                                        buildname='build 40000713',
+                                        platformname='platform 40000714')                         
 
     def test_getTestCaseAssignedTester_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.getTestCaseAssignedTester(4711, 'TC-4712', 
-                                            buildname='build 4713', 
-                                            platformname='platform 4714') 
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.getTestCaseAssignedTester(40000711, 'TC-40000712', 
+                                            buildname='build 40000713', 
+                                            platformname='platform 40000714') 
               
     def test_unassignTestCaseExecutionTask_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '3000.*4711'):
-            self.client.unassignTestCaseExecutionTask(4711, 'TC-4712', 
-                                        buildname='build 4713', 
-                                        platformname='platform 4714',
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.unassignTestCaseExecutionTask(40000711, 'TC-40000712', 
+                                        buildname='build 40000713', 
+                                        platformname='platform 40000714',
                                         user='username',action='unassignOne') 
     
     def test_getProjectKeywords_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*4711'):
-            self.client.getProjectKeywords(4711) 
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getProjectKeywords(40000711) 
 
     def test_getTestCaseKeywords_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '5000.*4712'):
-            self.client.getTestCaseKeywords(testcaseid=4712) 
+        with self.assertRaisesRegex(TLResponseError, '5000.*40000712'):
+            self.client.getTestCaseKeywords(testcaseid=40000712) 
 
     def test_getTestCaseKeywords_unknownID_external(self):
-        with self.assertRaisesRegex(TLResponseError, '5040.*4712'):
-            self.client.getTestCaseKeywords(testcaseexternalid='TC-4712')
+        with self.assertRaisesRegex(TLResponseError, '5040.*40000712'):
+            self.client.getTestCaseKeywords(testcaseexternalid='TC-40000712')
             
+    def test_deleteTestPlan_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
+            self.client.deleteTestPlan(40000711) 
+
                                  
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

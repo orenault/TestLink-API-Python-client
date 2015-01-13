@@ -1227,6 +1227,26 @@ TL version >= 1.9.11
         args variations: testcaseid - testcaseexternalid  (mandatoy!)
          
         returns an empty dictionary, if no keywords are defined """
+        
+#   /**
+#    *  Delete a test plan and all related link to other items
+#    *
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["$tplanID"]
+#    *
+#    * @return mixed $resultInfo
+#    *         [status]  => true/false of success
+#    *         [id]      => result id or error code
+#    *         [message]  => optional message for error message string
+#    * @access public
+#    */
+#   public function deleteTestPlan($args)
+        
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testplanid'])
+    def deleteTestPlan(self):
+        """ Delete a test plan and all related link to other items """
  
     #
     #  public methods for general server calls

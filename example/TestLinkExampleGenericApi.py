@@ -77,6 +77,7 @@ NEWPROJECT="PROJECT_API_GENERIC-%i" % projNr
 NEWPREFIX="GPROAPI%i" % projNr
 NEWTESTPLAN_A="TestPlan_API_GENERIC A"
 NEWTESTPLAN_B="TestPlan_API_GENERIC B"
+NEWTESTPLAN_C="TestPlan_API_GENERIC C - DeleteTest"
 NEWPLATFORM_A='Big Bird %i' % projNr
 NEWPLATFORM_B='Small Bird'
 NEWPLATFORM_C='Ugly Bird'
@@ -88,6 +89,7 @@ NEWTESTCASE_B="TESTCASE_B"
 myApiVersion='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
 NEWBUILD_A='%s' % myApiVersion
 NEWBUILD_B='%s' % myApiVersion
+NEWBUILD_C='%s - DeleteTest' % myApiVersion
 
 this_file_dirname=os.path.dirname(__file__)
 NEWATTACHMENT_PY= os.path.join(this_file_dirname, 'TestLinkExampleGenericApi.py')
@@ -498,6 +500,47 @@ print("setTestCaseExecutionType", response)
 newResult = myTestLink.setTestCaseExecutionType(tc_b_full_ext_id, tc_version, 
                                                 newProjectID, MANUAL)
 print("setTestCaseExecutionType", response)
+
+# create TestPlan C with Platform, Build , TestCase, assigned TestCase 
+# and delete it 
+newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN_C, NEWPROJECT,
+            notes='TestPlan for delete test.',
+            active=1, public=1)    
+print("createTestPlan for DeleteTest", newTestPlan)
+newTestPlanID_C = newTestPlan[0]['id'] 
+print("Test Plan '%s' - id: %s" % (NEWTESTPLAN_C,newTestPlanID_C))
+newBuild = myTestLink.createBuild(newTestPlanID_C, NEWBUILD_C, 
+                                  buildnotes='Build for TestPlan delete test')
+print("createBuild for DeleteTest", newBuild)
+newBuildID_C = newBuild[0]['id'] 
+print("Build '%s' - id: %s" % (NEWBUILD_C, newBuildID_C))
+response = myTestLink.addPlatformToTestPlan(newTestPlanID_C, NEWPLATFORM_C) 
+print("addPlatformToTestPlan", response)
+response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_C, 
+                    tc_aa_full_ext_id, tc_version, platformid=newPlatFormID_C)
+print("addTestCaseToTestPlan", response)
+response = myTestLink.assignTestCaseExecutionTask( myTestUserName, 
+                        newTestPlanID_C, tc_aa_full_ext_id, buildid=newBuildID_C,
+                        platformid=newPlatFormID_C)  
+print("assignTestCaseExecutionTask", response)
+newResult = myTestLink.reportTCResult(newTestPlanID_C, 'p', 
+                buildid=newBuildID_C, testcaseid=newTestCaseID_AA, 
+                platformname=NEWPLATFORM_C, notes="TP delete test")
+print("reportTCResult", newResult)
+newResultID_B = newResult[0]['id']
+newAttachment = myTestLink.uploadExecutionAttachment(NEWATTACHMENT_PY, newResultID_B, 
+        title='Textfile Example', filename='MyPyTPDeleteTest.py',
+        description='Attachment Example for a TC Execution and TP delete test')
+print("uploadExecutionAttachment", newAttachment)
+response = myTestLink.getTotalsForTestPlan(newTestPlanID_C)
+print("getTotalsForTestPlan before delete", response)
+response = myTestLink.deleteTestPlan(newTestPlanID_C)
+print("deleteTestPlan", response)
+try:
+    response = myTestLink.getTotalsForTestPlan(newTestPlanID_C)
+    print("getTotalsForTestPlan after delete", response)
+except TLResponseError as tl_err:
+    print(tl_err.message)
 
 # get information - TestProject
 response = myTestLink.getTestProjectByName(NEWPROJECT)
