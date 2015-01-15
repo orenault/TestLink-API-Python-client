@@ -285,17 +285,49 @@ TL version >= 1.9.11
 #         This method is meant primarily for testing and debugging during development
 #         """
 
+#   /**
+#    * getTestCasesForTestPlan
+#    * List test cases linked to a test plan
+#    * 
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["testplanid"]
+#    * @param int $args["buildid"] - optional
+#    * @param int $args["platformid"] - optional  
+#    * @param int $args["testcaseid"] - optional
+#    * @param int $args["keywordid"] - optional mutual exclusive with $args["keywords"]
+#    * @param int $args["keywords"] - optional  mutual exclusive with $args["keywordid"]
+#    *
+#    * @param boolean $args["executed"] - optional
+#    * @param int $args["$assignedto"] - optional
+#    * @param string $args["executestatus"] - optional
+#    * @param array $args["executiontype"] - optional
+#    * @param array $args["getstepinfo"] - optional - default false
+#    * @param string $args["details"] - optional 
+#    *                     'full': (default) get summary,steps,expected_results,test suite name
+#    *                     'simple':
+#    *                     'details':
+#    * @return mixed $resultInfo
+#    *
+#    * @internal revisions
+#    * @since 1.9.13
+#    * 20141230 - franciscom - TICKET 6805: platform parameter
+#    */
+#   public function getTestCasesForTestPlan($args)
 
     @decoMakerApiCallReplaceTLResponseError()          
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid'], 
-                ['testcaseid', 'keywordid', 'keywords', 'executed', 'assignedto', 
+                ['buildid', 'platformid', 
+                 'testcaseid', 'keywordid', 'keywords', 'executed', 'assignedto', 
                  'executestatus', 'executiontype', 'getstepinfo', 'details'])
     def getTestCasesForTestPlan(self):
         """ List test cases linked to a test plan
         
         details - default is 'full', 
                   'simple', 'details' ??
+                  
+        args variations:     keywordid - keywords 
         
         returns an empty list, if no build is assigned """
 

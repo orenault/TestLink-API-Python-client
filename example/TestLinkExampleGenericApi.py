@@ -569,7 +569,10 @@ response = myTestLink.getTestSuitesForTestPlan(newTestPlanID_A)
 print("getTestSuitesForTestPlan", response)
 # get failed Testcases 
 response = myTestLink.getTestCasesForTestPlan(newTestPlanID_A, executestatus='f')
-print("getTestCasesForTestPlan", response)
+print("getTestCasesForTestPlan A failed ", response)
+# get Testcases for Plattform SmallBird
+response = myTestLink.getTestCasesForTestPlan(newTestPlanID_A, platformid=newPlatFormID_B)
+print("getTestCasesForTestPlan A SmallBirds", response)
 
 # get information - TestSuite
 response = myTestLink.getTestSuiteByID(newTestSuiteID_B)

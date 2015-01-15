@@ -15,45 +15,39 @@ pull request `#36 <https://github.com/lczub/TestLink-API-Python-client/pull/36>`
 - Adds a new --proxy option in command line.
 - Recognizes "http_proxy" environment variable.
  
-implement 1.9.13 new api - unassignTestCaseExecutionTask #32
+implement 1.9.13 new api methods #32 #41 #42 #44
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-new TestlinkAPIGeneric and TestlinkAPIClient api method
+new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
 - unassignTestCaseExecutionTask(<testplanid>, <testcaseexternalid>, 
   [buildid=<buildid>], [buildname=<buildname>], [platformid=<platformid>], 
   [platformname=<platformname>], [user=<loginname>], 
   [action='unassignAll'|'unassignOne'], [devKey=<devKey>])
   
-examples see `<example/TestLinkExample.py>`_ 
- 
-implement 1.9.13 new api - getProjectKeywords #41
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-new TestlinkAPIGeneric and TestlinkAPIClient api method
-
-- getProjectKeywords(<testprojectid>)
-  
-examples see `<example/TestLinkExample_CF_KW.py>`_  
-
-implement 1.9.13 new api - getTestCaseKeywords #42 
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-new TestlinkAPIGeneric and TestlinkAPIClient api method
+- getProjectKeywords(<testprojectid>)  
 
 - getTestCaseKeywords([testcaseid=<testcaseid>], 
   [testcaseexternalid=<testcaseexternalid>])
   
-examples see `<example/TestLinkExample_CF_KW.py>`_  
-
-implement 1.9.13 new api - deleteTestPlan #44 
+- deleteTestPlan(<testplanid>)  
+  
+examples see `<example/TestLinkExample.py>`_ and `<example/TestLinkExample_CF_KW.py>`_
+ 
+implement 1.9.13 api change - getTestCasesForTestPlan #41
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-new TestlinkAPIGeneric and TestlinkAPIClient api method
+TestlinkAPIGeneric and TestlinkAPIClient api method getTestCasesForTestPlan() 
+accepts now the additional optional argument platformid=<platformid>
 
-- deleteTestPlan(<testplanid>)
+example:
 
-examples see `<example/TestLinkExample.py>`_ 
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tls.getTestCasesForTestPlan(aTPlanID, platformid=aPlatFormID)
+  {'12996': {'949': {'platform_name': 'Small Bird',  ... }}
+  
+Also the optional argument buildid=<buildid> could now be used
+
 
 TestLink-API-Python-client release notes v0.6.0 (Dec. 2014) 
 ------------------------------------------------------------
