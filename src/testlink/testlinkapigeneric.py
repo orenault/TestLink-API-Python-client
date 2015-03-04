@@ -1299,6 +1299,26 @@ TL version >= 1.9.11
         self._checkResponse(response, methodNameAPI, argsOptional) 
         # seams to be ok, so let give them the data
         return response
+    
+#   /**
+#    * addTestCaseKeywords
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param string $args["testcaseexternalid"]
+#    * @param array $args["keywords"]: keywords
+#    * 
+#    * @return mixed $resultInfo
+#    *
+#    * @internal revisions
+#    * @since 1.9.13
+#    */
+#   function addTestCaseKeywords($args)
+
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testcaseexternalid', 'keywords'], [])
+    def addTestCaseKeywords(self):
+        """ adds a list of keywords to a given Test case  """
+    
 
     #
     #  internal methods for general server calls

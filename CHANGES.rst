@@ -3,7 +3,7 @@ Changes in TestLink-API-Python-client Source Distribution
 
 TestLink-API-Python-client v0.6.1 - Under Develop 
 ------------------------------------------------------------
-support for future TL 1.9.13 release
+support for TL 1.9.13 release
 
 Proxy configuration support in TestLinkHelper - pull request #36 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -15,7 +15,7 @@ pull request `#36 <https://github.com/lczub/TestLink-API-Python-client/pull/36>`
 - Adds a new --proxy option in command line.
 - Recognizes "http_proxy" environment variable.
  
-implement 1.9.13 new api methods #32 #41 #42 #44
+implement 1.9.13 new api methods #32 #41 #42 #44 #47
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
@@ -30,7 +30,9 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 - getTestCaseKeywords([testcaseid=<testcaseid>], 
   [testcaseexternalid=<testcaseexternalid>])
   
-- deleteTestPlan(<testplanid>)  
+- deleteTestPlan(<testplanid>) 
+
+- addTestCaseKeywords(<testcaseexternalid>, <keywords>)
   
 examples see `<example/TestLinkExample.py>`_ and `<example/TestLinkExample_CF_KW.py>`_
  

@@ -396,13 +396,17 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.getTestCaseKeywords(testcaseid=40000712) 
 
     def test_getTestCaseKeywords_unknownID_external(self):
-        with self.assertRaisesRegex(TLResponseError, '5040.*40000712'):
+        with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
             self.client.getTestCaseKeywords(testcaseexternalid='TC-40000712')
             
     def test_deleteTestPlan_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
             self.client.deleteTestPlan(40000711) 
 
+    def test_getTestCaseKeywords_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
+            self.client.addTestCaseKeywords('TC-40000712', 
+                                            ['KeyWord01', 'KeyWord03']) 
                                  
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

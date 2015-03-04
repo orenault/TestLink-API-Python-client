@@ -54,8 +54,8 @@ Cause of missing knowledge, how ids of kind
 - testplan - testcase link
 could be requested via api, these example does not work currently. 
 
-Script returns keywords from test case TESTCASE_B, if the user has assigned 
-manually some values.
+Script adds keywords KeyWord01 KeyWord02 KeyWord03 to test case TESTCASE_B
+and returns the resulting keyword list
    
 """                                       
 from testlink import TestlinkAPIClient, TestLinkHelper
@@ -139,6 +139,17 @@ newTestSuiteID_AA=response[1]['id']
 newTestSuiteID_B=response[2]['id']
 newTestSuite = myTestLink.getTestSuiteByID(newTestSuiteID_B)
 print( "getTestSuiteByID", newTestSuite )
+# get informationen - TestCase_B
+response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
+print( "getTestCaseIDByName", response )
+newTestCaseID_B = response[0]['id'] 
+tc_b_full_ext_id = myTestLink.getTestCase(newTestCaseID_B)[0]['full_tc_external_id']
+print( "Test Case '%s' - id: %s - ext-id %s" % (NEWTESTCASE_B, newTestCaseID_B, tc_b_full_ext_id) )
+# add keywords to TestCase B
+response = myTestLink.addTestCaseKeywords(tc_b_full_ext_id,
+                                        ['KeyWord01', 'KeyWord03', 'KeyWord02'])
+print( "addTestCaseKeywords", response )
+
 
 # list test cases with assigned keywords
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, True, 
@@ -148,11 +159,7 @@ response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False,
                                                'full', getkeywords=True)
 print( "getTestCasesForTestSuite (deep=False)", response )
 
-# get informationen - TestCase_B
-response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
-print( "getTestCaseIDByName", response )
-newTestCaseID_B = response[0]['id'] 
-print( "Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B) )
+# get informationen - TestCase_B again 
 newTestCase_B = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]
 print( "getTestCase", newTestCase_B )
 
