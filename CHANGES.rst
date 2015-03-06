@@ -15,7 +15,7 @@ pull request `#36 <https://github.com/lczub/TestLink-API-Python-client/pull/36>`
 - Adds a new --proxy option in command line.
 - Recognizes "http_proxy" environment variable.
  
-implement 1.9.13 new api methods #32 #41 #42 #44 #47
+implement 1.9.13 new api methods #32 #41 #42 #44 #47 #46
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
@@ -33,6 +33,13 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 - deleteTestPlan(<testplanid>) 
 
 - addTestCaseKeywords(<testcaseexternalid>, <keywords>)
+  - Attention: with TL 1.9.14, this api method will change the interface (args)
+    see `TL Mantis Task 6934 <http://mantis.testlink.org/view.php?id=6934>`_ 
+    
+- removeTestCaseKeywords(<testcaseexternalid>, <keywords>)
+  - Attention: with TL 1.9.14, this api method will change the interface (args)
+    see `TL Mantis Task 6907 <http://mantis.testlink.org/view.php?id=6907>`_ 
+
   
 examples see `<example/TestLinkExample.py>`_ and `<example/TestLinkExample_CF_KW.py>`_
  

@@ -1319,7 +1319,26 @@ TL version >= 1.9.11
     def addTestCaseKeywords(self):
         """ adds a list of keywords to a given Test case  """
     
+#   /**
+#    * removeTestCaseKeywords
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param string $args["testcaseexternalid"]
+#    * @param array $args["keywords"]: keywords
+#    * 
+#    * @return mixed $resultInfo
+#    *
+#    * @internal revisions
+#    * @since 1.9.13
+#    */
+#   function removeTestCaseKeywords($args)
 
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['testcaseexternalid', 'keywords'], [])
+    def removeTestCaseKeywords(self):
+        """ removes a list of keywords from a given Test case  """
+
+  
     #
     #  internal methods for general server calls
     #                                   

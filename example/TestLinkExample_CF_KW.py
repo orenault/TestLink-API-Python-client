@@ -54,8 +54,8 @@ Cause of missing knowledge, how ids of kind
 - testplan - testcase link
 could be requested via api, these example does not work currently. 
 
-Script adds keywords KeyWord01 KeyWord02 KeyWord03 to test case TESTCASE_B
-and returns the resulting keyword list
+Script adds keywords KeyWord01 KeyWord02 KeyWord03 to test case TESTCASE_B,
+removes keyword KeyWord02 again and returns the resulting keyword list.
    
 """                                       
 from testlink import TestlinkAPIClient, TestLinkHelper
@@ -145,10 +145,14 @@ print( "getTestCaseIDByName", response )
 newTestCaseID_B = response[0]['id'] 
 tc_b_full_ext_id = myTestLink.getTestCase(newTestCaseID_B)[0]['full_tc_external_id']
 print( "Test Case '%s' - id: %s - ext-id %s" % (NEWTESTCASE_B, newTestCaseID_B, tc_b_full_ext_id) )
+
 # add keywords to TestCase B
 response = myTestLink.addTestCaseKeywords(tc_b_full_ext_id,
                                         ['KeyWord01', 'KeyWord03', 'KeyWord02'])
 print( "addTestCaseKeywords", response )
+# remove keywords from TestCase B
+response = myTestLink.removeTestCaseKeywords(tc_b_full_ext_id, ['KeyWord02'])
+print( "removeTestCaseKeywords", response )
 
 
 # list test cases with assigned keywords
