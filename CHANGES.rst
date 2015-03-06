@@ -1,9 +1,9 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client v0.6.1 - Under Develop 
+TestLink-API-Python-client release notes v0.6.1 (Mar. 2015)  
 ------------------------------------------------------------
-support for TL 1.9.13 release
+support for TL 1.9.13 release  
 
 Proxy configuration support in TestLinkHelper - pull request #36 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,11 +33,11 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 - deleteTestPlan(<testplanid>) 
 
 - addTestCaseKeywords(<testcaseexternalid>, <keywords>)
-  - Attention: with TL 1.9.14, this api method will change the interface (args)
+    Attention: with TL 1.9.14, this api method will change the interface (args)
     see `TL Mantis Task 6934 <http://mantis.testlink.org/view.php?id=6934>`_ 
     
 - removeTestCaseKeywords(<testcaseexternalid>, <keywords>)
-  - Attention: with TL 1.9.14, this api method will change the interface (args)
+    Attention: with TL 1.9.14, this api method will change the interface (args)
     see `TL Mantis Task 6907 <http://mantis.testlink.org/view.php?id=6907>`_ 
 
   
