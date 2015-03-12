@@ -55,7 +55,10 @@ Cause of missing knowledge, how ids of kind
 could be requested via api, these example does not work currently. 
 
 Script adds keywords KeyWord01 KeyWord02 KeyWord03 to test case TESTCASE_B,
-removes keyword KeyWord02 again and returns the resulting keyword list.
+removes keyword KeyWord02 again.
+
+Script adds keywords KeyWord01 KeyWord02 to test case TESTCASE_AA,
+removes keyword KeyWord01 again.
    
 """                                       
 from testlink import TestlinkAPIClient, TestLinkHelper
@@ -95,7 +98,7 @@ NEWPLATFORM_B='Small Birds'
 NEWTESTSUITE_A="A - First Level"
 NEWTESTSUITE_B="B - First Level"
 NEWTESTSUITE_AA="AA - Second Level"
-# NEWTESTCASE_AA="TESTCASE_AA"
+NEWTESTCASE_AA="TESTCASE_AA"
 NEWTESTCASE_B="TESTCASE_B"
 # myApiVersion='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
 # NEWBUILD_A='%s' % myApiVersion
@@ -145,36 +148,69 @@ print( "getTestCaseIDByName", response )
 newTestCaseID_B = response[0]['id'] 
 tc_b_full_ext_id = myTestLink.getTestCase(newTestCaseID_B)[0]['full_tc_external_id']
 print( "Test Case '%s' - id: %s - ext-id %s" % (NEWTESTCASE_B, newTestCaseID_B, tc_b_full_ext_id) )
+# get informationen - TestCase_AA
+response = myTestLink.getTestCaseIDByName(NEWTESTCASE_AA, testprojectname=NEWPROJECT)
+print( "getTestCaseIDByName", response )
+newTestCaseID_AA = response[0]['id'] 
+tc_aa_full_ext_id = myTestLink.getTestCase(newTestCaseID_AA)[0]['full_tc_external_id']
+print( "Test Case '%s' - id: %s - ext-id %s" % (NEWTESTCASE_AA, newTestCaseID_AA, tc_aa_full_ext_id) )
 
-# add keywords to TestCase B
-response = myTestLink.addTestCaseKeywords(tc_b_full_ext_id,
-                                        ['KeyWord01', 'KeyWord03', 'KeyWord02'])
+
+# add keywords to TestCase B and TestCase AA
+response = myTestLink.addTestCaseKeywords(
+                {tc_b_full_ext_id : ['KeyWord01', 'KeyWord03', 'KeyWord02'],
+                 tc_aa_full_ext_id : ['KeyWord01', 'KeyWord02', 'KeyWord03']})
 print( "addTestCaseKeywords", response )
-# remove keywords from TestCase B
-response = myTestLink.removeTestCaseKeywords(tc_b_full_ext_id, ['KeyWord02'])
+# remove keywords from TestCase B and TestCase AA
+response = myTestLink.removeTestCaseKeywords(
+                            {tc_b_full_ext_id : ['KeyWord02'],
+                             tc_aa_full_ext_id : ['KeyWord01', 'KeyWord03']})
 print( "removeTestCaseKeywords", response )
 
 
-# list test cases with assigned keywords
+# list test cases with assigned keywords B
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, True, 
                                                'full', getkeywords=True)
-print( "getTestCasesForTestSuite (deep=True)", response )
+print( "getTestCasesForTestSuite B (deep=True)", response )
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 
                                                'full', getkeywords=True)
-print( "getTestCasesForTestSuite (deep=False)", response )
+print( "getTestCasesForTestSuite B (deep=False)", response )
 
 # get informationen - TestCase_B again 
 newTestCase_B = myTestLink.getTestCase(testcaseid=newTestCaseID_B)[0]
-print( "getTestCase", newTestCase_B )
+print( "getTestCase B", newTestCase_B )
 
 # return keyword list for TestCase_B
 response =  myTestLink.listKeywordsForTC(newTestCaseID_B)
-print( "listKeywordsForTC", response )
+print( "listKeywordsForTC B", response )
 # return keyword lists for all test cases of test newTestSuite_B
 response =  myTestLink.listKeywordsForTS(newTestSuiteID_B)
-print( "listKeywordsForTS", response )
+print( "listKeywordsForTS B", response )
+
+# list test cases with assigned keywords AA
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A, True, 
+                                               'full', getkeywords=True)
+print( "getTestCasesForTestSuite A (deep=True)", response )
+response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A, False, 
+                                               'full', getkeywords=True)
+print( "getTestCasesForTestSuite A (deep=False)", response )
+
+# get informationen - TestCase_AA again 
+newTestCase_AA = myTestLink.getTestCase(testcaseid=newTestCaseID_AA)[0]
+print( "getTestCase AA", newTestCase_AA )
+
+# return keyword list for TestCase_AA
+response =  myTestLink.listKeywordsForTC(newTestCaseID_AA)
+print( "listKeywordsForTC AA", response )
+# return keyword lists for all test cases of test newTestSuite_A
+response =  myTestLink.listKeywordsForTS(newTestSuiteID_AA)
+print( "listKeywordsForTS AA", response )
+
+
 response = myTestLink.getTestCaseKeywords(testcaseid=newTestCaseID_B)
-print("getTestCaseKeywords", response)
+print("getTestCaseKeywords B", response)
+response = myTestLink.getTestCaseKeywords(testcaseid=newTestCaseID_AA)
+print("getTestCaseKeywords AA", response)
 
 # new execution result with custom field data
 # TC_B passed, explicit build and some notes , TC identified with internal id

@@ -355,23 +355,22 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
 
     # test might fail during Travis test, cause used TestLink demo application
     # represents  still a 1.9.13 dev state from 26/12/14
-    # the keyword add method are added later and will be changed with 1.9.14
+    # the keyword add method are added later and has changed with 1.9.14
     # the interface (see TL Mantis Task 6934)        
     @unittest.expectedFailure
     def test_addTestCaseKeywords_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
-            self.client.addTestCaseKeywords('TC-40000712', 
-                                            ['KeyWord01', 'KeyWord03']) 
+            self.client.addTestCaseKeywords({'TC-40000712' :  
+                                             ['KeyWord01', 'KeyWord03']}) 
 
     # test might fail during Travis test, cause used TestLink demo application
-    # represents  still a 1.9.13 dev state from 26/12/14
-    # the keyword remove method are added later and will be changed with 1.9.14
+    # represents still a 1.9.13 dev state from 26/12/14
+    # the keyword remove method are added later and has be changed with 1.9.14
     # the interface (see TL Mantis Task 6907)      
     @unittest.expectedFailure
     def test_removeTestCaseKeywords_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
-            self.client.removeTestCaseKeywords('TC-40000712', 
-                                            ['KeyWord01']) 
+            self.client.removeTestCaseKeywords({'TC-40000712' : ['KeyWord01']}) 
              
         
 if __name__ == "__main__":

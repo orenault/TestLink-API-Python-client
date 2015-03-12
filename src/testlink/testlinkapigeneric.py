@@ -1304,39 +1304,69 @@ TL version >= 1.9.11
 #    * addTestCaseKeywords
 #    * @param struct $args
 #    * @param string $args["devKey"]
-#    * @param string $args["testcaseexternalid"]
-#    * @param array $args["keywords"]: keywords
-#    * 
+#    * @param array array $args["keywords"]: map key testcaseexternalid
+#    *                                       values array of keyword name 
 #    * @return mixed $resultInfo
 #    *
+#    * call examples:
+#    * c$args=array();
+#    * c$args["devKey"]=isset($_REQUEST['apiKey']) ? $_REQUEST['apiKey'] : $devKey;
+#    * c$args["keywords"] = array('MAB-3' => array('Barbie','Barbie'),
+#                                 'MAB-2' => array('Barbie','Jessie'));
+#    *
 #    * @internal revisions
-#    * @since 1.9.13
+#    * @since 1.9.13, interface changed in 1.9.14
 #    */
 #   function addTestCaseKeywords($args)
 
     @decoApiCallAddDevKey
-    @decoMakerApiCallWithArgs(['testcaseexternalid', 'keywords'], [])
+    @decoMakerApiCallWithArgs(['keywords'], [])
     def addTestCaseKeywords(self):
-        """ adds a list of keywords to a given Test case  """
+        """ adds list of keywords to a set of test cases 
+        
+        expects as arg <keywords> a dictionary with 
+          <testcaseexternalid> as a key and <list of keywords> as value
+        
+        example:
+          {'TC-4711' : ['KeyWord02'], 'TC-4712' : ['KeyWord01', KeyWord03']}
+          
+          adds to test case 'TC-4711' the keyword 'KeyWord02'
+          adds to test case 'TC-4712' the keywords 'KeyWord01' + KeyWord03'
+          """
     
 #   /**
 #    * removeTestCaseKeywords
 #    * @param struct $args
 #    * @param string $args["devKey"]
-#    * @param string $args["testcaseexternalid"]
-#    * @param array $args["keywords"]: keywords
-#    * 
+#    * @param array array $args["keywords"]: map key testcaseexternalid
+#    *                                       values array of keyword name 
 #    * @return mixed $resultInfo
 #    *
+#    * call examples:
+#    * c$args=array();
+#    * c$args["devKey"]=isset($_REQUEST['apiKey']) ? $_REQUEST['apiKey'] : $devKey;
+#    * c$args["keywords"] = array('MAB-3' => array('Barbie','Barbie'),
+#                                 'MAB-2' => array('Barbie','Jessie'));
+#    *
 #    * @internal revisions
-#    * @since 1.9.13
+#    * @since 1.9.13, interface changed in 1.9.14
 #    */
 #   function removeTestCaseKeywords($args)
 
     @decoApiCallAddDevKey
-    @decoMakerApiCallWithArgs(['testcaseexternalid', 'keywords'], [])
+    @decoMakerApiCallWithArgs(['keywords'], [])
     def removeTestCaseKeywords(self):
-        """ removes a list of keywords from a given Test case  """
+        """ removes list of keywords from a set of test cases 
+        
+        expects as arg <keywords> a dictionary with 
+          <testcaseexternalid> as a key and <list of keywords> as value
+        
+        example:
+          {'TC-4711' : ['KeyWord02'], 'TC-4712' : ['KeyWord01', KeyWord03']}
+          
+          removes from test case 'TC-4711' the keyword 'KeyWord02'
+          removes from test case 'TC-4712' the keywords 'KeyWord01' + KeyWord03'
+         """
 
   
     #
