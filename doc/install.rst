@@ -110,6 +110,11 @@ with connection parameter as environment variables
 
 - TESTLINK_API_PYTHON_SERVER_URL and TESTLINK_API_PYTHON_DEVKEY 
 
+Known Installation Problems
+----------------------------
+
+If the installation for the combination **linux + py26** fails, maybe the workaround from  `issue 50`_ helps.
+
 
 
 .. _PyPI: https://pypi.python.org/pypi
@@ -118,3 +123,4 @@ with connection parameter as environment variables
 .. _GitHup Releases: https://github.com/lczub/TestLink-API-Python-client/releases
 .. _GitHup Master: https://github.com/lczub/TestLink-API-Python-client/archive/master.zip
 .. _virtualenv: http://www.virtualenv.org/en/latest/virtualenv.html
+.. _issue 50: https://github.com/lczub/TestLink-API-Python-client/issues/50
