@@ -227,7 +227,7 @@ TL version >= 1.9.11
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testcasename', 'testsuiteid', 'testprojectid', 
                                'authorlogin', 'summary', 'steps'], 
-                ['preconditions', 'importance', 'execution', 'order', 
+                ['preconditions', 'importance', 'executiontype', 'order', 
                  'internalid', 'checkduplicatedname', 'actiononduplicatedname'])
     def createTestCase(self):
         """ Create a test case

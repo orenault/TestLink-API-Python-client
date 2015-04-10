@@ -590,6 +590,10 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertIn('options=<options>', argsDescription)
         self.assertIn('getBugs', argsDescription)
 
+    def test_whatArgs_createTestCase(self):
+        argsDescription = self.api.whatArgs('createTestCase')
+        self.assertIn('executiontype=<executiontype>', argsDescription)
+        self.assertIn('executiontype, order', argsDescription)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
