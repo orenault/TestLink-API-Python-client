@@ -124,8 +124,8 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         """ createTestCase: Create a test case
         positional args: testcasename, testsuiteid, testprojectid, authorlogin,
                          summary
-        optional args : preconditions, importance, execution, order, internalid,
-                        checkduplicatedname, actiononduplicatedname
+        optional args : preconditions, importance, executiontype, order,
+                        internalid, checkduplicatedname, actiononduplicatedname
                         
         argument 'steps' will be set with values from .stepsList, 
         - when argsOptional does not include a 'steps' item
@@ -265,7 +265,7 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         externalArgNames.extend(optArgNames)
         externalTointernalNames = {'testcasename' : 'name', 
                 'testsuiteid' : 'testsuite_id', 'authorlogin' : 'author_login', 
-                'execution' : 'execution_type', 'order' : 'node_order'}
+                'executiontype' : 'execution_type', 'order' : 'node_order'}
         
         # extend origItems with some values needed in createTestCase 
         origArgItems['checkduplicatedname'] = 1 

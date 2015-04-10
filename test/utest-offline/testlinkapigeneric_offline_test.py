@@ -743,6 +743,11 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertIn('buildid=<buildid>', argsDescription)
         self.assertIn('platformid=<platformid>', argsDescription)
         self.assertIn('keywordid - keywords', argsDescription)
+        
+    def test_whatArgs_createTestCase(self):
+        argsDescription = self.api.whatArgs('createTestCase')
+        self.assertIn('executiontype=<executiontype>', argsDescription)
+        
                
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

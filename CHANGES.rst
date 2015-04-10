@@ -1,6 +1,13 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+Bugfixes TestLink-API-Python-client release v0.6.1
+------------------------------------------------------------
+
+whatArgs reports incorrect arg name for createTestCase - issue #51
+ 
+- wrong arg name <execution>, correct arg name <executiontype>
+
 TestLink-API-Python-client release notes v0.6.1 (Mar. 2015)  
 ------------------------------------------------------------
 support for TL 1.9.13 release  
