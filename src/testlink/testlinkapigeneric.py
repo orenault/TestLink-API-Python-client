@@ -1368,6 +1368,25 @@ TL version >= 1.9.11
           removes from test case 'TC-4712' the keywords 'KeyWord01' + KeyWord03'
          """
 
+#   /**
+#    *  Delete a test project and all related link to other items
+#    *
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["prefix"]
+#    *
+#    * @return mixed $resultInfo
+#    *         [status]  => true/false of success
+#    *         [message]  => optional message for error message string
+#    * @access public
+#    */
+#    public function deleteTestProject($args)
+
+    @decoApiCallAddDevKey
+    @decoMakerApiCallWithArgs(['prefix'], [])
+    def deleteTestProject(self):
+        """ Delete a test project and all related link to other items  """ 
+        
   
     #
     #  internal methods for general server calls

@@ -1,6 +1,37 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+TestLink-API-Python-client v0.6.2 - Under Develop 
+------------------------------------------------------------
+support for future TL 1.9.14 release
+
+implement 1.9.14 new api interfaces - #53
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api methods
+
+- deleteTestProject - UNDER CONSTRUCTION
+
+implement 1.9.14 changed api interfaces - #48 #49
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+changed TestlinkAPIGeneric and TestlinkAPIClient api methods
+ 
+- addTestCaseKeywords() and removeTestCaseKeywords() are adapted to work with a set of keywords.
+
+- getTestCaseKeywords() is adapted to work with a set of test cases ids.
+
+examples:
+
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tls.addTestCaseKeywords( {TCa_exID : ['KW01', 'KW03', 'KW02'], 
+ >>>                           TCb_exID : ['KW01', 'KW02', 'KW04']})
+ >>> tls.removeTestCaseKeywords( {TCa_exID : ['KW02'], 
+ >>>                              TCb_exID : ['KW01', 'KW04']})  
+ >>> tls.getTestCaseKeywords( testcaseid=[TCa_ID, TCb_ID] )  
+ >>> tls.getTestCaseKeywords( testcaseexternalid=[TCa_exID, TCb_exID] )  
+ 
+
 Bugfixes TestLink-API-Python-client release v0.6.1
 ------------------------------------------------------------
 

@@ -392,13 +392,21 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.getProjectKeywords(40000711) 
 
     def test_getTestCaseKeywords_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '5000.*40000712'):
+        with self.assertRaisesRegex(TLResponseError, '5040.*40000712'):
             self.client.getTestCaseKeywords(testcaseid=40000712) 
 
-    def test_getTestCaseKeywords_unknownID_external(self):
+    def test_getTestCaseKeywords_unknownID_set(self):
+        with self.assertRaisesRegex(TLResponseError, '5040.*40000712'):
+            self.client.getTestCaseKeywords(testcaseid=[40000712, 40000713]) 
+
+    def test_getTestCaseKeywords_unknownID_external_single(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
             self.client.getTestCaseKeywords(testcaseexternalid='TC-40000712')
             
+    def test_getTestCaseKeywords_unknownID_external_set(self):
+        with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
+            self.client.getTestCaseKeywords(testcaseexternalid=['TC-40000712', 'TC-40000713'])
+
     def test_deleteTestPlan_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
             self.client.deleteTestPlan(40000711) 
@@ -421,6 +429,15 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_removeTestCaseKeywords_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
             self.client.removeTestCaseKeywords({'TC-40000712' : ['KeyWord01']}) 
+
+    # test might fail during Travis test, cause used TestLink demo application
+    # represents still a 1.9.13 dev state from 26/12/14
+    # the project delete method are added later during 1.9.14 dev
+    # the interface (see TL Mantis Task 7019)      
+    @unittest.expectedFailure
+    def test_deleteTestProject_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7013.*TProjectPrefix'):
+            self.client.deleteTestProject('TProjectPrefix') 
                                  
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
