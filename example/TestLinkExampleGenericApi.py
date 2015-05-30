@@ -71,14 +71,13 @@ tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI.
 => Create a new Project with the following structure:''')
 myTestLink = tl_helper.connect(TestlinkAPIGeneric) 
 
-projNr=len(myTestLink.getProjects())+1
+myPyVersion = python_version()
+myPyVersionShort = myPyVersion.replace('.', '')[:2]
 
-NEWPROJECT="PROJECT_API_GENERIC-%i" % projNr
-NEWPREFIX="GPROAPI%i" % projNr
 NEWTESTPLAN_A="TestPlan_API_GENERIC A"
 NEWTESTPLAN_B="TestPlan_API_GENERIC B"
 NEWTESTPLAN_C="TestPlan_API_GENERIC C - DeleteTest"
-NEWPLATFORM_A='Big Bird %i' % projNr
+NEWPLATFORM_A='Big Bird %s' % myPyVersionShort
 NEWPLATFORM_B='Small Bird'
 NEWPLATFORM_C='Ugly Bird'
 NEWTESTSUITE_A="A - First Level"
@@ -97,6 +96,10 @@ NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
 # Servers TestLink Version
 myTLVersion = myTestLink.testLinkVersion()
+myTLVersionShort = myTLVersion.replace('.', '')
+
+NEWPROJECT="PROJECT_API_GENERIC-%s" % myPyVersionShort
+NEWPREFIX="GPROAPI%s" % myPyVersionShort
 
 # used connection settings
 print(myTestLink.connectionInfo())
@@ -135,9 +138,16 @@ for project in myTestLink.getProjects():
     print("Name: %(name)s ID: %(id)s " % project)
 print("")
 
+# Delete the project, if it already exists
+try:
+    response = myTestLink.deleteTestProject(NEWPREFIX)
+    print("deleteTestProject", response)
+except TLResponseError:
+    print("No project with prefix %s exists" % NEWPREFIX)
+
 # Creates the project
 projInfo = 'Example created with Python %s API class %s in TL %s' % \
-            ( python_version(), myApiVersion, myTLVersion )
+            ( myPyVersion, myApiVersion, myTLVersion )
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX, 
     notes=projInfo, active=1, public=1,
     options={'requirementsEnabled' : 1, 'testPriorityEnabled' : 1, 

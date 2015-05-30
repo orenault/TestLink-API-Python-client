@@ -10,7 +10,11 @@ implement 1.9.14 new api interfaces - #53
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
-- deleteTestProject - UNDER CONSTRUCTION
+- deleteTestProject(<testprojectprefix>) 
+
+examples `<example/TestLinkExample.py>`_  and 
+`<example/TestLinkExampleGenericApi.py>`_ now deletes the example project, if it
+already exist.
 
 implement 1.9.14 changed api interfaces - #48 #49
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

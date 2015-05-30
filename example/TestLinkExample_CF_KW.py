@@ -25,19 +25,19 @@ This example requires a special existing project with special custom fields
 assigned
 
 a) run example TestLinkExample.py
-   - this creates a project like NEW_PROJECT_API-7
+   - this creates a project like NEW_PROJECT_API-34
    if some additional project are created since running that example, adapt 
    variable projNr in this script your are reading currently 
 b) load custom field definitions customFields_ExampleDefs.xml
    TL - Desktop - System - Define Custom Fields - Import
-c) assign custom fields to project NEW_PROJECT_API-7
+c) assign custom fields to project NEW_PROJECT_API-34
    TL - Desktop - Test Project - Assign Custom Fields
 d) load keyword definitions keywords_ExampleDefs.xml
    TL - Desktop - Test Project - Keyword Management
    
 Script works with:
 
-TestProject NEW_PROJECT_API-7
+TestProject NEW_PROJECT_API-34
 - TestSuite B - First Level
   - TestCase TESTCASE_B
 - TestPlan TestPlan_API_GENERIC A (Platform Small Bird)
@@ -85,11 +85,11 @@ tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI for CustomFields
 => requires an existing project NEW_PROJECT_API-*''')
 myTestLink = tl_helper.connect(TestlinkAPIClient) 
 
-#projNr=len(myTestLink.getProjects())+1
-projNr=len(myTestLink.getProjects())
+myPyVersion = python_version()
+myPyVersionShort = myPyVersion.replace('.', '')[:2]
 
-NEWPROJECT="NEW_PROJECT_API-%i" % projNr
-NEWPREFIX="NPROAPI%i" % projNr
+NEWPROJECT="NEW_PROJECT_API-%s" % myPyVersionShort
+NEWPREFIX="NPROAPI%s" % myPyVersionShort
 NEWTESTPLAN_A="TestPlan_API A"
 # NEWTESTPLAN_B="TestPlan_API B"
 # NEWPLATFORM_A='Big Bird %i' % projNr

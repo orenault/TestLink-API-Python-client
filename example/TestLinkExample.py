@@ -82,14 +82,13 @@ tl_helper.setParamsFromArgs('''Shows how to use the TestLinkAPI.
 => Create a new Project with the following structure:''')
 myTestLink = tl_helper.connect(TestlinkAPIClient) 
 
-projNr=len(myTestLink.getProjects())+1
+myPyVersion = python_version()
+myPyVersionShort = myPyVersion.replace('.', '')[:2]
 
-NEWPROJECT="NEW_PROJECT_API-%i" % projNr
-NEWPREFIX="NPROAPI%i" % projNr
 NEWTESTPLAN_A="TestPlan_API A"
 NEWTESTPLAN_B="TestPlan_API B"
 NEWTESTPLAN_C="TestPlan_API C - DeleteTest"
-NEWPLATFORM_A='Big Birds %i' % projNr
+NEWPLATFORM_A='Big Birds %s' % myPyVersionShort
 NEWPLATFORM_B='Small Birds'
 NEWPLATFORM_C='Ugly Birds'
 NEWTESTSUITE_A="A - First Level"
@@ -108,6 +107,10 @@ NEWATTACHMENT_PNG=os.path.join(this_file_dirname, 'PyGreat.png')
 
 # Servers TestLink Version
 myTLVersion = myTestLink.testLinkVersion()
+myTLVersionShort = myTLVersion.replace('.', '')
+
+NEWPROJECT="NEW_PROJECT_API-%s" % myPyVersionShort
+NEWPREFIX="NPROAPI%s" % myPyVersionShort
 
 # used connection settings
 print(myTestLink.connectionInfo())
@@ -128,11 +131,6 @@ print("getUserByID   ", response)
 print(myTestLink.whatArgs('assignTestCaseExecutionTask'))
 
 
-# -- Start CHANGE v0.4.5 -- 
-# if myTestLink.checkDevKey() != True:
-#     print "Error with the devKey."      
-#     sys.exit(-1)
-
 # example handling Response Error Codes
 # first check an invalid devKey and than the own one
 try:
@@ -145,27 +143,20 @@ except TLResponseError as tl_err:
     else:
         # seems to be another response failure - we forward it 
         raise   
-# -- END CHANGE v0.4.5 -- 
-            
 
 print("Number of Projects in TestLink: %s " % (myTestLink.countProjects()))
 print("")
 myTestLink.listProjects()
 print("")
 
-# Creates the project
+# Delete the project, if it already exists
+try:
+    response = myTestLink.deleteTestProject(NEWPREFIX)
+    print("deleteTestProject", response)
+except TLResponseError:
+    print("No project with prefix %s exists" % NEWPREFIX)
 
-# -- Start CHANGE v0.4.5 -- 
-# newProject = myTestLink.createTestProject(NEWPROJECT, "NPROAPI",
-# "notes=This is a Project created with the API", "active=1", "public=1",
-# "options=requirementsEnabled:0,testPriorityEnabled:1,automationEnabled:1,inventoryEnabled:0")
-# isOk = newProject[0]['message']
-# if isOk=="Success!":
-#   newProjectID = newProject[0]['id'] 
-#   print "New Project '%s' - id: %s" % (NEWPROJECT,newProjectID)
-# else:
-#   print "Error creating the project '%s': %s " % (NEWPROJECT,isOk)
-#   sys.exit(-1)
+# Creates the project
 projInfo = 'Example created with Python %s API class %s in TL %s' % \
             ( python_version(), myApiVersion, myTLVersion )
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX,
@@ -175,19 +166,8 @@ newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX,
 print("createTestProject", newProject)
 newProjectID = newProject[0]['id']
 print("New Project '%s' - id: %s" % (NEWPROJECT,newProjectID))
-# -- END CHANGE v0.4.5 -- 
 
 # Creates the test plan
-# -- Start CHANGE v0.4.5 -- 
-# newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN_A, NEWPROJECT,
-#             "notes=New TestPlan created with the API","active=1", "public=1")    
-# isOk = newTestPlan[0]['message']
-# if isOk=="Success!":
-#   newTestPlanID_A = newTestPlan[0]['id'] 
-#   print "New Test Plan '%s' - id: %s" % (NEWTESTPLAN_A,newTestPlanID_A)
-# else:
-#   print "Error creating the Test Plan '%s': %s " % (NEWTESTPLAN_A, isOk)
-#   sys.exit(-1)
 newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN_A, NEWPROJECT,
             notes='New TestPlan created with the API',active=1, public=1)    
 print("createTestPlan", newTestPlan)
@@ -201,9 +181,7 @@ newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN_B, NEWPROJECT,
 print("createTestPlan", newTestPlan)
 newTestPlanID_B = newTestPlan[0]['id'] 
 print("New Test Plan '%s' - id: %s" % (NEWTESTPLAN_B,newTestPlanID_B))
-# -- END CHANGE v0.4.5 -- 
 
-# -- Start NEW v0.4.6 -- 
 # Create platform 'Big Birds x' 
 newPlatForm = myTestLink.createPlatform(NEWPROJECT, NEWPLATFORM_A, 
         notes='Platform for Big Birds, unique name, only used in this project')
@@ -230,59 +208,29 @@ newPlatFormID_C = newPlatForm['id']
 # Add Platform  'Ugly Bird' to platform 
 response = myTestLink.addPlatformToTestPlan(newTestPlanID_A, NEWPLATFORM_C) 
 print("addPlatformToTestPlan", response)
-# -- End NEW v0.4.6 -- 
 
 #Creates the test Suite A      
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_A,
             "Details of the Test Suite A")  
-# -- Start CHANGE v0.4.5 -- 
-# isOk = newTestSuite[0]['message']
-# if isOk=="ok":
-#   newTestSuiteID = newTestSuite[0]['id'] 
-#   print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, newTestSuiteID)
-# else:
-#   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_A, isOk)
-#   sys.exit(-1)
 print("createTestSuite", newTestSuite)
 newTestSuiteID_A = newTestSuite[0]['id']
 print("New Test Suite '%s' - id: %s" % (NEWTESTSUITE_A, newTestSuiteID_A))
-# -- END CHANGE v0.4.5 -- 
 
 FirstLevelID = newTestSuiteID_A
  
 #Creates the test Suite B      
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_B,
             "Details of the Test Suite B")               
-# -- Start CHANGE v0.4.5 -- 
-# isOk = newTestSuite[0]['message']
-# if isOk=="ok":
-#   TestSuiteID_B = newTestSuite[0]['id'] 
-#   print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, TestSuiteID_B)
-# else:
-#   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_B, isOk)
-#   sys.exit(-1)
 print("createTestSuite", newTestSuite)
 newTestSuiteID_B = newTestSuite[0]['id']
 print("New Test Suite '%s' - id: %s" % (NEWTESTSUITE_B, newTestSuiteID_B))
-# -- END CHANGE v0.4.5 -- 
 
 #Creates the test Suite AA       
-# -- Start CHANGE v0.4.5 -- 
-# newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
-#             "Details of the Test Suite AA","parentid="+FirstLevelID)               
-# isOk = newTestSuite[0]['message']
-# if isOk=="ok":
-#   TestSuiteID_AA = newTestSuite[0]['id'] 
-#   print "New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, TestSuiteID_AA)
-# else:
-#   print "Error creating the Test Suite '%s': %s " % (NEWTESTSUITE_AA, isOk)
-#   sys.exit(-1)
 newTestSuite = myTestLink.createTestSuite(newProjectID, NEWTESTSUITE_AA,
             "Details of the Test Suite AA",parentid=FirstLevelID)               
 print("createTestSuite", newTestSuite)
 newTestSuiteID_AA = newTestSuite[0]['id']
 print("New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, newTestSuiteID_AA))
-# -- END CHANGE v0.4.5 -- 
 
 MANUAL = 1
 AUTOMATED = 2
@@ -296,24 +244,12 @@ myTestLink.appendStep("Step action 5", "Step result 5", MANUAL)
 myTestLink.appendStep("Dummy step for delete tests", 
                       "should be delete with deleteTestCaseSteps", MANUAL)
      
-# -- Start CHANGE v0.4.5 -- 
-# newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, TestSuiteID_AA, 
-#           newProjectID, "admin", "This is the summary of the Test Case AA", 
-#           "preconditions=these are the preconditions")                 
-# isOk = newTestCase[0]['message']
-# if isOk=="Success!":
-#   newTestCaseID_AA = newTestCase[0]['id'] 
-#   print "New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA)
-# else:
-#   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_AA, isOk)
-#   sys.exit(-1)
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, newTestSuiteID_AA, 
           newProjectID, myTestUserName, "This is the summary of the Test Case AA", 
           preconditions='these are the preconditions')
 print("createTestCase", newTestCase)
 newTestCaseID_AA = newTestCase[0]['id']
 print("New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA))              
-# -- END CHANGE v0.4.5 -- 
 
 #Creates the test case TC_B  
 myTestLink.initStep("Step action 1", "Step result 1", AUTOMATED)
@@ -322,27 +258,12 @@ myTestLink.appendStep("Step action 3", "Step result 3", AUTOMATED)
 myTestLink.appendStep("Step action 4", "Step result 4", AUTOMATED)
 myTestLink.appendStep("Step action 5", "Step result 5", AUTOMATED)
      
-# -- Start CHANGE v0.4.5 -- 
-# newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, TestSuiteID_B, 
-#           newProjectID, "admin", "This is the summary of the Test Case B", 
-#           "preconditions=these are the preconditions", 
-#           "executiontype=%i" % AUTOMATED)               
-# isOk = newTestCase[0]['message']
-# if isOk=="Success!":
-#   newTestCaseID_B = newTestCase[0]['id'] 
-#   print "New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B)
-# else:
-#   print "Error creating the Test Case '%s': %s " % (NEWTESTCASE_B, isOk)
-#   sys.exit(-1)
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, newTestSuiteID_B, 
           newProjectID, myTestUserName, "This is the summary of the Test Case B", 
           preconditions='these are the preconditions', executiontype=AUTOMATED)
 print("createTestCase", newTestCase)
 newTestCaseID_B = newTestCase[0]['id']
 print("New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B))               
-# -- END CHANGE v0.4.5 -- 
-  
-# -- New Examples with v0.4.5 or later -- 
   
 # Add  test cases to test plan - we need the full external id !
 # for every test case version 1 is used
