@@ -31,6 +31,13 @@ examples:
  >>> tls.getTestCaseKeywords( testcaseid=[TCa_ID, TCb_ID] )  
  >>> tls.getTestCaseKeywords( testcaseexternalid=[TCa_exID, TCb_exID] )  
  
+Attention:
+the api getTestCaseKeywords() returns for the situation **invalid test case id**
+a different error code
+
+- 1.9.13 error code *5000* - 1.9.14 error code *5040*
+
+ 
 
 Bugfixes TestLink-API-Python-client release v0.6.1
 ------------------------------------------------------------
