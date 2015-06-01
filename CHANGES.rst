@@ -41,14 +41,18 @@ a different error code
 
 - 1.9.13 error code *5000* - 1.9.14 error code *5040*
 
- 
+Bugfixes TestLink-API-Python-client v0.6.1 - #51 #55
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Bugfixes TestLink-API-Python-client release v0.6.1
-------------------------------------------------------------
-
-whatArgs reports incorrect arg name for createTestCase - issue #51
+whatArgs reports incorrect arg name for createTestCase
  
 - wrong arg name <execution>, correct arg name <executiontype>
+
+TestlinkAPIClient service method countProjects() raise 'Empty Response!' error, 
+when no project exist
+
+- general problem of all 'count*' service methods
+- api method 'getProjects()' now returns an empty list when no projects exists
 
 TestLink-API-Python-client release notes v0.6.1 (Mar. 2015)  
 ------------------------------------------------------------

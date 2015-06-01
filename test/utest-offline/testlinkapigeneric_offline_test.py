@@ -197,6 +197,9 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                                             } 
                      }
 
+# scenario_no_project simulates a fresh empty test link application
+SCENARIO_NO_PROJECT = {'getProjects' : [] }
+
 # example text file attachment = this python file
 # why not using os.path.realpath(__file__)
 # -> cause __file__ could be compiled python file *.pyc, if the test run is 
@@ -747,6 +750,13 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     def test_whatArgs_createTestCase(self):
         argsDescription = self.api.whatArgs('createTestCase')
         self.assertIn('executiontype=<executiontype>', argsDescription)
+
+    def test_getProjects_noProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
+        response = self.api.getProjects()
+        self.assertEqual([], response)
+        self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
+        
         
                
 if __name__ == "__main__":

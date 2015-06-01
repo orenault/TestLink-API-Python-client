@@ -259,6 +259,8 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                                                     'testsuite_id': 'deepFalse3', 'testcase_id': '8169', 'name': 'TESTCASE_B3'}] }
                      }
 
+# scenario_no_project simulates a fresh empty test link application
+SCENARIO_NO_PROJECT = {'getProjects' : [] }
 
 class DummyAPIClient(TestlinkAPIClient):
     """ Dummy for Simulation TestLinkAPICLient. 
@@ -331,14 +333,29 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countProjects()
         self.assertEqual(2, response)
+        
+    def test_countProjects_NoProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
+        response = self.api.countProjects()
+        self.assertEqual(0, response)
 
     def test_countTestPlans(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countTestPlans()
         self.assertEqual(2, response)
 
+    def test_countTestPlans_NoProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
+        response = self.api.countTestPlans()
+        self.assertEqual(0, response)
+
     def test_countTestSuites(self):
         self.api.loadScenario(SCENARIO_A)
+        response = self.api.countTestSuites()
+        self.assertEqual(0, response)
+
+    def test_countTestSuites_NoProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
         response = self.api.countTestSuites()
         self.assertEqual(0, response)
 
@@ -347,8 +364,18 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         response = self.api.countTestCasesTP()
         self.assertEqual(0, response)
 
+    def test_countTestCasesTP_NoProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
+        response = self.api.countTestCasesTP()
+        self.assertEqual(0, response)
+
     def test_countTestCasesTS(self):
         self.api.loadScenario(SCENARIO_A)
+        response = self.api.countTestCasesTS()
+        self.assertEqual(0, response)
+
+    def test_countTestCasesTS_NoProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
         response = self.api.countTestCasesTS()
         self.assertEqual(0, response)
 
@@ -356,11 +383,22 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countPlatforms()
         self.assertEqual(2, response)
+        
+    def test_countPlatforms_NoProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
+        response = self.api.countPlatforms()
+        self.assertEqual(0, response)
 
     def test_countBuilds(self):
         self.api.loadScenario(SCENARIO_A)
         response = self.api.countBuilds()
         self.assertEqual(0, response)
+        
+    def test_countBuilds_NoProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
+        response = self.api.countBuilds()
+        self.assertEqual(0, response)
+
 
 #    def test_listProjects(self):
 #        self.api.loadScenario(SCENARIO_A)
@@ -374,6 +412,12 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertEqual('21', response)
         response = self.api.getProjectIDByName('UNKNOWN_PROJECT')
         self.assertEqual(-1, response)
+        
+    def test_getProjectIDByName_NoProject(self):
+        self.api.loadScenario(SCENARIO_NO_PROJECT)
+        response = self.api.getProjectIDByName('UNKNOWN_PROJECT')
+        self.assertEqual(-1, response)
+        
 
     def test_initStep(self):
         self.api.initStep("action A", "result A", 0)

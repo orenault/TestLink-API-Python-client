@@ -151,11 +151,14 @@ TL version >= 1.9.11
                               ['buildnotes'])
     def createBuild(self):
         """ Creates a new build for a specific test plan """
-
+        
+    @decoMakerApiCallReplaceTLResponseError() 
     @decoApiCallAddDevKey            
     @decoMakerApiCallWithArgs()
     def getProjects(self):
-        """ Gets a list of all projects """
+        """ Gets a list of all projects   
+        
+        returns an empty list, if no test project exist """
 
     @decoMakerApiCallReplaceTLResponseError()            
     @decoApiCallAddDevKey
