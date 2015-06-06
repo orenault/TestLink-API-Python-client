@@ -269,8 +269,8 @@ class DummyAPIClient(TestlinkAPIClient):
 
     __slots__ = ['scenario_data', 'callArgs']
 
-    def __init__(self, server_url, devKey):
-        super(DummyAPIClient, self).__init__(server_url, devKey)
+    def __init__(self, server_url, devKey, **args):
+        super(DummyAPIClient, self).__init__(server_url, devKey, **args)
         self.scenario_data = {}
         self.callArgs = None
 
@@ -638,6 +638,12 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         argsDescription = self.api.whatArgs('createTestCase')
         self.assertIn('executiontype=<executiontype>', argsDescription)
         self.assertIn('executiontype, order', argsDescription)
+
+    def test_connect_with_proxy(self):
+        """ create a TestLink API dummy with ProxiedTransport"""
+        self.api = DummyAPIClient('http://SERVER-URL-71', 'DEVKEY-71', 
+                                   transport='PROXY-71')
+        self.assertEqual('PROXY-71', self.api.server.__call__('transport'))        
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

@@ -217,8 +217,8 @@ class DummyAPIGeneric(TestlinkAPIGeneric):
 
     __slots__ = ['scenario_data', 'callArgs']
   
-    def __init__(self, server_url, devKey):
-        super(DummyAPIGeneric, self).__init__(server_url, devKey)
+    def __init__(self, server_url, devKey, **args):
+        super(DummyAPIGeneric, self).__init__(server_url, devKey, **args)
         self._positionalArgNames['DummyMethod'] = ['Uno', 'due', 'tre']
         self.scenario_data = {}
         self.callArgs = None
@@ -757,7 +757,11 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertEqual([], response)
         self.assertEqual(self.api.devKey, self.api.callArgs['devKey'])
         
-        
+    def test_connect_with_proxy(self):
+        """ create a TestLink Generic API dummy with ProxiedTransport"""
+        self.api = DummyAPIGeneric('http://SERVER-URL-71', 'DEVKEY-71', 
+                                   transport='PROXY-71')
+        self.assertEqual('PROXY-71', self.api.server.__call__('transport'))        
                
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

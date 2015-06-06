@@ -45,13 +45,14 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
     __slots__ = ['stepsList']
     __author__ = 'Luiko Czub, Olivier Renault, James Stock, TestLink-API-Python-client developers'
     
-    def __init__(self, server_url, devKey):
+    def __init__(self, server_url, devKey, **kwargs):
         """ call super for init generell slots, init sepcial slots for teststeps
-            and define special positional arg settings """ 
-        super(TestlinkAPIClient, self).__init__(server_url, devKey, 
-                                                allow_none=1)
+            and define special positional arg settings """
+            
+        kwargs['allow_none'] = True
+        super(TestlinkAPIClient, self).__init__(server_url, devKey, **kwargs)
         # allow_none is an argument from xmlrpclib.Server()
-        # with set to True, it is possible to set postional args to None, so 
+        # with set to True, it is possible to set positional args to None, so 
         # alternative optional arguments could be set
         # example - testcaseid is set : 
         # reportTCResult(None, newTestPlanID, None, 'f', '', guess=True,

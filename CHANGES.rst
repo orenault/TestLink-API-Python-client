@@ -41,7 +41,7 @@ a different error code
 
 - 1.9.13 error code *5000* - 1.9.14 error code *5040*
 
-Bugfixes TestLink-API-Python-client v0.6.1 - #51 #55
+Bugfixes TestLink-API-Python-client v0.6.1 - #51 #55 #56
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 whatArgs reports incorrect arg name for createTestCase
@@ -53,6 +53,11 @@ when no project exist
 
 - general problem of all 'count*' service methods
 - api method 'getProjects()' now returns an empty list when no projects exists
+
+TestlinkAPIClient does not accept optional argument 'transport' for proxy 
+configuration 
+
+- _TestlinkAPIClient_ accepts now like _TestlinkAPIGeneric_ optional arguments
 
 TestLink-API-Python-client release notes v0.6.1 (Mar. 2015)  
 ------------------------------------------------------------

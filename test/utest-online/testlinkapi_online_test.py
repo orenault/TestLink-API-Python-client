@@ -105,6 +105,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
             self.client.getLatestBuildForTestPlan(40000711)
         
+    # test might fail during Travis test, cause used TestLink demo application
+    # returns since 05/2015 invalid XML response for getProjects
+    # see comments https://github.com/lczub/TestLink-API-Python-client/issues/55
+    @unittest.expectedFailure
     def test_getProjects(self):
         response = self.client.getProjects()
         self.assertIsNotNone(response)
@@ -206,6 +210,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.uploadExecutionAttachment(attachemantFile, 40000712, 
                         'title 40000713', 'descr. 40000714')
 
+    # test might fail during Travis test, cause used TestLink demo application
+    # returns since 05/2015 invalid XML response for getProjects
+    # see comments https://github.com/lczub/TestLink-API-Python-client/issues/55
+    @unittest.expectedFailure
     def test_getProjectIDByName_unknownID(self):
         response = self.client.getProjectIDByName('project 40000711')
         self.assertEqual(-1, response)
