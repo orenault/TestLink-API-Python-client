@@ -22,9 +22,11 @@
 
 import sys, os.path
 
+IS_PY26 = False
 if sys.version_info[0] == 2 and sys.version_info[1] == 6:
     # py26 needs backport unittest2
     import unittest2 as unittest
+    IS_PY26 = True
 else:
     import unittest
     
@@ -761,7 +763,12 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         """ create a TestLink Generic API dummy with ProxiedTransport"""
         self.api = DummyAPIGeneric('http://SERVER-URL-71', 'DEVKEY-71', 
                                    transport='PROXY-71')
-        self.assertEqual('PROXY-71', self.api.server.__call__('transport'))        
+        if not IS_PY26:
+            # Py 26 does not define a __call__ method and getattr is overriden
+            # to created a request and return the response
+            # -> so no access to attribute __transport with Py26
+            self.assertEqual('PROXY-71', self.api.server.__call__('transport'))
+                    
                
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
