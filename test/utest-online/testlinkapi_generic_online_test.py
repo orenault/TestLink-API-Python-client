@@ -94,10 +94,6 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.createTestProject(testprojectname='', 
                                                  testcaseprefix='P40000711')
  
-    # test might fail during Travis test, cause used TestLink demo application
-    # returns since 05/2015 invalid XML response for getProjects
-    # see comments https://github.com/lczub/TestLink-API-Python-client/issues/55
-    @unittest.expectedFailure
     def test_getProjects(self):
         response = self.client.getProjects()
         self.assertIsNotNone(response)

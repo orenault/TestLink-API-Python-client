@@ -187,3 +187,20 @@ Under Py26, unittest2_ must be used.
  
 .. _unittest2: https://pypi.python.org/pypi/unittest2
 
+
+How to check original exchange XML data  
+------------------------------------------
+
+If for debugging reasons the original exchanged XML data are needed, initialise
+the API client with the optional argument *verbose* set to *True*: ::
+
+ >>> tlh = testlink.TestLinkHelper()
+ >>> tls = testlink.TestlinkAPIClient(tlh._server_url, tl._devkey, verbose=True))
+  send: b"POST /testlink/lib/api/xmlrpc/v1/xmlrpc.php HTTP/1.1\r\nHost: ... 
+        <?xml version='1.0'?>\n<methodCall>\n<methodName>tl.getUserByLogin</methodName>\n<params>...</params>\n</methodCall>\n"
+  reply: 'HTTP/1.1 200 OK\r\n'
+  header: Date header: Server header: ... body: b'<?xml version="1.0"?>\n<methodResponse>\n  <params> ...'
+  body: b'</name><value><string>1</string></value></member>\n</struct></value>\n  <value><struct>\n ...'
+  body: b'...  </params>\n</methodResponse>\n'
+
+
