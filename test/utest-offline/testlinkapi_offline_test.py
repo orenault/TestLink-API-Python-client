@@ -651,6 +651,11 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
             # -> so no access to attribute __transport with Py26
             self.assertEqual('PROXY-71', self.api.server.__call__('transport'))        
 
+    def test_whatArgs_createTestPlan(self):
+        argsDescription = self.api.whatArgs('createTestPlan')
+        self.assertIn('prefix=<prefix>', argsDescription)
+        self.assertIn('testprojectname=<testprojectname>', argsDescription)
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

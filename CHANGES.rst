@@ -16,7 +16,7 @@ examples `<example/TestLinkExample.py>`_  and
 `<example/TestLinkExampleGenericApi.py>`_ now deletes the example project, if it
 already exist.
 
-implement 1.9.14 changed api interfaces - #48 #49
+implement 1.9.14 changed api interfaces - #48 #49 #54
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 changed TestlinkAPIGeneric and TestlinkAPIClient api methods
@@ -24,6 +24,8 @@ changed TestlinkAPIGeneric and TestlinkAPIClient api methods
 - addTestCaseKeywords() and removeTestCaseKeywords() are adapted to work with a set of keywords.
 
 - getTestCaseKeywords() is adapted to work with a set of test cases ids.
+
+- createTestPlan is adapted to work with new optional argument 'prefix'
 
 examples:
 
@@ -34,6 +36,9 @@ examples:
  >>>                              TCb_exID : ['KW01', 'KW04']})  
  >>> tls.getTestCaseKeywords( testcaseid=[TCa_ID, TCb_ID] )  
  >>> tls.getTestCaseKeywords( testcaseexternalid=[TCa_exID, TCb_exID] )  
+ >>> tls.createTestPlan('aTPlanName', 'aTProjectName')
+ >>> tls.createTestPlan('aTPlanName', testprojectname='aTProjectName')
+ >>> tls.createTestPlan('aTPlanName', prefix='aTProjectPrefix')  
  
 Attention:
 the api getTestCaseKeywords() returns for the situation **invalid test case id**

@@ -38,7 +38,8 @@ from .testlinkhelper import TestLinkHelper, VERSION
 from .testlinkargs import getMethodsWithPositionalArgs, getArgsForMethod
 from .testlinkdecorators import decoApiCallAddAttachment,\
 decoApiCallAddDevKey, decoApiCallWithoutArgs, \
-decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs 
+decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs, \
+decoMakerApiCallChangePosToOptArg
 
 
 class TestlinkAPIGeneric(object): 
@@ -448,11 +449,24 @@ TL version >= 1.9.11
         otherwise TL (<=1.9.8) returns 
         <ProtocolError for xmlrpc.php: 500 Internal Server Error>"""
 
+    @decoMakerApiCallChangePosToOptArg(2,'testprojectname')
     @decoApiCallAddDevKey               
-    @decoMakerApiCallWithArgs(['testplanname', 'testprojectname'], 
-                              ['note', 'active', 'public'])
+    @decoMakerApiCallWithArgs(['testplanname'], 
+                    ['testprojectname', 'prefix', 'note', 'active', 'public'])
     def createTestPlan(self):
-        """ create a test plan """
+        """ create a test plan 
+                
+            args variations: testprojectname - prefix
+                
+            supports also pre 1.9.14 arg definition, where 'testprojectname'
+            was mandatory ('prefix' comes as alternative with 1.9.14)
+            
+            examples:
+            - createTestPlan('aTPlanName', 'aTProjectName')
+            - createTestPlan('aTPlanName', testprojectname='aTProjectName')
+            - createTestPlan('aTPlanName', prefix='aTProjectPrefix')
+
+        """
 
 
     @decoApiCallAddDevKey               

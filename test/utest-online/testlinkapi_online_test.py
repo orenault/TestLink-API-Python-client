@@ -182,7 +182,7 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
             self.client.createBuild(40000711, 'Build 40000712', 'note 40000713')
 
-    def test_createTestPlan_unknownID(self):
+    def test_createTestPlan_projectname_posArg_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '7011.*40000712'):
             self.client.createTestPlan('plan 40000711', 'project 40000712')
 
@@ -401,6 +401,22 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     def test_deleteTestProject_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '7013.*TProjectPrefix'):
             self.client.deleteTestProject('TProjectPrefix') 
+
+    def test_createTestPlan_projectname_optArg_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7011.*40000712'):
+            self.client.createTestPlan('plan 40000711', 
+                                       testprojectname='project 40000712')
+
+    # test might fail during Travis test, cause used TestLink demo application
+    # represents still a 1.9.13 dev state from 26/12/14
+    # the optional arg 'prefix' are added later during 1.9.14 dev
+    # (see TL Mantis Task 7020) 
+    # and returns also not the expected error code (see TL Mantis 7156)     
+    @unittest.expectedFailure
+    def test_createTestPlan_prefix_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7013.*TProjectPrefix'):
+            self.client.createTestPlan('plan 40000713', 
+                                       prefix='TProjectPrefix')
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

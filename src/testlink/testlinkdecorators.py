@@ -47,12 +47,19 @@ Additional behavior could be added with
      empty list
      - replaceCode : TestLink Error Code, which should be handled 
                      default is None for "Empty Results"
-@decoApiCallAddAttachment(methodAPI):
+@decoApiCallAddAttachment:
     - to add an mandatory argument 'attachmentfile'
       - attachmentfile is a python file descriptor pointing to the file 
     - to expand parameter list with key/value pairs
          'filename', 'filetype', 'content'
       from 'attachmentfile' before calling the server method
+@decoMakerApiCallChangePosToOptArg(argPos, argName):
+    - to change the positional argument ARGPOS into an optional argument ARGNAME. 
+    - used for example in createTestPlan to support TL 1.9.13 and 1.9.14
+      argument definitions
+      - with TL 1.9.13 'testprojectname' was mandatory and expected as argPos 2
+      - with TL 1.9.14 'testproject' is optional, cause new argument 'prefix'
+        could be used as alternative      
 """
 
 
@@ -161,3 +168,24 @@ def decoApiCallAddAttachment(methodAPI):
         return methodAPI(self, *argsPositional, **argsAttachment)
     return wrapperAddAttachment
 
+def decoMakerApiCallChangePosToOptArg(argPos, argName):
+    """ creates a decorator, which change the positional argument ARGPOS into
+        an optional argument ARGNAME. 
+        
+        argPos=1 is the first positional arg
+     """  
+    # for understanding, what we are doing here please read
+    # # see http://stackoverflow.com/questions/739654/how-can-i-make-a-chain-of-function-decorators-in-python
+    # - Passing arguments to the decorator
+    
+    def decoApiCallChangePosToOptArg(methodAPI):
+        """ Decorator to change a positional argument into an optional ARGNAME """
+        @wraps(methodAPI)  
+        def wrapperChangePosToOptArg(self, *argsPositional, **argsOptional):
+            argsPositionalChanged = list(argsPositional)
+            if (argPos > 0) and (len(argsPositional) >= argPos):
+                argValue = argsPositionalChanged.pop(argPos - 1)
+                argsOptional[argName] = argValue
+            return methodAPI(self, *argsPositionalChanged, **argsOptional)
+        return wrapperChangePosToOptArg
+    return decoApiCallChangePosToOptArg

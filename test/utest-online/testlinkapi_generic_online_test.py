@@ -54,7 +54,7 @@ from testlink.testlinkerrors import TLResponseError
 ATTACHMENT_EXAMPLE_TEXT= os.path.join(os.path.dirname(__file__), 
                                       'testlinkapi_generic_online_test.py')
 
-class TestLinkAPIOnlineTestCase(unittest.TestCase):
+class TestLinkAPIGenericOnlineTestCase(unittest.TestCase):
     """ TestCases for TestlinkAPIClient - interacts with a TestLink Server.
     works with the example project NEW_PROJECT_API (see TestLinkExample.py)
     """
@@ -98,7 +98,7 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         response = self.client.getProjects()
         self.assertIsNotNone(response)
          
-    def test_createTestPlan_unknownID(self):
+    def test_createTestPlan_projectname_posArg_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '7011.*40000712'):
             self.client.createTestPlan('plan 40000711', 'project 40000712')
  
@@ -446,11 +446,28 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
     # test might fail during Travis test, cause used TestLink demo application
     # represents still a 1.9.13 dev state from 26/12/14
     # the project delete method are added later during 1.9.14 dev
-    # the interface (see TL Mantis Task 7019)      
+    # (see TL Mantis Task 7019)      
     @unittest.expectedFailure
     def test_deleteTestProject_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '7013.*TProjectPrefix'):
             self.client.deleteTestProject('TProjectPrefix') 
+
+    def test_createTestPlan_projectname_optArg_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7011.*40000712'):
+            self.client.createTestPlan('plan 40000711', 
+                                       testprojectname='project 40000712')
+
+    # test might fail during Travis test, cause used TestLink demo application
+    # represents still a 1.9.13 dev state from 26/12/14
+    # the optional arg 'prefix' are added later during 1.9.14 dev
+    # (see TL Mantis Task 7020) 
+    # and returns also not the expected error code (see TL Mantis 7156)     
+    @unittest.expectedFailure
+    def test_createTestPlan_prefix_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7013.*TProjectPrefix'):
+            self.client.createTestPlan('plan 40000713', 
+                                       prefix='TProjectPrefix')
+
                                  
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

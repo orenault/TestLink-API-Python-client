@@ -36,7 +36,8 @@ from testlink.testlinkerrors import TLResponseError
 from testlink.testlinkargs import registerMethod, getArgsForMethod
 from testlink.testlinkdecorators import decoApiCallAddAttachment,\
 decoApiCallAddDevKey, decoApiCallWithoutArgs, \
-decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs
+decoMakerApiCallReplaceTLResponseError, decoMakerApiCallWithArgs, \
+decoMakerApiCallChangePosToOptArg
 
 
 
@@ -64,12 +65,12 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         @decoApiCallWithoutArgs
         def orig_funcname1(a_api):
-            "orig doc string"
+            "orig doc string1"
             return 'noArgs'
         
         self.assertEqual('orig_funcname1', orig_funcname1.__name__)
-        self.assertEqual('orig doc string', orig_funcname1.__doc__)
-        self.assertEqual('testlinkdecorators_test', orig_funcname1.__module__)
+        self.assertEqual('orig doc string1', orig_funcname1.__doc__)
+        self.assertIn('testlinkdecorators_test', orig_funcname1.__module__)
 
     def test_decoApiCallWithArgs(self):
         " decorator test: positional and optional arguments should be registered "
@@ -88,12 +89,12 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         @decoMakerApiCallWithArgs()
         def orig_funcname2(a_api):
-            "orig doc string"
+            "orig doc string2"
             return 'noArgs'
         
         self.assertEqual('orig_funcname2', orig_funcname2.__name__)
-        self.assertEqual('orig doc string', orig_funcname2.__doc__)
-        self.assertEqual('testlinkdecorators_test', orig_funcname2.__module__)
+        self.assertEqual('orig doc string2', orig_funcname2.__doc__)
+        self.assertIn('testlinkdecorators_test', orig_funcname2.__module__)
 
     def test_decoApiCallAddDevKey(self):
         " decorator test: argsOptional should be extended with devKey"
@@ -116,12 +117,12 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         registerMethod('orig_funcname3')
         @decoApiCallAddDevKey
         def orig_funcname3(a_api, *argsPositional, **argsOptional):
-            "orig doc string"
+            "orig doc string3"
             return argsPositional, argsOptional
         
         self.assertEqual('orig_funcname3', orig_funcname3.__name__)
-        self.assertEqual('orig doc string', orig_funcname3.__doc__)
-        self.assertEqual('testlinkdecorators_test', orig_funcname3.__module__)
+        self.assertEqual('orig doc string3', orig_funcname3.__doc__)
+        self.assertIn('testlinkdecorators_test', orig_funcname3.__module__)
         
     def test_decoApiCallReplaceTLResponseError_NoCodeError(self):
         " decorator test: TLResponseError (code=None) should be handled "
@@ -182,12 +183,12 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         
         @decoMakerApiCallReplaceTLResponseError()
         def orig_funcname4(a_api, *argsPositional, **argsOptional):
-            "orig doc string"
+            "orig doc string4"
             return argsPositional, argsOptional
         
         self.assertEqual('orig_funcname4', orig_funcname4.__name__)
-        self.assertEqual('orig doc string', orig_funcname4.__doc__)
-        self.assertEqual('testlinkdecorators_test', orig_funcname4.__module__)
+        self.assertEqual('orig doc string4', orig_funcname4.__doc__)
+        self.assertIn('testlinkdecorators_test', orig_funcname4.__module__)
         
     def test_decoApiCallAddAttachment(self):
         " decorator test: argsOptional should be extended attachment file infos"
@@ -212,13 +213,86 @@ class testlinkdecoratorsTestCase(unittest.TestCase):
         registerMethod('orig_funcname5')
         @decoApiCallAddAttachment
         def orig_funcname5(a_api):
-            "orig doc string"
+            "orig doc string5"
             return 'noArgs'
         
         self.assertEqual('orig_funcname5', orig_funcname5.__name__)
-        self.assertEqual('orig doc string', orig_funcname5.__doc__)
-        self.assertEqual('testlinkdecorators_test', orig_funcname5.__module__)
+        self.assertEqual('orig doc string5', orig_funcname5.__doc__)
+        self.assertIn('testlinkdecorators_test', orig_funcname5.__module__)
+        
+    def test_noWrapperName_decoApiCallChangePosToOptArg(self):
+        " decorator test: original function name should be unchanged "
+        
+        @decoMakerApiCallChangePosToOptArg(2, 'optArgName')
+        def orig_funcname6(*argsPositional, **argsOptional):
+            "orig doc string6"
+            return argsPositional, argsOptional
+        
+        self.assertEqual('orig_funcname6', orig_funcname6.__name__)
+        self.assertEqual('orig doc string6', orig_funcname6.__doc__)
+        self.assertIn('testlinkdecorators_test', orig_funcname6.__module__)
+        
+    def test_decoApiCallChangePosToOptArg_posArg2(self):
+        " decorator test:  change  posArg 2"
+        
+        @decoMakerApiCallChangePosToOptArg(2, 'due')
+        def a_func(a_api, *argsPositional, **argsOptional):
+            return argsPositional, argsOptional
 
+        #'Uno', 'due', 'tre', 'quad',  'cinque'
+        # 2 posArgs 2optArgs -> 1posArg, 3optArg
+        (posArgs, optArgs) = a_func(self.api, 1, 2, tre = 3, quad = 4 )
+        self.assertEqual((1,), posArgs)
+        self.assertEqual({'due' : 2, 'tre' : 3, 'quad' : 4 }, optArgs)
+
+        # 3 posArgs 2optArgs -> 2posArg, 2optArg
+        (posArgs, optArgs) = a_func(self.api, 1, 2, 3, quad = 4 , due = 5)
+        self.assertEqual((1,3), posArgs)
+        self.assertEqual({'due' : 2, 'quad' : 4 }, optArgs)
+
+        # 1 posArgs 2optArgs -> 1posArg, 2optArg
+        (posArgs, optArgs) = a_func(self.api, 1, due = 2, tre = 3)
+        self.assertEqual((1,), posArgs)
+        self.assertEqual({'due' : 2, 'tre' : 3 }, optArgs)
+
+        # 0 posArgs 2optArgs -> 0posArg, 2optArg
+        (posArgs, optArgs) = a_func(self.api, uno = 1, due = 2)
+        self.assertEqual( (), posArgs)
+        self.assertEqual({'uno' : 1, 'due' :2}, optArgs)
+
+    def test_decoApiCallChangePosToOptArg_posArg3(self):
+        " decorator test:  change  posArg 3"
+        
+        @decoMakerApiCallChangePosToOptArg(3, 'tre')
+        def a_func(a_api, *argsPositional, **argsOptional):
+            return argsPositional, argsOptional
+
+        # 3 posArgs 0optArgs -> 2posArg, 1optArg
+        (posArgs, optArgs) = a_func(self.api, 1, 2, 3 )
+        self.assertEqual((1,2), posArgs)
+        self.assertEqual({'tre' : 3}, optArgs)
+
+        # 2 posArgs 0optArgs -> 2posArg, 0optArg
+        (posArgs, optArgs) = a_func(self.api, 1, 2 )
+        self.assertEqual((1,2), posArgs)
+        self.assertEqual({}, optArgs)
+
+    def test_decoApiCallChangePosToOptArg_posArgNeg1(self):
+        " decorator test:  change  posArg -1"
+        
+        @decoMakerApiCallChangePosToOptArg(-1, 'last')
+        def a_func(a_api, *argsPositional, **argsOptional):
+            return argsPositional, argsOptional
+
+        # 3 posArgs 0optArgs -> 2posArg, 1optArg
+        (posArgs, optArgs) = a_func(self.api, 1, 2, 3 )
+        self.assertEqual((1,2,3), posArgs)
+        self.assertEqual({}, optArgs)
+
+        # 1 posArgs 0optArgs -> 0posArg, 1optArg
+        (posArgs, optArgs) = a_func(self.api, 1 )
+        self.assertEqual((1,), posArgs)
+        self.assertEqual({}, optArgs)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
