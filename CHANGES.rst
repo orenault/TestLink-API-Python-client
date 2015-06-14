@@ -12,8 +12,8 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
 - deleteTestProject(<testprojectprefix>) 
 
-examples `<example/TestLinkExample.py>`_  and 
-`<example/TestLinkExampleGenericApi.py>`_ now deletes the example project, if it
+examples _`<example/TestLinkExample.py>`_  and 
+`<example/TestLinkExampleGenericApi.py>`_ now deletes the sample project, if it
 already exist.
 
 implement 1.9.14 changed api interfaces - #48 #49 #54
@@ -25,7 +25,7 @@ changed TestlinkAPIGeneric and TestlinkAPIClient api methods
 
 - getTestCaseKeywords() is adapted to work with a set of test cases ids.
 
-- createTestPlan is adapted to work with new optional argument 'prefix'
+- createTestPlan() is adapted to work with new optional argument <prefix>
 
 examples:
 
@@ -62,7 +62,7 @@ when no project exist
 TestlinkAPIClient does not accept optional argument 'transport' for proxy 
 configuration 
 
-- _TestlinkAPIClient_ accepts now like _TestlinkAPIGeneric_ optional arguments
+- *TestlinkAPIClient* accepts now like *TestlinkAPIGeneric* optional arguments
 
 TestLink-API-Python-client release notes v0.6.1 (Mar. 2015)  
 ------------------------------------------------------------

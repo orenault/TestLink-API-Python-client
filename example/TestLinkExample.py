@@ -168,14 +168,14 @@ newProjectID = newProject[0]['id']
 print("New Project '%s' - id: %s" % (NEWPROJECT,newProjectID))
 
 # Creates the test plan
-newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN_A, NEWPROJECT,
+newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN_A, testprojectname=NEWPROJECT,
             notes='New TestPlan created with the API',active=1, public=1)    
 print("createTestPlan", newTestPlan)
 newTestPlanID_A = newTestPlan[0]['id']
 print("New Test Plan '%s' - id: %s" % (NEWTESTPLAN_A,newTestPlanID_A))
 
 # Create test plan B  - uses no platforms
-newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN_B, NEWPROJECT,
+newTestPlan = myTestLink.createTestPlan(NEWTESTPLAN_B, prefix=NEWPREFIX,
             notes='New TestPlan created with the Generic API - uses no platforms.',
             active=1, public=1)    
 print("createTestPlan", newTestPlan)
