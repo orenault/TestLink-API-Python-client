@@ -64,6 +64,7 @@ removes keyword KeyWord01 again.
 from testlink import TestlinkAPIClient, TestLinkHelper
 from testlink.testlinkerrors import TLResponseError
 import sys, os.path
+from platform import python_version  
 
 # precondition a)
 # SERVER_URL and KEY are defined in environment

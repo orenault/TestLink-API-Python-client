@@ -46,7 +46,7 @@ a different error code
 
 - 1.9.13 error code *5000* - 1.9.14 error code *5040*
 
-Bugfixes TestLink-API-Python-client v0.6.1 - #51 #55 #56
+Bugfixes TestLink-API-Python-client v0.6.1 - #51 #55 #56 #45
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 whatArgs reports incorrect arg name for createTestCase
@@ -63,6 +63,10 @@ TestlinkAPIClient does not accept optional argument 'transport' for proxy
 configuration 
 
 - *TestlinkAPIClient* accepts now like *TestlinkAPIGeneric* optional arguments
+
+TestlinkAPIClient service method listKeywordsForTC() uses now getTestCaseKeywords()
+
+- internal change to reduce code complexity 
 
 TestLink-API-Python-client release notes v0.6.1 (Mar. 2015)  
 ------------------------------------------------------------

@@ -318,34 +318,20 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         # - see enhancement issue #45
         
         a_tc_id = str(internal_or_external_tc_id)
-        argsPositional = [a_tc_id]
-        argsOptional   = {}
+        
         if '-' in a_tc_id:
-            # full external ID like 'NPROAPI-2'
-            argsPositional = [None]
-            argsOptional = {'testcaseexternalid' : a_tc_id}
-        a_tc = self.getTestCase(*argsPositional, **argsOptional)[0]
-        a_ts_id = a_tc['testsuite_id']
-        # attention!
-        # don't use 'id', that is the tcversion_id 
-        # - table tcversions, field id
-        # use testcase_id, that is id test case id without a version info
-        # - table nodes_hierarchy, fied id (condition node_type_id == 3)
-        a_tc_id = a_tc['testcase_id']
-        all_tc_for_ts = self.getTestCasesForTestSuite(a_ts_id, False, 
-                                                     'full', getkeywords=True)
-        
-        keyword_details = {}
-        
-        for a_ts_tc in all_tc_for_ts:
-            if a_ts_tc['id'] == a_tc_id:
-                keyword_details =  a_ts_tc.get('keywords', {})
-            
-        if sys.version_info[0] < 3:
-            keywords = map((lambda x: x['keyword']), keyword_details.values())
-        else:
-            keywords = [kw['keyword'] for kw in keyword_details.values()]
-        return keywords
+            # full external ID like 'NPROAPI-2', but we need the internal
+            a_tc = self.getTestCase(None, testcaseexternalid=a_tc_id )[0]
+            a_tc_id = a_tc['testcase_id']
+
+        # getTestCaseKeywords  returns a dictionary like
+        #   {'12622': {'34': 'KeyWord01', '36': 'KeyWord03'}}
+        # key is the testcaseid, why that? cause it is possible to ask for
+        # a set of test cases.  we are just interested in one tc
+        a_keyword_dic = self.getTestCaseKeywords(testcaseid=a_tc_id )[a_tc_id]
+        keywords = a_keyword_dic.values()
+
+        return list(keywords)
 
     def listKeywordsForTS(self, internal_ts_id):
         """ Returns dictionary with keyword lists for all test cases of 

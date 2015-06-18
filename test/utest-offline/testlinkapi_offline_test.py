@@ -258,7 +258,16 @@ SCENARIO_KEYWORDS = {'getTestCasesForTestSuite' : {
                                     '8169' : [{'full_tc_external_id': 'NPROAPI-4', 'id': '8170', 'tc_external_id': '3', 'version': '1', 
                                                     'testsuite_id': 'deepFalse3', 'testcase_id': '8169', 'name': 'TESTCASE_B3'}],
                                     'NPROAPI-4' : [{'full_tc_external_id': 'NPROAPI-4', 'id': '8170', 'tc_external_id': '3', 'version': '1', 
-                                                    'testsuite_id': 'deepFalse3', 'testcase_id': '8169', 'name': 'TESTCASE_B3'}] }
+                                                    'testsuite_id': 'deepFalse3', 'testcase_id': '8169', 'name': 'TESTCASE_B3'}] },
+                     'getTestCaseKeywords' : {
+                                               #{'12622': {'34': 'KeyWord01', '36': 'KeyWord03'}}
+                                    '8144' : {'8144' : {'1': 'KeyWord01', '3': 'KeyWord03'} },
+                                    'NPROAPI-2' : {'8144' : {'1': 'KeyWord01', '3': 'KeyWord03'} },
+                                    '8159' : {'8159' : {'2': 'KeyWord02'}},
+                                    'NPROAPI-3' : {'8159' : {'2': 'KeyWord02'}},
+                                    '8169' : {'8169' : {}},
+                                    'NPROAPI-4' : {'8169' : {}} 
+                                              }
                      }
 
 # scenario_no_project simulates a fresh empty test link application
@@ -295,7 +304,7 @@ class DummyAPIClient(TestlinkAPIClient):
             response = data[argsAPI['testsuiteid']]
         elif methodAPI in ['getTestCaseIDByName']:
             response = data[argsAPI['testcasename']]
-        elif methodAPI in ['getTestCase']:
+        elif methodAPI in ['getTestCase', 'getTestCaseKeywords']:
             datakey = argsAPI.get('testcaseid')
             if datakey:
                 datakey = str(datakey)
