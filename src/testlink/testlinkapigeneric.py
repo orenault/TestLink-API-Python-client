@@ -249,7 +249,7 @@ TL version >= 1.9.11
     @decoMakerApiCallWithArgs(['testplanid', 'status'], 
                 ['testcaseid', 'testcaseexternalid', 'buildid', 'buildname', 
                  'platformid', 'platformname', 'notes', 'guess', 'bugid', 
-                 'customfields', 'overwrite', 'user'])
+                 'customfields', 'overwrite', 'user', 'execduration'])
     def reportTCResult(self):
         """ Reports a result for a single test case
 
@@ -263,6 +263,7 @@ TL version >= 1.9.11
                        (testcase,testplan,build,platform) will be overwritten. 
         user : if present and user is a valid login (no other check will be done) 
                it will be used when writting execution.
+        execduration : Exec (min) as float (2.5 = 2min 30sec)
         """
 
 #   /**
@@ -693,7 +694,7 @@ TL version >= 1.9.11
 #      *                                if devKey is not valid => abort.
 #      *
 #      * @param string $args["customfieldname"]: custom field name
-#      * @param int     $args["tprojectid"]: project id
+#      * @param int     $args["testprojectid"]: project id
 #      * @param string $args["nodetype"]: note type (testcase, testsuite, ...)
 #      * @param int    $args["nodeid"]: node id (test case version id, project id, ...)
 #      * @param string $args["scope"]: cf scope (execution, design or testplan_design)
@@ -715,7 +716,7 @@ TL version >= 1.9.11
 #    *                                if devKey is not valid => abort.
 #    *
 #    * @param string $args["customfieldname"]: custom field name
-#    * @param int    $args["tprojectid"]: project id
+#    * @param int    $args["testprojectid"]: project id
 #    * @param int    $args["version"]: test case version id
 #    * @param int    $args["executionid"]: execution id
 #    * @param int    $args["testplanid"]: test plan id
@@ -769,7 +770,7 @@ TL version >= 1.9.11
 #     *                                 if devKey is not valid => abort.
 #    *
 #    * @param string $args["customfieldname"]: custom field name
-#    * @param int   $args["tprojectid"]: project id
+#    * @param int   $args["testprojectid"]: project id
 #     * @param int    $args["testsuiteid"]: test suite id
 #    * 
 #    * @return mixed $resultInfo
@@ -793,7 +794,7 @@ TL version >= 1.9.11
 #    *                                if devKey is not valid => abort.
 #    *
 #    * @param string $args["customfieldname"]: custom field name
-#    * @param int    $args["tprojectid"]: project id
+#    * @param int    $args["testprojectid"]: project id
 #    * @param int    $args["testplanid"]: test plan id
 #    *
 #    * @return mixed $resultInfo
@@ -817,7 +818,7 @@ TL version >= 1.9.11
 #      *                                if devKey is not valid => abort.
 #      *
 #      * @param string $args["customfieldname"]: custom field name
-#      * @param int    $args["tprojectid"]: project id
+#      * @param int    $args["testprojectid"]: project id
 #      * @param int    $args["reqspecid"]: requirement specification id
 #      * 
 #      * @return mixed $resultInfo
@@ -841,7 +842,7 @@ TL version >= 1.9.11
 #      *                                if devKey is not valid => abort.
 #      *
 #      * @param string $args["customfieldname"]: custom field name
-#      * @param int    $args["tprojectid"]: project id
+#      * @param int    $args["testprojectid"]: project id
 #      * @param int    $args["requirementid"]: requirement id
 #      * 
 #      * @return mixed $resultInfo

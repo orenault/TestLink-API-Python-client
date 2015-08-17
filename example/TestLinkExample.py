@@ -377,7 +377,8 @@ print("getTestCaseBugs TC_AA in TP_A (TC is not executed)", response)
 # TC_AA failed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(None, newTestPlanID_A, None, 'f', '', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id,
-                                      platformname=NEWPLATFORM_A)#, devKey='361451a1670cb31d127611262ed1a46d')
+                                      platformname=NEWPLATFORM_A,
+                                      execduration=3.9)
 print("reportTCResult", newResult)
 newResultID_AA = newResult[0]['id']
 
@@ -390,7 +391,8 @@ print("getTestCaseBugs TC_AA in TP_A (TC is executed, no bug)", response)
 # TC_AA passed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(None, newTestPlanID_A, None, 'p', '', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id,
-                                      platformname=NEWPLATFORM_B)
+                                      platformname=NEWPLATFORM_B,
+                                      execduration='2.2')
 print("reportTCResult", newResult)
 newResultID_AA_p = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id

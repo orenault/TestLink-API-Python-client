@@ -683,6 +683,7 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
     def test_whatArgs_reportTCResult(self):
         argsDescription = self.api.whatArgs('reportTCResult')
         self.assertIn('user=<user>', argsDescription)
+        self.assertIn('execduration=<execduration>', argsDescription)
         
     def test_whatArgs_getLastExecutionResult(self):
         argsDescription = self.api.whatArgs('getLastExecutionResult')
