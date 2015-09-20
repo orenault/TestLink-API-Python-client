@@ -385,7 +385,7 @@ print("getTestCaseBugs TC_AA in TP_A (TC is not executed)", response)
 newResult = myTestLink.reportTCResult(newTestPlanID_A, 'f', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id,
                                       platformname=NEWPLATFORM_A,
-                                      execduration=2.9)
+                                      execduration=2.9, timestamp='2014-09-18 14:33')
 print("reportTCResult", newResult)
 newResultID_AA = newResult[0]['id']
 
@@ -399,7 +399,7 @@ print("getTestCaseBugs TC_AA in TP_A (TC is executed, no bug)", response)
 newResult = myTestLink.reportTCResult(newTestPlanID_A, 'p', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id,
                                       platformid=newPlatFormID_B,
-                                      execduration='3.2')
+                                      execduration='3.2', timestamp='2014-09-19 14:33:02')
 print("reportTCResult", newResult)
 newResultID_AA_p = newResult[0]['id']
 # TC_B passed, explicit build and some notes , TC identified with internal id

@@ -249,7 +249,8 @@ TL version >= 1.9.11
     @decoMakerApiCallWithArgs(['testplanid', 'status'], 
                 ['testcaseid', 'testcaseexternalid', 'buildid', 'buildname', 
                  'platformid', 'platformname', 'notes', 'guess', 'bugid', 
-                 'customfields', 'overwrite', 'user', 'execduration'])
+                 'customfields', 'overwrite', 'user', 'execduration', 
+                 'timestamp'])
     def reportTCResult(self):
         """ Reports a result for a single test case
 
@@ -264,6 +265,7 @@ TL version >= 1.9.11
         user : if present and user is a valid login (no other check will be done) 
                it will be used when writting execution.
         execduration : Exec (min) as float (2.5 = 2min 30sec)
+        timestamp    : 'YYYY-MM-DD hh:mm[:ss]'
         """
 
 #   /**

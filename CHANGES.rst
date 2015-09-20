@@ -3,7 +3,7 @@ Changes in TestLink-API-Python-client Source Distribution
 
 TestLink-API-Python-client v0.6.2 - Under Develop 
 ------------------------------------------------------------
-support for future TL 1.9.14 release
+support for TL 1.9.14 release
 
 implement 1.9.14 new api interfaces - #53
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -27,7 +27,8 @@ changed TestlinkAPIGeneric and TestlinkAPIClient api methods
 
 - createTestPlan() is adapted to work with new optional argument <prefix>
 
-- reportTCResult() is adapted to work with new optional argument <execduration>
+- reportTCResult() is adapted to work with new optional arguments <execduration>
+  and <timestamp>
 
 examples:
 
@@ -43,7 +44,8 @@ examples:
  >>> tls.createTestPlan('aTPlanName', prefix='aTProjectPrefix')  
  >>> tls.reportTCResult(None, 'aTPlanID', 'aBuildName', 'f', 'result one', 
  >>>                    testcaseexternalid='aTCaseFullExID', overwrite=True,
- >>>                    platformname='Small Birds', execduration=4.1)
+ >>>                    platformname='Small Birds', execduration=4.1,
+ >>>                    timestamp='2015-09-19 14:33:02')
  
 Attention:
 the api getTestCaseKeywords() returns for the situation **invalid test case id**
