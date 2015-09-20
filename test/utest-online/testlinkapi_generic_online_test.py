@@ -327,7 +327,7 @@ class TestLinkAPIGenericOnlineTestCase(unittest.TestCase):
             self.client.getExecCountersByBuild(40000711)
             
     def test_getTestCaseCustomFieldExecutionValue_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+        with self.assertRaisesRegex(TLResponseError, '236.*version/executionid'):
             self.client.getTestCaseCustomFieldExecutionValue(
                             'cf_full', '40000711', 1, '715', '40000713')
             

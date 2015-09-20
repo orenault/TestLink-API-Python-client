@@ -312,6 +312,42 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
             self.client.getExecCountersByBuild(40000711)
 
+    def test_getTestCaseCustomFieldExecutionValue_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '236.*version/executionid'):
+            self.client.getTestCaseCustomFieldExecutionValue(
+                            'cf_full', '40000711', 1, '715', '40000713')
+            
+    def test_getTestCaseCustomFieldTestPlanDesignValue_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getTestCaseCustomFieldTestPlanDesignValue(
+                            'cf_full', '40000711', 1, '40000713', '615')
+            
+    def test_updateTestCaseCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.updateTestCaseCustomFieldDesignValue(
+                            'TC-40000712', 1, 40000711, {'cf_field1' : 'value1',
+                                                 'cf_field2' : 'value2'})
+
+    def test_getTestSuiteCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getTestSuiteCustomFieldDesignValue(
+                                                    'cf_full', 40000711, 40000713) 
+            
+    def test_getTestPlanCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getTestPlanCustomFieldDesignValue(
+                                                    'cf_full', 40000711, 40000712)             
+
+    def test_getReqSpecCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getReqSpecCustomFieldDesignValue(
+                                                    'cf_full', 40000711, 4732)             
+
+    def test_getRequirementCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.getRequirementCustomFieldDesignValue(
+                                                    'cf_full', 40000711, 4734)  
+
     def test_assignTestCaseExecutionTask_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
             self.client.assignTestCaseExecutionTask('username', 40000711, 'TC-40000712', 
