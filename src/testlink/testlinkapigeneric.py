@@ -183,7 +183,7 @@ TL version >= 1.9.11
     def getTestSuitesForTestPlan(self):
         """ List test suites within a test plan alphabetically
         
-        returns an empty list, if no build is assigned """
+        returns an empty list, if no suite is assigned """
         
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testprojectname', 'testcaseprefix'],
@@ -1407,6 +1407,44 @@ TL version >= 1.9.11
     def deleteTestProject(self):
         """ Delete a test project and all related link to other items  """ 
         
+#  /**
+#    * Update value of Custom Field with scope='design' 
+#    * for a given Test Suite
+#    *
+#    * @param struct $args
+#    * @param string $args["devKey"]: used to check if operation can be done.
+#    *                                if devKey is not valid => abort.
+#    *
+#    * @param string $args["testsuiteid"]:  
+#    * @param string $args["testprojectid"]: 
+#    * @param string $args["customfields"]
+#    *               contains an map with key:Custom Field Name, value: value for CF.
+#    *               VERY IMPORTANT: value must be formatted in the way it's written to db,
+#    *               this is important for types like:
+#    *
+#    *               DATE: strtotime()
+#    *               DATETIME: mktime()
+#    *               MULTISELECTION LIST / CHECKBOX / RADIO: se multipli selezione ! come separatore
+#    *
+#    *
+#    *               these custom fields must be configured to be writte during execution.
+#    *               If custom field do not meet condition value will not be written
+#    *
+#    * @return mixed null if everything ok, else array of IXR_Error objects
+#    *         
+#    * @access public
+#    */    
+#   public function updateTestSuiteCustomFieldDesignValue($args)
+        
+  
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testprojectid', 'testsuiteid', 'customfields'])
+    def updateTestSuiteCustomFieldDesignValue(self):
+        """ Update value of Custom Field with scope='design' for a given Test Suite
+
+        customfields : dictionary with customfields names + values
+            VERY IMPORTANT: value must be formatted in the way it's written to db
+        """
   
     #
     #  internal methods for general server calls

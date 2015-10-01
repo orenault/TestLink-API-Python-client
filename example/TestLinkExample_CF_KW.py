@@ -232,7 +232,7 @@ args =  {'devKey' : myTestLink.devKey,
          'testprojectid' : newProjectID,
          'testcaseexternalid' : newTestCase_B['full_tc_external_id'],
          'version' : int(newTestCase_B['version']),
-         'tcversion_id' : lastResult['tcversion_id'],
+         'tcversion_number' : lastResult['tcversion_number'],
          'executionid' : lastResult['id'],
          'linkid' : 779,
          'testsuiteid': newTestSuiteID_B,
@@ -242,7 +242,7 @@ args =  {'devKey' : myTestLink.devKey,
 
 # get CustomField Value - TestCase Execution
 response = myTestLink.getTestCaseCustomFieldExecutionValue(
-                'cf_tc_ex_string', args['testprojectid'], args['tcversion_id'],
+                'cf_tc_ex_string', args['testprojectid'], args['tcversion_number'],
                 args['executionid'] , args['testplanid'] )
 print( "getTestCaseCustomFieldExecutionValue", response )
 
@@ -273,9 +273,15 @@ print( "getTestCaseCustomFieldDesignValue simple", response )
 
 # get CustomField Value - TestCase Testplan Design
 response = myTestLink.getTestCaseCustomFieldTestPlanDesignValue(
-                'cf_tc_pd_string', args['testprojectid'], args['tcversion_id'],
+                'cf_tc_pd_string', args['testprojectid'], args['tcversion_number'],
                 args['testplanid'], args['linkid'])
 print( "getTestCaseCustomFieldTestPlanDesignValue", response )
+
+# update CustomField Value - TestSuite SpecDesign
+response = myTestLink.updateTestSuiteCustomFieldDesignValue( 
+                 args['testprojectid'], args['testsuiteid'],
+                 {'cf_ts_string' : 'A custom TestSuite value set via api'})
+print( "updateTestSuiteCustomFieldDesignValue", response )
 
 # get CustomField Value - TestSuite
 response = myTestLink.getTestSuiteCustomFieldDesignValue(

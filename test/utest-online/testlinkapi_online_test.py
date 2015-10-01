@@ -453,6 +453,14 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '7013.*TProjectPrefix'):
             self.client.createTestPlan('plan 40000713', 
                                        prefix='TProjectPrefix')
+
+    def test_updateTestSuiteCustomFieldDesignValue_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000712'):
+            self.client.updateTestSuiteCustomFieldDesignValue(
+                            '40000712 TP-ID', '40000711 TS-ID',  
+                            {'cf_tc_ex_string' : 'a custom exec value', 
+                             'cf_tc_ex_numeric' : 111} )
+            
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
