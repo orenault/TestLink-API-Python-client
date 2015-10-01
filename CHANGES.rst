@@ -3,7 +3,10 @@ Changes in TestLink-API-Python-client Source Distribution
 
 TestLink-API-Python-client v0.6.2 - Under Develop 
 ------------------------------------------------------------
-support for TL 1.9.14 release
+support for TL 1.9.14 release and py26, py27, py33 and py34
+
+- further releases will be developed only against py27 and py34. 
+- If there is a need to support other py versions, please give feedback
 
 implement 1.9.14 new api interfaces - #53 #61
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -13,11 +16,11 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 - deleteTestProject(<testprojectprefix>) 
 - updateTestSuiteCustomFieldDesignValue(<testprojectid>, <testsuiteid>, <customfields>)
 
-examples _`<example/TestLinkExample.py>`_  and 
+examples _ `<example/TestLinkExample.py>` _  and 
 `<example/TestLinkExampleGenericApi.py>`_ now deletes the sample project, if it
 already exist.
 
-example _`<example/TestLinkExample_CF_KW.py>`_ shows, how to set and get 
+example _ `<example/TestLinkExample_CF_KW.py>` _ shows, how to set and get 
 customer field values
 
 implement 1.9.14 changed api interfaces - #48 #49 #54 #59

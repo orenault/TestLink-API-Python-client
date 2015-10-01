@@ -377,19 +377,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
             self.client.getProjectKeywords(40000711)
             
-    # test might fail during Travis test, cause used TestLink demo application
-    # represents  still a 1.9.13 dev state from 26/12/14
-    # the 1.9.14 api returns a different error code 5040 instead 5000       
-    @unittest.expectedFailure
     def test_getTestCaseKeywords_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*40000712'):
             self.client.getTestCaseKeywords(testcaseid=40000712) 
 
-    # test might fail during Travis test, cause used TestLink demo application
-    # represents  still a 1.9.13 dev state from 26/12/14
-    # - the 1.9.14 api returns a different error code 5040 instead 5000       
-    # - the set support was added with 1.9.14 (see TL Mantis Task 6931)       
-    @unittest.expectedFailure
     def test_getTestCaseKeywords_unknownID_set(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*40000712'):
             self.client.getTestCaseKeywords(testcaseid=[40000712, 40000713]) 
@@ -398,10 +389,6 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
             self.client.getTestCaseKeywords(testcaseexternalid='TC-40000712')
             
-    # test might fail during Travis test, cause used TestLink demo application
-    # represents  still a 1.9.13 dev state from 26/12/14
-    # - the set support was added with 1.9.14 (see TL Mantis Task 6931)       
-    @unittest.expectedFailure
     def test_getTestCaseKeywords_unknownID_external_set(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
             self.client.getTestCaseKeywords(testcaseexternalid=['TC-40000712', 'TC-40000713'])
@@ -410,30 +397,15 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
             self.client.deleteTestPlan(40000711)
 
-    # test might fail during Travis test, cause used TestLink demo application
-    # represents  still a 1.9.13 dev state from 26/12/14
-    # the keyword add method are added later and has changed with 1.9.14
-    # the interface (see TL Mantis Task 6934)        
-    @unittest.expectedFailure
     def test_addTestCaseKeywords_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
             self.client.addTestCaseKeywords({'TC-40000712' :  
                                              ['KeyWord01', 'KeyWord03']}) 
 
-    # test might fail during Travis test, cause used TestLink demo application
-    # represents still a 1.9.13 dev state from 26/12/14
-    # the keyword remove method are added later and has be changed with 1.9.14
-    # the interface (see TL Mantis Task 6907)      
-    @unittest.expectedFailure
     def test_removeTestCaseKeywords_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*TC-40000712'):
             self.client.removeTestCaseKeywords({'TC-40000712' : ['KeyWord01']}) 
              
-    # test might fail during Travis test, cause used TestLink demo application
-    # represents still a 1.9.13 dev state from 26/12/14
-    # the project delete method are added later during 1.9.14 dev
-    # the interface (see TL Mantis Task 7019)      
-    @unittest.expectedFailure
     def test_deleteTestProject_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '7013.*TProjectPrefix'):
             self.client.deleteTestProject('TProjectPrefix') 
@@ -443,14 +415,8 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
             self.client.createTestPlan('plan 40000711', 
                                        testprojectname='project 40000712')
 
-    # test might fail during Travis test, cause used TestLink demo application
-    # represents still a 1.9.13 dev state from 26/12/14
-    # the optional arg 'prefix' are added later during 1.9.14 dev
-    # (see TL Mantis Task 7020) 
-    # and returns also not the expected error code (see TL Mantis 7156)     
-    @unittest.expectedFailure
     def test_createTestPlan_prefix_unknownID(self):
-        with self.assertRaisesRegex(TLResponseError, '7013.*TProjectPrefix'):
+        with self.assertRaisesRegex(TLResponseError, 'NO.*TProjectPrefix'):
             self.client.createTestPlan('plan 40000713', 
                                        prefix='TProjectPrefix')
 
