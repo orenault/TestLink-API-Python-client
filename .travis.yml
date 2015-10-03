@@ -1,3 +1,4 @@
+sudo: false
 language: python
 python:
   - "2.6"
@@ -19,3 +20,4 @@ install:
 script: 
   - py.test test/utest-offline
   - if [[ $TESTLINK_API_PYTHON_SERVER_URL ]]; then py.test test/utest-online; fi
+  - if [[ $TESTLINK_API_PYTHON_SERVER_URL && $TRAVIS_PYTHON_VERSION == '3.4' ]]; then python example\TestLinkExample.py; fi
