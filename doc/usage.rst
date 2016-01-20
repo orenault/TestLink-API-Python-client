@@ -78,7 +78,6 @@ Using the TestLink API Client - failed test case with none default reporter
 
  >>> import testlink
  >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
- >>> import testlink
  >>> tls.reportTCResult(a_TestCaseID, a_TestPlanID, 'a build name', 'f', 
                         'some notes', 
                         user='a user login name', platformid=a_platformID) 
@@ -88,8 +87,7 @@ reporter:
 
  >>> import testlink
  >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIGeneric)
- >>> import testlink
- >>> tls.reportTCResult(a_TestPlanID, 'p', testcaseid=a_TestCaseID, 
+  >>> tls.reportTCResult(a_TestPlanID, 'p', testcaseid=a_TestCaseID, 
                         buildname='a build name', notes='some notes',
                         user='a login name', platformid=a_platformID) 
                         
@@ -101,6 +99,21 @@ alternative optional args, default reporter (user for devKey)
  >>> exTCID = tls.getTestCase(testcaseid=a_TestCaseID)[0]['full_tc_external_id']
  >>> tls.reportTCResult(a_TestPlanID, 'b', testcaseexternalid=exTCID, 
                         buildid='a build name', platformname='a platform name')
+                        
+Report test results with timestamp and step result
+--------------------------------------------------
+
+This test result uses the external test case id and not the internal.
+-  argument 'execduration' and 'timestamp' usable with TL >= 1.9.14:
+-  argument 'steps' usable with TL >= 1.9.15:
+
+ >>> import testlink
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tls.reportTCResult(None, newTestPlanID_A, None, 'f', '', guess=True,
+                        testcaseexternalid=tc_aa_full_ext_id, platformname=NEWPLATFORM_A,
+                        execduration=3.9, timestamp='2015-09-18 14:33',
+         steps=[{'step_number' : 6, 'result' : 'p', 'notes" : 'result note for passed step 6'}, 
+                {'step_number' : 7, 'result' : 'f', 'notes" : 'result note for failed step 7'}]  )                        
                         
 Upload attachments
 ------------------
