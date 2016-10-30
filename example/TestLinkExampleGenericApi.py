@@ -222,6 +222,17 @@ print("createTestSuite", newTestSuite)
 newTestSuiteID_AA = newTestSuite[0]['id'] 
 print("New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, newTestSuiteID_AA))
  
+# Update test suite B details - Using Project ID
+updatedTestSuite = myTestLink.updateTestSuite(NEWTESTSUITE_B, testprojectid=newProjectID, 
+            details="updated Details of the Test Suite B")               
+print("updateTestSuite", updatedTestSuite)
+
+# Update test suite AA details - Using Project Name
+updatedTestSuite = myTestLink.updateTestSuite(NEWTESTSUITE_AA, prefix=NEWPREFIX, 
+            details="Updated Details of the Test Suite AA")               
+print("updateTestSuite", updatedTestSuite)
+
+ 
 MANUAL = 1
 AUTOMATED = 2
 # 

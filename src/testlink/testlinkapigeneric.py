@@ -1165,7 +1165,7 @@ TL version >= 1.9.11
         
         testplanid       test plan id
         
-        args variations: testcaseid - testcaseexternalid  (mandatoy!)
+        args variations: testcaseid - testcaseexternalid  (mandatory!)
                          buildid - buildname
                          platformid - platformname
         test case information is general mandatory
@@ -1444,6 +1444,32 @@ TL version >= 1.9.11
 
         customfields : dictionary with customfields names + values
             VERY IMPORTANT: value must be formatted in the way it's written to db
+        """
+
+#   /**
+#    * update a test suite
+#    * 
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["testprojectid"] OR string $args["prefix"] 
+#    * @param string $args["testsuitename"] optional
+#    * @param string $args["details"] optional
+#    * @param int $args["parentid"] optional, if do not provided means test suite must be top level.
+#    * @param int $args["order"] optional. Order inside parent container
+#    *   
+#    * @return mixed $resultInfo
+#    */
+#   public function updateTestSuite($args)
+
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testsuitename'], 
+            ['testprojectid', 'prefix', 'details', 'parentid', 
+             'order', 'checkduplicatedname', 'actiononduplicatedname'])
+    def updateTestSuite(self):
+        """ update a test suite 
+        
+        args variations: testprojectid - prefix (mandatory!)
+        test project information is general mandatory
         """
   
     #

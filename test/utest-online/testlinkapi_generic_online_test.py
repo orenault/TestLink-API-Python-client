@@ -147,7 +147,7 @@ class TestLinkAPIGenericOnlineTestCase(unittest.TestCase):
     def test_getTestCase_unknownExternalID(self):
         with self.assertRaisesRegex(TLResponseError, '5040.*GPROAPI-40000711'):
             self.client.getTestCase(testcaseexternalid='GPROAPI-40000711')
-         
+            
     def test_getTestCaseAttachments_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '5000.*40000711'):
             self.client.getTestCaseAttachments(testcaseid=40000711)
@@ -441,6 +441,12 @@ class TestLinkAPIGenericOnlineTestCase(unittest.TestCase):
                             {'cf_tc_ex_string' : 'a custom exec value', 
                              'cf_tc_ex_numeric' : 111} )
 
+    def test_updateTestSuite_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.updateTestSuite('suite 40000712', testprojectid=40000711, 
+                                        details='detail 40000713')
+            
+         
                                  
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

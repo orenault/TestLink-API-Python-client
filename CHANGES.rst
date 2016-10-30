@@ -1,6 +1,22 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
+TestLink-API-Python-client v0.6.3 - Under Develop 
+------------------------------------------------------------
+support for TL 1.9.15 release
+
+implement 1.9.14 new api interfaces - #54
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api methods
+
+- updateTestSuite(<testsuitename>, [testprojectid=<testprojectid>], 
+  [prefix=<prefix>], [details=<details>], [parentid=<parentid>], 
+  [order=<order>], [checkduplicatedname=<checkduplicatedname>], 
+  [actiononduplicatedname=<actiononduplicatedname>], [devKey=<devKey>])
+
+examples  `<example/TestLinkExample.py>`_  uses updateTestSuite, but it shows currently no effect
+
 TestLink-API-Python-client v0.6.2 release notes v0.6.2 (Oct. 2015)  
 -------------------------------------------------------------------
 support for TL 1.9.14 release and py26, py27, py33 and py34
