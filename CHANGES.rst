@@ -10,12 +10,24 @@ implement 1.9.14 new api interfaces - #54
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
-- updateTestSuite(<testsuitename>, [testprojectid=<testprojectid>], 
-  [prefix=<prefix>], [details=<details>], [parentid=<parentid>], 
-  [order=<order>], [checkduplicatedname=<checkduplicatedname>], 
-  [actiononduplicatedname=<actiononduplicatedname>], [devKey=<devKey>])
+- updateTestSuite(<testsuiteid>, [testprojectid=<testprojectid>], 
+  [prefix=<prefix>], [parentid=<parentid>], [testsuitename=<testsuitename>], 
+  [details=<details>], [order=<order>], [devKey=<devKey>])
+- getTestSuite(<testsuitename>, <prefix>, [devKey=<devKey>])
 
-examples  `<example/TestLinkExample.py>`_  uses updateTestSuite, but it shows currently no effect
+known TL 1.9.15 issues:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+changing test suite order with updateTestSuite raise internal server error
+
+- same reason as `TL Mantis Ticket 7696 <http://mantis.testlink.org/view.php?id=7696>`_
+- solution: change *testlink-1.9.15/lib/functions/testsuite.class.php - update* as
+  descriped in `TL GitHub Commit 1fa41e7 <https://github.com/TestLinkOpenSourceTRMS/testlink-code/commit/1fa41e7ca1eefa55ceaffac8c44a219c05e710e2>`_
+  
+TestLink web presents no login page (internal server error)
+
+- see `TL Mantis Ticket 7708 <http://mantis.testlink.org/view.php?id=7708>`_
+- solution: change *testlink-1.9.15/lib/functions/common.php* as described in `TL GitHub Commit db74644 <https://github.com/TestLinkOpenSourceTRMS/testlink-code/commit/db746440924aa3a572c8058a0595a9572cf36979>`_
 
 TestLink-API-Python-client v0.6.2 release notes v0.6.2 (Oct. 2015)  
 -------------------------------------------------------------------

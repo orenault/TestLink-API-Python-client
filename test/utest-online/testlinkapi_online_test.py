@@ -427,6 +427,17 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                             {'cf_tc_ex_string' : 'a custom exec value', 
                              'cf_tc_ex_numeric' : 111} )
             
+    def test_getTestSuite_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, 'NO.*TProjectPrefix'):
+            self.client.getTestSuite('suite 40000712', 'TProjectPrefix')
+            
+
+    def test_updateTestSuite_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000711'):
+            self.client.updateTestSuite(40000712, testprojectid=40000711, 
+                                    testsuitename = 'suite 40000712 updated',
+                                    details = 'detail 40000713 updated',
+                                    order =1)
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

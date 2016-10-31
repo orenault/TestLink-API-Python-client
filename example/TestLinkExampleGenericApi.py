@@ -222,17 +222,6 @@ print("createTestSuite", newTestSuite)
 newTestSuiteID_AA = newTestSuite[0]['id'] 
 print("New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, newTestSuiteID_AA))
  
-# Update test suite B details - Using Project ID
-updatedTestSuite = myTestLink.updateTestSuite(NEWTESTSUITE_B, testprojectid=newProjectID, 
-            details="updated Details of the Test Suite B")               
-print("updateTestSuite", updatedTestSuite)
-
-# Update test suite AA details - Using Project Name
-updatedTestSuite = myTestLink.updateTestSuite(NEWTESTSUITE_AA, prefix=NEWPREFIX, 
-            details="Updated Details of the Test Suite AA")               
-print("updateTestSuite", updatedTestSuite)
-
- 
 MANUAL = 1
 AUTOMATED = 2
 # 
@@ -609,11 +598,27 @@ response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B,
                                                deep=False, details='only_id')
 print("getTestCasesForTestSuite", response)
 
+# Update test suite B details - Using Project ID
+updatedTestSuite = myTestLink.updateTestSuite(newTestSuiteID_B, 
+                            testprojectid=newProjectID, 
+                            details="updated Details of the Test Suite B")               
+print("updateTestSuite", updatedTestSuite)
+
+# Update test suite A name and order details - Using Project Name
+changedNEWTESTSUITE_A = NEWTESTSUITE_A + ' - Changed'
+updatedTestSuite = myTestLink.updateTestSuite(newTestSuiteID_A, prefix=NEWPREFIX, 
+            testsuitename = changedNEWTESTSUITE_A, order=1)               
+print("updateTestSuite", updatedTestSuite)
+
+# get all test suites, using the same name - test Suite B
+response = myTestLink.getTestSuite(NEWTESTSUITE_B, NEWPREFIX)
+print("getTestSuite", response)
+
 # get informationen - TestCase_B
 response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
 print("getTestCaseIDByName", response)
 # get informationen - TestCase_AA via Pathname
-tcpathname = '::'.join([NEWPROJECT, NEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
+tcpathname = '::'.join([NEWPROJECT, changedNEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
 response = myTestLink.getTestCaseIDByName('unknown', testcasepathname=tcpathname)
 print("getTestCaseIDByName", response)
 # get execution result

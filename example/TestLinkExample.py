@@ -590,13 +590,29 @@ print("getTestCasesForTestSuite A", response)
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 'only_id')
 print("getTestCasesForTestSuite B", response)
 
+# Update test suite B details - Using Project ID
+updatedTestSuite = myTestLink.updateTestSuite(newTestSuiteID_B, 
+                            testprojectid=newProjectID, 
+                            details="updated Details of the Test Suite B")               
+print("updateTestSuite", updatedTestSuite)
+
+# Update test suite A name and order details - Using Project Name
+changedNEWTESTSUITE_A = NEWTESTSUITE_A + ' - Changed'
+updatedTestSuite = myTestLink.updateTestSuite(newTestSuiteID_A, prefix=NEWPREFIX, 
+            testsuitename = changedNEWTESTSUITE_A, order=1)               
+print("updateTestSuite", updatedTestSuite)
+
+# get all test suites, using the same name - test Suite B
+response = myTestLink.getTestSuite(NEWTESTSUITE_B, NEWPREFIX)
+print("getTestSuite", response)
+
 # get informationen - TestCase
 # -- Start CHANGE v0.4.5 -- 
 #response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, None, NEWPROJECT)
 response = myTestLink.getTestCaseIDByName(NEWTESTCASE_B, testprojectname=NEWPROJECT)
 # -- END CHANGE v0.4.5 -- 
 print("getTestCaseIDByName", response)
-tcpathname = '::'.join([NEWPROJECT, NEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
+tcpathname = '::'.join([NEWPROJECT, changedNEWTESTSUITE_A, NEWTESTSUITE_AA, NEWTESTCASE_AA])
 response = myTestLink.getTestCaseIDByName('unknown', testcasepathname=tcpathname)
 print("getTestCaseIDByName", response)
 # get execution result

@@ -1446,6 +1446,28 @@ TL version >= 1.9.11
             VERY IMPORTANT: value must be formatted in the way it's written to db
         """
 
+#  /**
+#   * Returns all test suites inside target 
+#   * test project with target name
+#   *
+#   * @param
+#   * @param struct $args
+#   * @param string $args["devKey"]
+#   * @param int $args["testsuitename"]
+#   * @param string $args["prefix"]
+#   * @return mixed $resultInfo
+#   * 
+#   * @access public
+#   */
+#   public function getTestSuite($args)
+
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['testsuitename', 'prefix'])
+    def getTestSuite(self):
+        """ Returns list with all test suites named TESTUITENAME defined for
+        test project using PREFIX """
+
+
 #   /**
 #    * update a test suite
 #    * 
@@ -1462,14 +1484,21 @@ TL version >= 1.9.11
 #   public function updateTestSuite($args)
 
     @decoApiCallAddDevKey               
-    @decoMakerApiCallWithArgs(['testsuitename'], 
-            ['testprojectid', 'prefix', 'details', 'parentid', 
-             'order', 'checkduplicatedname', 'actiononduplicatedname'])
+    @decoMakerApiCallWithArgs(['testsuiteid'], 
+            ['testprojectid', 'prefix', 'parentid', 'testsuitename', 'details',
+             'order'])
     def updateTestSuite(self):
         """ update a test suite 
         
-        args variations: testprojectid - prefix (mandatory!)
-        test project information is general mandatory
+        mandatory arg: testsuiteid - identifies the test suite to be change
+        
+        mandatory args variations: testprojectid or prefix 
+        - test project information is general mandatory
+        
+        optional args:
+        - testsuitename - if defined, test suite name will be changed
+        - details       - if defined test suite details will be changed
+        - order         - if defined, order inside parent container is changed
         """
   
     #
