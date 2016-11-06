@@ -667,6 +667,20 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertIn('prefix=<prefix>', argsDescription)
         self.assertIn('testprojectname=<testprojectname>', argsDescription)
 
+    def test_whatArgs_getTestSuite(self):
+        argsDescription = self.api.whatArgs('getTestSuite')
+        self.assertIn('<testsuitename>, <prefix>', argsDescription)
+        
+    def test_whatArgs_updateTestSuite(self):
+        argsDescription = self.api.whatArgs('updateTestSuite')
+        self.assertIn('<testsuiteid>,', argsDescription)
+        self.assertIn('testprojectid=<testprojectid>', argsDescription)
+        self.assertIn('prefix=<prefix>', argsDescription)
+        self.assertIn('parentid=<parentid>', argsDescription)
+        self.assertIn('testsuitename=<testsuitename>', argsDescription)
+        self.assertIn('details=<details>', argsDescription)
+        self.assertIn('order=<order>', argsDescription)
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

@@ -5,7 +5,7 @@ TestLink-API-Python-client v0.6.3 - Under Develop
 ------------------------------------------------------------
 support for TL 1.9.15 release
 
-implement 1.9.14 new api interfaces - #54
+implement 1.9.14 new api interfaces - #54 #67
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
