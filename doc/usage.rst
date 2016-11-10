@@ -104,6 +104,7 @@ Report test results with timestamp and step result
 --------------------------------------------------
 
 This test result uses the external test case id and not the internal.
+
 -  argument 'execduration' and 'timestamp' usable with TL >= 1.9.14:
 -  argument 'steps' usable with TL >= 1.9.15:
 
@@ -112,8 +113,8 @@ This test result uses the external test case id and not the internal.
  >>> tls.reportTCResult(None, newTestPlanID_A, None, 'f', '', guess=True,
                         testcaseexternalid=tc_aa_full_ext_id, platformname=NEWPLATFORM_A,
                         execduration=3.9, timestamp='2015-09-18 14:33',
-         steps=[{'step_number' : 6, 'result' : 'p', 'notes" : 'result note for passed step 6'}, 
-                {'step_number' : 7, 'result' : 'f', 'notes" : 'result note for failed step 7'}]  )                        
+         steps=[{'step_number' : 6, 'result' : 'p', 'notes' : 'result note for passed step 6'}, 
+                {'step_number' : 7, 'result' : 'f', 'notes' : 'result note for failed step 7'}]  )                        
                         
 Upload attachments
 ------------------

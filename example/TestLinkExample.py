@@ -373,12 +373,14 @@ response = myTestLink.getTestCaseBugs(newTestPlanID_A,
                                       testcaseexternalid=tc_aa_full_ext_id)
 print("getTestCaseBugs TC_AA in TP_A (TC is not executed)", response)
 
-# report Test Case Results for platform 'Big Bird'
+# report Test Case Results for platform 'Big Bird' with step results
 # TC_AA failed, build should be guessed, TC identified with external id
 newResult = myTestLink.reportTCResult(None, newTestPlanID_A, None, 'f', '', guess=True,
                                       testcaseexternalid=tc_aa_full_ext_id,
                                       platformname=NEWPLATFORM_A,
-                                      execduration=3.9, timestamp='2015-09-18 14:33')
+                                      execduration=3.9, timestamp='2015-09-18 14:33',
+         steps=[{'step_number' : 3, 'result' : 'p', 'notes' : 'result note for passed step 3'}, 
+                {'step_number' : 4, 'result' : 'f', 'notes' : 'result note for failed step 4'}]  ) 
 print("reportTCResult", newResult)
 newResultID_AA = newResult[0]['id']
 

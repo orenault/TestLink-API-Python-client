@@ -5,7 +5,7 @@ TestLink-API-Python-client v0.6.3 - Under Develop
 ------------------------------------------------------------
 support for TL 1.9.15 release
 
-implement 1.9.14 new api interfaces - #54 #67
+implement 1.9.15 new api interfaces - #54 #67
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
@@ -14,6 +14,24 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
   [prefix=<prefix>], [parentid=<parentid>], [testsuitename=<testsuitename>], 
   [details=<details>], [order=<order>], [devKey=<devKey>])
 - getTestSuite(<testsuitename>, <prefix>, [devKey=<devKey>])
+
+implement 1.9.15 changed api interfaces - #68
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+changed TestlinkAPIGeneric and TestlinkAPIClient api methods
+
+- reportTCResult() is adapted to support the new optional argument <steps>
+  for setting test step results
+
+examples:
+
+ >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
+ >>> tls.reportTCResult(None, 'aTPlanID', 'aBuildName', 'f', 'result one',
+ >>>                    testcaseexternalid='aTCaseFullExID', overwrite=True,
+ >>>                    platformname='Small Birds', execduration=4.1,
+ >>>                    timestamp='2015-09-19 14:33:02',
+ >>>     steps=[{'step_number' : 3, 'result' : 'p', 'notes' : 'a exec note3'},
+ >>>            {'step_number' : 4, 'result' : 'f', 'notes' : 'a exec note4'}])
 
 known TL 1.9.15 issues:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~

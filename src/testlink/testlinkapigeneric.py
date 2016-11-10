@@ -245,12 +245,83 @@ TL version >= 1.9.11
                 'expected_results' : "result C", 'execution_type' : 0}]
             """
 
+#    /**
+#    * Reports a result for a single test case
+#    *
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["testcaseid"]: optional, if not present           
+#    *                                 testcaseexternalid must be present
+#    *
+#    * @param int $args["testcaseexternalid"]: optional, if does not is present           
+#    *                                         testcaseid must be present
+#    *
+#    *
+#    *
+#    * @param int $args["testplanid"] 
+#    * @param string $args["status"] - status is {@link $validStatusList}
+#    * @param int $args["buildid"] - optional.
+#    *                               if not present and $args["buildname"] exists
+#    *                               then 
+#    *                                    $args["buildname"] will be checked and used if valid
+#    *                               else 
+#    *                                    build with HIGHEST ID will be used
+#    *
+#    * @param int $args["buildname"] - optional.
+#    *                               if not present Build with higher internal ID will be used
+#    *
+#    *
+#    * @param string $args["notes"] - optional
+#    * @param string $args["execduration"] - optional
+#    *
+#    * @param bool $args["guess"] - optional defining whether to guess optinal params or require them 
+#    *                               explicitly default is true (guess by default)
+#    *
+#    * @param string $args["bugid"] - optional
+#    *
+#    * @param string $args["platformid"] - optional, if not present platformname must be present
+#    * @param string $args["platformname"] - optional, if not present platformid must be present
+#    *    
+#    *
+#    * @param string $args["customfields"] - optional
+#    *               contains an map with key:Custom Field Name, value: value for CF.
+#    *               VERY IMPORTANT: value must be formatted in the way it's written to db,
+#    *               this is important for types like:
+#    *
+#    *               DATE: strtotime()
+#    *               DATETIME: mktime()
+#    *               MULTISELECTION LIST / CHECKBOX / RADIO: se multipli selezione ! come separatore
+#    *
+#    *
+#    *               these custom fields must be configured to be writte during execution.
+#    *               If custom field do not meet condition value will not be written
+#    *
+#    * @param boolean $args["overwrite"] - optional, if present and true, then last execution
+#    *                for (testcase,testplan,build,platform) will be overwritten.            
+#    *
+#    * @param boolean $args["user"] - optional, if present and user is a valid login 
+#    *                                (no other check will be done) it will be used when writting execution.
+#    *
+#    * @param string $args["timestamp"] - optional, if not present now is used
+#    *                                    format YYYY-MM-DD HH:MM:SS
+#    *                                    example 2015-05-22 12:15:45   
+#    * @return mixed $resultInfo 
+#    *         [status]  => true/false of success
+#    *         [id]      => result id or error code
+#    *         [message]  => optional message for error message string
+#    * @access public
+#    *
+#    * @internal revisions
+#    *
+#    */
+#   public function reportTCResult($args)
+
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid', 'status'], 
                 ['testcaseid', 'testcaseexternalid', 'buildid', 'buildname', 
                  'platformid', 'platformname', 'notes', 'guess', 'bugid', 
                  'customfields', 'overwrite', 'user', 'execduration', 
-                 'timestamp'])
+                 'timestamp', 'steps'])
     def reportTCResult(self):
         """ Reports a result for a single test case
 
@@ -263,9 +334,11 @@ TL version >= 1.9.11
         overwrite    : if present and true, then last execution for 
                        (testcase,testplan,build,platform) will be overwritten. 
         user : if present and user is a valid login (no other check will be done) 
-               it will be used when writting execution.
+               it will be used when writing execution.
         execduration : Exec (min) as float (2.5 = 2min 30sec)
-        timestamp    : 'YYYY-MM-DD hh:mm[:ss]'
+        timestamp    : 'YYYY-MM-DD hh:mm[:ss]'#
+        steps        : [{'step_number' : 6, 'result' : 'p', 'notes" : 'a_note'}, 
+                        {'step_number' : 7, 'result' : 'f', 'notes" : 'blabla'}] 
         """
 
 #   /**

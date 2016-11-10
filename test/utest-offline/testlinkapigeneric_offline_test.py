@@ -685,7 +685,9 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertIn('user=<user>', argsDescription)
         self.assertIn('execduration=<execduration>', argsDescription)
         self.assertIn('timestamp=<timestamp>', argsDescription)
-        
+        self.assertIn('steps=<steps>', argsDescription)
+        self.assertIn("[{'step_number' : 6,", argsDescription)
+                
     def test_whatArgs_getLastExecutionResult(self):
         argsDescription = self.api.whatArgs('getLastExecutionResult')
         self.assertIn('options=<options>', argsDescription)

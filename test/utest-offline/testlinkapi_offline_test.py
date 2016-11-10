@@ -569,6 +569,8 @@ class TestLinkAPIOfflineTestCase(unittest.TestCase):
         self.assertIn('user=<user>', argsDescription)
         self.assertIn('execduration=<execduration>', argsDescription)
         self.assertIn('timestamp=<timestamp>', argsDescription)
+        self.assertIn('steps=<steps>', argsDescription)
+        self.assertIn("[{'step_number' : 6,", argsDescription)
 
     def test_getTestCasesForTestSuite_keyWords(self):
         self.api.loadScenario(SCENARIO_KEYWORDS)
