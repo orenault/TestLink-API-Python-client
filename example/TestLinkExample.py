@@ -100,6 +100,7 @@ myApiVersion='%s v%s' % (myTestLink.__class__.__name__ , myTestLink.__version__)
 NEWBUILD_A='%s' % myApiVersion
 NEWBUILD_B='%s' % myApiVersion
 NEWBUILD_C='%s - DeleteTest' % myApiVersion
+NEWBUILD_D='%s - copyTestersTest' % myApiVersion
 
 this_file_dirname=os.path.dirname(__file__)
 NEWATTACHMENT_PY= os.path.join(this_file_dirname, 'TestLinkExample.py')
@@ -335,7 +336,8 @@ response = myTestLink.removePlatformFromTestPlan(newTestPlanID_A, NEWPLATFORM_C)
 print("removePlatformFromTestPlan", response)
   
 # -- Create Build for TestPlan A (uses platforms)
-newBuild = myTestLink.createBuild(newTestPlanID_A, NEWBUILD_A, 'Notes for the Build')
+newBuild = myTestLink.createBuild(newTestPlanID_A, NEWBUILD_A, 
+                            'Notes for the Build', releasedate="2016-12-31")
 print("createBuild", newBuild)
 newBuildID_A = newBuild[0]['id'] 
 print("New Build '%s' - id: %s" % (NEWBUILD_A, newBuildID_A))
@@ -420,7 +422,7 @@ print("uploadExecutionAttachment", newAttachment)
 
 # -- Create Build for TestPlan B (uses no platforms)
 newBuild = myTestLink.createBuild(newTestPlanID_B, NEWBUILD_B, 
-                                  'Build for TestPlan without platforms')
+            'Build for TestPlan without platforms', releasedate='2016-11-30')
 print("createBuild", newBuild)
 newBuildID_B = newBuild[0]['id'] 
 print("New Build '%s' - id: %s" % (NEWBUILD_B, newBuildID_B))
@@ -546,6 +548,14 @@ try:
     print("getTotalsForTestPlan after delete", response)
 except TLResponseError as tl_err:
     print(tl_err.message)
+
+# -- Create Build D and copy Testers from Build A
+newBuild = myTestLink.createBuild(newTestPlanID_A, NEWBUILD_D, 
+            'Build with copied testers from Build ' + NEWBUILD_A,
+            active=1, open=1, copytestersfrombuild=newBuildID_A)
+print("createBuild", newBuild)
+newBuildID_D = newBuild[0]['id'] 
+print("New Build '%s' - id: %s" % (NEWBUILD_D, newBuildID_D))
 
 # get information - TestProject
 response = myTestLink.getTestProjectByName(NEWPROJECT)

@@ -791,6 +791,16 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertIn('testsuitename=<testsuitename>', argsDescription)
         self.assertIn('details=<details>', argsDescription)
         self.assertIn('order=<order>', argsDescription)
+
+    def test_whatArgs_createBuild(self):
+        argsDescription = self.api.whatArgs('createBuild')
+        self.assertIn('<testplanid>,', argsDescription)
+        self.assertIn('<buildname>,', argsDescription)
+        self.assertIn('buildnotes=<buildnotes>', argsDescription)
+        self.assertIn('active=<active>', argsDescription)
+        self.assertIn('open=<open>', argsDescription)
+        self.assertIn('releasedate=<releasedate>', argsDescription)
+        self.assertIn('copytestersfrombuild=<copytestersfrombuild>', argsDescription)
                
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

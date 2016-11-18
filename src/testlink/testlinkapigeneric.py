@@ -147,11 +147,38 @@ TL version >= 1.9.11
     def about(self):
         """ Gives basic information about the API """
 
+#   /**
+#    * Creates a new build for a specific test plan
+#    *
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param int $args["testplanid"]
+#    * @param string $args["buildname"];
+#    * @param string $args["buildnotes"];
+#    * @param string $args["active"];
+#    * @param string $args["open"];
+#    * @param string $args["releasedate"]: YYYY-MM-DD;
+#    * @param int $args["copytestersfrombuild"] OPTIONAL,
+#    *        if > 0 and valid buildid tester assignments will be copied.
+#    *   
+#    * @return mixed $resultInfo
+#    *         
+#    * @access public
+#    */    
+#   public function createBuild($args)
+
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testplanid', 'buildname'], 
-                              ['buildnotes'])
+                              ['buildnotes', 'active', 'open', 'releasedate',
+                               'copytestersfrombuild'])
     def createBuild(self):
-        """ Creates a new build for a specific test plan """
+        """ Creates a new build for a specific test plan 
+        
+        active      : 1 (default) = activ  0 = inactiv 
+        open        : 1 (default) = open   1 = closed
+        releasedate : YYYY-MM-DD
+        copytestersfrombuild : valid buildid tester assignments will be copied.
+          """
         
     @decoMakerApiCallReplaceTLResponseError() 
     @decoApiCallAddDevKey            

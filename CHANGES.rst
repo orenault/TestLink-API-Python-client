@@ -15,24 +15,32 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
   [details=<details>], [order=<order>], [devKey=<devKey>])
 - getTestSuite(<testsuitename>, <prefix>, [devKey=<devKey>])
 
-implement 1.9.15 changed api interfaces - #68
+implement 1.9.15 changed api interfaces - #68 #70
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 changed TestlinkAPIGeneric and TestlinkAPIClient api methods
 
 - reportTCResult() is adapted to support the new optional argument <steps>
   for setting test step results
+- createBuild() is adapted to support new optional arguments
+  - <active> : 1 (default) = activ  0 = inactiv 
+  - <open>   : 1 (default) = open   1 = closed
+  - <releasedate> : YYYY-MM-DD
+  - <copytestersfrombuild> : valid buildid tester assignments will be copied.
 
 examples:
 
  >>> tls = testlink.TestLinkHelper().connect(testlink.TestlinkAPIClient)
- >>> tls.reportTCResult(None, 'aTPlanID', 'aBuildName', 'f', 'result one',
+ >>> tls.reportTCResult(None, 'aTPlanID', 'aBuildName', 'f', 'result note',
  >>>                    testcaseexternalid='aTCaseFullExID', overwrite=True,
  >>>                    platformname='Small Birds', execduration=4.1,
  >>>                    timestamp='2015-09-19 14:33:02',
  >>>     steps=[{'step_number' : 3, 'result' : 'p', 'notes' : 'a exec note3'},
  >>>            {'step_number' : 4, 'result' : 'f', 'notes' : 'a exec note4'}])
-
+ >>> tls.createBuild(aTPlanID, 'newBuildName',  'a build note', 
+ >>>                 active=1, open=1, releasedate='2016-11-30'
+ >>>                 copytestersfrombuild=existingBuildID)
+ 
 known TL 1.9.15 issues:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
