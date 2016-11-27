@@ -801,6 +801,17 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertIn('open=<open>', argsDescription)
         self.assertIn('releasedate=<releasedate>', argsDescription)
         self.assertIn('copytestersfrombuild=<copytestersfrombuild>', argsDescription)
+
+    def test_whatArgs_addTestCaseToTestPlan(self):
+        argsDescription = self.api.whatArgs('addTestCaseToTestPlan')
+        self.assertIn('<testprojectid>,', argsDescription)
+        self.assertIn('<testplanid>,', argsDescription)
+        self.assertIn('<testcaseexternalid>,', argsDescription)
+        self.assertIn('<version>,', argsDescription)
+        self.assertIn('platformid=<platformid>', argsDescription)
+        self.assertIn('executionorder=<executionorder>', argsDescription)
+        self.assertIn('urgency=<urgency>', argsDescription)
+        self.assertIn('overwrite=<overwrite>', argsDescription)
                
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

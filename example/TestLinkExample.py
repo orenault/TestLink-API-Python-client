@@ -674,11 +674,13 @@ print("uploadTestCaseAttachment", newAttachment)
 response = myTestLink.getTestCaseAttachments(testcaseid=newTestCaseID_B)
 print("getTestCaseAttachments", response)
 
-# copy test cases
+# copy test case - as a new TC version
 print("create new version of TC B")
 response = myTestLink.copyTCnewVersion(newTestCaseID_B, 
                 summary='new version of TC B', importance='1')
 print('copyTCnewVersion', response)
+
+# copy test case - as new TC in a different TestSuite
 print("copy TC B as TC BA into Test suite A")
 response = myTestLink.copyTCnewTestCase(newTestCaseID_B, 
                 testsuiteid=newTestSuiteID_A, testcasename='%sA' % NEWTESTCASE_B)
@@ -687,6 +689,16 @@ response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_B, False, 'simple'
 print('getTestCasesForTestSuite B', response)
 response = myTestLink.getTestCasesForTestSuite(newTestSuiteID_A, True, 'simple')
 print('getTestCasesForTestSuite A', response)
+
+# sample, how the test plan can be updated to use the new tc version
+# site effect of this step, assigned testers and existing execution results are 
+# not accessible anymore via the TL Web Gui. 
+# That is the reason, why we have uncomment it for the normal sample execution
+# response = myTestLink.addTestCaseToTestPlan(newProjectID, newTestPlanID_B, 
+#                                             tc_b_full_ext_id, tc_version+1,
+#                                             overwrite=1)
+# print("addTestCaseToTestPlan overwrite", response)
+
 
 # no test data
 # response = myTestLink.getTestCaseCustomFieldDesignValue(

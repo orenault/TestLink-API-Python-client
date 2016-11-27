@@ -175,7 +175,7 @@ TL version >= 1.9.11
         """ Creates a new build for a specific test plan 
         
         active      : 1 (default) = activ  0 = inactiv 
-        open        : 1 (default) = open   1 = closed
+        open        : 1 (default) = open   0 = closed
         releasedate : YYYY-MM-DD
         copytestersfrombuild : valid buildid tester assignments will be copied.
           """
@@ -465,6 +465,7 @@ TL version >= 1.9.11
 #     * @param args['platformid'] - OPTIONAL Only if  test plan has no platforms
 #     * @param args['executionorder'] - OPTIONAL
 #     * @param args['urgency'] - OPTIONAL
+#     * @param args['overwrite'] - OPTIONAL
 #     *
 #     */
 #   public function addTestCaseToTestPlan($args)
@@ -472,7 +473,7 @@ TL version >= 1.9.11
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testprojectid',
                                'testplanid', 'testcaseexternalid', 'version'],
-                              ['platformid', 'executionorder', 'urgency'])
+                    ['platformid', 'executionorder', 'urgency', 'overwrite'])
     def addTestCaseToTestPlan(self):
         """ Add a test case version to a test plan """
         

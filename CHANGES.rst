@@ -15,7 +15,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
   [details=<details>], [order=<order>], [devKey=<devKey>])
 - getTestSuite(<testsuitename>, <prefix>, [devKey=<devKey>])
 
-implement 1.9.15 changed api interfaces - #68 #70
+implement 1.9.15 changed api interfaces - #68 #70 #72
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 changed TestlinkAPIGeneric and TestlinkAPIClient api methods
@@ -23,10 +23,14 @@ changed TestlinkAPIGeneric and TestlinkAPIClient api methods
 - reportTCResult() is adapted to support the new optional argument <steps>
   for setting test step results
 - createBuild() is adapted to support new optional arguments
+
   - <active> : 1 (default) = activ  0 = inactiv 
   - <open>   : 1 (default) = open   1 = closed
   - <releasedate> : YYYY-MM-DD
   - <copytestersfrombuild> : valid buildid tester assignments will be copied.
+  
+- addTestCaseToTestPlan() is adapted to to support the new optional argument 
+  <overwrite> to update linked Test Case Versions
 
 examples:
 
@@ -40,6 +44,9 @@ examples:
  >>> tls.createBuild(aTPlanID, 'newBuildName',  'a build note', 
  >>>                 active=1, open=1, releasedate='2016-11-30'
  >>>                 copytestersfrombuild=existingBuildID)
+ >>> tls.addTestCaseToTestPlan(aTProjectID, aTPlanID, 'aTCaseFullExID',
+ >>>                           aTCVersion, overwrite=1)
+ 
  
 known TL 1.9.15 issues:
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
