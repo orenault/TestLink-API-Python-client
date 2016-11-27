@@ -125,12 +125,23 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         """ createTestCase: Create a test case
         positional args: testcasename, testsuiteid, testprojectid, authorlogin,
                          summary
-        optional args : preconditions, importance, executiontype, order,
-                        internalid, checkduplicatedname, actiononduplicatedname
+        optional args : steps, preconditions, importance, executiontype, order,
+                        internalid, checkduplicatedname, actiononduplicatedname,
+                        status, estimatedexecduration
                         
         argument 'steps' will be set with values from .stepsList, 
         - when argsOptional does not include a 'steps' item
         - .stepsList can be filled before call via .initStep() and .appendStep()
+        
+        otherwise, optional arg 'steps' must be defined as a list with 
+        dictionaries , example
+            [{'step_number' : 1, 'actions' : "action A" , 
+                'expected_results' : "result A", 'execution_type' : 0},
+                 {'step_number' : 2, 'actions' : "action B" , 
+                'expected_results' : "result B", 'execution_type' : 1},
+                 {'step_number' : 3, 'actions' : "action C" , 
+                'expected_results' : "result C", 'execution_type' : 0}]
+
         """ 
         
         # store current stepsList as argument 'steps', when argsOptional defines
@@ -266,7 +277,8 @@ class TestlinkAPIClient(TestlinkAPIGeneric):
         externalArgNames.extend(optArgNames)
         externalTointernalNames = {'testcasename' : 'name', 
                 'testsuiteid' : 'testsuite_id', 'authorlogin' : 'author_login', 
-                'executiontype' : 'execution_type', 'order' : 'node_order'}
+                'executiontype' : 'execution_type', 'order' : 'node_order',
+                'estimatedexecduration' : 'estimated_exec_duration' }
         
         # extend origItems with some values needed in createTestCase 
         origArgItems['checkduplicatedname'] = 1 

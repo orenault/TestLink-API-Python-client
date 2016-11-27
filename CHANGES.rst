@@ -15,7 +15,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
   [details=<details>], [order=<order>], [devKey=<devKey>])
 - getTestSuite(<testsuitename>, <prefix>, [devKey=<devKey>])
 
-implement 1.9.15 changed api interfaces - #68 #70 #72
+implement 1.9.15 changed api interfaces - #68 #70 #72 #71
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 changed TestlinkAPIGeneric and TestlinkAPIClient api methods
@@ -31,6 +31,8 @@ changed TestlinkAPIGeneric and TestlinkAPIClient api methods
   
 - addTestCaseToTestPlan() is adapted to to support the new optional argument 
   <overwrite> to update linked Test Case Versions
+- createTestCase() is adapted to to support the new optional arguments <status>
+  and <estimatedexecduration>
 
 examples:
 

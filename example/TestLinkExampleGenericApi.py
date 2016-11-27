@@ -225,8 +225,13 @@ print("New Test Suite '%s' - id: %s" % (NEWTESTSUITE_AA, newTestSuiteID_AA))
  
 MANUAL = 1
 AUTOMATED = 2
+READFORREVIEW=2
+REWORK=4
+HIGH=3
+MEDIUM=2
+LOW=1
 # 
-# #Creates the test case TC_AA
+# #Creates the test case TC_AA with state ready for review
 steps_tc_aa = [
         {'step_number' : 1, 'actions' : "Step action 1 - aa" , 
          'expected_results' : "Step result 1 - aa", 'execution_type' : MANUAL},
@@ -244,12 +249,13 @@ steps_tc_aa = [
                ]  
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_AA, newTestSuiteID_AA, 
           newProjectID, myTestUserName, "This is the summary of the Test Case AA", 
-          steps_tc_aa, preconditions='these are the preconditions')                 
+          steps_tc_aa, preconditions='these are the preconditions',
+          importance=LOW, state=READFORREVIEW, estimatedexecduration=10.1)                 
 print("createTestCase", newTestCase)
 newTestCaseID_AA = newTestCase[0]['id'] 
 print("New Test Case '%s' - id: %s" % (NEWTESTCASE_AA, newTestCaseID_AA))
  
-#Creates the test case TC_B 
+#Creates the test case TC_B with state rework
 steps_tc_b = [
         {'step_number' : 1, 'actions' : "Step action 1 -b " , 
          'expected_results' : "Step result 1 - b", 'execution_type' : AUTOMATED},
@@ -265,7 +271,7 @@ steps_tc_b = [
 newTestCase = myTestLink.createTestCase(NEWTESTCASE_B, newTestSuiteID_B, 
           newProjectID, myTestUserName, "This is the summary of the Test Case B", 
           steps_tc_b, preconditions='these are the preconditions', 
-          executiontype=AUTOMATED)               
+          executiontype=AUTOMATED, status=REWORK, estimatedexecduration=0.5)               
 print("createTestCase", newTestCase)
 newTestCaseID_B = newTestCase[0]['id'] 
 print("New Test Case '%s' - id: %s" % (NEWTESTCASE_B, newTestCaseID_B))
@@ -304,7 +310,7 @@ steps_tc_b_v1u.append(
     {'step_number' : 6, 'actions' : "Step action 6 -b added by updateTestCase" , 
      'expected_results' : "Step result 6 - b added", 'execution_type' : AUTOMATED})                 
 response = myTestLink.updateTestCase(tc_b_full_ext_id, version=tc_version,
-                steps=steps_tc_b_v1u, importance='high', estimatedexecduration=3)
+                steps=steps_tc_b_v1u, importance=MEDIUM, estimatedexecduration=3)
 print("updateTestCase", response)
 
 # create additional steps via createTestCaseSteps - action create

@@ -755,7 +755,21 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         
     def test_whatArgs_createTestCase(self):
         argsDescription = self.api.whatArgs('createTestCase')
+        self.assertIn('<testcasename>,', argsDescription)
+        self.assertIn('<testsuiteid>,', argsDescription)
+        self.assertIn('<testprojectid>,', argsDescription)
+        self.assertIn('<authorlogin>,', argsDescription)
+        self.assertIn('<summary>,', argsDescription)
+        self.assertIn('<steps>,', argsDescription)
+        self.assertIn('preconditions=<preconditions>', argsDescription)
+        self.assertIn('importance=<importance>', argsDescription)
         self.assertIn('executiontype=<executiontype>', argsDescription)
+        self.assertIn('order=<order>', argsDescription)
+        self.assertIn('internalid=<internalid>', argsDescription)
+        self.assertIn('checkduplicatedname=<checkduplicatedname>', argsDescription)
+        self.assertIn('actiononduplicatedname=<actiononduplicatedname>', argsDescription)
+        self.assertIn('status=<status>', argsDescription)
+        self.assertIn('estimatedexecduration=<estimatedexecduration>', argsDescription)
 
     def test_getProjects_noProject(self):
         self.api.loadScenario(SCENARIO_NO_PROJECT)

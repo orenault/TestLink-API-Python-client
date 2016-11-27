@@ -255,11 +255,50 @@ TL version >= 1.9.11
         server return can be a list or a dictionary 
         - optional arg testprojectname seems to create a dictionary response """
  
+#    /**
+#     * createTestCase
+#     * @param struct $args
+#     * @param string $args["devKey"]
+#     * @param string $args["testcasename"]
+#     * @param int    $args["testsuiteid"]: test case parent test suite id
+#     * @param int    $args["testprojectid"]: test case parent test suite id
+#     *
+#     * @param string $args["authorlogin"]: to set test case author
+#     * @param string $args["summary"]
+#     * @param array  $args["steps"]
+#     *
+#     * @param string $args["preconditions"] - optional
+#     * @param int    $args["importance"] - optional - see const.inc.php for domain
+#     * @param int    $args["execution"] - optional - see ... for domain
+#     * @param int    $args["order'] - optional
+#     * @param int    $args["internalid"] - optional - do not use
+#     * @param string $args["checkduplicatedname"] - optional
+#     * @param string $args["actiononduplicatedname"] - optional
+#     * @param int    $args["status"] - optional - see const.inc.php $tlCfg->testCaseStatus
+#     * @param number $args["estimatedexecduration"] - optional
+#     *
+#     * @return mixed $resultInfo
+#     * @return string $resultInfo['operation'] - verbose operation
+#     * @return boolean $resultInfo['status'] - verbose operation
+#     * @return int $resultInfo['id'] - test case internal ID (Database ID)
+#     * @return mixed $resultInfo['additionalInfo'] 
+#     * @return int $resultInfo['additionalInfo']['id'] same as $resultInfo['id']
+#     * @return int $resultInfo['additionalInfo']['external_id'] without prefix
+#     * @return int $resultInfo['additionalInfo']['status_ok'] 1/0
+#     * @return string $resultInfo['additionalInfo']['msg'] - for debug 
+#     * @return string $resultInfo['additionalInfo']['new_name'] only present if new name generation was needed
+#     * @return int $resultInfo['additionalInfo']['version_number']
+#     * @return boolean $resultInfo['additionalInfo']['has_duplicate'] - for debug 
+#     * @return string $resultInfo['message'] operation message
+#     */
+#   public function createTestCase($args)
+
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testcasename', 'testsuiteid', 'testprojectid', 
                                'authorlogin', 'summary', 'steps'], 
                 ['preconditions', 'importance', 'executiontype', 'order', 
-                 'internalid', 'checkduplicatedname', 'actiononduplicatedname'])
+                 'internalid', 'checkduplicatedname', 'actiononduplicatedname',
+                 'status', 'estimatedexecduration'])
     def createTestCase(self):
         """ Create a test case
                         
@@ -270,6 +309,14 @@ TL version >= 1.9.11
                 'expected_results' : "result B", 'execution_type' : 1},
                  {'step_number' : 3, 'actions' : "action C" , 
                 'expected_results' : "result C", 'execution_type' : 0}]
+                
+            possible values for optional arguments testlink/cfg/const.inc.php
+            importance:    1 (low)    2 (medium) 3 (high)   
+            status:        1 (draft)             2 (readyForReview)
+                           3 (reviewInProgress)  4 (rework) 
+                           5 (obsolete)          6 (future)
+                           7 (final)
+            executiontype: 1 (Manual)            2 (Automated)
             """
 
 #    /**
@@ -1171,6 +1218,31 @@ TL version >= 1.9.11
     *
     * ATTENTION: userApiKey will be set to NULL, because is worst that access to user password
     """
+
+#    /**
+#     * Update an existing test case
+#     * Not all test case attributes will be able to be updated using this method
+#     * See details below
+#     * 
+#     * @param struct $args
+#     * @param string $args["devKey"]
+#     * @param string $args["testcaseexternalid"] format PREFIX-NUMBER
+#     * @param int    $args["version"] optional version NUMBER (human readable) 
+#     * @param string $args["testcasename"] - optional
+#     * @param string $args["summary"] - optional
+#     * @param string $args["preconditions"] - optional
+#     * @param array  $args["steps"] - optional
+#     *               each element is a hash with following keys
+#     *               step_number,actions,expected_results,execution_type
+#     *
+#     * @param int    $args["importance"] - optional - see const.inc.php for domain
+#     * @param int    $args["executiontype"] - optional - see ... for domain
+#     * @param int    $args["status'] - optional
+#     * @param int    $args["estimatedexecduration'] - optional
+#     * @param string $args["user'] - login name used as updater - optional
+#     *                               if not provided will be set to user that request update
+#     */
+#    public function updateTestCase($args)
 
     @decoApiCallAddDevKey
     @decoMakerApiCallWithArgs(['testcaseexternalid'], 
