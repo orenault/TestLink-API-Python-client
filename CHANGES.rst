@@ -5,7 +5,7 @@ TestLink-API-Python-client v0.6.3 - Under Develop
 ------------------------------------------------------------
 support for TL 1.9.15 release
 
-implement 1.9.15 new api interfaces - #54 #67
+implement 1.9.15 new api interfaces - #54 #67 #69
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
@@ -14,8 +14,9 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
   [prefix=<prefix>], [parentid=<parentid>], [testsuitename=<testsuitename>], 
   [details=<details>], [order=<order>], [devKey=<devKey>])
 - getTestSuite(<testsuitename>, <prefix>, [devKey=<devKey>])
-
-implement 1.9.15 changed api interfaces - #68 #70 #72 #71
+- getIssueTrackerSystem(<itsname>, [devKey=<devKey>])
+ 
+implement 1.9.15 changed api interfaces - #68 #70 #72 #71 #69
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 changed TestlinkAPIGeneric and TestlinkAPIClient api methods
@@ -33,6 +34,8 @@ changed TestlinkAPIGeneric and TestlinkAPIClient api methods
   <overwrite> to update linked Test Case Versions
 - createTestCase() is adapted to to support the new optional arguments <status>
   and <estimatedexecduration>
+- createTestProject() is adapted to to support the new optional arguments 
+  <itsname> and <itsenabled> to link a project with an ITS
 
 examples:
 

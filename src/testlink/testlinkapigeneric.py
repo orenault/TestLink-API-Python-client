@@ -212,9 +212,32 @@ TL version >= 1.9.11
         
         returns an empty list, if no suite is assigned """
         
+        
+#   /**
+#    * create a test project
+#    * 
+#    * @param struct $args
+#    * @param string $args["devKey"]
+#    * @param string $args["testprojectname"]
+#    * @param string $args["testcaseprefix"]
+#    * @param string $args["notes"] OPTIONAL
+#    * @param map $args["options"] OPTIONAL ALL int treated as boolean
+#    *        keys  requirementsEnabled,testPriorityEnabled,automationEnabled,inventoryEnabled
+#    *
+#    * @param int $args["active"]  OPTIONAL
+#    * @param int $args["public"]  OPTIONAL
+#    * @param string $args["itsname"]  OPTIONAL  
+#    * @param boolean $args["itsEnabled"]  OPTIONAL  
+#    * 
+#    *
+#    * @return mixed $resultInfo
+#    */
+#   public function createTestProject($args)
+        
     @decoApiCallAddDevKey               
     @decoMakerApiCallWithArgs(['testprojectname', 'testcaseprefix'],
-                              ['notes', 'active', 'public', 'options'])
+                              ['notes', 'active', 'public', 'options',
+                               'itsname', 'itsenabled'])
     def createTestProject(self):
         """ Create a test project  
         
@@ -1673,6 +1696,23 @@ TL version >= 1.9.11
         - details       - if defined test suite details will be changed
         - order         - if defined, order inside parent container is changed
         """
+
+#    /**
+#     * Get Issue Tracker System by name
+#     *
+#     * @param struct $args
+#     * @param string $args["devKey"]
+#     * @param string $args["itsname"] ITS name 
+#     * @return mixed $itsObject      
+#     * @access public
+#     */
+#     public function getIssueTrackerSystem($args,$call=null)
+
+    @decoApiCallAddDevKey               
+    @decoMakerApiCallWithArgs(['itsname'], [])
+    def getIssueTrackerSystem(self):
+        """ Get Issue Tracker System by name """
+
   
     #
     #  internal methods for general server calls

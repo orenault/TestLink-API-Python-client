@@ -178,6 +178,11 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '7001.*Empty name'):
             self.client.createTestProject('', 'P40000711')
 
+    def test_createTestProject_unknownITS(self):
+        with self.assertRaisesRegex(TLResponseError, '13000.*Unable to find'):
+            self.client.createTestProject(testprojectname='aProject', 
+                                testcaseprefix='aPrefix', itsname='unknownITS')
+ 
     def test_createBuild_unknownID(self):
         with self.assertRaisesRegex(TLResponseError, '3000.*40000711'):
             self.client.createBuild(40000711, 'Build 40000712', 'note 40000713')
@@ -438,6 +443,10 @@ class TestLinkAPIOnlineTestCase(unittest.TestCase):
                                     testsuitename = 'suite 40000712 updated',
                                     details = 'detail 40000713 updated',
                                     order =1)
+            
+    def test_getIssueTrackerSystem_unknownITS(self):
+        with self.assertRaisesRegex(TLResponseError, '13000.*Unable to find'):
+            self.client.getIssueTrackerSystem('unknownITS')
         
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']

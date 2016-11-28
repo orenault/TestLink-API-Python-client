@@ -94,6 +94,11 @@ class TestLinkAPIGenericOnlineTestCase(unittest.TestCase):
             self.client.createTestProject(testprojectname='', 
                                                  testcaseprefix='P40000711')
  
+    def test_createTestProject_unknownITS(self):
+        with self.assertRaisesRegex(TLResponseError, '13000.*Unable to find'):
+            self.client.createTestProject(testprojectname='aProject', 
+                                testcaseprefix='aPrefix', itsname='unknownITS')
+ 
     def test_getProjects(self):
         response = self.client.getProjects()
         self.assertIsNotNone(response)
@@ -453,6 +458,10 @@ class TestLinkAPIGenericOnlineTestCase(unittest.TestCase):
                                     details = 'detail 40000713 updated',
                                     order =1)
             
+    def test_getIssueTrackerSystem_unknownITS(self):
+        with self.assertRaisesRegex(TLResponseError, '13000.*Unable to find'):
+            self.client.getIssueTrackerSystem('unknownITS')
+ 
          
                                  
 if __name__ == "__main__":

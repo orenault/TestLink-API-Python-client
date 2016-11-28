@@ -827,6 +827,21 @@ class TestLinkAPIGenericOfflineTestCase(unittest.TestCase):
         self.assertIn('urgency=<urgency>', argsDescription)
         self.assertIn('overwrite=<overwrite>', argsDescription)
                
+    def test_whatArgs_createTestProject(self):
+        argsDescription = self.api.whatArgs('createTestProject')
+        self.assertIn('<testprojectname>,', argsDescription)
+        self.assertIn('<testcaseprefix>,', argsDescription)
+        self.assertIn('notes=<notes>', argsDescription)
+        self.assertIn('active=<active>', argsDescription)
+        self.assertIn('public=<public>', argsDescription)
+        self.assertIn('options=<options>', argsDescription)
+        self.assertIn('itsname=<itsname>', argsDescription)
+        self.assertIn('itsenabled=<itsenabled>', argsDescription)
+
+    def test_whatArgs_getIssueTrackerSystem(self):
+        argsDescription = self.api.whatArgs('getIssueTrackerSystem')
+        self.assertIn('<itsname>,', argsDescription)
+
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()

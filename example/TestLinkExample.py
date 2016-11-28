@@ -112,6 +112,7 @@ myTLVersionShort = myTLVersion.replace('.', '')
 
 NEWPROJECT="NEW_PROJECT_API-%s" % myPyVersionShort
 NEWPREFIX="NPROAPI%s" % myPyVersionShort
+ITSNAME="myITS"
 
 # used connection settings
 print(myTestLink.connectionInfo())
@@ -156,12 +157,17 @@ try:
     print("deleteTestProject", response)
 except TLResponseError:
     print("No project with prefix %s exists" % NEWPREFIX)
+    
+# # get IssueTrackerSystem
+# aITS=myTestLink.getIssueTrackerSystem(aITSNAME)
+# print("getIssueTrackerSystem", aITS)    
 
 # Creates the project
 projInfo = 'Example created with Python %s API class %s in TL %s' % \
             ( python_version(), myApiVersion, myTLVersion )
 newProject = myTestLink.createTestProject(NEWPROJECT, NEWPREFIX,
     notes=projInfo, active=1, public=1,
+#    itsname=ITSNAME, itsenabled=1,
     options={'requirementsEnabled' : 0, 'testPriorityEnabled' : 1,
              'automationEnabled' : 1, 'inventoryEnabled' : 0})
 print("createTestProject", newProject)
