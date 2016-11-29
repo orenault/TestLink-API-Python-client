@@ -629,6 +629,8 @@ updatedTestSuite = myTestLink.updateTestSuite(newTestSuiteID_B,
 print("updateTestSuite", updatedTestSuite)
 
 # Update test suite A name and order details - Using Project Name
+# with TL 1.9.15 this step fails - solution see TL Mantis Ticket 7696 
+# <http://mantis.testlink.org/view.php?id=7696>
 changedNEWTESTSUITE_A = NEWTESTSUITE_A + ' - Changed'
 updatedTestSuite = myTestLink.updateTestSuite(newTestSuiteID_A, prefix=NEWPREFIX, 
             testsuitename = changedNEWTESTSUITE_A, order=1)               

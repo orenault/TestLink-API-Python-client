@@ -7,7 +7,11 @@ TestLink-API-Python-client Installation
 Preconditions
 -------------
 
-Currently the combinations Python 2.6.9/2.7.9/3.3.5/3.4.2 and TestLink 1.9.14 are tested.
+Currently the combinations Python 2.6.9/2.7.9/3.3.5/3.4.2 are tested with 
+TestLink 1.9.15 including the fixes 
+- `TL 7696 <http://mantis.testlink.org/view.php?id=7696>`_ ,
+  `TL 7708 <http://mantis.testlink.org/view.php?id=7708>` and
+  `TL 7765 <http://mantis.testlink.org/view.php?id=7765>`
 
 - Other combination might work - feedback is welcome :-) 
 
