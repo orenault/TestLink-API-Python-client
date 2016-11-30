@@ -7,16 +7,17 @@ TestLink-API-Python-client Installation
 Preconditions
 -------------
 
-Currently the combinations Python 2.6.9/2.7.9/3.3.5/3.4.2 are tested with 
+Currently the combinations Python 2.6.9/2.7.12/3.3.5/3.4.4/3.5.2 are tested with 
 TestLink 1.9.15 including the fixes 
-- `TL 7696 <http://mantis.testlink.org/view.php?id=7696>`_ ,
-  `TL 7708 <http://mantis.testlink.org/view.php?id=7708>` and
-  `TL 7765 <http://mantis.testlink.org/view.php?id=7765>`
 
-- Other combination might work - feedback is welcome :-) 
+- `TL 7696 <http://mantis.testlink.org/view.php?id=7696>`_ ,
+  `TL 7708 <http://mantis.testlink.org/view.php?id=7708>`_ and
+  `TL 7765 <http://mantis.testlink.org/view.php?id=7765>`_
+
+Other combination might work - feedback is welcome :-) 
 
 To use TestLink-API-Python-client under Py26, the module **argparse** must be 
-installed additionally (Py27, Py33 and Py34 already includes this)::
+installed additionally (Py27, Py33, Py34 and Py35 already includes this)::
 
     pip install argparse
 
@@ -52,7 +53,7 @@ The source code can be retrieved as source distribution either
 
 Install the archives using pip by running::
 
- pip install TestLink-API-Python-client-0.4.7.zip
+ pip install TestLink-API-Python-client-0.6.3.zip
     
 Installing from source
 ----------------------    

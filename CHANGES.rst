@@ -1,9 +1,12 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client v0.6.3 - Under Develop 
+TestLink-API-Python-client release notes v0.6.3 (Nov. 2016)  
 ------------------------------------------------------------
-support for TL 1.9.15 release
+support for TL 1.9.15 release and py26, py27, py33, py34 and py35
+
+- further releases will be developed only against py27, py34 and py35
+- If there is a need to support other py versions, please give feedback
 
 implement 1.9.15 new api interfaces - #54 #67 #69
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -66,6 +69,9 @@ TestLink web presents no login page (internal server error)
 
 - see `TL Mantis Ticket 7708 <http://mantis.testlink.org/view.php?id=7708>`_
 - solution: change *testlink-1.9.15/lib/functions/common.php* as described in `TL GitHub Commit db74644 <https://github.com/TestLinkOpenSourceTRMS/testlink-code/commit/db746440924aa3a572c8058a0595a9572cf36979>`_
+
+Test projects with execution step results can not be deleted
+- details and solution see `TL Mantis Ticket 7765 <http://mantis.testlink.org/view.php?id=7765>`_
 
 TestLink-API-Python-client v0.6.2 release notes v0.6.2 (Oct. 2015)  
 -------------------------------------------------------------------
