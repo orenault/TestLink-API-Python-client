@@ -462,6 +462,12 @@ class TestLinkAPIGenericOnlineTestCase(unittest.TestCase):
         with self.assertRaisesRegex(TLResponseError, '13000.*Unable to find'):
             self.client.getIssueTrackerSystem('unknownITS')
  
+    def test_updateBuildCustomFieldsValues_unknownID(self):
+        with self.assertRaisesRegex(TLResponseError, '7000.*40000712'):
+            self.client.updateBuildCustomFieldsValues(
+                            '40000712 project', '40000713 plan', '40000714 build', 
+                            {'cf_b_ex_string' : 'a custom exec value', 
+                             'cf_b_ex_numeric' : 111} )
          
                                  
 if __name__ == "__main__":

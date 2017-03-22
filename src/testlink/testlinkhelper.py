@@ -133,10 +133,9 @@ class TestLinkHelper(object):
         a_pt.set_proxy(self._proxy)
         return a_pt
 
-    def connect(self, tl_api_class):
+    def connect(self, tl_api_class, **kwargs):
         """ returns a new instance of TL_API_CLASS """
         
-        kwargs = {}
         if self._proxy:
             kwargs['transport'] = self._getProxiedTransport()
             

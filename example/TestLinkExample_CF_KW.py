@@ -238,7 +238,8 @@ args =  {'devKey' : myTestLink.devKey,
          'testsuiteid': newTestSuiteID_B,
          'testplanid': lastResult['testplan_id'],
          'reqspecid': 7789,
-         'requirementid': 7791}
+         'requirementid': 7791,
+         'buildid':newBuildID_A}
 
 # get CustomField Value - TestCase Execution
 response = myTestLink.getTestCaseCustomFieldExecutionValue(
@@ -303,3 +304,11 @@ print( "getReqSpecCustomFieldDesignValue", response )
 response = myTestLink.getRequirementCustomFieldDesignValue(
                 'cf_req_string',args['testprojectid'], args['requirementid'])
 print( "getRequirementCustomFieldDesignValue", response )
+
+# update CustomField Value - Build
+response = myTestLink.updateBuildCustomFieldsValues( 
+                 args['testprojectid'], args['testplanid'], args['buildid'], 
+                 {'cf_b_string' : 'A custom Build value set via api'})
+print( "updateBuildCustomFieldsValues", response )
+
+

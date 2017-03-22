@@ -1,15 +1,30 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client release notes v0.6.3 (Nov. 2016)  
-------------------------------------------------------------
+TestLink-API-Python-client v0.6.4 - Under Develop
+-------------------------------------------------
+support for TL 1.9.16 release and py27, py34 and py35
+
+implement 1.9.16 new api interfaces - #80
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+new TestlinkAPIGeneric and TestlinkAPIClient api method
+
+- updateBuildCustomFieldsValues(<testprojectid>, <testplanid>, <buildid>, 
+  <customfields>, [devKey=<devKey>])
+  
+example `<example/TestLinkExample_CF_KW.py>`_ shows, how to set and get 
+customer field values
+
+TestLink-API-Python-client release notes v0.6.3 (Nov. 2016)
+-----------------------------------------------------------
 support for TL 1.9.15 release and py26, py27, py33, py34 and py35
 
 - further releases will be developed only against py27, py34 and py35
 - If there is a need to support other py versions, please give feedback
 
 implement 1.9.15 new api interfaces - #54 #67 #69
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
@@ -20,7 +35,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 - getIssueTrackerSystem(<itsname>, [devKey=<devKey>])
  
 implement 1.9.15 changed api interfaces - #68 #70 #72 #71 #69
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 changed TestlinkAPIGeneric and TestlinkAPIClient api methods
 
@@ -57,7 +72,7 @@ examples:
  
  
 known TL 1.9.15 issues:
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~
 
 changing test suite order with updateTestSuite raise internal server error
 
@@ -73,15 +88,15 @@ TestLink web presents no login page (internal server error)
 Test projects with execution step results can not be deleted
 - details and solution see `TL Mantis Ticket 7765 <http://mantis.testlink.org/view.php?id=7765>`_
 
-TestLink-API-Python-client v0.6.2 release notes v0.6.2 (Oct. 2015)  
--------------------------------------------------------------------
+TestLink-API-Python-client v0.6.2 release notes v0.6.2 (Oct. 2015)
+------------------------------------------------------------------
 support for TL 1.9.14 release and py26, py27, py33 and py34
 
 - further releases will be developed only against py27 and py34. 
 - If there is a need to support other py versions, please give feedback
 
 implement 1.9.14 new api interfaces - #53 #61
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
@@ -96,7 +111,7 @@ example `<example/TestLinkExample_CF_KW.py>`_ shows, how to set and get
 customer field values
 
 implement 1.9.14 changed api interfaces - #48 #49 #54 #59
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 changed TestlinkAPIGeneric and TestlinkAPIClient api methods
  
@@ -133,7 +148,7 @@ a different error code
 - 1.9.13 error code *5000* - 1.9.14 error code *5040*
 
 Bugfixes TestLink-API-Python-client v0.6.1 - #51 #55 #56 #45
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 whatArgs reports incorrect arg name for createTestCase
  
@@ -159,11 +174,11 @@ Known TL 1.9.14 limitations:
 
 - 7282 updateTestSuiteCustomFieldDesignValue() does change customer field values
 
-TestLink-API-Python-client release notes v0.6.1 (Mar. 2015)  
-------------------------------------------------------------
+TestLink-API-Python-client release notes v0.6.1 (Mar. 2015)
+-----------------------------------------------------------
 support for TL 1.9.13 release  
 
-Proxy configuration support in TestLinkHelper - pull request #36 
+Proxy configuration support in TestLinkHelper - pull request #36
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  
 Integrates `Maberi <https://github.com/Maberi/TestLink-API-Python-client>`_ 
@@ -174,7 +189,7 @@ pull request `#36 <https://github.com/lczub/TestLink-API-Python-client/pull/36>`
 - Recognizes "http_proxy" environment variable.
  
 implement 1.9.13 new api methods #32 #41 #42 #44 #47 #46
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 new TestlinkAPIGeneric and TestlinkAPIClient api methods
 
@@ -202,7 +217,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api methods
 examples see `<example/TestLinkExample.py>`_ and `<example/TestLinkExample_CF_KW.py>`_
  
 implement 1.9.13 api change - getTestCasesForTestPlan #41
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 TestlinkAPIGeneric and TestlinkAPIClient api method getTestCasesForTestPlan() 
 accepts now the additional optional argument platformid=<platformid>
@@ -216,13 +231,13 @@ example:
 Also the optional argument buildid=<buildid> could now be used
 
 
-TestLink-API-Python-client release notes v0.6.0 (Dec. 2014) 
-------------------------------------------------------------
+TestLink-API-Python-client release notes v0.6.0 (Dec. 2014)
+-----------------------------------------------------------
 
 support for TestLink release 1.9.12 and py26, py27, py33 and py34
 
 python 3 support - pull requests #33 #37
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Integrates `manojklm <https://github.com/manojklm/TestLink-API-Python-client>`_ 
 pull requests 
@@ -281,7 +296,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api method
 
 examples see `<example/TestLinkExample.py>`_  
   
-TestLink-API-Python-client release notes v0.5.1 (Aug. 2014) 
+TestLink-API-Python-client release notes v0.5.1 (Aug. 2014)
 -----------------------------------------------------------
 support for TestLink release 1.9.11
 
@@ -311,7 +326,7 @@ new TestlinkAPIGeneric and TestlinkAPIClient api method
 examples see `<example/TestLinkExample.py>`_  
 
 
-TestLink-API-Python-client release notes v0.5.0 (Jul. 2014) 
+TestLink-API-Python-client release notes v0.5.0 (Jul. 2014)
 -----------------------------------------------------------
 support for TestLink release 1.9.10
 
@@ -511,7 +526,7 @@ Other API methods can be used with the new method
 
 - callServerWithPosArgs(apiMethodame, [apiArgName=apiArgValue])
 
-generic api class TestlinkAPIGeneric #7 
+generic api class TestlinkAPIGeneric #7
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 new class TestlinkAPIGeneric implements the Testlink API methods as generic PY methods
     
