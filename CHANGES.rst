@@ -1,9 +1,9 @@
 Changes in TestLink-API-Python-client Source Distribution
 =========================================================
 
-TestLink-API-Python-client v0.6.4 - Under Develop
--------------------------------------------------
-support for TL 1.9.16 release and py27, py34 and py35
+TestLink-API-Python-client release notes v0.6.4 (Mar. 2017)
+-----------------------------------------------------------
+support for TL 1.9.16 release and py27, py34, py35 and py36
 
 implement 1.9.16 new api interfaces - #80
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
