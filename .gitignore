@@ -1,7 +1,9 @@
+.tox
+.idea
 .project
 .pydevproject
 .settings/
 build/
 *.pyc
-dist/ 
+dist/
 MANIFEST

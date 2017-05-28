@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2012 TestLink-API-Python-client developers
+#  Copyright 2013-2017 TestLink-API-Python-client developers
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -17,4 +17,6 @@
 #
 # ------------------------------------------------------------------------
 
-VERSION = '0.4.0-RC1'
+VERSION = '0.6.4'
+TL_RELEASE = '1.9.16'
+

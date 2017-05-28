@@ -1,7 +1,7 @@
 #! /usr/bin/python
 # -*- coding: UTF-8 -*-
 
-#  Copyright 2012 Patrick Dassier, Luiko Czub, TestLink-API-Python-client developers
+#  Copyright 2012-2017 Patrick Dassier, Luiko Czub, TestLink-API-Python-client developers
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
@@ -34,5 +34,25 @@ class TLConnectionError(TestLinkError):
 class TLAPIError(TestLinkError):
     """ API error 
     - wrong method name ? - misssing required args? """
+    
+class TLArgError(TestLinkError):
+    """ Call error 
+    - wrong number of mandatory params ? - wrong param type? """    
+
+class TLResponseError(TestLinkError):
+    """ Response error 
+    - Response is empty or includes error codes """
+    
+    def __init__(self, methodNameAPI, argsOptional, message, code=None):
+        self.methodNameAPI = methodNameAPI
+        self.argsOptional  = argsOptional
+        self.message       = message
+        self.code          = code
+        msg = '%s\n%s(%s)' % (message, methodNameAPI, argsOptional)
+        if code:
+            msg = '%s: %s' % (code, msg)
+        return super(TLResponseError, self).__init__(msg)
+        
+           
 
         
