@@ -37,7 +37,7 @@ class RobotTestLinkHelper(TestLinkHelper):
         _devkey     <- TESTLINK_API_PYTHON_DEVKEY     <- robot_variable`testlinkdevkey`
         _proxy      <- http_proxy                     <- robot_variable`testlinkproxy`
 
-        If robot variables are not defined, values are kept as None.
+        If robot variables are not defined, values are kept as None for other _setParams* to handle.
         """
         if self._server_url is None:
             self._server_url = self._get_param_from_robot('testlinkserverurl')
