@@ -29,7 +29,7 @@ class RobotTestLinkHelper(TestLinkHelper):
 
     def _get_missing_params_from_robot_variables(self, param_dict):
         for testlink_param, robot_variable in robot_report_params.items():
-            setdefault_if_not_none(param_dict, testlink_param, self._get_param_from_robot(testlink_param))
+            setdefault_if_not_none(param_dict, testlink_param, self._get_param_from_robot(robot_variable))
 
     def _setParamsFromRobot(self):
         """
