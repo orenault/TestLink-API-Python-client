@@ -1,3 +1,5 @@
+# THIS IS AN UNTESTED WIP. There is a lot of non-functional scaffolding and I'm working out ideas with a draft
+
 from .robottestlinkhelper import RobotTestLinkHelper
 from robot.api import logger as robot_logger
 from testlink import TestlinkAPIGeneric
