@@ -1,5 +1,6 @@
 # THIS IS AN UNTESTED WIP. There is a lot of non-functional scaffolding and I'm working out ideas with a draft
 
+from .docparser import DocTestParser
 from .robottestlinkhelper import RobotTestLinkHelper
 from robot.api import logger as robot_logger
 from testlink import TestlinkAPIGeneric
@@ -9,7 +10,7 @@ from testlink.testlinkerrors import TLResponseError
 class testlinklistener(object):
     ROBOT_LISTENER_API_VERSION = 3
 
-    def __init__(self, test_prefix, dev_key, server, *report_kwargs, **also_conosle):
+    def __init__(self, server_url=None, devkey=None, proxy=None, test_prefix=None, *report_kwargs, **also_console):
         """
         This is specifically for looking at testcaseexternalids in testcase documentation and sending results to all
         testcases found.
@@ -25,15 +26,17 @@ class testlinklistener(object):
         Since kwargs are not supported in listeners you must pass in args with an equal sign between the key and the
         value (<argument>=<value).
 
+        :param server_url: The testlink server
+        :param devkey: API key of the user running the tests
+        :param proxy: Testlink proxy
         :param test_prefix: The letters preceding testlink numbers. ex. abc-1234 the test_prefix would be 'abc'
-        :param dev_key: API key of the user running the tests
-        :param server: The testlink server
         :param report_kwargs: These are args in the format `<argument>=<value>`.
         :param also_console: py2 support for non-positional kwargs. pass in also_console=<bool>. Defaults to True.
         """
+        self.server = server_url
+        self.devkey = devkey
+        self.proxy = proxy
         self.test_prefix = test_prefix
-        self.dev_key = dev_key
-        self.testlink_server = server
 
         # Listeners don't support real kwargs
         self.report_kwargs = {}
@@ -46,9 +49,18 @@ class testlinklistener(object):
                 raise RuntimeError("Report kwarg was passed in with multiple equal signs. '{}'".format(kwarg))
             self.report_kwargs[arg] = value
 
-        self.also_console = also_conosle.get('also_console', True)
+        self.also_console = also_console.get('also_console', True)
 
         self._tlh = self._tls = self._testcases = None
+
+    @property
+    def tlh(self):
+        if not self._tlh:
+            self._make_testlinkhelper()
+        return self._tlh
+
+    def _make_testlinkhelper(self):
+        self._tlh = RobotTestLinkHelper(self.server, self.devkey, self.proxy)
 
     @property
     def tls(self):
@@ -56,15 +68,8 @@ class testlinklistener(object):
             self.connect_testlink()
         return self._tls
 
-    @property
-    def tlh(self):
-        if not self._tlh:
-            self.connect_testlink()
-        return self._tlh
-
     def connect_testlink(self):
-        self._tlh = RobotTestLinkHelper(self.testlink_server, self.dev_key)
-        self._tls = self._tlh.connect(TestlinkAPIGeneric)
+        self._tls = self.tlh.connect(TestlinkAPIGeneric)
 
     @property
     def testcases(self):

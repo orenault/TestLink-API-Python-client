@@ -16,7 +16,8 @@ def setdefault_if_not_none(di, key, val):
 
 
 class RobotTestLinkHelper(TestLinkHelper):
-    """We preface all testlink inputs with 'testlink'.
+    """
+    We preface all testlink inputs with 'testlink'.
 
     So, to pass the serverurl as a variable in a robot test set the variable ${testlinkserverurl}.
 
@@ -26,7 +27,7 @@ class RobotTestLinkHelper(TestLinkHelper):
         """Returns the found robot variable, defaults to None."""
         return BuiltIn().get_variable_value("${" + str(robot_variable) + "}")
 
-    def _get_robot_params_from_variables(self, param_dict):
+    def _get_missing_params_from_robot_variables(self, param_dict):
         for testlink_param, robot_variable in robot_report_params.items():
             setdefault_if_not_none(param_dict, testlink_param, self._get_param_from_robot(testlink_param))
 
